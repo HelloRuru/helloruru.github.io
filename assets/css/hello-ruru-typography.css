@@ -1,0 +1,155 @@
+/* ============================================
+   Hello Ruru Design System v1.1
+   Typography Specification
+   ============================================ */
+
+/* ---------- Google Fonts Import ---------- */
+@import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
+
+/* ---------- CSS Variables ---------- */
+:root {
+  /* Font Families */
+  --font-heading: 'Zen Maru Gothic', 'Noto Sans TC', sans-serif;
+  --font-body: 'Zen Kaku Gothic New', 'Noto Sans TC', sans-serif;
+  
+  /* Font Weights */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-bold: 700;
+  
+  /* Font Sizes - Desktop */
+  --text-h1: 2.5rem;      /* 40px - 頁面主標題 */
+  --text-h2: 1.75rem;     /* 28px - 區塊標題 */
+  --text-h3: 1.25rem;     /* 20px - 小標題 */
+  --text-body: 1rem;      /* 16px - 內文 */
+  --text-small: 0.875rem; /* 14px - 說明文字 */
+  --text-caption: 0.75rem;/* 12px - 註解 */
+  
+  /* Line Heights */
+  --leading-tight: 1.3;   /* 標題用 */
+  --leading-normal: 1.6;  /* 短文用 */
+  --leading-relaxed: 1.8; /* 長文閱讀 */
+  
+  /* Letter Spacing */
+  --tracking-tight: -0.01em;  /* 大標題 */
+  --tracking-normal: 0.02em;  /* 一般文字 */
+  --tracking-wide: 0.08em;    /* 品牌標語、英文小字 */
+}
+
+/* ---------- Mobile Overrides ---------- */
+@media (max-width: 768px) {
+  :root {
+    --text-h1: 1.875rem;    /* 30px */
+    --text-h2: 1.5rem;      /* 24px */
+    --text-h3: 1.125rem;    /* 18px */
+    --text-body: 1rem;      /* 16px - 維持不變 */
+    --text-small: 0.875rem; /* 14px */
+    --text-caption: 0.75rem;/* 12px */
+  }
+}
+
+/* ---------- Base Typography ---------- */
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-relaxed);
+  letter-spacing: var(--tracking-normal);
+  color: #4a4a4a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---------- Headings ---------- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: #333;
+}
+
+h1 {
+  font-size: var(--text-h1);
+  font-weight: var(--weight-bold);
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: var(--text-h2);
+  font-weight: var(--weight-medium);
+  margin-bottom: 0.75rem;
+}
+
+h3 {
+  font-size: var(--text-h3);
+  font-weight: var(--weight-medium);
+  margin-bottom: 0.5rem;
+}
+
+/* ---------- Body Text ---------- */
+p {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: var(--leading-relaxed);
+  margin-bottom: 1em;
+}
+
+/* ---------- UI Elements ---------- */
+button, 
+input, 
+select, 
+textarea {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  font-weight: var(--weight-medium);
+}
+
+/* ---------- Utility Classes ---------- */
+
+/* 品牌標語 */
+.brand-tagline {
+  font-family: var(--font-heading);
+  font-size: var(--text-small);
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+/* 強調文字 */
+.text-emphasis {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-medium);
+}
+
+/* 說明文字 */
+.text-small {
+  font-size: var(--text-small);
+  line-height: var(--leading-normal);
+  color: #888;
+}
+
+/* 註解文字 */
+.text-caption {
+  font-size: var(--text-caption);
+  line-height: var(--leading-normal);
+  color: #aaa;
+}
+
+/* ---------- Special Styles ---------- */
+
+/* 引用區塊 */
+blockquote {
+  font-family: var(--font-heading);
+  font-size: var(--text-h3);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-normal);
+  font-style: normal;
+  color: #666;
+}
+
+/* 程式碼（保持等寬）*/
+code, pre {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.9em;
+}
