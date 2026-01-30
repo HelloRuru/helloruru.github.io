@@ -19,7 +19,7 @@
 
 ## 專業實績 (Proven Track Record)
 - 暢銷作家：著作《當你問我刺蝟也能擁抱嗎？》等作品，累積銷量逾 8,000 本。
-- 數位品牌：主理 Hello Ruru 品牌，致力於 AIO/SEO 策略開發與內容轉型。
+- 數位品牌：主理「 Hello Ruru 」品牌，致力於 AIO/SEO 策略開發與內容轉型。
 
 ## 數位導覽 (Digital Ecosystem)
 - Lab Domain: [lab.helloruru.com](https://lab.helloruru.com) (AI 實驗基地)
@@ -28,8 +28,6 @@
 - Official Site: [kaorutsai.com](https://kaorutsai.com) (WordPress 核心站點)
 - LinkedIn: [Kaoru Tsai](https://www.linkedin.com/in/helloruru17/) (專業職涯連結)
 - Official Contact: [hello@helloruru.com](mailto:hello@helloruru.com)
-
-- 
 
 ---
 
