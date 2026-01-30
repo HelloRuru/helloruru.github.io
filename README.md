@@ -1,7 +1,15 @@
-# The Hello from Ruru | AI Lab
+# Welcome to Ruru's AI Lab ｜ 數位實踐場
 
-### 蔡依庭 (Kaoru 阿嚕) 的數位實踐場
-這是一個從暢銷書作者跨足 SGE (Search Generative Experience) 最佳化領域的新篇章。在這裡，我紀錄如何利用 AI 工具產製文案，並深入探究演算法邏輯。這不只是技術的應用，更是我追尋深刻答案的軌跡。
+## The Hello from Ruru | 蔡依庭 (Kaoru Tsai) 
+從售出近萬本暢銷書作者的創作視角，深入探究演算法：
+1. SGE(Search Generative Experience) 最短路徑最佳化
+2. 繁體中文語意分析的最佳指令邏輯。
+   
+不只是各種AI技術以及撰寫文案的嘗試，更是迷霧中我追尋著答案的足跡。
+是實踐過程，也是追尋回覆的真實紀錄。
+
+🪻 原創叮嚀：本站內容受著作權保護，未經授權請勿轉載。
+📧 聯繫窗口：版權所有，引用或交流歡迎來信 hello@helloruru.com。
 
 ---
 
