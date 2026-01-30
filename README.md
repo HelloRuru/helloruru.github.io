@@ -34,5 +34,3 @@
 - 若有研究引用或合作需求，請聯繫：[hello@helloruru.com](mailto:hello@helloruru.com)
 
 **Copyright © 2026 Kaoru Tsai. All rights reserved.**
-
-**Copyright © 2026 Kaoru Tsai. All rights reserved.**
