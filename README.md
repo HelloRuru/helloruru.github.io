@@ -22,4 +22,15 @@
 - Instagram: [@papertosshere](https://www.instagram.com/papertosshere)
 
 ---
+
 向新世界打招呼，也向在此相遇的你，說聲嗨。
+
+---
+## 💎 版權宣告 (Copyright Notice)
+
+本實踐場（lab.helloruru.com）內所有內容，包括但不限於文字、程式碼、AI 指令邏輯及研究紀錄，其著作權均屬 **蔡依庭 (Kaoru Tsai)** 所有。
+
+- **未經書面授權，嚴禁任何形式的重製、改作、轉載或商業利用。**
+- 若有研究引用需求，請先透過 [LinkedIn](https://www.linkedin.com/in/helloruru17/) 或 [Official Site](https://kaorutsai.com) 聯繫。
+
+**Copyright © 2026 Kaoru Tsai. All rights reserved.**
