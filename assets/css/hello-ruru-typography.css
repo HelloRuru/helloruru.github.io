@@ -1,18 +1,81 @@
 /* ============================================
    Hello Ruru Design System v1.1
    Typography Specification
+   
+   字體：獅尾四季春 + 獅尾四季春加糖
    ============================================ */
 
-/* ---------- Google Fonts Import ---------- */
-@import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
+/* ---------- Font Face 定義 ---------- */
+/* 獅尾四季春加糖（標題用） */
+@font-face {
+  font-family: 'Swei Spring Sugar';
+  src: url('https://cdn.jsdelivr.net/gh/nicholaschu/Swei-Spring-Sugar/webfont/SweiSpringSugarCJKtc-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Swei Spring Sugar';
+  src: url('https://cdn.jsdelivr.net/gh/nicholaschu/Swei-Spring-Sugar/webfont/SweiSpringSugarCJKtc-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Swei Spring Sugar';
+  src: url('https://cdn.jsdelivr.net/gh/nicholaschu/Swei-Spring-Sugar/webfont/SweiSpringSugarCJKtc-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 獅尾四季春（內文用） */
+@font-face {
+  font-family: 'Swei Spring';
+  src: url('https://cdn.jsdelivr.net/gh/nicholaschu/Swei-Spring/webfont/SweiSpringCJKtc-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Swei Spring';
+  src: url('https://cdn.jsdelivr.net/gh/nicholaschu/Swei-Spring/webfont/SweiSpringCJKtc-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Swei Spring';
+  src: url('https://cdn.jsdelivr.net/gh/nicholaschu/Swei-Spring/webfont/SweiSpringCJKtc-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Swei Spring';
+  src: url('https://cdn.jsdelivr.net/gh/nicholaschu/Swei-Spring/webfont/SweiSpringCJKtc-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Noto Sans TC fallback（Google Fonts） */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
 
 /* ---------- CSS Variables ---------- */
 :root {
   /* Font Families */
-  --font-heading: 'Zen Maru Gothic', 'Noto Sans TC', sans-serif;
-  --font-body: 'Zen Kaku Gothic New', 'Noto Sans TC', sans-serif;
+  --font-heading: 'Swei Spring Sugar', 'Noto Sans TC', sans-serif;
+  --font-body: 'Swei Spring', 'Noto Sans TC', sans-serif;
+  --font-caption: 'Noto Sans TC', sans-serif;
   
   /* Font Weights */
+  --weight-light: 300;
   --weight-regular: 400;
   --weight-medium: 500;
   --weight-bold: 700;
@@ -61,9 +124,15 @@ body {
 }
 
 /* ---------- Headings ---------- */
-h1, h2, h3, h4, h5, h6 {
+h1, h2 {
   font-family: var(--font-heading);
-  font-weight: var(--weight-medium);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: #333;
+}
+
+h3, h4, h5, h6 {
+  font-family: var(--font-body);
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
   color: #333;
@@ -107,13 +176,12 @@ textarea {
 
 /* ---------- Utility Classes ---------- */
 
-/* 品牌標語 */
+/* 品牌標語（加糖版） */
 .brand-tagline {
   font-family: var(--font-heading);
   font-size: var(--text-small);
   font-weight: var(--weight-regular);
   letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
 }
 
 /* 強調文字 */
@@ -124,13 +192,15 @@ textarea {
 
 /* 說明文字 */
 .text-small {
+  font-family: var(--font-body);
   font-size: var(--text-small);
   line-height: var(--leading-normal);
   color: #888;
 }
 
-/* 註解文字 */
+/* 註解文字（使用 Noto Sans TC 確保清晰） */
 .text-caption {
+  font-family: var(--font-caption);
   font-size: var(--text-caption);
   line-height: var(--leading-normal);
   color: #aaa;
@@ -148,8 +218,18 @@ blockquote {
   color: #666;
 }
 
-/* 程式碼（保持等寬）*/
+/* 程式碼（保持等寬） */
 code, pre {
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
   font-size: 0.9em;
 }
+
+/* ---------- 字體層級速查 ---------- */
+/*
+  H1 主標題    → 獅尾四季春加糖 Bold    40px/30px
+  H2 區塊標題  → 獅尾四季春加糖 Medium  28px/24px
+  H3 小標題    → 獅尾四季春 Medium      20px/18px
+  Body 內文    → 獅尾四季春 Regular     16px/16px
+  Small 說明   → 獅尾四季春 Regular     14px/14px
+  Caption 註解 → Noto Sans TC Regular   12px/12px
+*/
