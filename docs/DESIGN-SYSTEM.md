@@ -1,4 +1,4 @@
-# Hello Ruru Design System v1.3
+# Hello Ruru Design System v1.4
 
 > 最後更新：2026-01-30
 
@@ -15,6 +15,7 @@
 | 卡片/按鈕 | 完整 CSS 範例 |
 | 深淺模式 | Toggle + JS 邏輯 |
 | 頁面結構 | Layout + 響應式斷點 |
+| **Footer 規範** | **統一頁尾格式、年份自動更新** |
 | 響應式斷點 | Desktop / Tablet / Mobile |
 | PWA 圖示 | 檔案清單 + 設計規則 |
 | 禁止事項 | 5 條紅線 |
@@ -450,7 +451,7 @@ initTheme();
   </main>
   
   <footer class="footer">
-    <!-- 頁尾 -->
+    <!-- 頁尾（見 Footer 規範） -->
   </footer>
 </body>
 ```
@@ -471,6 +472,90 @@ initTheme();
   }
 }
 ```
+
+---
+
+## Footer 規範
+
+### 標準格式
+
+所有 Hello Ruru 網站必須使用統一的 Footer 格式：
+
+```
+© {年份} Kaoru Tsai. All Rights Reserved. | Contact: hello@helloruru.com
+```
+
+### 年份顯示規則
+
+| 情況 | 顯示格式 | 範例 |
+|------|---------|------|
+| 當前年份 = 起始年份 | `{起始年份}` | `© 2026` |
+| 當前年份 > 起始年份 | `{起始年份}–{當前年份}` | `© 2026–2027` |
+
+> **注意**：使用 en dash（–）而非連字號（-）
+
+### React 元件範例
+
+```jsx
+export default function Footer() {
+  const startYear = 2026;
+  const currentYear = new Date().getFullYear();
+  const yearDisplay = currentYear > startYear 
+    ? `${startYear}–${currentYear}` 
+    : `${startYear}`;
+
+  return (
+    <footer className="text-center py-8 text-sm" style={{ color: 'var(--text-muted)' }}>
+      <p>
+        © {yearDisplay} Kaoru Tsai. All Rights Reserved. |{' '}
+        <a 
+          href="mailto:hello@helloruru.com"
+          style={{ color: 'var(--accent-primary)' }}
+        >
+          hello@helloruru.com
+        </a>
+      </p>
+    </footer>
+  );
+}
+```
+
+### 純 HTML/JS 範例
+
+```html
+<footer class="footer">
+  <p>
+    © <span id="footer-year"></span> Kaoru Tsai. All Rights Reserved. | 
+    Contact: <a href="mailto:hello@helloruru.com">hello@helloruru.com</a>
+  </p>
+</footer>
+
+<script>
+  const startYear = 2026;
+  const currentYear = new Date().getFullYear();
+  document.getElementById('footer-year').textContent = 
+    currentYear > startYear ? `${startYear}–${currentYear}` : startYear;
+</script>
+```
+
+### 樣式規範
+
+| 項目 | 規範 |
+|------|------|
+| 字級 | 14px (Small) |
+| 顏色 | var(--text-muted) / #888888 |
+| 連結顏色 | var(--accent-primary) / #D4A5A5 |
+| 對齊 | 置中 |
+| 上下間距 | py-8（32px） |
+
+### 禁止事項
+
+| ❌ 錯誤 | ✅ 正確 |
+|--------|--------|
+| `© 2026 Kaoru Tsai. All rights reserved.` | `© 2026 Kaoru Tsai. All Rights Reserved.` |
+| `Built with curiosity at HelloRuru` | `© 2026 Kaoru Tsai. All Rights Reserved. \| Contact: hello@helloruru.com` |
+| 缺少聯絡信箱 | 必須包含 `hello@helloruru.com` |
+| 使用連字號 `2026-2027` | 使用 en dash `2026–2027` |
 
 ---
 
@@ -553,6 +638,7 @@ initTheme();
 | 3 | ❌ 禁止使用直角 (0px 圓角) | 最小圓角 8px |
 | 4 | ❌ 禁止使用系統預設字體 | 必須載入指定字體 |
 | 5 | ❌ 禁止使用高對比強烈陰影 | 陰影保持輕柔低對比 |
+| 6 | ❌ 禁止非標準 Footer 格式 | 必須符合 Footer 規範 |
 
 ---
 
@@ -561,7 +647,7 @@ initTheme();
 複製以下內容給任何 AI，即可按規範開發：
 
 ```
-# Hello Ruru Design System v1.3
+# Hello Ruru Design System v1.4
 
 ## 品牌調性
 溫柔、質感、日系文青、簡約
@@ -609,6 +695,11 @@ Caption：12px，字重 400，行高 1.6
 風格：SVG 線條 (Outline)，線寬 1.5-2px
 禁止：不使用 Emoji 作為 UI 圖示
 
+## Footer（必須遵守）
+格式：© {年份} Kaoru Tsai. All Rights Reserved. | Contact: hello@helloruru.com
+年份：2026 或 2026–2027（自動計算）
+字級：14px，顏色 #888888，連結色 #D4A5A5
+
 ## 響應式斷點
 Desktop：≥1024px
 Tablet：768px - 1023px
@@ -620,6 +711,7 @@ Mobile：<768px
 3. 禁止使用直角 (0px 圓角)
 4. 禁止使用系統預設字體
 5. 禁止使用高對比強烈陰影
+6. 禁止非標準 Footer 格式
 
 ## 開發規則
 1. 按鈕使用主色 #D4A5A5，圓角 24px
@@ -627,6 +719,7 @@ Mobile：<768px
 3. 標題用獅尾四季春加糖，內文用獅尾四季春
 4. 12px 以下小字改用 Noto Sans TC 確保清晰
 5. 整體風格：溫柔、質感、日系文青
+6. 所有頁面必須使用標準 Footer
 ```
 
 ---
@@ -635,6 +728,7 @@ Mobile：<768px
 
 | 版本 | 日期 | 變更 |
 |------|------|------|
+| v1.4 | 2026-01-30 | 新增 Footer 規範（統一格式、年份自動更新、程式碼範例） |
 | v1.3 | 2026-01-30 | 新增元件規範、深淺模式、頁面結構、PWA 圖示、禁止事項 |
 | v1.2 | 2026-01-30 | 擴充完整色彩系統、完善字體階層 |
 | v1.1 | 2026-01-30 | 更新字體為獅尾四季春系列 |
