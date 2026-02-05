@@ -15,6 +15,14 @@
 }
 
 @font-face {
+  font-family: 'Swei Spring';
+  src: url('/fonts/SweiSpring-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: 'Swei Sugar';
   src: url('/fonts/SweiSugar-Bold.woff2') format('woff2');
   font-weight: 700;

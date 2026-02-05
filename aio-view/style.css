@@ -4,17 +4,25 @@
 
 /* Web Fonts — 獅尾四季春（全域子集化） */
 @font-face {
-  font-family: 'Swei Sugar';
-  src: url('/fonts/SweiSugar-Bold.woff2') format('woff2');
-  font-weight: 700;
+  font-family: 'Swei Spring';
+  src: url('/fonts/SweiSpring-Regular.woff2') format('woff2');
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Swei Spring';
-  src: url('/fonts/SweiSpring-Regular.woff2') format('woff2');
-  font-weight: 400;
+  src: url('/fonts/SweiSpring-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Swei Sugar';
+  src: url('/fonts/SweiSugar-Bold.woff2') format('woff2');
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
