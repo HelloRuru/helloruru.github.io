@@ -1,8 +1,8 @@
 # Dependencies
 node_modules/
 
-# Fonts (ignore root fonts, allow project fonts)
-/fonts/
+# Fonts cache (full fonts before subset)
+*-full.woff2
 
 # Test files
 test-*.json

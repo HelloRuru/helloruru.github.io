@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 /**
- * 獅尾字體自動子集化腳本
+ * HelloRuru 全域字體子集化腳本
+ * Design System v1.4
  *
  * 使用方式：
- *   cd aio-view/fonts
+ *   cd fonts
  *   npm install subset-font
  *   node subset-fonts.js
  *
  * 功能：
- *   1. 掃描 index.html 中所有中文字元
+ *   1. 掃描所有 HelloRuru 網站的 HTML 檔案
  *   2. 下載完整字體（如果不存在）
  *   3. 子集化並產生 woff2 檔案
  */
@@ -16,11 +17,16 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const { execSync } = require('child_process');
 
 // 設定
 const CONFIG = {
-  // 要掃描的 HTML 檔案
-  htmlFiles: ['../index.html'],
+  // 要掃描的目錄（所有 HelloRuru 網站）
+  scanDirs: [
+    path.resolve(__dirname, '..'),           // helloruru.github.io (lab)
+    path.resolve(__dirname, '../../tools'),  // tools
+    path.resolve(__dirname, '../../happy-exit'), // happy-exit
+  ],
 
   // 字體來源（jsDelivr CDN）
   fonts: [
@@ -39,25 +45,62 @@ const CONFIG = {
   ],
 
   // 基本字元（拉丁字母、數字、標點）
-  baseChars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .,;:!?@#$%^&*()-_=+[]{}|\\/"\'<>~`©–—·「」『』【】《》、。！？；：'
+  baseChars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .,;:!?@#$%^&*()-_=+[]{}|\\/"\'<>~`©–—·「」『』【】《》、。！？；：（）'
 };
+
+/**
+ * 遞迴找出所有 HTML 檔案
+ */
+function findHtmlFiles(dir, files = []) {
+  if (!fs.existsSync(dir)) return files;
+
+  const items = fs.readdirSync(dir);
+  for (const item of items) {
+    // 跳過 node_modules 和隱藏目錄
+    if (item === 'node_modules' || item === 'cli' || item.startsWith('.')) continue;
+
+    const fullPath = path.join(dir, item);
+    const stat = fs.statSync(fullPath);
+
+    if (stat.isDirectory()) {
+      findHtmlFiles(fullPath, files);
+    } else if (item.endsWith('.html')) {
+      files.push(fullPath);
+    }
+  }
+  return files;
+}
 
 /**
  * 從 HTML 檔案提取中文字元
  */
-function extractChineseChars(htmlFiles) {
+function extractChineseChars(dirs) {
   const chars = new Set();
+  const stats = {};
 
-  for (const file of htmlFiles) {
-    const filePath = path.resolve(__dirname, file);
-    if (!fs.existsSync(filePath)) {
-      console.warn(`⚠ 檔案不存在: ${file}`);
-      continue;
+  for (const dir of dirs) {
+    const dirName = path.basename(dir);
+    const files = findHtmlFiles(dir);
+    stats[dirName] = { files: files.length, chars: new Set() };
+
+    for (const file of files) {
+      try {
+        const content = fs.readFileSync(file, 'utf8');
+        const matches = content.match(/[\u4e00-\u9fff]/g) || [];
+        matches.forEach(char => {
+          chars.add(char);
+          stats[dirName].chars.add(char);
+        });
+      } catch (e) {}
     }
+  }
 
-    const content = fs.readFileSync(filePath, 'utf8');
-    const matches = content.match(/[\u4e00-\u9fff]/g) || [];
-    matches.forEach(char => chars.add(char));
+  // 輸出統計
+  console.log('   各網站統計:');
+  for (const [dir, data] of Object.entries(stats)) {
+    if (data.files > 0) {
+      console.log(`     ${dir}: ${data.chars.size} 字 (${data.files} 個檔案)`);
+    }
   }
 
   return [...chars].sort().join('');
@@ -72,7 +115,6 @@ function downloadFile(url, dest) {
 
     const file = fs.createWriteStream(dest);
     https.get(url, (response) => {
-      // 處理重定向
       if (response.statusCode === 301 || response.statusCode === 302) {
         file.close();
         fs.unlinkSync(dest);
@@ -102,7 +144,7 @@ function downloadFile(url, dest) {
 /**
  * 子集化字體
  */
-async function subsetFont(inputFile, outputFile, chars) {
+async function subsetFontFile(inputFile, outputFile, chars) {
   const subsetFont = require('subset-font');
 
   const font = fs.readFileSync(inputFile);
@@ -119,17 +161,18 @@ async function subsetFont(inputFile, outputFile, chars) {
  * 主程式
  */
 async function main() {
-  console.log('🔤 獅尾字體子集化工具\n');
+  console.log('🔤 HelloRuru 全域字體子集化\n');
+  console.log('   Design System v1.4\n');
 
   // 1. 提取中文字元
-  console.log('📄 掃描 HTML 檔案...');
-  const zhChars = extractChineseChars(CONFIG.htmlFiles);
+  console.log('📄 掃描所有網站...');
+  const zhChars = extractChineseChars(CONFIG.scanDirs);
   const allChars = zhChars + CONFIG.baseChars;
-  console.log(`   找到 ${zhChars.length} 個中文字元`);
-  console.log(`   總共 ${allChars.length} 個字元\n`);
+  console.log(`\n   總共 ${zhChars.length} 個中文字元`);
+  console.log(`   加上基本字元: ${allChars.length} 個\n`);
 
-  // 儲存字元清單（方便檢查）
-  fs.writeFileSync('chars.txt', `中文字元 (${zhChars.length}):\n${zhChars}\n\n全部字元 (${allChars.length}):\n${allChars}`);
+  // 儲存字元清單
+  fs.writeFileSync('chars.txt', `HelloRuru Design System v1.4 字體子集\n${'='.repeat(40)}\n\n中文字元 (${zhChars.length}):\n${zhChars}\n\n全部字元 (${allChars.length}):\n${allChars}`);
 
   // 2. 處理每個字體
   for (const font of CONFIG.fonts) {
@@ -150,14 +193,15 @@ async function main() {
 
     // 子集化
     try {
-      const result = await subsetFont(font.fullFile, font.outputFile, allChars);
+      const result = await subsetFontFile(font.fullFile, font.outputFile, allChars);
       console.log(`   ✓ 子集化完成: ${result.originalSize} KB → ${result.newSize} KB\n`);
     } catch (err) {
       console.error(`   ✗ 子集化失敗: ${err.message}\n`);
     }
   }
 
-  console.log('✅ 完成！記得 commit 更新的字體檔案。');
+  console.log('✅ 完成！');
+  console.log('   字體位置: https://lab.helloruru.com/fonts/');
 }
 
 main().catch(console.error);

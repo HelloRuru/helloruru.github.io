@@ -4,7 +4,8 @@ on:
   push:
     branches: [main]
     paths:
-      - 'aio-view/index.html'
+      - '**/*.html'
+      - '!**/node_modules/**'
 
 jobs:
   subset:
@@ -22,17 +23,17 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        working-directory: aio-view/fonts
+        working-directory: fonts
         run: npm install subset-font
 
       - name: Run subset script
-        working-directory: aio-view/fonts
+        working-directory: fonts
         run: node subset-fonts.js
 
       - name: Check for changes
         id: changes
         run: |
-          if git diff --quiet aio-view/fonts/*.woff2; then
+          if git diff --quiet fonts/*.woff2; then
             echo "changed=false" >> $GITHUB_OUTPUT
           else
             echo "changed=true" >> $GITHUB_OUTPUT
@@ -43,8 +44,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add aio-view/fonts/*.woff2 aio-view/fonts/chars.txt
-          git commit -m "chore(aio-view): 自動更新字體子集化
+          git add fonts/*.woff2 fonts/chars.txt
+          git commit -m "chore: 自動更新字體子集化
 
           Co-Authored-By: GitHub Actions <github-actions[bot]@users.noreply.github.com>"
           git push
