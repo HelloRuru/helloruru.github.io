@@ -31,6 +31,12 @@ const CliGenerator = {
     });
   },
 
+  /** 暫存資料 */
+  currentData: {
+    articles: [],
+    domain: ''
+  },
+
   /**
    * 產生 CLI 指令
    * @param {Array} articles - 文章清單
@@ -44,17 +50,11 @@ const CliGenerator = {
       return;
     }
 
-    // 產生 queries.json 內容
-    const queries = selected.map(a => ({
-      url: a.url,
-      title: a.title,
-      query: a.query
-    }));
+    // 儲存資料供下載使用
+    this.currentData = { articles: selected, domain };
 
-    const queriesJson = JSON.stringify(queries, null, 2);
     const estimatedMinutes = Math.ceil(selected.length * 2.5);
-
-    const commands = this.buildCommands(queriesJson, domain, estimatedMinutes);
+    const commands = this.buildCommands(domain, estimatedMinutes, selected.length);
 
     // 顯示
     if (this.elements.commands) {
@@ -62,31 +62,54 @@ const CliGenerator = {
     }
 
     this.show();
+
+    // 自動下載 queries.json
+    this.downloadQueries();
   },
 
   /**
    * 建立指令內容
-   * @param {string} queriesJson - queries.json 內容
    * @param {string} domain - 網域
    * @param {number} minutes - 預估分鐘數
+   * @param {number} count - 文章數量
    * @returns {string} 指令
    */
-  buildCommands(queriesJson, domain, minutes) {
-    return `# 1. 下載 CLI 工具（首次使用）
+  buildCommands(domain, minutes, count) {
+    return `# ===== AIO View CLI 使用說明 =====
+# 監測 ${count} 篇文章，預估需要 ${minutes} 分鐘
+
+# 步驟 1：下載 CLI 工具（首次使用）
 git clone https://github.com/helloruru/helloruru.github.io.git
 cd helloruru.github.io/aio-view/cli
 npm install
 npx playwright install chromium
 
-# 2. 建立 queries.json
-cat > queries.json << 'EOF'
-${queriesJson}
-EOF
+# 步驟 2：將剛才下載的 queries.json 放到 cli 資料夾
 
-# 3. 執行掃描（約需 ${minutes} 分鐘）
+# 步驟 3：執行掃描
 node scan.js --input queries.json --output results.json --domain ${domain}
 
-# 4. 完成後上傳 results.json 到 Dashboard`;
+# 步驟 4：完成後將 results.json 上傳回 Dashboard`;
+  },
+
+  /**
+   * 下載 queries.json
+   */
+  downloadQueries() {
+    const { articles } = this.currentData;
+
+    if (!articles || articles.length === 0) return;
+
+    const data = articles.map(a => ({
+      url: a.url,
+      title: a.title,
+      query: a.query
+    }));
+
+    const json = JSON.stringify(data, null, 2);
+    Utils.downloadFile(json, 'queries.json', 'application/json');
+
+    Toast.success('queries.json 已下載，請放到 cli 資料夾');
   },
 
   /**
