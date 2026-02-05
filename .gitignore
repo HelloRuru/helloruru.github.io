@@ -1,8 +1,8 @@
 # Dependencies
 node_modules/
 
-# Fonts (local only)
-fonts/
+# Fonts (ignore root fonts, allow project fonts)
+/fonts/
 
 # Test files
 test-*.json
