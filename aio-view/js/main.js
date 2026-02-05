@@ -26,6 +26,7 @@ const App = {
    */
   initModules() {
     // 初始化元件
+    Guide.init();
     Stats.init();
     ArticlesTable.init();
     ResultsTable.init();

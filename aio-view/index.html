@@ -28,6 +28,86 @@
     <main class="main">
       <div class="container">
 
+        <!-- Guide: 使用說明 -->
+        <section class="card guide-card" id="guide-section">
+          <button class="guide-header" id="guide-toggle" aria-expanded="true">
+            <h2>
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+              使用說明
+            </h2>
+            <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6,9 12,15 18,9"/>
+            </svg>
+          </button>
+
+          <div class="guide-content expanded" id="guide-content">
+            <!-- 流程總覽 -->
+            <div class="guide-flow">
+              <div class="flow-step">
+                <span class="flow-num">1</span>
+                <span class="flow-text">輸入 Sitemap</span>
+              </div>
+              <svg class="flow-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+              <div class="flow-step">
+                <span class="flow-num">2</span>
+                <span class="flow-text">編輯搜尋語句</span>
+              </div>
+              <svg class="flow-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+              <div class="flow-step">
+                <span class="flow-num">3</span>
+                <span class="flow-text">本機執行 CLI</span>
+              </div>
+              <svg class="flow-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+              <div class="flow-step">
+                <span class="flow-num">4</span>
+                <span class="flow-text">上傳結果</span>
+              </div>
+            </div>
+
+            <!-- 詳細說明 -->
+            <div class="guide-details">
+              <div class="guide-item">
+                <h3>這是什麼工具？</h3>
+                <p>AIO View 用來監測你的網站文章是否出現在 Google 搜尋的 <strong>AI Overview</strong>（AI 摘要）中。當使用者搜尋相關關鍵字時，Google 可能會顯示 AI 生成的摘要，並引用你的文章作為來源。</p>
+              </div>
+
+              <div class="guide-item">
+                <h3>為什麼需要本機執行？</h3>
+                <p>由於瀏覽器安全限制（CORS），網頁無法直接抓取 Google 搜尋結果。因此需要在你的電腦上執行 CLI 工具，它會用 Playwright 模擬瀏覽器進行搜尋。</p>
+              </div>
+
+              <div class="guide-item">
+                <h3>CLI 工具需求</h3>
+                <ul>
+                  <li><strong>Node.js 18+</strong> — <a href="https://nodejs.org/" target="_blank" rel="noopener">下載安裝</a></li>
+                  <li><strong>Git</strong> — 用於下載工具</li>
+                  <li>約 <strong>500MB</strong> 硬碟空間（Chromium 瀏覽器）</li>
+                </ul>
+              </div>
+
+              <div class="guide-item">
+                <h3>執行時間與注意事項</h3>
+                <ul>
+                  <li>每個搜尋間隔 <strong>2.5 分鐘</strong>，避免觸發 Google 反爬機制</li>
+                  <li>50 篇文章約需 <strong>2 小時</strong>，建議睡前執行</li>
+                  <li>執行過程中會看到瀏覽器自動開啟並搜尋</li>
+                  <li>結果會即時儲存，中斷後可繼續</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <!-- Step 1: Input -->
         <section class="card" id="input-section">
           <h2>
@@ -218,6 +298,7 @@
   <script src="js/modules/sitemap.js"></script>
 
   <!-- Scripts: Components -->
+  <script src="js/components/guide.js"></script>
   <script src="js/components/stats.js"></script>
   <script src="js/components/articles-table.js"></script>
   <script src="js/components/results-table.js"></script>
