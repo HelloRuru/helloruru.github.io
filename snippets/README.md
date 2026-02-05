@@ -1,6 +1,8 @@
 # Hello Ruru — UI Snippets
 
-可重用的 UI 元件片段，遵循 Design System v1.4 規範。
+可重用的 UI 元件片段，遵循 Design System v1.5 規範。
+
+> **v1.5 字體更新**：內文改用 Medium (500) 字重，字體 CDN：`lab.helloruru.com/fonts/`
 
 ## 檔案結構
 
