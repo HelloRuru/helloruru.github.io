@@ -1,0 +1,75 @@
+<!-- Design System 色票互動區 -->
+<div class="color-playground">
+  <div class="color-playground-label">點選色票，觀察漸層的變化</div>
+  <div class="swatch-row" id="swatchRow">
+    <!-- Swatches injected by JS -->
+  </div>
+  <div class="gradient-preview" id="gradientPreview">
+    <span class="gradient-label" id="gradientLabel">135deg · #D4A5A5 → #B8A9C9</span>
+  </div>
+</div>
+
+<script>
+  const PALETTE = [
+    { name: '乾燥玫瑰', hex: '#D4A5A5' },
+    { name: '薰衣草紫', hex: '#B8A9C9' },
+    { name: '腮紅粉',   hex: '#F5D0C5' },
+    { name: '灰玫瑰',   hex: '#C9929A' },
+    { name: '撫子粉',   hex: '#E8B4B8' },
+    { name: '櫻花粉',   hex: '#FEDFE1' },
+    { name: '藕荷',     hex: '#9B7E93' },
+    { name: '藤紫',     hex: '#C4B7D7' },
+    { name: '桔梗紫',   hex: '#8F77B5' },
+    { name: '鼠尾草綠', hex: '#A8B5A0' },
+  ];
+
+  const swatchRow = document.getElementById('swatchRow');
+  const gradientPreview = document.getElementById('gradientPreview');
+  const gradientLabel = document.getElementById('gradientLabel');
+
+  let selected = [0, 1]; // default: Rose → Lavender
+
+  function renderSwatches() {
+    swatchRow.innerHTML = '';
+    PALETTE.forEach((c, i) => {
+      const el = document.createElement('div');
+      el.className = 'swatch' + (selected.includes(i) ? ' active' : '');
+      el.style.background = c.hex;
+      el.setAttribute('role', 'button');
+      el.setAttribute('aria-label', c.name + ' ' + c.hex);
+      el.tabIndex = 0;
+
+      const tip = document.createElement('span');
+      tip.className = 'swatch-tooltip';
+      tip.textContent = c.name;
+      el.appendChild(tip);
+
+      el.addEventListener('click', () => pickColor(i));
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          pickColor(i);
+        }
+      });
+      swatchRow.appendChild(el);
+    });
+  }
+
+  function pickColor(index) {
+    if (selected[0] === index) return;
+    selected = [selected[1], index];
+    updateGradient();
+    renderSwatches();
+  }
+
+  function updateGradient() {
+    const from = PALETTE[selected[0]].hex;
+    const to = PALETTE[selected[1]].hex;
+    gradientPreview.style.setProperty('--grad-from', from);
+    gradientPreview.style.setProperty('--grad-to', to);
+    gradientLabel.textContent = '135deg · ' + from + ' → ' + to;
+  }
+
+  renderSwatches();
+  updateGradient();
+</script>

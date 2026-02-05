@@ -1,0 +1,14 @@
+<!-- Back to Top 按鈕 -->
+<a href="#top" class="back-to-top" id="backToTop" aria-label="回到頂部">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="18 15 12 9 6 15"/>
+  </svg>
+</a>
+
+<script>
+  // Back to Top 顯示/隱藏
+  const backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    backToTop.classList.toggle('visible', window.scrollY > 300);
+  }, { passive: true });
+</script>
