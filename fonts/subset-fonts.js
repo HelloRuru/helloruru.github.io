@@ -37,6 +37,12 @@ const CONFIG = {
       outputFile: 'SweiSpring-Regular.woff2'
     },
     {
+      name: 'SweiSpring-Medium',
+      url: 'https://cdn.jsdelivr.net/gh/max32002/swei-spring/WebFont/CJK%20TC/SweiSpringCJKtc-Medium.woff2',
+      fullFile: 'SweiSpring-Medium-full.woff2',
+      outputFile: 'SweiSpring-Medium.woff2'
+    },
+    {
       name: 'SweiSugar-Bold',
       url: 'https://cdn.jsdelivr.net/gh/max32002/swei-sugar/WebFont/CJK%20TC/SweiSugarCJKtc-Bold.woff2',
       fullFile: 'SweiSugar-Bold-full.woff2',
