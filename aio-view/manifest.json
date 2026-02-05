@@ -1,0 +1,38 @@
+{
+  "name": "AIO View — AI Overview 監測工具",
+  "short_name": "AIO View",
+  "description": "監測你的網站文章是否出現在 Google AI Overview 摘要中",
+  "start_url": "/aio-view/",
+  "display": "standalone",
+  "background_color": "#FAFAFA",
+  "theme_color": "#D4A5A5",
+  "orientation": "portrait-primary",
+  "lang": "zh-TW",
+  "categories": ["utilities", "productivity"],
+  "icons": [
+    {
+      "src": "icons/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

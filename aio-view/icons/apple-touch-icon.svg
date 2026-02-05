@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180">
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4A5A5"/>
+      <stop offset="100%" style="stop-color:#B8A9C9"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 背景（iOS 會自己加圓角） -->
+  <rect width="180" height="180" fill="url(#bg-gradient)"/>
+
+  <!-- 放大鏡 -->
+  <g fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="76" cy="76" r="36"/>
+    <line x1="101" y1="101" x2="135" y2="135"/>
+  </g>
+
+  <!-- AI 點陣 -->
+  <g fill="#FFFFFF">
+    <circle cx="64" cy="68" r="8"/>
+    <circle cx="88" cy="68" r="8"/>
+    <circle cx="76" cy="90" r="8"/>
+  </g>
+
+  <!-- 小勾勾 -->
+  <path d="M125 50 L140 65 L158 42" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

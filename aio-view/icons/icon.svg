@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <!-- 主漸層 -->
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4A5A5"/>
+      <stop offset="100%" style="stop-color:#B8A9C9"/>
+    </linearGradient>
+    <!-- 淺色漸層（用於圖案） -->
+    <linearGradient id="icon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.95"/>
+      <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:0.85"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 背景圓角方形 -->
+  <rect x="0" y="0" width="512" height="512" rx="96" ry="96" fill="url(#bg-gradient)"/>
+
+  <!-- 放大鏡（代表搜尋監測） -->
+  <g fill="none" stroke="url(#icon-gradient)" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 放大鏡圓圈 -->
+    <circle cx="224" cy="224" r="96"/>
+    <!-- 放大鏡手柄 -->
+    <line x1="292" y1="292" x2="380" y2="380"/>
+  </g>
+
+  <!-- AI 點陣（代表 AI Overview） -->
+  <g fill="url(#icon-gradient)">
+    <!-- 三個圓點排列成三角形，代表 AI/數據 -->
+    <circle cx="192" cy="200" r="20"/>
+    <circle cx="256" cy="200" r="20"/>
+    <circle cx="224" cy="256" r="20"/>
+  </g>
+
+  <!-- 小勾勾（代表監測結果） -->
+  <path d="M360 160 L400 200 L440 140" fill="none" stroke="url(#icon-gradient)" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

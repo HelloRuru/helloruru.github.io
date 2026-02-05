@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4A5A5"/>
+      <stop offset="100%" style="stop-color:#B8A9C9"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 背景圓角方形 -->
+  <rect width="192" height="192" rx="36" fill="url(#bg-gradient)"/>
+
+  <!-- 放大鏡 -->
+  <g fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="80" cy="80" r="36"/>
+    <line x1="105" y1="105" x2="142" y2="142"/>
+  </g>
+
+  <!-- AI 點陣 -->
+  <g fill="#FFFFFF">
+    <circle cx="68" cy="72" r="8"/>
+    <circle cx="92" cy="72" r="8"/>
+    <circle cx="80" cy="94" r="8"/>
+  </g>
+
+  <!-- 小勾勾 -->
+  <path d="M132 56 L148 72 L168 48" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
