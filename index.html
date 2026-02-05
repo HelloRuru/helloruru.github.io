@@ -240,9 +240,25 @@
       background: var(--color-bg-secondary);
       padding: 3px 10px;
       border-radius: 8px;
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
       width: fit-content;
       margin-top: 4px;
+    }
+
+    .card-badge.dev::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: #E8B4B8;
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
     }
 
     .card.card-full {
@@ -550,6 +566,7 @@
           </div>
           <div class="card-title">AIO View</div>
           <div class="card-desc">一站式資訊總覽儀表板</div>
+          <span class="card-badge dev">開發中</span>
         </a>
         <a href="/keyword-pro/" class="card">
           <div class="card-icon sage">
