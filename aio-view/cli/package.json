@@ -1,0 +1,20 @@
+{
+  "name": "aio-view-cli",
+  "version": "1.0.0",
+  "description": "Google AI Overview 監測工具 CLI",
+  "main": "scan.js",
+  "scripts": {
+    "scan": "node scan.js"
+  },
+  "keywords": [
+    "google",
+    "ai-overview",
+    "seo",
+    "monitoring"
+  ],
+  "author": "Kaoru Tsai",
+  "license": "MIT",
+  "dependencies": {
+    "playwright": "^1.40.0"
+  }
+}
