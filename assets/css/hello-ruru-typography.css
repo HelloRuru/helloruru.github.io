@@ -1,64 +1,22 @@
 /* ============================================
-   Hello Ruru Design System v1.1
+   Hello Ruru Design System v1.4
    Typography Specification
-   
-   字體：獅尾四季春 + 獅尾四季春加糖
+
+   字體：獅尾四季春 + 獅尾加糖（全域子集化）
    ============================================ */
 
-/* ---------- Font Face 定義 ---------- */
-/* 獅尾四季春加糖（標題用） */
+/* ---------- Font Face 定義（子集化版本） ---------- */
 @font-face {
-  font-family: 'Swei Spring Sugar';
-  src: url('https://cdn.jsdelivr.net/gh/nicholaschu/Swei-Spring-Sugar/webfont/SweiSpringSugarCJKtc-Regular.woff2') format('woff2');
+  font-family: 'Swei Spring';
+  src: url('/fonts/SweiSpring-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Swei Spring Sugar';
-  src: url('https://cdn.jsdelivr.net/gh/nicholaschu/Swei-Spring-Sugar/webfont/SweiSpringSugarCJKtc-Medium.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Swei Spring Sugar';
-  src: url('https://cdn.jsdelivr.net/gh/nicholaschu/Swei-Spring-Sugar/webfont/SweiSpringSugarCJKtc-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* 獅尾四季春（內文用） */
-@font-face {
-  font-family: 'Swei Spring';
-  src: url('https://cdn.jsdelivr.net/gh/nicholaschu/Swei-Spring/webfont/SweiSpringCJKtc-Light.woff2') format('woff2');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Swei Spring';
-  src: url('https://cdn.jsdelivr.net/gh/nicholaschu/Swei-Spring/webfont/SweiSpringCJKtc-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Swei Spring';
-  src: url('https://cdn.jsdelivr.net/gh/nicholaschu/Swei-Spring/webfont/SweiSpringCJKtc-Medium.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Swei Spring';
-  src: url('https://cdn.jsdelivr.net/gh/nicholaschu/Swei-Spring/webfont/SweiSpringCJKtc-Bold.woff2') format('woff2');
+  font-family: 'Swei Sugar';
+  src: url('/fonts/SweiSugar-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -70,7 +28,7 @@
 /* ---------- CSS Variables ---------- */
 :root {
   /* Font Families */
-  --font-heading: 'Swei Spring Sugar', 'Noto Sans TC', sans-serif;
+  --font-heading: 'Swei Sugar', 'Noto Sans TC', sans-serif;
   --font-body: 'Swei Spring', 'Noto Sans TC', sans-serif;
   --font-caption: 'Noto Sans TC', sans-serif;
   
