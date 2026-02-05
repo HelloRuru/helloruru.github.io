@@ -1,6 +1,9 @@
 # Dependencies
 node_modules/
 
+# Fonts (local only)
+fonts/
+
 # Test files
 test-*.json
 
