@@ -1,0 +1,54 @@
+{
+  "scanDate": "2026-02-05",
+  "domain": "dailyshiru.com",
+  "results": [
+    {
+      "url": "https://dailyshiru.com/article/123",
+      "title": "高雄左營美食推薦",
+      "query": "高雄 左營 美食",
+      "hasAIO": true,
+      "isCited": true,
+      "aioSources": ["dailyshiru.com", "google.com/maps", "tripadvisor.com"]
+    },
+    {
+      "url": "https://dailyshiru.com/article/456",
+      "title": "鳳山夜市必吃",
+      "query": "鳳山 夜市 推薦",
+      "hasAIO": true,
+      "isCited": false,
+      "aioSources": ["pixnet.net", "google.com/maps"]
+    },
+    {
+      "url": "https://dailyshiru.com/article/789",
+      "title": "高雄咖啡廳推薦",
+      "query": "高雄 咖啡廳",
+      "hasAIO": true,
+      "isCited": true,
+      "aioSources": ["dailyshiru.com", "yelp.com"]
+    },
+    {
+      "url": "https://dailyshiru.com/article/101",
+      "title": "旗津海鮮餐廳",
+      "query": "旗津 海鮮",
+      "hasAIO": false,
+      "isCited": false,
+      "aioSources": []
+    },
+    {
+      "url": "https://dailyshiru.com/article/102",
+      "title": "駁二藝術特區攻略",
+      "query": "駁二 景點",
+      "hasAIO": true,
+      "isCited": false,
+      "aioSources": ["klook.com", "kkday.com"]
+    },
+    {
+      "url": "https://dailyshiru.com/article/103",
+      "title": "美麗島站打卡",
+      "query": "美麗島站 拍照",
+      "hasAIO": false,
+      "isCited": false,
+      "aioSources": []
+    }
+  ]
+}
