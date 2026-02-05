@@ -120,91 +120,91 @@
           </button>
 
           <div class="guide-content expanded" id="guide-content">
-            <!-- 流程總覽 -->
-            <div class="guide-flow">
-              <div class="flow-step">
-                <span class="flow-num">1</span>
-                <span class="flow-text">輸入 Sitemap</span>
-              </div>
-              <svg class="flow-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
-              <div class="flow-step">
-                <span class="flow-num">2</span>
-                <span class="flow-text">編輯搜尋語句</span>
-              </div>
-              <svg class="flow-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
-              <div class="flow-step">
-                <span class="flow-num">3</span>
-                <span class="flow-text">本機執行 CLI</span>
-              </div>
-              <svg class="flow-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
-              <div class="flow-step">
-                <span class="flow-num">4</span>
-                <span class="flow-text">上傳結果</span>
-              </div>
+            <!-- 這是什麼 -->
+            <div class="guide-intro">
+              <p><strong>AIO View</strong> 監測你的網站文章是否被 Google AI Overview（AI 摘要）引用。</p>
+              <p class="guide-note">由於瀏覽器限制，需要在你的電腦執行小工具來搜尋 Google。</p>
             </div>
 
-            <!-- 詳細說明 -->
-            <div class="guide-details">
-              <div class="guide-item">
-                <h3>
-                  <svg class="guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
-                    <line x1="12" y1="17" x2="12.01" y2="17"/>
-                  </svg>
-                  這是什麼工具？
-                </h3>
-                <p>AIO View 用來監測你的網站文章是否出現在 Google 搜尋的 <strong>AI Overview</strong>（AI 摘要）中。當使用者搜尋相關關鍵字時，Google 可能會顯示 AI 生成的摘要，並引用你的文章作為來源。</p>
-              </div>
+            <!-- 事前準備 -->
+            <div class="guide-section">
+              <h3>
+                <svg class="guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                  <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                事前準備（只需做一次）
+              </h3>
+              <ol class="guide-steps">
+                <li>
+                  <strong>安裝 Node.js</strong>
+                  <p>前往 <a href="https://nodejs.org/" target="_blank" rel="noopener">nodejs.org</a> 下載安裝，選擇 LTS 版本，一直按下一步即可。</p>
+                </li>
+                <li>
+                  <strong>安裝 Git</strong>
+                  <p>前往 <a href="https://git-scm.com/download/win" target="_blank" rel="noopener">git-scm.com</a> 下載安裝，一直按下一步即可。</p>
+                </li>
+                <li>
+                  <strong>下載 CLI 工具</strong>
+                  <p>開啟 <strong>PowerShell</strong>（在開始選單搜尋「PowerShell」），輸入：</p>
+                  <code class="guide-code">git clone https://github.com/helloruru/helloruru.github.io.git</code>
+                  <p>接著安裝相依套件：</p>
+                  <code class="guide-code">cd helloruru.github.io/aio-view/cli<br>npm install<br>npx playwright install chromium</code>
+                </li>
+              </ol>
+            </div>
 
-              <div class="guide-item">
-                <h3>
-                  <svg class="guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                    <line x1="8" y1="21" x2="16" y2="21"/>
-                    <line x1="12" y1="17" x2="12" y2="21"/>
-                  </svg>
-                  為什麼需要本機執行？
-                </h3>
-                <p>由於瀏覽器安全限制（CORS），網頁無法直接抓取 Google 搜尋結果。因此需要在你的電腦上執行 CLI 工具，它會用 Playwright 模擬瀏覽器進行搜尋。</p>
-              </div>
+            <!-- 使用流程 -->
+            <div class="guide-section">
+              <h3>
+                <svg class="guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="4 17 10 11 4 5"/>
+                  <line x1="12" y1="19" x2="20" y2="19"/>
+                </svg>
+                使用流程
+              </h3>
+              <ol class="guide-steps">
+                <li>
+                  <strong>在這個網頁：輸入 Sitemap 網址</strong>
+                  <p>在下方輸入你的網站 sitemap.xml 網址，點「解析」。</p>
+                </li>
+                <li>
+                  <strong>在這個網頁：選擇要監測的文章</strong>
+                  <p>勾選想監測的文章，可編輯搜尋關鍵字。點「產生 CLI 指令」會自動下載 <code>queries.json</code>。</p>
+                </li>
+                <li>
+                  <strong>在電腦：把 queries.json 放到 CLI 資料夾</strong>
+                  <p>把下載的 <code>queries.json</code> 移到 <code>helloruru.github.io/aio-view/cli</code> 資料夾。</p>
+                </li>
+                <li>
+                  <strong>在電腦：執行掃描</strong>
+                  <p>在 PowerShell 輸入（確保在 cli 資料夾）：</p>
+                  <code class="guide-code">node scan.js --input queries.json --output results.json --domain 你的網域.com</code>
+                  <p>然後就會看到瀏覽器自動打開、搜尋，慢慢等它跑完。</p>
+                </li>
+                <li>
+                  <strong>在這個網頁：上傳結果</strong>
+                  <p>掃描完成後，在下方的「上傳結果」區塊上傳 <code>results.json</code>，就能看到監測報告！</p>
+                </li>
+              </ol>
+            </div>
 
-              <div class="guide-item">
-                <h3>
-                  <svg class="guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="4 17 10 11 4 5"/>
-                    <line x1="12" y1="19" x2="20" y2="19"/>
-                  </svg>
-                  CLI 工具需求
-                </h3>
-                <ul>
-                  <li><strong>Node.js 18+</strong> — <a href="https://nodejs.org/" target="_blank" rel="noopener">下載安裝</a></li>
-                  <li><strong>Git</strong> — 用於下載工具</li>
-                  <li>約 <strong>500MB</strong> 硬碟空間（自動下載瀏覽器）</li>
-                </ul>
-              </div>
-
-              <div class="guide-item">
-                <h3>
-                  <svg class="guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"/>
-                    <polyline points="12 6 12 12 16 14"/>
-                  </svg>
-                  執行時間與注意事項
-                </h3>
-                <ul>
-                  <li>每個搜尋間隔 <strong>2.5 分鐘</strong>，避免觸發 Google 反爬機制</li>
-                  <li>50 篇文章約需 <strong>2 小時</strong>，建議睡前執行</li>
-                  <li>執行過程中會看到瀏覽器自動開啟並搜尋</li>
-                  <li>結果會即時儲存，中斷後可繼續</li>
-                </ul>
-              </div>
+            <!-- 注意事項 -->
+            <div class="guide-section">
+              <h3>
+                <svg class="guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="8" x2="12" y2="12"/>
+                  <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                注意事項
+              </h3>
+              <ul class="guide-notes">
+                <li>每篇文章間隔 <strong>2.5 分鐘</strong>搜尋，避免被 Google 封鎖</li>
+                <li>50 篇文章約需 <strong>2 小時</strong>，建議睡前或外出時執行</li>
+                <li>執行中途可以關閉，下次會從上次進度繼續</li>
+                <li>請勿同時開其他 Chrome 視窗，可能會干擾掃描</li>
+              </ul>
             </div>
           </div>
         </section>
