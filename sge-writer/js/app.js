@@ -1,0 +1,684 @@
+/**
+ * SGE 文案助手 - 主程式
+ * @module app
+ */
+
+import { storage } from './storage.js';
+import { editor } from './editor.js';
+import { analyzer } from './seo-analyzer.js';
+import { templates } from './templates.js';
+
+// ========================================
+// State Management
+// ========================================
+const state = {
+  currentStep: 1,
+  questData: {
+    keyword: '',
+    wordMin: 650,
+    wordMax: 700,
+    source: '',
+    focus: '',
+    strategy: null
+  },
+  partyNames: {
+    guide: '文案小C',
+    writer: '哈皮',
+    player: '露露'
+  },
+  userProgress: {
+    level: 1,
+    exp: 0,
+    completedQuests: 0
+  }
+};
+
+// ========================================
+// DOM Elements
+// ========================================
+const elements = {
+  // Progress
+  progressSteps: document.querySelectorAll('.progress-step'),
+  dialogSteps: document.querySelectorAll('.dialog-step'),
+
+  // Party
+  guideName: document.getElementById('guide-name'),
+  writerName: document.getElementById('writer-name'),
+  playerName: document.getElementById('player-name'),
+  playerNameDisplays: document.querySelectorAll('.player-name-display'),
+  partyMembers: document.querySelectorAll('.member'),
+
+  // Forms
+  questForm: document.getElementById('quest-form'),
+  keywordInput: document.getElementById('keyword'),
+  wordMinInput: document.getElementById('word-min'),
+  wordMaxInput: document.getElementById('word-max'),
+  sourceInput: document.getElementById('source'),
+  focusInput: document.getElementById('focus'),
+
+  // Strategy
+  strategyOptions: document.querySelectorAll('.strategy-option'),
+
+  // Fact Check
+  factList: document.getElementById('fact-list'),
+  goddessCard: document.getElementById('goddess-card'),
+  goddessText: document.getElementById('goddess-text'),
+  backToStep2: document.getElementById('back-to-step2'),
+  confirmFacts: document.getElementById('confirm-facts'),
+
+  // Writing
+  writingStatus: document.getElementById('writing-status'),
+  commandButtons: document.querySelectorAll('.cmd-btn'),
+
+  // Level
+  userLevel: document.getElementById('user-level'),
+  levelTitle: document.getElementById('level-title'),
+  expFill: document.getElementById('exp-fill'),
+  expCurrent: document.getElementById('exp-current'),
+  expMax: document.getElementById('exp-max'),
+
+  // Editor
+  editor: document.getElementById('editor'),
+  toolbarButtons: document.querySelectorAll('.toolbar-btn'),
+  templateButtons: document.querySelectorAll('.template-btn'),
+
+  // Analysis
+  sgeScore: document.getElementById('sge-score'),
+  scoreFill: document.getElementById('score-fill'),
+  h1Count: document.getElementById('h1-count'),
+  wordCount: document.getElementById('word-count'),
+  keywordCount: document.getElementById('keyword-count'),
+  violationCount: document.getElementById('violation-count'),
+  toneStatus: document.getElementById('tone-status'),
+  violationCard: document.getElementById('violation-card'),
+  violationList: document.getElementById('violation-list'),
+  checkItems: document.querySelectorAll('.check-item'),
+
+  // Mobile Tabs
+  tabButtons: document.querySelectorAll('.tab-btn'),
+  tabContents: document.querySelectorAll('.tab-content'),
+
+  // Modal
+  nameModal: document.getElementById('name-modal'),
+  customizeNamesBtn: document.getElementById('customize-names'),
+  closeModalBtn: document.getElementById('close-modal'),
+  cancelNamesBtn: document.getElementById('cancel-names'),
+  nameForm: document.getElementById('name-form'),
+  customGuide: document.getElementById('custom-guide'),
+  customWriter: document.getElementById('custom-writer'),
+  customPlayer: document.getElementById('custom-player'),
+
+  // Actions
+  resetBtn: document.getElementById('reset-btn'),
+  themeToggle: document.getElementById('theme-toggle'),
+
+  // Footer
+  footerYear: document.getElementById('footer-year'),
+
+  // Toast
+  toastContainer: document.getElementById('toast-container')
+};
+
+// ========================================
+// Level System
+// ========================================
+const levelSystem = {
+  levels: [
+    { level: 1, title: '文案見習生', expRequired: 0 },
+    { level: 2, title: '初階寫手', expRequired: 100 },
+    { level: 3, title: '內容創作者', expRequired: 300 },
+    { level: 4, title: 'SEO 劍士', expRequired: 600 },
+    { level: 5, title: 'SGE 大師', expRequired: 1000 }
+  ],
+
+  getExpForNextLevel(currentLevel) {
+    const nextLevel = this.levels.find(l => l.level === currentLevel + 1);
+    return nextLevel ? nextLevel.expRequired : this.levels[this.levels.length - 1].expRequired;
+  },
+
+  getCurrentLevelInfo(exp) {
+    let currentLevel = this.levels[0];
+    for (const level of this.levels) {
+      if (exp >= level.expRequired) {
+        currentLevel = level;
+      }
+    }
+    return currentLevel;
+  },
+
+  addExp(amount) {
+    state.userProgress.exp += amount;
+    const levelInfo = this.getCurrentLevelInfo(state.userProgress.exp);
+    const oldLevel = state.userProgress.level;
+    state.userProgress.level = levelInfo.level;
+
+    if (levelInfo.level > oldLevel) {
+      showToast(`升級了！你現在是 Lv.${levelInfo.level} ${levelInfo.title}`, 'success');
+    }
+
+    this.updateUI();
+    storage.saveProgress(state.userProgress);
+  },
+
+  updateUI() {
+    const levelInfo = this.getCurrentLevelInfo(state.userProgress.exp);
+    const currentLevelExp = levelInfo.expRequired;
+    const nextLevelExp = this.getExpForNextLevel(levelInfo.level);
+    const expInLevel = state.userProgress.exp - currentLevelExp;
+    const expNeeded = nextLevelExp - currentLevelExp;
+    const progress = expNeeded > 0 ? (expInLevel / expNeeded) * 100 : 100;
+
+    elements.userLevel.textContent = levelInfo.level;
+    elements.levelTitle.textContent = levelInfo.title;
+    elements.expCurrent.textContent = state.userProgress.exp;
+    elements.expMax.textContent = nextLevelExp;
+    elements.expFill.style.width = `${Math.min(progress, 100)}%`;
+  }
+};
+
+// ========================================
+// Goddess Revelations (策略解說)
+// ========================================
+const goddessRevelations = {
+  price: {
+    text: '你選擇了價格敏感型客群，這是明智的判斷！這類客群會仔細比價，所以文案要強調 CP 值、優惠活動、免費服務項目。記得用具體數字呈現價值感，例如「省下 XX 元」或「買一送一」。',
+    tips: ['強調優惠價格', '列出免費附加服務', '使用比較表凸顯 CP 值']
+  },
+  quality: {
+    text: '品質追求型客群是最有價值的客戶！他們願意為專業付費，所以文案要強調細節、專業認證、獨特技術。避免只談價格，改用「投資」「品質保證」等詞彙傳遞價值感。',
+    tips: ['強調專業資歷與認證', '詳述服務流程細節', '使用品質相關詞彙']
+  },
+  auto: {
+    text: '讓我來幫你分析最佳策略！根據你提供的資料，我會綜合考量服務類型、價位區間、目標市場來推薦最適合的文案風格。',
+    tips: ['AI 自動分析店家定位', '根據資料推薦策略', '可隨時手動調整']
+  }
+};
+
+// ========================================
+// Step Navigation
+// ========================================
+function goToStep(stepNumber) {
+  state.currentStep = stepNumber;
+
+  // Update progress bar
+  elements.progressSteps.forEach((step, index) => {
+    const stepNum = index + 1;
+    step.classList.remove('active', 'completed');
+    if (stepNum < stepNumber) {
+      step.classList.add('completed');
+    } else if (stepNum === stepNumber) {
+      step.classList.add('active');
+    }
+  });
+
+  // Update dialog steps
+  elements.dialogSteps.forEach((step, index) => {
+    step.classList.remove('active');
+    if (index + 1 === stepNumber) {
+      step.classList.add('active');
+    }
+  });
+
+  // Update active party member
+  updateActivePartyMember(stepNumber);
+}
+
+function updateActivePartyMember(step) {
+  elements.partyMembers.forEach(member => member.classList.remove('active'));
+
+  if (step <= 3) {
+    // Guide is active for steps 1-3
+    document.querySelector('[data-member="guide"]').classList.add('active');
+  } else {
+    // Writer is active for step 4
+    document.querySelector('[data-member="writer"]').classList.add('active');
+  }
+}
+
+// ========================================
+// Quest Form Handler
+// ========================================
+function handleQuestSubmit(e) {
+  e.preventDefault();
+
+  state.questData.keyword = elements.keywordInput.value.trim();
+  state.questData.wordMin = parseInt(elements.wordMinInput.value) || 650;
+  state.questData.wordMax = parseInt(elements.wordMaxInput.value) || 700;
+  state.questData.source = elements.sourceInput.value.trim();
+  state.questData.focus = elements.focusInput.value.trim();
+
+  if (!state.questData.keyword) {
+    showToast('請輸入核心關鍵字', 'error');
+    return;
+  }
+
+  // Update analyzer with keyword
+  analyzer.setKeyword(state.questData.keyword);
+  analyzer.setWordRange(state.questData.wordMin, state.questData.wordMax);
+
+  goToStep(2);
+}
+
+// ========================================
+// Strategy Selection Handler
+// ========================================
+function handleStrategySelect(e) {
+  const button = e.currentTarget;
+  const strategy = button.dataset.strategy;
+
+  // Update UI
+  elements.strategyOptions.forEach(opt => opt.classList.remove('selected'));
+  button.classList.add('selected');
+
+  state.questData.strategy = strategy;
+
+  // Show goddess revelation
+  const revelation = goddessRevelations[strategy];
+  elements.goddessCard.style.display = 'block';
+  elements.goddessText.textContent = revelation.text;
+
+  // Build fact check list
+  buildFactCheckList();
+
+  // Go to step 3 after a short delay
+  setTimeout(() => {
+    goToStep(3);
+  }, 500);
+}
+
+// ========================================
+// Fact Check
+// ========================================
+function buildFactCheckList() {
+  const facts = [
+    { label: '核心關鍵字', value: state.questData.keyword, status: 'success' },
+    { label: '目標字數', value: `${state.questData.wordMin}-${state.questData.wordMax} 字`, status: 'success' },
+    { label: '策略方向', value: getStrategyLabel(state.questData.strategy), status: 'success' },
+    { label: '店家資料', value: state.questData.source ? '已提供' : '未提供', status: state.questData.source ? 'success' : 'warning' },
+    { label: '文案重點', value: state.questData.focus || '未指定', status: state.questData.focus ? 'success' : 'warning' }
+  ];
+
+  elements.factList.innerHTML = facts.map(fact => `
+    <li>
+      <span class="fact-label">${fact.label}</span>
+      <span class="fact-value">${fact.value}</span>
+      <span class="fact-status ${fact.status}">
+        ${fact.status === 'success' ? '✓' : '⚠'}
+      </span>
+    </li>
+  `).join('');
+}
+
+function getStrategyLabel(strategy) {
+  const labels = {
+    price: '價格敏感型',
+    quality: '品質追求型',
+    auto: 'AI 自動推薦'
+  };
+  return labels[strategy] || '未選擇';
+}
+
+// ========================================
+// Writing Phase
+// ========================================
+function startWriting() {
+  goToStep(4);
+
+  // Simulate writing process
+  const statuses = [
+    '正在分析關鍵字結構...',
+    '正在構思標題...',
+    '正在撰寫開場白...',
+    '正在組織內容架構...',
+    '文案撰寫完成！'
+  ];
+
+  let statusIndex = 0;
+  const statusInterval = setInterval(() => {
+    if (statusIndex < statuses.length) {
+      elements.writingStatus.textContent = statuses[statusIndex];
+      statusIndex++;
+    } else {
+      clearInterval(statusInterval);
+      generateSampleContent();
+    }
+  }, 800);
+}
+
+function generateSampleContent() {
+  const keyword = state.questData.keyword;
+  const strategy = state.questData.strategy;
+
+  // Generate sample H1 (target 28 characters)
+  let h1 = `${keyword}推薦｜專業服務讓你安心`;
+  if (h1.length > 28) {
+    h1 = h1.substring(0, 28);
+  } else if (h1.length < 28) {
+    h1 = h1.padEnd(28, '！');
+  }
+
+  // Generate sample content based on strategy
+  let content = '';
+
+  if (strategy === 'price') {
+    content = `
+<h1>${h1}</h1>
+
+<p>正在尋找<strong>${keyword}</strong>服務嗎？本篇整理了高 CP 值的選擇，讓你花小錢也能享受專業服務。</p>
+
+<h2>${keyword}怎麼挑才划算？</h2>
+
+<p>選擇${keyword}服務時，建議先比較以下重點：價格透明度、服務內容、額外優惠。很多店家會提供首次優惠或套裝組合，善用這些方案可以省下不少費用。</p>
+
+<h2>平價${keyword}服務比較表</h2>
+
+<p>以下整理了市面上常見的價格區間供參考。</p>
+
+<h2>什麼時候最適合預約？</h2>
+
+<p>平日預約通常比假日便宜，部分店家也會在淡季推出優惠活動。建議提前預約，不但能選到理想時段，有時還能享有早鳥價。</p>
+`;
+  } else if (strategy === 'quality') {
+    content = `
+<h1>${h1}</h1>
+
+<p>追求品質的你，一定在尋找真正專業的<strong>${keyword}</strong>服務。本篇將深入介紹如何辨識優質服務，讓你的每一分投資都物超所值。</p>
+
+<h2>專業${keyword}服務有什麼不同？</h2>
+
+<p>真正專業的服務從細節就能看出差異：完整的事前諮詢、透明的服務流程、使用的設備與材料等級。這些細節決定了最終的服務品質與滿意度。</p>
+
+<h2>如何辨識${keyword}的專業度？</h2>
+
+<p>建議觀察以下幾點：服務人員的專業資歷、店家的營業年資、客戶評價的真實性。有經驗的專業人員會主動說明服務內容，而非只談價格。</p>
+
+<h2>選擇品質服務的長期價值</h2>
+
+<p>雖然專業服務的價格可能較高，但考量到效果持久度和整體體驗，長期來看反而更划算。品質投資帶來的是安心與滿意。</p>
+`;
+  } else {
+    content = `
+<h1>${h1}</h1>
+
+<p>想找<strong>${keyword}</strong>服務嗎？這篇文章整理了完整的資訊，幫助你做出最適合的選擇。</p>
+
+<h2>${keyword}服務該注意什麼？</h2>
+
+<p>選擇服務前，建議先了解自己的需求和預算。不同的服務方案適合不同的情況，找到最適合自己的才是最重要的。</p>
+
+<h2>常見問題解答</h2>
+
+<p>許多人在選擇${keyword}服務時會有疑問，以下整理了最常被問到的問題。</p>
+
+<h2>如何預約${keyword}服務？</h2>
+
+<p>大部分店家都提供線上預約或電話預約，建議提前 3-5 天預約以確保能選到理想時段。</p>
+`;
+  }
+
+  editor.setContent(content);
+  analyzer.analyze();
+
+  // Add EXP for completing a draft
+  levelSystem.addExp(30);
+  showToast('初稿完成！獲得 30 EXP', 'success');
+}
+
+// ========================================
+// Quick Commands
+// ========================================
+function handleCommand(cmd) {
+  switch (cmd) {
+    case '+100':
+      showToast('功能開發中：增加 100 字細節', 'warning');
+      break;
+    case '-100':
+      showToast('功能開發中：精簡內容', 'warning');
+      break;
+    case 'casual':
+      showToast('功能開發中：轉換口語風格', 'warning');
+      break;
+    case 'rewrite':
+      if (confirm('確定要重新開始嗎？')) {
+        resetApp();
+      }
+      break;
+    case 'copy':
+      copyToClipboard();
+      break;
+  }
+}
+
+async function copyToClipboard() {
+  const content = editor.getContent();
+  try {
+    await navigator.clipboard.writeText(content);
+    showToast('已複製到剪貼簿', 'success');
+    levelSystem.addExp(10);
+  } catch (err) {
+    showToast('複製失敗，請手動選取複製', 'error');
+  }
+}
+
+// ========================================
+// Name Customization Modal
+// ========================================
+function openNameModal() {
+  elements.customGuide.value = state.partyNames.guide;
+  elements.customWriter.value = state.partyNames.writer;
+  elements.customPlayer.value = state.partyNames.player;
+  elements.nameModal.classList.add('active');
+}
+
+function closeNameModal() {
+  elements.nameModal.classList.remove('active');
+}
+
+function saveNames(e) {
+  e.preventDefault();
+
+  state.partyNames.guide = elements.customGuide.value.trim() || '文案小C';
+  state.partyNames.writer = elements.customWriter.value.trim() || '哈皮';
+  state.partyNames.player = elements.customPlayer.value.trim() || '露露';
+
+  updatePartyNamesUI();
+  storage.saveNames(state.partyNames);
+  closeNameModal();
+  showToast('夥伴名稱已更新', 'success');
+}
+
+function updatePartyNamesUI() {
+  elements.guideName.textContent = state.partyNames.guide;
+  elements.writerName.textContent = state.partyNames.writer;
+  elements.playerName.textContent = state.partyNames.player;
+
+  // Update all player name displays in dialogs
+  elements.playerNameDisplays.forEach(el => {
+    el.textContent = state.partyNames.player;
+  });
+
+  // Update bubble names
+  document.querySelectorAll('.guide-bubble .bubble-name').forEach(el => {
+    el.textContent = state.partyNames.guide;
+  });
+  document.querySelectorAll('.writer-bubble .bubble-name').forEach(el => {
+    el.textContent = state.partyNames.writer;
+  });
+}
+
+// ========================================
+// Mobile Tabs
+// ========================================
+function handleTabSwitch(e) {
+  const tab = e.currentTarget.dataset.tab;
+
+  elements.tabButtons.forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === tab);
+  });
+
+  elements.tabContents.forEach(content => {
+    content.classList.toggle('active', content.dataset.tab === tab);
+  });
+}
+
+// ========================================
+// Toast Notifications
+// ========================================
+function showToast(message, type = 'info') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `<span class="toast-message">${message}</span>`;
+
+  elements.toastContainer.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.animation = 'toastIn 0.3s ease reverse';
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
+// ========================================
+// Reset App
+// ========================================
+function resetApp() {
+  state.currentStep = 1;
+  state.questData = {
+    keyword: '',
+    wordMin: 650,
+    wordMax: 700,
+    source: '',
+    focus: '',
+    strategy: null
+  };
+
+  // Reset form
+  elements.questForm.reset();
+  elements.wordMinInput.value = 650;
+  elements.wordMaxInput.value = 700;
+
+  // Reset strategy selection
+  elements.strategyOptions.forEach(opt => opt.classList.remove('selected'));
+  elements.goddessCard.style.display = 'none';
+
+  // Reset editor
+  editor.clear();
+
+  // Reset analyzer
+  analyzer.reset();
+
+  // Go to step 1
+  goToStep(1);
+
+  showToast('已重置，開始新的冒險！', 'success');
+}
+
+// ========================================
+// Footer Year
+// ========================================
+function updateFooterYear() {
+  const startYear = 2026;
+  const currentYear = new Date().getFullYear();
+  elements.footerYear.textContent = currentYear > startYear
+    ? `${startYear}–${currentYear}`
+    : `${startYear}`;
+}
+
+// ========================================
+// Theme Toggle
+// ========================================
+function toggleTheme() {
+  document.documentElement.classList.toggle('dark-mode');
+  const isDark = document.documentElement.classList.contains('dark-mode');
+  storage.saveTheme(isDark ? 'dark' : 'light');
+}
+
+// ========================================
+// Initialize
+// ========================================
+function init() {
+  // Load saved data
+  const savedNames = storage.loadNames();
+  if (savedNames) {
+    state.partyNames = savedNames;
+    updatePartyNamesUI();
+  }
+
+  const savedProgress = storage.loadProgress();
+  if (savedProgress) {
+    state.userProgress = savedProgress;
+  }
+  levelSystem.updateUI();
+
+  const savedTheme = storage.loadTheme();
+  if (savedTheme === 'dark') {
+    document.documentElement.classList.add('dark-mode');
+  }
+
+  // Update footer year
+  updateFooterYear();
+
+  // Event Listeners
+  elements.questForm.addEventListener('submit', handleQuestSubmit);
+
+  elements.strategyOptions.forEach(option => {
+    option.addEventListener('click', handleStrategySelect);
+  });
+
+  elements.backToStep2.addEventListener('click', () => goToStep(2));
+  elements.confirmFacts.addEventListener('click', startWriting);
+
+  elements.commandButtons.forEach(btn => {
+    btn.addEventListener('click', () => handleCommand(btn.dataset.cmd));
+  });
+
+  elements.customizeNamesBtn.addEventListener('click', openNameModal);
+  elements.closeModalBtn.addEventListener('click', closeNameModal);
+  elements.cancelNamesBtn.addEventListener('click', closeNameModal);
+  elements.nameForm.addEventListener('submit', saveNames);
+  elements.nameModal.querySelector('.modal-backdrop').addEventListener('click', closeNameModal);
+
+  elements.tabButtons.forEach(btn => {
+    btn.addEventListener('click', handleTabSwitch);
+  });
+
+  elements.resetBtn.addEventListener('click', () => {
+    if (confirm('確定要重置所有內容嗎？')) {
+      resetApp();
+    }
+  });
+
+  elements.themeToggle.addEventListener('click', toggleTheme);
+
+  // Initialize editor
+  editor.init(elements.editor, elements.toolbarButtons);
+
+  // Initialize analyzer
+  analyzer.init({
+    sgeScore: elements.sgeScore,
+    scoreFill: elements.scoreFill,
+    h1Count: elements.h1Count,
+    wordCount: elements.wordCount,
+    keywordCount: elements.keywordCount,
+    violationCount: elements.violationCount,
+    toneStatus: elements.toneStatus,
+    violationCard: elements.violationCard,
+    violationList: elements.violationList,
+    checkItems: elements.checkItems
+  });
+
+  // Initialize templates
+  templates.init(elements.templateButtons, editor);
+
+  // Editor change listener
+  elements.editor.addEventListener('input', () => {
+    analyzer.analyze();
+  });
+
+  console.log('SGE 文案助手已載入！歡迎來到文案大陸～');
+}
+
+// Start app
+document.addEventListener('DOMContentLoaded', init);
+
+// Export for debugging
+window.sgeApp = { state, goToStep, showToast, levelSystem };
