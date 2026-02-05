@@ -206,13 +206,45 @@ async function main() {
 
   // 啟動瀏覽器
   console.log('正在啟動瀏覽器...');
-  const browser = await chromium.launch({
+
+  // 嘗試找到可用的瀏覽器
+  const browserPaths = [
+    '/mnt/c/Program Files/Google/Chrome/Application/chrome.exe',  // WSL + Windows Chrome
+    '/mnt/c/Program Files (x86)/Google/Chrome/Application/chrome.exe',
+    '/usr/bin/google-chrome',
+    '/usr/bin/google-chrome-stable',
+    '/usr/bin/chromium',
+    '/usr/bin/chromium-browser',
+    null  // 使用 Playwright 內建
+  ];
+
+  let executablePath = null;
+  for (const p of browserPaths) {
+    if (p === null) break;
+    try {
+      if (require('fs').existsSync(p)) {
+        executablePath = p;
+        console.log(`使用瀏覽器：${p}`);
+        break;
+      }
+    } catch {}
+  }
+
+  const launchOptions = {
     headless: options.headless,
     args: [
       '--disable-blink-features=AutomationControlled',
-      '--no-sandbox'
+      '--no-sandbox',
+      '--disable-dev-shm-usage'
     ]
-  });
+  };
+
+  // 只有找到自訂瀏覽器路徑時才設定
+  if (executablePath) {
+    launchOptions.executablePath = executablePath;
+  }
+
+  const browser = await chromium.launch(launchOptions);
 
   const context = await browser.newContext({
     userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',

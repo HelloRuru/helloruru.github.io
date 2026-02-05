@@ -46,6 +46,12 @@ const App = {
    * 綁定全域事件
    */
   bindEvents() {
+    // Logo 點擊 — 回到初始狀態
+    document.getElementById('logo-link')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.reset();
+    });
+
     // 匯出搜尋語句
     document.getElementById('export-queries-btn')?.addEventListener('click', () => {
       CliGenerator.exportQueries(ArticlesTable.articles);
@@ -60,6 +66,39 @@ const App = {
     document.getElementById('export-csv-btn')?.addEventListener('click', () => {
       ResultsTable.exportCsv();
     });
+  },
+
+  /**
+   * 重置頁面到初始狀態
+   */
+  reset() {
+    // 清除儲存的資料
+    Storage.clearAll();
+
+    // 重置變數
+    this.domain = '';
+    ArticlesTable.articles = [];
+
+    // 隱藏所有區塊
+    ArticlesTable.hide();
+    ResultsTable.hide();
+    CliGenerator.hide();
+
+    // 重置統計
+    Stats.reset();
+
+    // 清空輸入框
+    const sitemapInput = document.getElementById('sitemap-url');
+    if (sitemapInput) {
+      sitemapInput.value = '';
+    }
+    const statusEl = document.getElementById('fetch-status');
+    if (statusEl) {
+      statusEl.textContent = '';
+    }
+
+    // 顯示提示
+    Toast.success('已重置');
   },
 
   /**
