@@ -1,5 +1,5 @@
 /* ================================================
-   AIO View — Design System v1.4
+   AIO View — Design System v1.5
    ================================================ */
 
 /* Web Fonts — 獅尾四季春（全域子集化） */
@@ -76,7 +76,7 @@
   --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.08);
   --shadow-deep: 0 8px 32px rgba(0, 0, 0, 0.12);
 
-  /* Typography — Design System v1.4 */
+  /* Typography — Design System v1.5 */
   --font-display: 'Swei Sugar', 'Noto Sans TC', sans-serif;   /* H1, H2 標題（獅尾加糖） */
   --font-heading: 'Swei Spring', 'Noto Sans TC', sans-serif;  /* H3 標題（獅尾四季春） */
   --font-body: 'Swei Spring', 'Noto Sans TC', sans-serif;     /* 內文（獅尾四季春） */
@@ -108,7 +108,7 @@ html {
 
 body {
   font-family: var(--font-body);
-  font-weight: 400;
+  font-weight: 500; /* v1.5: 內文改用 Medium */
   line-height: 1.8;
   color: var(--color-text);
   background: var(--bg-light);

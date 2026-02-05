@@ -1,8 +1,9 @@
 /* ============================================
-   Hello Ruru Design System v1.4
+   Hello Ruru Design System v1.5
    Typography Specification
 
    字體：獅尾四季春 + 獅尾加糖（全域子集化）
+   v1.5 更新：內文改用 Medium (500) 字重
    ============================================ */
 
 /* ---------- Font Face 定義（子集化版本） ---------- */
@@ -81,7 +82,7 @@
 body {
   font-family: var(--font-body);
   font-size: var(--text-body);
-  font-weight: var(--weight-regular);
+  font-weight: var(--weight-medium); /* v1.5: 內文改用 Medium */
   line-height: var(--leading-relaxed);
   letter-spacing: var(--tracking-normal);
   color: #4a4a4a;
