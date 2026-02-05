@@ -6,8 +6,8 @@
 const Sitemap = {
   /** CORS Proxy 清單 */
   PROXIES: [
-    'https://api.allorigins.win/raw?url=',
-    'https://corsproxy.io/?'
+    { url: 'https://api.allorigins.win/get?url=', type: 'json', key: 'contents' },
+    { url: 'https://api.allorigins.win/raw?url=', type: 'raw' }
   ],
 
   /** 排除的 URL 模式 */
@@ -38,19 +38,32 @@ const Sitemap = {
     // 嘗試多個 CORS proxy
     for (const proxy of this.PROXIES) {
       try {
-        const response = await fetch(proxy + encodeURIComponent(sitemapUrl));
+        const proxyUrl = proxy.url + encodeURIComponent(sitemapUrl);
+        const response = await fetch(proxyUrl);
+
         if (response.ok) {
-          xml = await response.text();
-          break;
+          if (proxy.type === 'json') {
+            const data = await response.json();
+            xml = data[proxy.key];
+          } else {
+            xml = await response.text();
+          }
+
+          // 驗證是否為有效 XML
+          if (xml && (xml.includes('<?xml') || xml.includes('<urlset') || xml.includes('<sitemapindex'))) {
+            break;
+          }
+          xml = null;
         }
       } catch (e) {
         lastError = e;
+        console.warn(`Proxy ${proxy.url} failed:`, e.message);
         continue;
       }
     }
 
     if (!xml) {
-      throw new Error('無法取得 sitemap，請檢查網址是否正確');
+      throw new Error('無法取得 sitemap，請檢查網址是否正確，或稍後再試');
     }
 
     return this.parse(xml, sitemapUrl);
