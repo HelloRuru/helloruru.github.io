@@ -852,10 +852,20 @@ code {
 }
 
 .guide-item h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
   font-size: 14px;
   font-weight: 500;
   color: var(--color-ink);
   margin-bottom: var(--space-sm);
+}
+
+.guide-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--color-rose);
+  flex-shrink: 0;
 }
 
 .guide-item p {
