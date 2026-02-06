@@ -1,0 +1,1 @@
+# 角色立繪目錄\n\n此目錄存放角色立繪 PNG 檔案。\n\n## 檔案命名\n\n- guide-joy.png\n- guide-happy.png\n- guide-angry.png\n- guide-sad.png\n- writer-joy.png\n- writer-happy.png\n- writer-angry.png\n- writer-sad.png\n- player-joy.png\n- player-happy.png\n- player-angry.png\n- player-sad.png\n\n## 規格\n\n- 尺寸：512×512 px\n- 格式：PNG（透明背景）
