@@ -391,6 +391,58 @@
       background: var(--bg);
     }
 
+    /* 額外圖片區 */
+    .extra-section {
+      border: 2px dashed var(--lavender);
+      background: rgba(184, 169, 201, 0.05);
+    }
+
+    .extra-drop {
+      padding: 30px;
+      margin-bottom: 16px;
+    }
+
+    .extra-grid {
+      grid-template-columns: repeat(5, 1fr);
+    }
+
+    @media (max-width: 768px) {
+      .extra-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* 備註欄 */
+    .notes-section {
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .notes-section h2 {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .notes-section textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 1.6;
+      resize: vertical;
+      background: var(--bg);
+    }
+
+    .notes-section textarea:focus {
+      outline: none;
+      border-color: var(--rose);
+    }
+
     /* Footer */
     footer {
       text-align: center;
@@ -582,6 +634,99 @@
       </div>
     </div>
 
+    <!-- 額外圖片區 -->
+    <div class="progress-section extra-section">
+      <div class="progress-header">
+        <h2>🎁 露露額外圖片（選填）</h2>
+        <span class="progress-count" id="extraCount">0 / 7 張</span>
+      </div>
+
+      <div class="drop-zone extra-drop" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleExtraDrop(event)">
+        <div class="upload-icon" style="font-size:32px;">📁</div>
+        <div class="upload-desc">拖放額外圖片或 <strong>點擊選擇</strong></div>
+        <input type="file" accept="image/png" multiple onchange="handleExtraFiles(this.files)">
+      </div>
+
+      <div class="preview-grid extra-grid">
+        <div class="preview-slot player" data-role="player" data-emotion="trophy">
+          <div class="preview-empty">+</div>
+          <div class="preview-info">
+            <div class="preview-role">拿獎盃</div>
+            <div class="preview-emotion">升級/成就</div>
+          </div>
+        </div>
+        <div class="preview-slot player" data-role="player" data-emotion="mascot">
+          <div class="preview-empty">+</div>
+          <div class="preview-info">
+            <div class="preview-role">拿綠色娃娃</div>
+            <div class="preview-emotion">特殊獎勵</div>
+          </div>
+        </div>
+        <div class="preview-slot player" data-role="player" data-emotion="cry">
+          <div class="preview-empty">+</div>
+          <div class="preview-info">
+            <div class="preview-role">大哭</div>
+            <div class="preview-emotion">任務失敗</div>
+          </div>
+        </div>
+        <div class="preview-slot player" data-role="player" data-emotion="confused">
+          <div class="preview-empty">+</div>
+          <div class="preview-info">
+            <div class="preview-role">困惑</div>
+            <div class="preview-emotion">需要幫助</div>
+          </div>
+        </div>
+        <div class="preview-slot player" data-role="player" data-emotion="writing-1">
+          <div class="preview-empty">+</div>
+          <div class="preview-info">
+            <div class="preview-role">寫筆記 1</div>
+            <div class="preview-emotion">輸入中</div>
+          </div>
+        </div>
+        <div class="preview-slot player" data-role="player" data-emotion="writing-2">
+          <div class="preview-empty">+</div>
+          <div class="preview-info">
+            <div class="preview-role">寫筆記 2</div>
+            <div class="preview-emotion">輸入中</div>
+          </div>
+        </div>
+        <div class="preview-slot player" data-role="player" data-emotion="writing-3">
+          <div class="preview-empty">+</div>
+          <div class="preview-info">
+            <div class="preview-role">寫筆記 3</div>
+            <div class="preview-emotion">輸入中</div>
+          </div>
+        </div>
+        <div class="preview-slot player" data-role="player" data-emotion="writing-4">
+          <div class="preview-empty">+</div>
+          <div class="preview-info">
+            <div class="preview-role">寫筆記 4</div>
+            <div class="preview-emotion">輸入中</div>
+          </div>
+        </div>
+        <div class="preview-slot player" data-role="player" data-emotion="writing-5">
+          <div class="preview-empty">+</div>
+          <div class="preview-info">
+            <div class="preview-role">寫筆記 5</div>
+            <div class="preview-emotion">輸入中</div>
+          </div>
+        </div>
+        <div class="preview-slot player" data-role="player" data-emotion="writing-6">
+          <div class="preview-empty">+</div>
+          <div class="preview-info">
+            <div class="preview-role">寫筆記 6</div>
+            <div class="preview-emotion">輸入中</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 備註欄 -->
+    <div class="notes-section">
+      <h2>📝 備註給開發者</h2>
+      <textarea id="userNotes" placeholder="說明每張圖的內容、用途、或任何想法...&#10;&#10;例如：&#10;- 寫筆記1: 低頭專心寫&#10;- 寫筆記2: 抬頭思考&#10;- 大哭: 眼淚噴出來那種"></textarea>
+    </div>
+
     <!-- 操作按鈕 -->
     <div class="actions">
       <button class="btn btn-secondary" onclick="clearAll()">清除全部</button>
@@ -608,6 +753,7 @@
     const uploadedFiles = new Map();
     const roles = ['guide', 'writer', 'player'];
     const emotions = ['joy', 'happy', 'angry', 'sad'];
+    const extraEmotions = ['trophy', 'mascot', 'cry', 'confused', 'writing-1', 'writing-2', 'writing-3', 'writing-4', 'writing-5', 'writing-6'];
 
     // 從檔名猜角色
     function guessRole(filename) {
@@ -775,13 +921,86 @@
       updateProgress();
     }
 
-    function updateProgress() {
-      const count = uploadedFiles.size;
-      const percent = (count / 12) * 100;
+    // 額外圖片處理
+    function handleExtraDrop(e) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('dragover');
+      handleExtraFiles(e.dataTransfer.files);
+    }
 
-      document.getElementById('progressFill').style.width = percent + '%';
-      document.getElementById('progressCount').textContent = `${count} / 12 張`;
-      document.getElementById('downloadBtn').disabled = count === 0;
+    function handleExtraFiles(files) {
+      const pngFiles = Array.from(files).filter(f => f.type === 'image/png');
+      if (pngFiles.length === 0) return;
+
+      // 找空位
+      const emptySlots = extraEmotions.filter(em => !uploadedFiles.has(`player-${em}.png`));
+
+      pngFiles.forEach((file, index) => {
+        // 嘗試從檔名猜
+        let emotion = guessExtraEmotion(file.name);
+        let targetKey = emotion ? `player-${emotion}.png` : null;
+
+        // 如果猜不到或已滿，用下一個空位
+        if (!targetKey || uploadedFiles.has(targetKey)) {
+          if (emptySlots.length > index) {
+            targetKey = `player-${emptySlots[index]}.png`;
+          } else {
+            return;
+          }
+        }
+
+        if (targetKey && !uploadedFiles.has(targetKey)) {
+          uploadedFiles.set(targetKey, file);
+          const em = targetKey.replace('player-', '').replace('.png', '');
+          updateSlot('player', em, file);
+
+          const idx = emptySlots.indexOf(em);
+          if (idx > -1) emptySlots.splice(idx, 1);
+        }
+      });
+
+      updateProgress();
+    }
+
+    function guessExtraEmotion(filename) {
+      const lower = filename.toLowerCase();
+      if (lower.includes('trophy') || lower.includes('獎盃') || lower.includes('獎杯')) return 'trophy';
+      if (lower.includes('mascot') || lower.includes('娃娃') || lower.includes('doll')) return 'mascot';
+      if (lower.includes('cry') || lower.includes('大哭') || lower.includes('哭')) return 'cry';
+      if (lower.includes('confus') || lower.includes('困惑') || lower.includes('問號')) return 'confused';
+      if (lower.includes('writing') || lower.includes('寫') || lower.includes('筆記') || lower.includes('note')) {
+        // 嘗試找數字
+        const match = lower.match(/(\d)/);
+        if (match) return `writing-${match[1]}`;
+        return 'writing-1';
+      }
+      return null;
+    }
+
+    function updateProgress() {
+      // 基本 12 張
+      const baseCount = [...uploadedFiles.keys()].filter(k => {
+        const em = k.replace('player-', '').replace('guide-', '').replace('writer-', '').replace('.png', '');
+        return emotions.includes(em);
+      }).length;
+
+      const basePercent = (baseCount / 12) * 100;
+      document.getElementById('progressFill').style.width = basePercent + '%';
+      document.getElementById('progressCount').textContent = `${baseCount} / 12 張`;
+
+      // 額外圖片
+      const extraCount = [...uploadedFiles.keys()].filter(k => {
+        const em = k.replace('player-', '').replace('.png', '');
+        return extraEmotions.includes(em);
+      }).length;
+
+      const extraEl = document.getElementById('extraCount');
+      if (extraEl) {
+        const extraSlots = document.querySelectorAll('.extra-grid .preview-slot').length;
+        extraEl.textContent = `${extraCount} / ${extraSlots} 張`;
+      }
+
+      document.getElementById('downloadBtn').disabled = uploadedFiles.size === 0;
     }
 
     function clearAll() {
@@ -829,6 +1048,16 @@
           const buffer = await file.arrayBuffer();
           zip.file(filename, buffer);
         }
+
+        // 加入備註
+        const notes = document.getElementById('userNotes').value.trim();
+        if (notes) {
+          zip.file('_備註.txt', notes);
+        }
+
+        // 加入檔案清單
+        const fileList = [...uploadedFiles.keys()].sort().join('\n');
+        zip.file('_檔案清單.txt', `已上傳 ${uploadedFiles.size} 張圖片：\n\n${fileList}`);
 
         const blob = await zip.generateAsync({ type: 'blob' });
 
