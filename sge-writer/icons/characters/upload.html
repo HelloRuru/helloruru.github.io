@@ -52,51 +52,6 @@
       margin-bottom: 32px;
     }
 
-    /* 檔名規則 */
-    .naming-rules {
-      background: var(--card-bg);
-      border-radius: 24px;
-      padding: 24px;
-      margin-bottom: 24px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-
-    .naming-rules h2 {
-      font-size: 18px;
-      font-weight: 500;
-      margin-bottom: 16px;
-    }
-
-    .rules-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
-
-    .rules-table th {
-      text-align: left;
-      padding: 10px 12px;
-      background: var(--bg);
-      font-weight: 500;
-    }
-
-    .rules-table td {
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .rules-table tr:last-child td {
-      border-bottom: none;
-    }
-
-    .rules-table code {
-      background: var(--bg);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: monospace;
-      font-size: 13px;
-    }
-
     .color-dot {
       display: inline-block;
       width: 12px;
@@ -109,6 +64,102 @@
     .color-dot.rose { background: var(--rose); }
     .color-dot.lavender { background: var(--lavender); }
     .color-dot.sage { background: var(--sage); }
+
+    /* 使用說明 */
+    .instruction-card {
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .instruction-card h2 {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .steps { grid-template-columns: 1fr; }
+    }
+
+    .step {
+      display: flex;
+      gap: 12px;
+      padding: 16px;
+      background: var(--bg);
+      border-radius: 12px;
+    }
+
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--rose), var(--lavender));
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .step-content strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .step-content p {
+      font-size: 13px;
+      color: var(--text-light);
+      margin: 0;
+    }
+
+    /* 角色對照 */
+    .character-ref {
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .character-ref h2 {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .ref-row {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .ref-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    .ref-item strong {
+      font-weight: 500;
+    }
+
+    .ref-desc {
+      color: var(--text-light);
+      font-size: 13px;
+    }
 
     /* 大上傳區 */
     .upload-zone {
@@ -361,38 +412,61 @@
     <h1>SGE 文案助手 — 角色立繪上傳</h1>
     <p class="subtitle">一次丟入全部 12 張 PNG，系統自動根據檔名分類</p>
 
-    <!-- 檔名規則 -->
-    <div class="naming-rules">
-      <h2>📋 檔名對照表（系統會自動辨識）</h2>
-      <table class="rules-table">
-        <tr>
-          <th>角色</th>
-          <th>檔名關鍵字</th>
-          <th>表情</th>
-          <th>範例檔名</th>
-        </tr>
-        <tr>
-          <td><span class="color-dot rose"></span>文案小C</td>
-          <td><code>guide</code> <code>小c</code> <code>c-</code></td>
-          <td rowspan="3">
-            <code>joy</code> 樂<br>
-            <code>happy</code> 喜<br>
-            <code>angry</code> 怒<br>
-            <code>sad</code> 哀
-          </td>
-          <td><code>guide-joy.png</code></td>
-        </tr>
-        <tr>
-          <td><span class="color-dot lavender"></span>哈皮</td>
-          <td><code>writer</code> <code>哈皮</code> <code>h-</code></td>
-          <td><code>writer-happy.png</code></td>
-        </tr>
-        <tr>
-          <td><span class="color-dot sage"></span>露露</td>
-          <td><code>player</code> <code>露露</code> <code>l-</code></td>
-          <td><code>player-sad.png</code></td>
-        </tr>
-      </table>
+    <!-- 使用說明 -->
+    <div class="instruction-card">
+      <h2>📖 使用說明</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <strong>檔名隨便取沒關係</strong>
+            <p>直接把 12 張 PNG 全部丟進來，不用特別改檔名</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <strong>檢查下方預覽格子</strong>
+            <p>系統會隨機填入空位，你只需確認每張圖在正確的位置</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <strong>位置錯了？點 × 刪除重傳</strong>
+            <p>把錯的刪掉，再單獨上傳到正確格子即可</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <strong>確認後下載 ZIP</strong>
+            <p>ZIP 內的檔名會自動改成正確格式，直接給我就好</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 角色對照 -->
+    <div class="character-ref">
+      <h2>🎭 角色辨識（供參考，不強制）</h2>
+      <div class="ref-row">
+        <div class="ref-item">
+          <span class="color-dot rose"></span>
+          <strong>文案小C</strong>
+          <span class="ref-desc">姊姊系・圓框眼鏡</span>
+        </div>
+        <div class="ref-item">
+          <span class="color-dot lavender"></span>
+          <strong>哈皮</strong>
+          <span class="ref-desc">元氣少女・音符髮夾</span>
+        </div>
+        <div class="ref-item">
+          <span class="color-dot sage"></span>
+          <strong>露露</strong>
+          <span class="ref-desc">小蘿莉・雙馬尾</span>
+        </div>
+      </div>
     </div>
 
     <!-- 大上傳區 -->
