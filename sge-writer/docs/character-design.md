@@ -22,7 +22,7 @@
 |------|------|------|------|
 | 文案小C | Rose 玫瑰粉 | `#D4A5A5` | 服裝、配件主色 |
 | 哈皮 | Lavender 薰衣草紫 | `#B8A9C9` | 服裝、配件主色 |
-| 露露 | Sage 鼠尾草綠 | `#A8B5A0` | 服裝、配件主色 |
+| BLUE | Sage 鼠尾草綠 | `#A8B5A0` | 服裝、配件主色 |
 
 ---
 
@@ -153,7 +153,7 @@
 
 ---
 
-## 角色 3：露露（ルル）
+## 角色 3：BLUE（ブルー）
 
 ### 基本資料
 
@@ -229,10 +229,10 @@ sge-writer/icons/characters/
 ├── writer-happy.png    # H-2 哈皮 喜
 ├── writer-angry.png    # H-3 哈皮 怒
 ├── writer-sad.png      # H-4 哈皮 哀
-├── player-joy.png      # L-1 露露 樂
-├── player-happy.png    # L-2 露露 喜
-├── player-angry.png    # L-3 露露 怒
-└── player-sad.png      # L-4 露露 哀
+├── player-joy.png      # L-1 BLUE 樂
+├── player-happy.png    # L-2 BLUE 喜
+├── player-angry.png    # L-3 BLUE 怒
+└── player-sad.png      # L-4 BLUE 哀
 ```
 
 ---
@@ -252,7 +252,7 @@ sge-writer/icons/characters/
 ┌─────────────────────────────────────────┐
 │            冒險小隊 Party               │
 │                                         │
-│   [小C]          [哈皮]        [露露]   │
+│   [小C]          [哈皮]        [BLUE]   │
 │   姊姊系         元氣系        蘿莉系   │
 │   ↓              ↓             ↓       │
 │   領導者         創作者        學習者   │
