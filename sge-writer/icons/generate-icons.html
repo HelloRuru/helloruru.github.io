@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SGE 文案助手 - 圖示生成器</title>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      padding: 40px;
+      min-height: 100vh;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    .icon-card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .icon-card h3 {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 12px;
+    }
+    .icon-preview {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .icon-source {
+      border-radius: 20%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #D4A5A5, #B8A9C9);
+      position: relative;
+    }
+    .icon-source::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.3), transparent 50%);
+      pointer-events: none;
+    }
+    .icon-content {
+      color: white;
+      font-weight: bold;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      line-height: 1;
+      position: relative;
+      z-index: 1;
+    }
+    .icon-content .letter {
+      display: block;
+    }
+    .icon-content .suffix {
+      display: block;
+      opacity: 0.8;
+    }
+    .sparkle {
+      position: absolute;
+      background: rgba(255,255,255,0.6);
+      border-radius: 50%;
+      z-index: 2;
+    }
+    .btn {
+      display: inline-block;
+      padding: 8px 16px;
+      background: linear-gradient(135deg, #D4A5A5, #B8A9C9);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: transform 0.2s;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .actions {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .actions .btn {
+      margin: 0 10px;
+      padding: 12px 24px;
+      font-size: 16px;
+    }
+    .status {
+      text-align: center;
+      margin-top: 20px;
+      color: #666;
+    }
+    /* Maskable icon has larger safe zone */
+    .maskable .icon-source {
+      border-radius: 0;
+    }
+    .maskable .icon-content {
+      transform: scale(0.7);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>SGE 文案助手 - 圖示生成器</h1>
+
+    <div class="icon-grid">
+      <!-- 16x16 -->
+      <div class="icon-card">
+        <h3>favicon-16x16.png</h3>
+        <div class="icon-preview">
+          <div class="icon-source" id="icon-16" style="width:16px;height:16px;">
+            <div class="icon-content" style="font-size:10px;">
+              <span class="letter">S</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn" onclick="downloadIcon('icon-16', 'favicon-16x16.png', 16)">下載</button>
+      </div>
+
+      <!-- 32x32 -->
+      <div class="icon-card">
+        <h3>favicon-32x32.png</h3>
+        <div class="icon-preview">
+          <div class="icon-source" id="icon-32" style="width:32px;height:32px;">
+            <div class="icon-content" style="font-size:20px;">
+              <span class="letter">S</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn" onclick="downloadIcon('icon-32', 'favicon-32x32.png', 32)">下載</button>
+      </div>
+
+      <!-- 180x180 Apple Touch Icon -->
+      <div class="icon-card">
+        <h3>apple-touch-icon.png (180x180)</h3>
+        <div class="icon-preview">
+          <div class="icon-source" id="icon-180" style="width:180px;height:180px;">
+            <div class="icon-content" style="font-size:100px;">
+              <span class="letter">S</span>
+              <span class="suffix" style="font-size:30px;">GE</span>
+            </div>
+            <div class="sparkle" style="width:15px;height:15px;top:20px;right:25px;"></div>
+            <div class="sparkle" style="width:8px;height:8px;top:12px;right:15px;"></div>
+          </div>
+        </div>
+        <button class="btn" onclick="downloadIcon('icon-180', 'apple-touch-icon.png', 180)">下載</button>
+      </div>
+
+      <!-- 192x192 Android Chrome -->
+      <div class="icon-card">
+        <h3>android-chrome-192x192.png</h3>
+        <div class="icon-preview">
+          <div class="icon-source" id="icon-192" style="width:192px;height:192px;">
+            <div class="icon-content" style="font-size:110px;">
+              <span class="letter">S</span>
+              <span class="suffix" style="font-size:32px;">GE</span>
+            </div>
+            <div class="sparkle" style="width:16px;height:16px;top:22px;right:28px;"></div>
+            <div class="sparkle" style="width:8px;height:8px;top:14px;right:18px;"></div>
+          </div>
+        </div>
+        <button class="btn" onclick="downloadIcon('icon-192', 'android-chrome-192x192.png', 192)">下載</button>
+      </div>
+
+      <!-- 512x512 Android Chrome -->
+      <div class="icon-card">
+        <h3>android-chrome-512x512.png</h3>
+        <div class="icon-preview">
+          <div class="icon-source" id="icon-512" style="width:200px;height:200px;">
+            <div class="icon-content" style="font-size:115px;">
+              <span class="letter">S</span>
+              <span class="suffix" style="font-size:34px;">GE</span>
+            </div>
+            <div class="sparkle" style="width:18px;height:18px;top:24px;right:30px;"></div>
+            <div class="sparkle" style="width:9px;height:9px;top:15px;right:19px;"></div>
+          </div>
+        </div>
+        <button class="btn" onclick="downloadIconScaled('icon-512', 'android-chrome-512x512.png', 200, 512)">下載</button>
+      </div>
+
+      <!-- 512x512 Maskable -->
+      <div class="icon-card maskable">
+        <h3>maskable-512x512.png</h3>
+        <div class="icon-preview">
+          <div class="icon-source" id="icon-maskable" style="width:200px;height:200px;">
+            <div class="icon-content" style="font-size:80px;">
+              <span class="letter">S</span>
+              <span class="suffix" style="font-size:24px;">GE</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn" onclick="downloadIconScaled('icon-maskable', 'maskable-512x512.png', 200, 512)">下載</button>
+      </div>
+
+      <!-- OG Image 1200x630 -->
+      <div class="icon-card" style="grid-column: span 2;">
+        <h3>og-image.png (1200x630)</h3>
+        <div class="icon-preview">
+          <div id="og-image" style="width:600px;height:315px;background:linear-gradient(135deg,#D4A5A5,#B8A9C9);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;position:relative;overflow:hidden;">
+            <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.2),transparent 50%);"></div>
+            <div style="font-size:80px;font-weight:bold;font-family:Arial;position:relative;z-index:1;">SGE 文案助手</div>
+            <div style="font-size:24px;opacity:0.9;margin-top:10px;position:relative;z-index:1;">AI Overview 優化寫作工具</div>
+            <div style="position:absolute;bottom:20px;font-size:16px;opacity:0.7;">lab.helloruru.com/sge-writer</div>
+          </div>
+        </div>
+        <button class="btn" onclick="downloadIconScaled('og-image', 'og-image.png', 600, 1200)">下載</button>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn" onclick="downloadAll()">一鍵下載全部</button>
+    </div>
+
+    <div class="status" id="status"></div>
+  </div>
+
+  <script>
+    async function downloadIcon(elementId, filename, size) {
+      const element = document.getElementById(elementId);
+      const status = document.getElementById('status');
+
+      try {
+        status.textContent = `正在生成 ${filename}...`;
+
+        const canvas = await html2canvas(element, {
+          width: size,
+          height: size,
+          scale: 1,
+          backgroundColor: null,
+          logging: false
+        });
+
+        const link = document.createElement('a');
+        link.download = filename;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+
+        status.textContent = `${filename} 已下載`;
+      } catch (err) {
+        status.textContent = `錯誤: ${err.message}`;
+        console.error(err);
+      }
+    }
+
+    async function downloadIconScaled(elementId, filename, sourceSize, targetSize) {
+      const element = document.getElementById(elementId);
+      const status = document.getElementById('status');
+
+      try {
+        status.textContent = `正在生成 ${filename}...`;
+
+        // Capture at higher resolution
+        const scale = targetSize / sourceSize;
+        const canvas = await html2canvas(element, {
+          scale: scale,
+          backgroundColor: null,
+          logging: false
+        });
+
+        const link = document.createElement('a');
+        link.download = filename;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+
+        status.textContent = `${filename} 已下載`;
+      } catch (err) {
+        status.textContent = `錯誤: ${err.message}`;
+        console.error(err);
+      }
+    }
+
+    async function downloadAll() {
+      const icons = [
+        ['icon-16', 'favicon-16x16.png', 16, 16],
+        ['icon-32', 'favicon-32x32.png', 32, 32],
+        ['icon-180', 'apple-touch-icon.png', 180, 180],
+        ['icon-192', 'android-chrome-192x192.png', 192, 192],
+        ['icon-512', 'android-chrome-512x512.png', 200, 512],
+        ['icon-maskable', 'maskable-512x512.png', 200, 512],
+        ['og-image', 'og-image.png', 600, 1200]
+      ];
+
+      const status = document.getElementById('status');
+
+      for (const [id, filename, source, target] of icons) {
+        status.textContent = `正在生成 ${filename}...`;
+        await new Promise(r => setTimeout(r, 300));
+
+        if (source === target) {
+          await downloadIcon(id, filename, source);
+        } else {
+          await downloadIconScaled(id, filename, source, target);
+        }
+
+        await new Promise(r => setTimeout(r, 500));
+      }
+
+      status.textContent = '全部圖示已下載完成！';
+    }
+  </script>
+</body>
+</html>

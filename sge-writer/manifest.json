@@ -1,0 +1,67 @@
+{
+  "name": "SGE 文案助手",
+  "short_name": "SGE助手",
+  "description": "AI Overview 優化寫作工具，幫助你的內容被 Google SGE 引用",
+  "start_url": "/sge-writer/",
+  "scope": "/sge-writer/",
+  "display": "standalone",
+  "background_color": "#FAFAFA",
+  "theme_color": "#D4A5A5",
+  "orientation": "portrait-primary",
+  "categories": ["productivity", "utilities"],
+  "lang": "zh-TW",
+  "icons": [
+    {
+      "src": "icons/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "icons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "開始新文案",
+      "short_name": "新文案",
+      "description": "開始撰寫新的 SGE 優化文案",
+      "url": "/sge-writer/",
+      "icons": [
+        {
+          "src": "icons/android-chrome-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}
