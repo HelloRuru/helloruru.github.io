@@ -1,27 +1,28 @@
 /* ================================================
-   AIO View — Design System v1.5
+   AIO View — Design System v1.6
+   Font: GenSenRounded (源泉圓體)
    ================================================ */
 
-/* Web Fonts — 獅尾四季春（全域子集化） */
+/* Web Fonts — 源泉圓體 GenSenRounded TW */
 @font-face {
-  font-family: 'Swei Spring';
-  src: url('/fonts/SweiSpring-Regular.woff2') format('woff2');
+  font-family: 'GenSenRounded';
+  src: url('/fonts/GenSenRounded-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Swei Spring';
-  src: url('/fonts/SweiSpring-Medium.woff2') format('woff2');
+  font-family: 'GenSenRounded';
+  src: url('/fonts/GenSenRounded-Medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Swei Sugar';
-  src: url('/fonts/SweiSugar-Bold.woff2') format('woff2');
+  font-family: 'GenSenRounded';
+  src: url('/fonts/GenSenRounded-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -76,10 +77,10 @@
   --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.08);
   --shadow-deep: 0 8px 32px rgba(0, 0, 0, 0.12);
 
-  /* Typography — Design System v1.5 */
-  --font-display: 'Swei Sugar', 'Noto Sans TC', sans-serif;   /* H1, H2 標題（獅尾加糖） */
-  --font-heading: 'Swei Spring', 'Noto Sans TC', sans-serif;  /* H3 標題（獅尾四季春） */
-  --font-body: 'Swei Spring', 'Noto Sans TC', sans-serif;     /* 內文（獅尾四季春） */
+  /* Typography — Design System v1.6 */
+  --font-display: 'GenSenRounded', 'Noto Sans TC', sans-serif;   /* H1, H2 標題 */
+  --font-heading: 'GenSenRounded', 'Noto Sans TC', sans-serif;  /* H3 標題 */
+  --font-body: 'GenSenRounded', 'Noto Sans TC', sans-serif;     /* 內文 */
   --font-small: 'Noto Sans TC', sans-serif;                   /* 小字 ≤12px */
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;      /* 程式碼 */
 
