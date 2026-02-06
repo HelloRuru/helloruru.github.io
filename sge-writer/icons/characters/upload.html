@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SGE 文案助手 - 角色立繪上傳</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rose: #D4A5A5;
+      --lavender: #B8A9C9;
+      --sage: #A8B5A0;
+      --text: #333333;
+      --text-light: #888888;
+      --bg: #FAFAFA;
+      --card-bg: #FFFFFF;
+      --border: #E8E4E1;
+      --success: #A8B5A0;
+      --warning: #E8B4B8;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--rose), var(--lavender));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: var(--text-light);
+      margin-bottom: 32px;
+    }
+
+    /* Spec Card */
+    .spec-card {
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 32px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .spec-card h2 {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+
+    .spec-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .spec-item {
+      background: var(--bg);
+      padding: 12px 16px;
+      border-radius: 12px;
+    }
+
+    .spec-item label {
+      font-size: 12px;
+      color: var(--text-light);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .spec-item strong {
+      font-size: 16px;
+      color: var(--text);
+    }
+
+    /* Character Reference */
+    .character-ref {
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 32px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .character-ref h2 {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+
+    .ref-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .ref-grid { grid-template-columns: 1fr; }
+    }
+
+    .ref-card {
+      padding: 16px;
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    .ref-card.guide { background: rgba(212, 165, 165, 0.15); }
+    .ref-card.writer { background: rgba(184, 169, 201, 0.15); }
+    .ref-card.player { background: rgba(168, 181, 160, 0.15); }
+
+    .ref-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .ref-card.guide .ref-avatar { background: var(--rose); }
+    .ref-card.writer .ref-avatar { background: var(--lavender); }
+    .ref-card.player .ref-avatar { background: var(--sage); }
+
+    .ref-name {
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .ref-desc {
+      font-size: 13px;
+      color: var(--text-light);
+      margin-bottom: 8px;
+    }
+
+    .ref-files {
+      font-size: 12px;
+      color: var(--text);
+      background: rgba(255,255,255,0.6);
+      padding: 8px;
+      border-radius: 8px;
+      font-family: monospace;
+    }
+
+    /* Progress */
+    .progress-bar {
+      background: var(--bg);
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 24px 0 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--rose), var(--lavender));
+      transition: width 0.3s ease;
+      border-radius: 4px;
+    }
+
+    .progress-text {
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-light);
+      margin-bottom: 24px;
+    }
+
+    /* Emotion Section */
+    .emotion-section {
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .emotion-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .emotion-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      background: var(--bg);
+    }
+
+    .emotion-info h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .emotion-info p {
+      font-size: 14px;
+      color: var(--text-light);
+    }
+
+    .emotion-count {
+      margin-left: auto;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .emotion-count.complete {
+      background: rgba(168, 181, 160, 0.2);
+      color: var(--sage);
+    }
+
+    .emotion-count.pending {
+      background: var(--bg);
+      color: var(--text-light);
+    }
+
+    /* Drop Zone */
+    .drop-zone {
+      border: 2px dashed var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .drop-zone:hover,
+    .drop-zone.dragover {
+      border-color: var(--rose);
+      background: rgba(212, 165, 165, 0.05);
+    }
+
+    .drop-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .drop-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .drop-text {
+      font-size: 14px;
+      color: var(--text-light);
+    }
+
+    .drop-text strong {
+      color: var(--rose);
+    }
+
+    /* Preview Grid */
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .preview-slot {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      position: relative;
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .preview-slot.filled {
+      background: rgba(168, 181, 160, 0.1);
+    }
+
+    .preview-slot.guide { border-left: 3px solid var(--rose); }
+    .preview-slot.writer { border-left: 3px solid var(--lavender); }
+    .preview-slot.player { border-left: 3px solid var(--sage); }
+
+    .preview-img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      border-radius: 8px;
+      background: white;
+      margin-bottom: 8px;
+    }
+
+    .preview-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .preview-filename {
+      font-size: 10px;
+      color: var(--text-light);
+      font-family: monospace;
+      margin-top: 4px;
+    }
+
+    .preview-empty {
+      color: var(--text-light);
+      font-size: 24px;
+    }
+
+    .preview-remove {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.5);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .preview-slot.filled:hover .preview-remove {
+      display: flex;
+    }
+
+    /* Actions */
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 14px 28px;
+      border-radius: 24px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--rose), var(--lavender));
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(212, 165, 165, 0.4);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      background: var(--card-bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg);
+    }
+
+    /* Output */
+    .output-section {
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 24px;
+      margin-top: 32px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      display: none;
+    }
+
+    .output-section.show { display: block; }
+
+    .output-section h2 {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+
+    .output-list {
+      background: #2d2d2d;
+      color: #f8f8f2;
+      padding: 16px;
+      border-radius: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      overflow-x: auto;
+    }
+
+    .output-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid #444;
+    }
+
+    .output-item:last-child { border-bottom: none; }
+
+    .output-status { width: 20px; text-align: center; }
+    .output-filename { flex: 1; color: #a6e22e; }
+    .output-size { color: #888; }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--text-light);
+      font-size: 14px;
+    }
+
+    footer a {
+      color: var(--rose);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>SGE 文案助手 — 角色立繪上傳</h1>
+    <p class="subtitle">依表情分類批量上傳，每區可一次拖放該表情的 3 張角色圖</p>
+
+    <!-- 規格說明 -->
+    <div class="spec-card">
+      <h2>📋 檔案規格</h2>
+      <div class="spec-grid">
+        <div class="spec-item">
+          <label>尺寸</label>
+          <strong>512 × 512 px</strong>
+        </div>
+        <div class="spec-item">
+          <label>格式</label>
+          <strong>PNG（透明背景）</strong>
+        </div>
+        <div class="spec-item">
+          <label>風格</label>
+          <strong>Q版可愛 / 日系 RPG</strong>
+        </div>
+        <div class="spec-item">
+          <label>總數量</label>
+          <strong>12 張（3角色 × 4表情）</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- 角色對照表 -->
+    <div class="character-ref">
+      <h2>🎭 角色對照表（檔名規則）</h2>
+      <div class="ref-grid">
+        <div class="ref-card guide">
+          <div class="ref-avatar">C</div>
+          <div class="ref-name">文案小C</div>
+          <div class="ref-desc">姊姊系 · 圓框眼鏡 · 中長髮</div>
+          <div class="ref-files">guide-*.png</div>
+        </div>
+        <div class="ref-card writer">
+          <div class="ref-avatar">H</div>
+          <div class="ref-name">哈皮</div>
+          <div class="ref-desc">元氣少女 · 音符髮夾 · 長捲髮</div>
+          <div class="ref-files">writer-*.png</div>
+        </div>
+        <div class="ref-card player">
+          <div class="ref-avatar">L</div>
+          <div class="ref-name">露露</div>
+          <div class="ref-desc">小蘿莉 · 雙馬尾 · 小背包</div>
+          <div class="ref-files">player-*.png</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 進度條 -->
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+    <p class="progress-text" id="progressText">已上傳 0 / 12 張</p>
+
+    <!-- 樂 Joy -->
+    <div class="emotion-section" data-emotion="joy">
+      <div class="emotion-header">
+        <div class="emotion-icon">😊</div>
+        <div class="emotion-info">
+          <h3>樂 Joy — 一般引導 / 開始撰寫</h3>
+          <p>歡迎使用者、日常對話、準備開始</p>
+        </div>
+        <div class="emotion-count pending" id="joy-count">0 / 3</div>
+      </div>
+      <div class="drop-zone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'joy')">
+        <div class="drop-icon">📁</div>
+        <div class="drop-text">拖放 3 張「樂」表情的圖片到這裡<br>或 <strong>點擊選擇檔案</strong></div>
+        <input type="file" accept="image/png" multiple onchange="handleFiles(this.files, 'joy')">
+      </div>
+      <div class="preview-grid">
+        <div class="preview-slot guide" data-role="guide" data-emotion="joy">
+          <div class="preview-empty">+</div>
+          <div class="preview-label">文案小C</div>
+          <div class="preview-filename">guide-joy.png</div>
+        </div>
+        <div class="preview-slot writer" data-role="writer" data-emotion="joy">
+          <div class="preview-empty">+</div>
+          <div class="preview-label">哈皮</div>
+          <div class="preview-filename">writer-joy.png</div>
+        </div>
+        <div class="preview-slot player" data-role="player" data-emotion="joy">
+          <div class="preview-empty">+</div>
+          <div class="preview-label">露露</div>
+          <div class="preview-filename">player-joy.png</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 喜 Happy -->
+    <div class="emotion-section" data-emotion="happy">
+      <div class="emotion-header">
+        <div class="emotion-icon">🎉</div>
+        <div class="emotion-info">
+          <h3>喜 Happy — 查核通過 / 文案完成</h3>
+          <p>成功完成、獲得高分、升級</p>
+        </div>
+        <div class="emotion-count pending" id="happy-count">0 / 3</div>
+      </div>
+      <div class="drop-zone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'happy')">
+        <div class="drop-icon">📁</div>
+        <div class="drop-text">拖放 3 張「喜」表情的圖片到這裡<br>或 <strong>點擊選擇檔案</strong></div>
+        <input type="file" accept="image/png" multiple onchange="handleFiles(this.files, 'happy')">
+      </div>
+      <div class="preview-grid">
+        <div class="preview-slot guide" data-role="guide" data-emotion="happy">
+          <div class="preview-empty">+</div>
+          <div class="preview-label">文案小C</div>
+          <div class="preview-filename">guide-happy.png</div>
+        </div>
+        <div class="preview-slot writer" data-role="writer" data-emotion="happy">
+          <div class="preview-empty">+</div>
+          <div class="preview-label">哈皮</div>
+          <div class="preview-filename">writer-happy.png</div>
+        </div>
+        <div class="preview-slot player" data-role="player" data-emotion="happy">
+          <div class="preview-empty">+</div>
+          <div class="preview-label">露露</div>
+          <div class="preview-filename">player-happy.png</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 怒 Angry -->
+    <div class="emotion-section" data-emotion="angry">
+      <div class="emotion-header">
+        <div class="emotion-icon">😤</div>
+        <div class="emotion-info">
+          <h3>怒 Angry — 發現問題 / 違規詞警告</h3>
+          <p>格式錯誤、違規詞、遇到問題</p>
+        </div>
+        <div class="emotion-count pending" id="angry-count">0 / 3</div>
+      </div>
+      <div class="drop-zone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'angry')">
+        <div class="drop-icon">📁</div>
+        <div class="drop-text">拖放 3 張「怒」表情的圖片到這裡<br>或 <strong>點擊選擇檔案</strong></div>
+        <input type="file" accept="image/png" multiple onchange="handleFiles(this.files, 'angry')">
+      </div>
+      <div class="preview-grid">
+        <div class="preview-slot guide" data-role="guide" data-emotion="angry">
+          <div class="preview-empty">+</div>
+          <div class="preview-label">文案小C</div>
+          <div class="preview-filename">guide-angry.png</div>
+        </div>
+        <div class="preview-slot writer" data-role="writer" data-emotion="angry">
+          <div class="preview-empty">+</div>
+          <div class="preview-label">哈皮</div>
+          <div class="preview-filename">writer-angry.png</div>
+        </div>
+        <div class="preview-slot player" data-role="player" data-emotion="angry">
+          <div class="preview-empty">+</div>
+          <div class="preview-label">露露</div>
+          <div class="preview-filename">player-angry.png</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 哀 Sad -->
+    <div class="emotion-section" data-emotion="sad">
+      <div class="emotion-header">
+        <div class="emotion-icon">😢</div>
+        <div class="emotion-info">
+          <h3>哀 Sad — 資料不足 / 需要重寫</h3>
+          <p>缺少資訊、分數太低、任務失敗</p>
+        </div>
+        <div class="emotion-count pending" id="sad-count">0 / 3</div>
+      </div>
+      <div class="drop-zone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'sad')">
+        <div class="drop-icon">📁</div>
+        <div class="drop-text">拖放 3 張「哀」表情的圖片到這裡<br>或 <strong>點擊選擇檔案</strong></div>
+        <input type="file" accept="image/png" multiple onchange="handleFiles(this.files, 'sad')">
+      </div>
+      <div class="preview-grid">
+        <div class="preview-slot guide" data-role="guide" data-emotion="sad">
+          <div class="preview-empty">+</div>
+          <div class="preview-label">文案小C</div>
+          <div class="preview-filename">guide-sad.png</div>
+        </div>
+        <div class="preview-slot writer" data-role="writer" data-emotion="sad">
+          <div class="preview-empty">+</div>
+          <div class="preview-label">哈皮</div>
+          <div class="preview-filename">writer-sad.png</div>
+        </div>
+        <div class="preview-slot player" data-role="player" data-emotion="sad">
+          <div class="preview-empty">+</div>
+          <div class="preview-label">露露</div>
+          <div class="preview-filename">player-sad.png</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 操作按鈕 -->
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="clearAll()">清除全部</button>
+      <button class="btn btn-primary" id="downloadBtn" onclick="downloadAll()" disabled>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        下載 ZIP 壓縮檔
+      </button>
+    </div>
+
+    <!-- 輸出區域 -->
+    <div class="output-section" id="outputSection">
+      <h2>📦 已上傳檔案清單</h2>
+      <div class="output-list" id="outputList"></div>
+    </div>
+
+    <footer>
+      <p>© 2026 Kaoru Tsai. All Rights Reserved. | Contact: <a href="mailto:hello@helloruru.com">hello@helloruru.com</a></p>
+      <p style="margin-top: 8px;">
+        <a href="../../docs/character-design.md" target="_blank">查看完整角色設計需求文件</a>
+      </p>
+    </footer>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script>
+    // 儲存上傳的檔案
+    const uploadedFiles = new Map();
+    const roles = ['guide', 'writer', 'player'];
+    const emotions = ['joy', 'happy', 'angry', 'sad'];
+
+    // 根據檔名猜測角色
+    function guessRole(filename) {
+      const lower = filename.toLowerCase();
+      if (lower.includes('guide') || lower.includes('小c') || lower.includes('c-') || lower.includes('navigator')) return 'guide';
+      if (lower.includes('writer') || lower.includes('哈皮') || lower.includes('h-') || lower.includes('happy') || lower.includes('bard')) return 'writer';
+      if (lower.includes('player') || lower.includes('露露') || lower.includes('l-') || lower.includes('lulu') || lower.includes('apprentice')) return 'player';
+      return null;
+    }
+
+    // 處理拖放
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.currentTarget.classList.add('dragover');
+    }
+
+    function handleDragLeave(e) {
+      e.currentTarget.classList.remove('dragover');
+    }
+
+    function handleDrop(e, emotion) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('dragover');
+      handleFiles(e.dataTransfer.files, emotion);
+    }
+
+    // 處理檔案上傳
+    function handleFiles(files, emotion) {
+      const fileArray = Array.from(files).filter(f => f.type === 'image/png');
+
+      if (fileArray.length === 0) {
+        alert('請上傳 PNG 格式的圖片');
+        return;
+      }
+
+      // 找出這個表情還缺哪些角色
+      const emptySlots = roles.filter(role => !uploadedFiles.has(`${role}-${emotion}.png`));
+
+      fileArray.forEach((file, index) => {
+        // 先嘗試從檔名猜測角色
+        let role = guessRole(file.name);
+
+        // 如果猜不出來或該位置已有檔案，就填入下一個空位
+        if (!role || uploadedFiles.has(`${role}-${emotion}.png`)) {
+          role = emptySlots[index] || null;
+        }
+
+        if (role) {
+          const targetFilename = `${role}-${emotion}.png`;
+          uploadedFiles.set(targetFilename, file);
+          updateSlot(role, emotion, file);
+
+          // 從空位列表中移除
+          const idx = emptySlots.indexOf(role);
+          if (idx > -1) emptySlots.splice(idx, 1);
+        }
+      });
+
+      updateProgress();
+    }
+
+    // 更新單一格子的預覽
+    function updateSlot(role, emotion, file) {
+      const slot = document.querySelector(`.preview-slot[data-role="${role}"][data-emotion="${emotion}"]`);
+      if (!slot) return;
+
+      slot.classList.add('filled');
+
+      // 清除舊內容
+      const oldImg = slot.querySelector('.preview-img');
+      const oldEmpty = slot.querySelector('.preview-empty');
+      if (oldImg) oldImg.remove();
+      if (oldEmpty) oldEmpty.remove();
+
+      // 新增預覽圖
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = document.createElement('img');
+        img.className = 'preview-img';
+        img.src = e.target.result;
+        slot.insertBefore(img, slot.firstChild);
+      };
+      reader.readAsDataURL(file);
+
+      // 新增刪除按鈕
+      let removeBtn = slot.querySelector('.preview-remove');
+      if (!removeBtn) {
+        removeBtn = document.createElement('button');
+        removeBtn.className = 'preview-remove';
+        removeBtn.innerHTML = '×';
+        removeBtn.onclick = () => removeFile(role, emotion);
+        slot.appendChild(removeBtn);
+      }
+    }
+
+    // 移除單一檔案
+    function removeFile(role, emotion) {
+      const filename = `${role}-${emotion}.png`;
+      uploadedFiles.delete(filename);
+
+      const slot = document.querySelector(`.preview-slot[data-role="${role}"][data-emotion="${emotion}"]`);
+      slot.classList.remove('filled');
+
+      const img = slot.querySelector('.preview-img');
+      if (img) img.remove();
+
+      const removeBtn = slot.querySelector('.preview-remove');
+      if (removeBtn) removeBtn.remove();
+
+      // 重新加入空白符號
+      const empty = document.createElement('div');
+      empty.className = 'preview-empty';
+      empty.textContent = '+';
+      slot.insertBefore(empty, slot.firstChild);
+
+      updateProgress();
+    }
+
+    // 更新進度
+    function updateProgress() {
+      const total = 12;
+      const count = uploadedFiles.size;
+      const percent = (count / total) * 100;
+
+      document.getElementById('progressFill').style.width = percent + '%';
+      document.getElementById('progressText').textContent = `已上傳 ${count} / ${total} 張`;
+
+      // 更新每個表情區的計數
+      emotions.forEach(emotion => {
+        const emotionCount = roles.filter(role => uploadedFiles.has(`${role}-${emotion}.png`)).length;
+        const countEl = document.getElementById(`${emotion}-count`);
+        countEl.textContent = `${emotionCount} / 3`;
+        countEl.className = emotionCount === 3 ? 'emotion-count complete' : 'emotion-count pending';
+      });
+
+      // 啟用/禁用下載按鈕
+      document.getElementById('downloadBtn').disabled = count === 0;
+
+      // 更新輸出區域
+      updateOutput();
+    }
+
+    function updateOutput() {
+      const outputSection = document.getElementById('outputSection');
+      const outputList = document.getElementById('outputList');
+
+      if (uploadedFiles.size === 0) {
+        outputSection.classList.remove('show');
+        return;
+      }
+
+      outputSection.classList.add('show');
+
+      let html = '';
+      const sortedFiles = Array.from(uploadedFiles.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+
+      sortedFiles.forEach(([filename, file]) => {
+        const sizeKB = (file.size / 1024).toFixed(1);
+        html += `
+          <div class="output-item">
+            <span class="output-status">✓</span>
+            <span class="output-filename">${filename}</span>
+            <span class="output-size">${sizeKB} KB</span>
+          </div>
+        `;
+      });
+
+      outputList.innerHTML = html;
+    }
+
+    function clearAll() {
+      if (uploadedFiles.size === 0) return;
+      if (!confirm('確定要清除所有已上傳的圖片嗎？')) return;
+
+      uploadedFiles.clear();
+
+      // 重置所有格子
+      document.querySelectorAll('.preview-slot').forEach(slot => {
+        slot.classList.remove('filled');
+
+        const img = slot.querySelector('.preview-img');
+        if (img) img.remove();
+
+        const removeBtn = slot.querySelector('.preview-remove');
+        if (removeBtn) removeBtn.remove();
+
+        let empty = slot.querySelector('.preview-empty');
+        if (!empty) {
+          empty = document.createElement('div');
+          empty.className = 'preview-empty';
+          empty.textContent = '+';
+          slot.insertBefore(empty, slot.firstChild);
+        }
+      });
+
+      // 重置 input
+      document.querySelectorAll('.drop-zone input').forEach(input => input.value = '');
+
+      updateProgress();
+    }
+
+    async function downloadAll() {
+      if (uploadedFiles.size === 0) {
+        alert('請先上傳至少一張圖片');
+        return;
+      }
+
+      const btn = document.getElementById('downloadBtn');
+      btn.disabled = true;
+      btn.innerHTML = '⏳ 正在打包...';
+
+      try {
+        const zip = new JSZip();
+
+        for (const [filename, file] of uploadedFiles) {
+          const arrayBuffer = await file.arrayBuffer();
+          zip.file(filename, arrayBuffer);
+        }
+
+        const blob = await zip.generateAsync({ type: 'blob' });
+
+        // 下載
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'sge-writer-characters.zip';
+        link.click();
+
+        URL.revokeObjectURL(link.href);
+
+        btn.innerHTML = `
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          下載 ZIP 壓縮檔
+        `;
+        btn.disabled = false;
+
+      } catch (err) {
+        console.error(err);
+        alert('打包失敗：' + err.message);
+        btn.innerHTML = '下載 ZIP 壓縮檔';
+        btn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>
