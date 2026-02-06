@@ -1,13 +1,14 @@
 # HelloRuru 全域字體
 
-Design System v1.4 的獅尾字體子集化版本，供所有 HelloRuru 網站共用。
+Design System v1.6 的源泉圓體子集化版本，供所有 HelloRuru 網站共用。
 
 ## 字體檔案
 
-| 檔案 | 字體 | 用途 | 大小 |
+| 檔案 | 字重 | 用途 | 大小 |
 |------|------|------|------|
-| `SweiSpring-Regular.woff2` | 獅尾四季春 | H3、內文 | ~150 KB |
-| `SweiSugar-Bold.woff2` | 獅尾加糖 | H1、H2 標題 | ~200 KB |
+| `GenSenRounded-Regular.woff2` | 400 Regular | Caption、輔助文字 | ~199 KB |
+| `GenSenRounded-Medium.woff2` | 500 Medium | H3、內文（預設） | ~202 KB |
+| `GenSenRounded-Bold.woff2` | 700 Bold | H1、H2 標題 | ~205 KB |
 
 ## 使用方式
 
@@ -15,27 +16,24 @@ Design System v1.4 的獅尾字體子集化版本，供所有 HelloRuru 網站�
 
 ```css
 @font-face {
-  font-family: 'Swei Spring';
-  src: url('https://lab.helloruru.com/fonts/SweiSpring-Regular.woff2') format('woff2');
+  font-family: 'GenSenRounded';
+  src: url('https://lab.helloruru.com/fonts/GenSenRounded-Regular.woff2') format('woff2');
   font-weight: 400;
   font-display: swap;
 }
-
 @font-face {
-  font-family: 'Swei Sugar';
-  src: url('https://lab.helloruru.com/fonts/SweiSugar-Bold.woff2') format('woff2');
+  font-family: 'GenSenRounded';
+  src: url('https://lab.helloruru.com/fonts/GenSenRounded-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'GenSenRounded';
+  src: url('https://lab.helloruru.com/fonts/GenSenRounded-Bold.woff2') format('woff2');
   font-weight: 700;
   font-display: swap;
 }
 ```
-
-## 自動更新
-
-當任何網站的 HTML 檔案有變更時，GitHub Actions 會自動：
-
-1. 掃描所有網站的中文字元
-2. 重新子集化字體
-3. 自動 commit 更新
 
 ## 手動更新
 
@@ -45,6 +43,8 @@ npm install subset-font
 node subset-fonts.js
 ```
 
+需要先將 GenSenRounded TW OTF 檔案放到 `/tmp/GenSenRounded2TW/`。
+
 ## 掃描範圍
 
 - `helloruru.github.io` (lab.helloruru.com)
@@ -53,7 +53,7 @@ node subset-fonts.js
 
 ## 授權
 
-獅尾字體採用 SIL Open Font License 1.1，可自由商用。
+源泉圓體採用 SIL Open Font License 1.1，可自由商用。
 
-- [獅尾四季春](https://github.com/max32002/swei-spring)
-- [獅尾加糖](https://github.com/max32002/swei-sugar)
+- [源泉圓體 GenSenRounded](https://github.com/ButTaiwan/gensen-font)
+- 基底：Adobe Source Han Sans（思源黑體）

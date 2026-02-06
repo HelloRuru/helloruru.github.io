@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>表格修復工具 — Hello Ruru Lab</title>
+  <meta name="description" content="把亂掉的表格文字貼上來，一鍵還原成乾淨表格，可直接複製到 Word 或 Google Docs。">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* === Design System v1.6 Font Faces — GenSenRounded (源泉圓體) === */
+    @font-face {
+      font-family: 'GenSenRounded';
+      src: url('https://lab.helloruru.com/fonts/GenSenRounded-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'GenSenRounded';
+      src: url('https://lab.helloruru.com/fonts/GenSenRounded-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'GenSenRounded';
+      src: url('https://lab.helloruru.com/fonts/GenSenRounded-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-display: swap;
+    }
+
+    /* === CSS Variables === */
+    :root {
+      --color-rose: #D4A5A5;
+      --color-lavender: #B8A9C9;
+      --color-blush: #F5D0C5;
+      --color-grey-rose: #C9929A;
+      --color-nadeshiko: #E8B4B8;
+      --color-sakura: #FEDFE1;
+      --color-fuji: #C4B7D7;
+      --color-bellflower: #8F77B5;
+      --color-sage: #A8B5A0;
+      --color-mist: #E8E4E1;
+      --color-warm-grey: #B5ADA7;
+      --color-charcoal: #5C5856;
+      --color-ink: #333333;
+      --color-body: #4A4A4A;
+      --color-caption: #888888;
+      --color-light-grey: #AAAAAA;
+      --color-bg: #FAFAFA;
+      --color-card: #FFFFFF;
+      --gradient-main: linear-gradient(135deg, #D4A5A5, #B8A9C9);
+      --gradient-pink-purple: linear-gradient(135deg, #F5D0C5, #C4B7D7);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 24px;
+      --radius-full: 50%;
+      --shadow-soft: 0 2px 8px rgba(0,0,0,0.06);
+      --shadow-mid: 0 4px 16px rgba(0,0,0,0.08);
+      --shadow-deep: 0 8px 32px rgba(0,0,0,0.12);
+      --font-title: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+      --font-body: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+      --font-small: 'Noto Sans TC', sans-serif;
+    }
+
+    /* === Reset & Base === */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--color-body);
+      background: var(--color-bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* === Header === */
+    .header {
+      text-align: center;
+      padding: 48px 24px 32px;
+    }
+    .header h1 {
+      font-family: var(--font-title);
+      font-weight: 700;
+      font-size: 40px;
+      line-height: 1.3;
+      color: var(--color-ink);
+      margin-bottom: 8px;
+    }
+    .header p {
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 16px;
+      color: var(--color-caption);
+    }
+
+    /* === Main === */
+    .main {
+      flex: 1;
+      max-width: 960px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 24px 48px;
+    }
+
+    /* === Card === */
+    .card {
+      background: var(--color-card);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+
+    .card-title {
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 20px;
+      line-height: 1.3;
+      color: var(--color-ink);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-title svg {
+      width: 20px;
+      height: 20px;
+      color: var(--color-rose);
+      flex-shrink: 0;
+    }
+
+    /* === Textarea === */
+    textarea {
+      width: 100%;
+      min-height: 200px;
+      border: 1.5px solid var(--color-mist);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      font-family: var(--font-small);
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--color-body);
+      background: var(--color-bg);
+      resize: vertical;
+      transition: border-color 0.2s;
+    }
+    textarea::placeholder {
+      color: var(--color-light-grey);
+    }
+    textarea:focus {
+      outline: none;
+      border-color: var(--color-rose);
+    }
+
+    /* === Buttons === */
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 24px;
+      border: none;
+      border-radius: var(--radius-lg);
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .btn-primary {
+      background: var(--gradient-main);
+      color: #FFFFFF;
+      box-shadow: var(--shadow-soft);
+    }
+    .btn-primary:hover {
+      box-shadow: var(--shadow-mid);
+      transform: translateY(-1px);
+    }
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .btn-secondary {
+      background: var(--color-card);
+      color: var(--color-body);
+      border: 1.5px solid var(--color-mist);
+    }
+    .btn-secondary:hover {
+      border-color: var(--color-rose);
+      color: var(--color-rose);
+    }
+    .btn-secondary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* === Result === */
+    .result-area {
+      display: none;
+    }
+    .result-area.visible {
+      display: block;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 8px;
+      border: 1.5px solid var(--color-mist);
+      border-radius: var(--radius-md);
+    }
+
+    .table-wrap table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .table-wrap th,
+    .table-wrap td {
+      padding: 10px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--color-mist);
+      white-space: nowrap;
+    }
+    .table-wrap tr:last-child th,
+    .table-wrap tr:last-child td {
+      border-bottom: none;
+    }
+    .table-wrap th {
+      background: var(--color-bg);
+      font-weight: 500;
+      color: var(--color-ink);
+    }
+    .table-wrap tr:hover td {
+      background: #FEFCFB;
+    }
+
+    /* === Toast === */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--color-charcoal);
+      color: #FFFFFF;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 14px;
+      padding: 12px 24px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-deep);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 100;
+      pointer-events: none;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* === Hint === */
+    .hint {
+      font-family: var(--font-small);
+      font-size: 12px;
+      color: var(--color-caption);
+      line-height: 1.6;
+      margin-top: 12px;
+    }
+
+    /* === Separator Options === */
+    .sep-options {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .sep-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 14px;
+      border: 1.5px solid var(--color-mist);
+      border-radius: var(--radius-lg);
+      font-family: var(--font-small);
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--color-body);
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--color-card);
+    }
+    .sep-chip:hover {
+      border-color: var(--color-nadeshiko);
+    }
+    .sep-chip.active {
+      border-color: var(--color-rose);
+      background: var(--color-sakura);
+      color: var(--color-ink);
+    }
+
+    /* === Stats === */
+    .stats {
+      display: flex;
+      gap: 24px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .stat-item {
+      font-family: var(--font-small);
+      font-size: 14px;
+      color: var(--color-caption);
+    }
+    .stat-item strong {
+      color: var(--color-ink);
+      font-weight: 500;
+    }
+
+    /* === Footer === */
+    .site-footer {
+      text-align: center;
+      padding: 32px 0;
+      font-family: var(--font-small);
+      font-size: 14px;
+      color: var(--color-caption);
+    }
+    .site-footer a {
+      color: var(--color-rose);
+      text-decoration: none;
+    }
+    .site-footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* === Responsive === */
+    @media (max-width: 767px) {
+      .header { padding: 32px 16px 24px; }
+      .header h1 { font-size: 30px; }
+      .main { padding: 0 16px 32px; }
+      .card { padding: 24px 20px; }
+      .btn-row { flex-direction: column; }
+      .btn { justify-content: center; }
+      .stats { gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <h1>表格修復工具</h1>
+    <p>把亂掉的表格貼上來，一鍵還原，直接複製到 Word 或 Google Docs</p>
+  </header>
+
+  <main class="main">
+    <!-- Input Card -->
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+        貼上文字
+      </div>
+      <textarea id="input" placeholder="把亂掉的表格文字貼在這裡⋯&#10;&#10;支援：Tab 分隔、空格分隔、Pipe | 分隔、Markdown 表格、CSV 等格式"></textarea>
+
+      <div class="sep-options">
+        <span class="sep-chip active" data-sep="auto">自動偵測</span>
+        <span class="sep-chip" data-sep="tab">Tab</span>
+        <span class="sep-chip" data-sep="pipe">Pipe |</span>
+        <span class="sep-chip" data-sep="comma">逗號 ,</span>
+        <span class="sep-chip" data-sep="spaces">多空格</span>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btn-fix">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          修復表格
+        </button>
+        <button class="btn btn-secondary" id="btn-clear">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          清除
+        </button>
+      </div>
+    </div>
+
+    <!-- Result Card -->
+    <div class="card result-area" id="result-card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+        修復結果
+      </div>
+      <div class="stats" id="stats"></div>
+      <div class="table-wrap" id="table-output"></div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btn-copy-html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          複製表格（貼到 Word / Docs）
+        </button>
+        <button class="btn btn-secondary" id="btn-copy-tsv">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          複製純文字（貼到 Excel）
+        </button>
+      </div>
+      <p class="hint">「貼到 Word / Docs」會保留表格框線與格式；「貼到 Excel」為 Tab 分隔純文字。</p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; <span id="footer-year"></span> Kaoru Tsai. All Rights Reserved. | Contact: <a href="mailto:hello@helloruru.com">hello@helloruru.com</a></p>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // === Footer Year ===
+    (() => {
+      const startYear = 2026;
+      const currentYear = new Date().getFullYear();
+      document.getElementById('footer-year').textContent =
+        currentYear > startYear ? `${startYear}\u2013${currentYear}` : `${startYear}`;
+    })();
+
+    // === State ===
+    let currentSep = 'auto';
+    let parsedData = [];
+
+    // === DOM ===
+    const inputEl = document.getElementById('input');
+    const resultCard = document.getElementById('result-card');
+    const tableOutput = document.getElementById('table-output');
+    const statsEl = document.getElementById('stats');
+    const toastEl = document.getElementById('toast');
+
+    // === Separator Chips ===
+    document.querySelectorAll('.sep-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.sep-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        currentSep = chip.dataset.sep;
+      });
+    });
+
+    // === Parse Logic ===
+    function detectSeparator(text) {
+      const lines = text.trim().split('\n').filter(l => l.trim());
+      if (lines.length === 0) return 'tab';
+
+      // Check for pipe (markdown-style)
+      const pipeLines = lines.filter(l => l.includes('|'));
+      if (pipeLines.length > lines.length * 0.5) return 'pipe';
+
+      // Check for tab
+      const tabLines = lines.filter(l => l.includes('\t'));
+      if (tabLines.length > lines.length * 0.5) return 'tab';
+
+      // Check for comma (CSV)
+      const commaLines = lines.filter(l => l.includes(','));
+      if (commaLines.length > lines.length * 0.5) return 'comma';
+
+      // Fallback: multiple spaces
+      const spaceLines = lines.filter(l => /\s{2,}/.test(l));
+      if (spaceLines.length > lines.length * 0.5) return 'spaces';
+
+      return 'tab';
+    }
+
+    function splitLine(line, sep) {
+      switch (sep) {
+        case 'tab':
+          return line.split('\t').map(c => c.trim());
+        case 'pipe':
+          return line.split('|').map(c => c.trim()).filter((c, i, arr) => {
+            // Remove empty leading/trailing from pipe tables
+            if (i === 0 && c === '') return false;
+            if (i === arr.length - 1 && c === '') return false;
+            return true;
+          });
+        case 'comma':
+          return parseCSVLine(line);
+        case 'spaces':
+          return line.split(/\s{2,}/).map(c => c.trim());
+        default:
+          return line.split('\t').map(c => c.trim());
+      }
+    }
+
+    function parseCSVLine(line) {
+      const result = [];
+      let current = '';
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (inQuotes) {
+          if (ch === '"' && line[i + 1] === '"') {
+            current += '"';
+            i++;
+          } else if (ch === '"') {
+            inQuotes = false;
+          } else {
+            current += ch;
+          }
+        } else {
+          if (ch === '"') {
+            inQuotes = true;
+          } else if (ch === ',') {
+            result.push(current.trim());
+            current = '';
+          } else {
+            current += ch;
+          }
+        }
+      }
+      result.push(current.trim());
+      return result;
+    }
+
+    function isMarkdownSeparatorRow(cells) {
+      return cells.every(c => /^[-:]+$/.test(c.trim()));
+    }
+
+    function parseTable(text, sep) {
+      const lines = text.trim().split('\n').filter(l => l.trim());
+      if (lines.length === 0) return [];
+
+      const rows = [];
+      for (const line of lines) {
+        const cells = splitLine(line, sep);
+        // Skip markdown separator rows (---|----|---)
+        if (sep === 'pipe' && isMarkdownSeparatorRow(cells)) continue;
+        if (cells.length > 0 && cells.some(c => c !== '')) {
+          rows.push(cells);
+        }
+      }
+
+      // Normalize column count
+      const maxCols = Math.max(...rows.map(r => r.length));
+      return rows.map(r => {
+        while (r.length < maxCols) r.push('');
+        return r;
+      });
+    }
+
+    // === Render ===
+    function renderTable(data) {
+      if (data.length === 0) return;
+
+      const hasHeader = true; // Treat first row as header
+      let html = '<table>';
+
+      data.forEach((row, i) => {
+        html += '<tr>';
+        const tag = (i === 0 && hasHeader) ? 'th' : 'td';
+        row.forEach(cell => {
+          html += `<${tag}>${escapeHtml(cell)}</${tag}>`;
+        });
+        html += '</tr>';
+      });
+
+      html += '</table>';
+      tableOutput.innerHTML = html;
+
+      // Stats
+      statsEl.innerHTML = `
+        <span class="stat-item"><strong>${data.length}</strong> 列</span>
+        <span class="stat-item"><strong>${data[0].length}</strong> 欄</span>
+      `;
+
+      resultCard.classList.add('visible');
+      resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // === Copy ===
+    async function copyAsHtml() {
+      const html = tableOutput.innerHTML;
+      try {
+        await navigator.clipboard.write([
+          new ClipboardItem({
+            'text/html': new Blob([html], { type: 'text/html' }),
+            'text/plain': new Blob([toTSV()], { type: 'text/plain' }),
+          })
+        ]);
+        showToast('已複製！可直接貼到 Word / Google Docs');
+      } catch {
+        // Fallback
+        fallbackCopy(toTSV());
+        showToast('已複製為純文字格式');
+      }
+    }
+
+    function toTSV() {
+      return parsedData.map(row => row.join('\t')).join('\n');
+    }
+
+    async function copyAsTSV() {
+      try {
+        await navigator.clipboard.writeText(toTSV());
+        showToast('已複製純文字！可直接貼到 Excel');
+      } catch {
+        fallbackCopy(toTSV());
+        showToast('已複製純文字格式');
+      }
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+    }
+
+    // === Toast ===
+    function showToast(msg) {
+      toastEl.textContent = msg;
+      toastEl.classList.add('show');
+      setTimeout(() => toastEl.classList.remove('show'), 2500);
+    }
+
+    // === Events ===
+    document.getElementById('btn-fix').addEventListener('click', () => {
+      const text = inputEl.value.trim();
+      if (!text) {
+        showToast('請先貼上表格文字');
+        return;
+      }
+
+      const sep = currentSep === 'auto' ? detectSeparator(text) : currentSep;
+      parsedData = parseTable(text, sep);
+
+      if (parsedData.length === 0) {
+        showToast('無法辨識表格內容');
+        return;
+      }
+
+      renderTable(parsedData);
+    });
+
+    document.getElementById('btn-clear').addEventListener('click', () => {
+      inputEl.value = '';
+      parsedData = [];
+      resultCard.classList.remove('visible');
+    });
+
+    document.getElementById('btn-copy-html').addEventListener('click', copyAsHtml);
+    document.getElementById('btn-copy-tsv').addEventListener('click', copyAsTSV);
+  </script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 /**
  * SGE 文案助手 - 樣式表
- * Design System v1.5
+ * Design System v1.6 — GenSenRounded (源泉圓體)
  */
 
 /* ========================================
@@ -37,8 +37,8 @@
   --gradient-pink-purple: linear-gradient(135deg, #F5D0C5, #C4B7D7);
 
   /* Typography */
-  --font-title: 'Swei Sugar', 'Noto Sans TC', sans-serif;
-  --font-body: 'Swei Spring', 'Noto Sans TC', sans-serif;
+  --font-title: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  --font-body: 'GenSenRounded', 'Noto Sans TC', sans-serif;
   --font-ui: 'Noto Sans TC', sans-serif;
 
   /* Spacing */
