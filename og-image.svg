@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D4A5A5"/>
+      <stop offset="100%" stop-color="#B8A9C9"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#FAFAFA"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Decorative circles -->
+  <circle cx="100" cy="530" r="180" fill="#FFFFFF" opacity="0.06"/>
+  <circle cx="1100" cy="100" r="140" fill="#FFFFFF" opacity="0.06"/>
+  <circle cx="950" cy="500" r="100" fill="#FFFFFF" opacity="0.04"/>
+
+  <!-- Center card -->
+  <rect x="120" y="80" width="960" height="470" rx="32" fill="url(#card)" opacity="0.95"/>
+
+  <!-- Flower icon -->
+  <g transform="translate(600, 200)">
+    <ellipse cx="0" cy="-48" rx="18" ry="36" fill="#FEDFE1" opacity="0.7" transform="rotate(0 0 0)"/>
+    <ellipse cx="0" cy="-48" rx="18" ry="36" fill="#F5D0C5" opacity="0.6" transform="rotate(60 0 0)"/>
+    <ellipse cx="0" cy="-48" rx="18" ry="36" fill="#C4B7D7" opacity="0.6" transform="rotate(120 0 0)"/>
+    <ellipse cx="0" cy="-48" rx="18" ry="36" fill="#E8B4B8" opacity="0.6" transform="rotate(180 0 0)"/>
+    <ellipse cx="0" cy="-48" rx="18" ry="36" fill="#D4A5A5" opacity="0.6" transform="rotate(240 0 0)"/>
+    <ellipse cx="0" cy="-48" rx="18" ry="36" fill="#FEDFE1" opacity="0.5" transform="rotate(300 0 0)"/>
+    <circle cx="0" cy="0" r="16" fill="#FFFFFF" stroke="#E8B4B8" stroke-width="2"/>
+  </g>
+
+  <!-- Title -->
+  <text x="600" y="320" text-anchor="middle" font-family="Noto Sans CJK TC, Noto Sans TC, sans-serif" font-weight="700" font-size="56" fill="#333333" letter-spacing="4">Hello Ruru Lab</text>
+
+  <!-- Subtitle -->
+  <text x="600" y="385" text-anchor="middle" font-family="Noto Sans CJK TC, Noto Sans TC, sans-serif" font-weight="500" font-size="28" fill="#888888">數位工具與 AI 實驗基地</text>
+
+  <!-- Features row -->
+  <text x="600" y="448" text-anchor="middle" font-family="Noto Sans CJK TC, Noto Sans TC, sans-serif" font-weight="400" font-size="20" fill="#B5ADA7">AI Overview ・ SEO 文案 ・ 閱讀器測驗 ・ 問安圖 ・ 離職規劃</text>
+
+  <!-- Brand footer -->
+  <text x="600" y="600" text-anchor="middle" font-family="Noto Sans CJK TC, Noto Sans TC, sans-serif" font-weight="700" font-size="20" fill="#FFFFFF" opacity="0.7" letter-spacing="2">lab.helloruru.com</text>
+</svg>
