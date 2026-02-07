@@ -281,7 +281,7 @@
 |------|-----------|----------|
 | `tools.helloruru.com/hihi/` | 問安圖產生器 | 必要 |
 | `tools.helloruru.com/reader-quiz/` | 電子書閱讀器選購測驗 | 必要 |
-| `tools.helloruru.com/prompt-gen/` | SD 咒語產生器 | 必要 |
+| `tools.helloruru.com/spell/` | SD 咒語產生器 | 必要 |
 | `newday.helloruru.com` | 離職全能導航幫手 | 必要 |
 | `lab.helloruru.com` | —（已有完整花朵 Hero） | 不需要 |
 
