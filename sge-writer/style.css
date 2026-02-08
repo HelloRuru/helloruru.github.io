@@ -168,20 +168,28 @@ input, textarea, select {
 
 .logo-section {
   display: flex;
-  align-items: center;
-  gap: var(--space-md);
-}
-
-.logo-icon {
-  flex-shrink: 0;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .app-title {
   font-size: 1.25rem;
+  font-weight: 700;
   background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.app-subtitle {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+hello-ruru-header {
+  display: block;
+  margin-bottom: 28px;
 }
 
 .header-actions {
@@ -470,6 +478,25 @@ input, textarea, select {
 .member-role {
   font-size: 0.75rem;
   color: var(--color-text-muted);
+}
+
+.member-mood {
+  display: none;
+  font-size: 0.7rem;
+  color: var(--color-text-sub);
+  font-style: italic;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  max-width: 120px;
+  line-height: 1.4;
+}
+
+.member.active .member-mood {
+  display: block;
+}
+
+.member-mood.visible {
+  opacity: 1;
 }
 
 .party-actions {

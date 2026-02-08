@@ -23,9 +23,9 @@ const state = {
     strategy: null
   },
   partyNames: {
-    guide: '文案小C',
+    guide: '筱西',
     writer: '哈皮',
-    player: '露露'
+    player: 'BLUE'
   },
   userProgress: {
     level: 1,
@@ -229,15 +229,58 @@ function goToStep(stepNumber) {
   updateActivePartyMember(stepNumber);
 }
 
+const PARTY_MOODS = {
+  guide: {
+    1: ['準備好了嗎？告訴我任務目標吧', '新的冒險即將展開！'],
+    2: ['讓我想想最適合的策略...', '每個選擇都會影響結果喔'],
+    3: ['確認事實是最重要的一步', '仔細核對，不能有錯'],
+    4: ['交給哈皮了，我在旁邊看著', '哈皮加油～'],
+    5: ['寫得不錯呢！', '任務完成，辛苦了']
+  },
+  writer: {
+    1: ['～♪ 等待靈感中...', '今天要寫什麼呢～'],
+    2: ['策略決定好就換我上場囉', '已經開始構思了...'],
+    3: ['正在醞釀最美的詩句...', '靈感快來了...'],
+    4: ['讓我來施展文字魔法！', '筆尖已經發光了！', '最喜歡寫作的時刻～'],
+    5: ['這篇文案好有感覺！', '又完成一首詩篇了']
+  },
+  player: {
+    1: ['第一次冒險好期待！', '我會認真學習的！'],
+    2: ['原來有這麼多策略...', '我在認真做筆記中'],
+    3: ['確認事實好重要啊', '學到了！'],
+    4: ['哈皮好厲害...', '我也想學寫作！'],
+    5: ['太棒了，我學到好多！', '下次我也要試試看']
+  }
+};
+
 function updateActivePartyMember(step) {
   elements.partyMembers.forEach(member => member.classList.remove('active'));
 
   if (step <= 3) {
-    // Guide is active for steps 1-3
     document.querySelector('[data-member="guide"]').classList.add('active');
   } else {
-    // Writer is active for step 4
     document.querySelector('[data-member="writer"]').classList.add('active');
+  }
+
+  updatePartyMoods(step);
+}
+
+function updatePartyMoods(step) {
+  const roles = ['guide', 'writer', 'player'];
+  for (const role of roles) {
+    const el = document.getElementById(`${role}-mood`);
+    if (!el) continue;
+    const lines = PARTY_MOODS[role][step] || [];
+    if (lines.length === 0) {
+      el.textContent = '';
+      el.classList.remove('visible');
+      continue;
+    }
+    el.classList.remove('visible');
+    setTimeout(() => {
+      el.textContent = lines[Math.floor(Math.random() * lines.length)];
+      el.classList.add('visible');
+    }, 150);
   }
 }
 
@@ -483,9 +526,9 @@ function closeNameModal() {
 function saveNames(e) {
   e.preventDefault();
 
-  state.partyNames.guide = elements.customGuide.value.trim() || '文案小C';
+  state.partyNames.guide = elements.customGuide.value.trim() || '筱西';
   state.partyNames.writer = elements.customWriter.value.trim() || '哈皮';
-  state.partyNames.player = elements.customPlayer.value.trim() || '露露';
+  state.partyNames.player = elements.customPlayer.value.trim() || 'BLUE';
 
   updatePartyNamesUI();
   storage.saveNames(state.partyNames);
@@ -518,7 +561,7 @@ function updatePartyNamesUI() {
 const activeObjectURLs = [];
 
 const IMAGE_ROLES = [
-  { id: 'guide', name: '小C', subtitle: '領航員', labelClass: 'guide-label' },
+  { id: 'guide', name: '筱西', subtitle: '領航員', labelClass: 'guide-label' },
   { id: 'writer', name: '哈皮', subtitle: '吟遊詩人', labelClass: 'writer-label' },
   { id: 'player', name: 'BLUE', subtitle: '見習生', labelClass: 'player-label' }
 ];
@@ -1068,6 +1111,9 @@ function init() {
   // Initialize image modal and load saved avatars
   initImageModal();
   updateAvatars();
+
+  // Initialize party moods
+  updatePartyMoods(1);
 
   // Editor change listener
   elements.editor.addEventListener('input', () => {
