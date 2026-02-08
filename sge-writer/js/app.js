@@ -113,8 +113,6 @@ const elements = {
   imageModal: document.getElementById('image-modal'),
   manageImagesBtn: document.getElementById('manage-images'),
   closeImageModalBtn: document.getElementById('close-image-modal'),
-  extraImagesList: document.getElementById('extra-images-list'),
-  addExtraImageBtn: document.getElementById('add-extra-image'),
 
   // Actions
   resetBtn: document.getElementById('reset-btn'),
@@ -517,8 +515,133 @@ function updatePartyNamesUI() {
 // ========================================
 // Image Management Modal
 // ========================================
-let extraImageCounter = 0;
 const activeObjectURLs = [];
+
+const IMAGE_ROLES = [
+  { id: 'guide', name: '小C', subtitle: '領航員', labelClass: 'guide-label' },
+  { id: 'writer', name: '哈皮', subtitle: '吟遊詩人', labelClass: 'writer-label' },
+  { id: 'player', name: 'BLUE', subtitle: '見習生', labelClass: 'player-label' }
+];
+
+const IMAGE_EMOTIONS = [
+  { id: 'default', name: '預設' },
+  { id: 'joy', name: '樂' },
+  { id: 'happy', name: '喜' },
+  { id: 'angry', name: '怒' },
+  { id: 'sad', name: '哀' }
+];
+
+const VARIANTS_PER_EMOTION = 4;
+
+function buildImageModalDOM() {
+  const body = document.getElementById('image-modal-body');
+  body.innerHTML = '';
+
+  // Core section: 3 roles × 5 emotions × 4 variants
+  for (const role of IMAGE_ROLES) {
+    const group = document.createElement('div');
+    group.className = 'image-role-group';
+    group.innerHTML = `<span class="image-role-label ${role.labelClass}">${role.name}（${role.subtitle}）</span>`;
+
+    for (const emotion of IMAGE_EMOTIONS) {
+      const emotionRow = document.createElement('div');
+      emotionRow.className = 'image-emotion-row';
+      emotionRow.innerHTML = `<span class="image-emotion-label">${emotion.name}</span>`;
+
+      const grid = document.createElement('div');
+      grid.className = 'image-grid';
+
+      for (let v = 1; v <= VARIANTS_PER_EMOTION; v++) {
+        const key = `${role.id}-${emotion.id}-${v}`;
+        const slot = createImageSlot(key, `${role.name} ${emotion.name} #${v}`);
+        grid.appendChild(slot);
+      }
+
+      emotionRow.appendChild(grid);
+      group.appendChild(emotionRow);
+    }
+
+    body.appendChild(group);
+  }
+
+  // Other section: free upload with notes
+  const otherSection = document.createElement('div');
+  otherSection.className = 'image-other-section';
+  otherSection.innerHTML = `
+    <h4 class="image-section-title">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+        <circle cx="8.5" cy="8.5" r="1.5"/>
+        <polyline points="21 15 16 10 5 21"/>
+      </svg>
+      其他圖片
+    </h4>
+    <p class="image-section-desc">自由上傳其他場景圖片，並備註用途</p>
+    <div class="extra-images-list" id="extra-images-list"></div>
+    <button type="button" class="btn-secondary add-extra-image" id="add-extra-image">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      新增圖片
+    </button>
+  `;
+  body.appendChild(otherSection);
+}
+
+function createImageSlot(key, alt) {
+  const slot = document.createElement('div');
+  slot.className = 'image-slot';
+  slot.dataset.key = key;
+  slot.innerHTML = `
+    <input type="file" accept="image/png,image/jpeg,image/webp" class="image-input" tabindex="-1">
+    <div class="image-placeholder">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+        <line x1="12" y1="8" x2="12" y2="16"/>
+        <line x1="8" y1="12" x2="16" y2="12"/>
+      </svg>
+    </div>
+    <img class="image-preview" alt="${alt}">
+    <button class="image-delete" title="刪除">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  `;
+
+  const input = slot.querySelector('.image-input');
+  const deleteBtn = slot.querySelector('.image-delete');
+
+  input.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const preview = slot.querySelector('.image-preview');
+    const url = imageStorage.createImageURL(file);
+    activeObjectURLs.push(url);
+    preview.src = url;
+    slot.classList.add('filled');
+    imageStorage.saveImage(key, file).then(() => {
+      updateAvatars();
+      showToast('立繪已儲存', 'success');
+    });
+  });
+
+  deleteBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const preview = slot.querySelector('.image-preview');
+    preview.src = '';
+    slot.classList.remove('filled');
+    input.value = '';
+    imageStorage.deleteImage(key).then(() => {
+      updateAvatars();
+      showToast('立繪已刪除', 'info');
+    });
+  });
+
+  return slot;
+}
 
 function openImageModal() {
   loadImageModalState();
@@ -531,10 +654,12 @@ function closeImageModal() {
 
 async function loadImageModalState() {
   const images = await imageStorage.loadAllImages();
-  const coreSlots = elements.imageModal.querySelectorAll('.image-section:first-child .image-slot');
 
-  coreSlots.forEach(slot => {
+  // Load core slots
+  const allSlots = elements.imageModal.querySelectorAll('.image-slot[data-key]');
+  allSlots.forEach(slot => {
     const key = slot.dataset.key;
+    if (key.startsWith('extra-')) return;
     const record = images.find(img => img.key === key);
     const preview = slot.querySelector('.image-preview');
 
@@ -549,55 +674,18 @@ async function loadImageModalState() {
     }
   });
 
-  // Load extra images
-  elements.extraImagesList.innerHTML = '';
-  extraImageCounter = 0;
+  // Load extra/other images
+  const extraList = document.getElementById('extra-images-list');
+  extraList.innerHTML = '';
   const extras = images.filter(img => img.key.startsWith('extra-'));
-  extras.sort((a, b) => {
-    const numA = parseInt(a.key.split('-')[1]);
-    const numB = parseInt(b.key.split('-')[1]);
-    return numA - numB;
-  });
+  extras.sort((a, b) => a.updatedAt - b.updatedAt);
   for (const extra of extras) {
     addExtraImageRow(extra.key, extra.blob, extra.description);
   }
 }
 
-function handleCoreImageUpload(slot, file) {
-  const key = slot.dataset.key;
-  const preview = slot.querySelector('.image-preview');
-
-  const url = imageStorage.createImageURL(file);
-  activeObjectURLs.push(url);
-  preview.src = url;
-  slot.classList.add('filled');
-
-  imageStorage.saveImage(key, file).then(() => {
-    updateAvatars();
-    showToast('立繪已儲存', 'success');
-  });
-}
-
-function handleCoreImageDelete(slot) {
-  const key = slot.dataset.key;
-  const preview = slot.querySelector('.image-preview');
-  const input = slot.querySelector('.image-input');
-
-  preview.src = '';
-  slot.classList.remove('filled');
-  input.value = '';
-
-  imageStorage.deleteImage(key).then(() => {
-    updateAvatars();
-    showToast('立繪已刪除', 'info');
-  });
-}
-
 function addExtraImageRow(key, blob, description) {
-  if (!key) {
-    key = `extra-${Date.now()}`;
-  }
-  extraImageCounter++;
+  if (!key) key = `extra-${Date.now()}`;
 
   const row = document.createElement('div');
   row.className = 'extra-image-row';
@@ -613,8 +701,8 @@ function addExtraImageRow(key, blob, description) {
           <line x1="8" y1="12" x2="16" y2="12"/>
         </svg>
       </div>
-      <img class="image-preview" alt="場景圖片" ${blob ? `src="${imageStorage.createImageURL(blob)}"` : ''}>
-      <button class="image-delete" title="刪除">
+      <img class="image-preview" alt="其他圖片" ${blob ? `src="${imageStorage.createImageURL(blob)}"` : ''}>
+      <button class="image-delete" title="刪除圖片">
         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="18" y1="6" x2="6" y2="18"/>
           <line x1="6" y1="6" x2="18" y2="18"/>
@@ -622,7 +710,7 @@ function addExtraImageRow(key, blob, description) {
       </button>
     </div>
     <div class="extra-desc">
-      <input type="text" placeholder="描述用途（如「升級慶祝」）" value="${description || ''}" maxlength="50">
+      <input type="text" placeholder="備註用途（如「升級慶祝」、「寫筆記中」）" value="${description || ''}" maxlength="80">
     </div>
     <button class="extra-remove" title="移除此列">
       <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
@@ -632,7 +720,6 @@ function addExtraImageRow(key, blob, description) {
     </button>
   `;
 
-  // Extra image upload
   const slot = row.querySelector('.image-slot');
   const input = row.querySelector('.image-input');
   const deleteBtn = row.querySelector('.image-delete');
@@ -652,19 +739,15 @@ function addExtraImageRow(key, blob, description) {
 
   deleteBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    const preview = slot.querySelector('.image-preview');
-    preview.src = '';
+    slot.querySelector('.image-preview').src = '';
     slot.classList.remove('filled');
     input.value = '';
     imageStorage.deleteImage(key);
   });
 
   descInput.addEventListener('change', () => {
-    // Re-save with updated description if image exists
     imageStorage.loadImage(key).then(record => {
-      if (record) {
-        imageStorage.saveImage(key, record.blob, descInput.value);
-      }
+      if (record) imageStorage.saveImage(key, record.blob, descInput.value);
     });
   });
 
@@ -673,7 +756,7 @@ function addExtraImageRow(key, blob, description) {
     row.remove();
   });
 
-  elements.extraImagesList.appendChild(row);
+  document.getElementById('extra-images-list').appendChild(row);
 }
 
 async function updateAvatars() {
@@ -681,13 +764,21 @@ async function updateAvatars() {
   const roles = ['guide', 'writer', 'player'];
 
   for (const role of roles) {
-    // Find the default expression image (joy first, then any available)
-    const expressions = ['joy', 'happy', 'angry', 'sad'];
-    let avatarRecord = null;
-    for (const expr of expressions) {
-      avatarRecord = images.find(img => img.key === `${role}-${expr}`);
-      if (avatarRecord) break;
+    // Find variants: try default first, then any emotion
+    const emotionOrder = ['default', 'joy', 'happy', 'angry', 'sad'];
+    let candidates = [];
+
+    for (const emotion of emotionOrder) {
+      candidates = images.filter(img =>
+        img.key.startsWith(`${role}-${emotion}-`)
+      );
+      if (candidates.length > 0) break;
     }
+
+    // Random pick from available variants
+    const avatarRecord = candidates.length > 0
+      ? candidates[Math.floor(Math.random() * candidates.length)]
+      : null;
 
     // Update member-avatar in party card
     const memberAvatar = document.querySelector(`.${role}-avatar`);
@@ -698,7 +789,6 @@ async function updateAvatars() {
       if (avatarRecord) {
         const url = imageStorage.createImageURL(avatarRecord.blob);
         activeObjectURLs.push(url);
-
         if (existingImg) {
           existingImg.src = url;
         } else {
@@ -717,15 +807,13 @@ async function updateAvatars() {
     }
 
     // Update bubble-avatars in dialog area
-    const bubbleAvatars = document.querySelectorAll(`.${role}-bubble .bubble-avatar`);
-    bubbleAvatars.forEach(bubble => {
+    document.querySelectorAll(`.${role}-bubble .bubble-avatar`).forEach(bubble => {
       const existingImg = bubble.querySelector('img.avatar-img');
       const existingSvg = bubble.querySelector('svg');
 
       if (avatarRecord) {
         const url = imageStorage.createImageURL(avatarRecord.blob);
         activeObjectURLs.push(url);
-
         if (existingImg) {
           existingImg.src = url;
         } else {
@@ -746,32 +834,17 @@ async function updateAvatars() {
 }
 
 function initImageModal() {
-  // Core image slots - upload and delete
-  const coreSlots = elements.imageModal.querySelectorAll('.image-section:first-child .image-slot');
-  coreSlots.forEach(slot => {
-    const input = slot.querySelector('.image-input');
-    const deleteBtn = slot.querySelector('.image-delete');
-
-    input.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) handleCoreImageUpload(slot, file);
-    });
-
-    deleteBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      handleCoreImageDelete(slot);
-    });
-  });
-
-  // Add extra image button
-  elements.addExtraImageBtn.addEventListener('click', () => {
-    addExtraImageRow();
-  });
+  buildImageModalDOM();
 
   // Modal open/close
   elements.manageImagesBtn.addEventListener('click', openImageModal);
   elements.closeImageModalBtn.addEventListener('click', closeImageModal);
   elements.imageModal.querySelector('.modal-backdrop').addEventListener('click', closeImageModal);
+
+  // Add extra image button (delegated since it's dynamic)
+  document.getElementById('add-extra-image').addEventListener('click', () => {
+    addExtraImageRow();
+  });
 }
 
 // ========================================

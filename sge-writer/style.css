@@ -1512,15 +1512,34 @@ input, textarea, select {
   background: rgba(168, 181, 160, 0.15);
 }
 
+.image-emotion-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.image-emotion-label {
+  writing-mode: vertical-rl;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  padding: 8px 2px;
+  min-width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
 .image-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: var(--space-sm);
+  flex: 1;
 }
 
 .image-slot {
   position: relative;
-  aspect-ratio: 1;
+  aspect-ratio: 4 / 7;
   border: 2px dashed var(--color-border);
   border-radius: var(--radius-md);
   cursor: pointer;
@@ -1614,7 +1633,13 @@ input, textarea, select {
   border-radius: 0 0 10px 10px;
 }
 
-/* 額外場景圖片 */
+.image-other-section {
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border-light, #E8E4E1);
+}
+
+/* 其他圖片 */
 .extra-images-list {
   display: flex;
   flex-direction: column;
