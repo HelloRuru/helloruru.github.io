@@ -533,6 +533,26 @@ const IMAGE_EMOTIONS = [
 
 const VARIANTS_PER_EMOTION = 4;
 
+// 預設立繪路徑（內建圖片，使用者未自訂時顯示）
+const DEFAULT_IMAGES = {
+  'writer-default-1': 'icons/characters/writer-default-1.png',
+  'writer-angry-1': 'icons/characters/writer-angry-1.png',
+  'writer-sad-1': 'icons/characters/writer-sad-1.png',
+  'player-default-1': 'icons/characters/player-default-1.png'
+};
+
+function getImageSrc(key, blob) {
+  if (blob) {
+    const url = imageStorage.createImageURL(blob);
+    activeObjectURLs.push(url);
+    return url;
+  }
+  if (DEFAULT_IMAGES[key]) {
+    return DEFAULT_IMAGES[key];
+  }
+  return null;
+}
+
 function buildImageModalDOM() {
   const body = document.getElementById('image-modal-body');
   body.innerHTML = '';
@@ -663,14 +683,16 @@ async function loadImageModalState() {
     const record = images.find(img => img.key === key);
     const preview = slot.querySelector('.image-preview');
 
-    if (record) {
-      const url = imageStorage.createImageURL(record.blob);
-      activeObjectURLs.push(url);
-      preview.src = url;
+    const src = getImageSrc(key, record ? record.blob : null);
+    if (src) {
+      preview.src = src;
       slot.classList.add('filled');
+      // Mark default vs custom
+      slot.dataset.isDefault = record ? '' : 'true';
     } else {
       preview.src = '';
       slot.classList.remove('filled');
+      delete slot.dataset.isDefault;
     }
   });
 
@@ -764,72 +786,60 @@ async function updateAvatars() {
   const roles = ['guide', 'writer', 'player'];
 
   for (const role of roles) {
-    // Find variants: try default first, then any emotion
+    // 1. Try user-uploaded images from IndexedDB (random from default emotion variants)
     const emotionOrder = ['default', 'joy', 'happy', 'angry', 'sad'];
-    let candidates = [];
+    let avatarSrc = null;
 
     for (const emotion of emotionOrder) {
-      candidates = images.filter(img =>
+      const candidates = images.filter(img =>
         img.key.startsWith(`${role}-${emotion}-`)
       );
-      if (candidates.length > 0) break;
+      if (candidates.length > 0) {
+        const pick = candidates[Math.floor(Math.random() * candidates.length)];
+        avatarSrc = imageStorage.createImageURL(pick.blob);
+        activeObjectURLs.push(avatarSrc);
+        break;
+      }
     }
 
-    // Random pick from available variants
-    const avatarRecord = candidates.length > 0
-      ? candidates[Math.floor(Math.random() * candidates.length)]
-      : null;
+    // 2. Fallback to built-in default images
+    if (!avatarSrc) {
+      const defaultKeys = Object.keys(DEFAULT_IMAGES).filter(k =>
+        k.startsWith(`${role}-default-`)
+      );
+      if (defaultKeys.length > 0) {
+        const pick = defaultKeys[Math.floor(Math.random() * defaultKeys.length)];
+        avatarSrc = DEFAULT_IMAGES[pick];
+      }
+    }
 
-    // Update member-avatar in party card
-    const memberAvatar = document.querySelector(`.${role}-avatar`);
-    if (memberAvatar) {
-      const existingImg = memberAvatar.querySelector('img.avatar-img');
-      const existingSvg = memberAvatar.querySelector('svg');
+    // Apply to member-avatar and bubble-avatar
+    const targets = [
+      document.querySelector(`.${role}-avatar`),
+      ...document.querySelectorAll(`.${role}-bubble .bubble-avatar`)
+    ].filter(Boolean);
 
-      if (avatarRecord) {
-        const url = imageStorage.createImageURL(avatarRecord.blob);
-        activeObjectURLs.push(url);
+    for (const el of targets) {
+      const existingImg = el.querySelector('img.avatar-img');
+      const existingSvg = el.querySelector('svg');
+
+      if (avatarSrc) {
         if (existingImg) {
-          existingImg.src = url;
+          existingImg.src = avatarSrc;
         } else {
           const img = document.createElement('img');
           img.className = 'avatar-img';
-          img.src = url;
+          img.src = avatarSrc;
           img.alt = role;
           img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;';
           if (existingSvg) existingSvg.style.display = 'none';
-          memberAvatar.appendChild(img);
+          el.appendChild(img);
         }
       } else {
         if (existingImg) existingImg.remove();
         if (existingSvg) existingSvg.style.display = '';
       }
     }
-
-    // Update bubble-avatars in dialog area
-    document.querySelectorAll(`.${role}-bubble .bubble-avatar`).forEach(bubble => {
-      const existingImg = bubble.querySelector('img.avatar-img');
-      const existingSvg = bubble.querySelector('svg');
-
-      if (avatarRecord) {
-        const url = imageStorage.createImageURL(avatarRecord.blob);
-        activeObjectURLs.push(url);
-        if (existingImg) {
-          existingImg.src = url;
-        } else {
-          const img = document.createElement('img');
-          img.className = 'avatar-img';
-          img.src = url;
-          img.alt = role;
-          img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;';
-          if (existingSvg) existingSvg.style.display = 'none';
-          bubble.appendChild(img);
-        }
-      } else {
-        if (existingImg) existingImg.remove();
-        if (existingSvg) existingSvg.style.display = '';
-      }
-    });
   }
 }
 
