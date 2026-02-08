@@ -555,7 +555,19 @@ const DEFAULT_SCENE_IMAGES = [
   { key: 'scene-writer-thinking', src: 'icons/characters/writer-scene-thinking.png', description: '哈皮 低頭沉思' },
   { key: 'scene-welcome-1', src: 'icons/characters/scene-welcome-1.png', description: '哈皮 歡迎加入世界' },
   { key: 'scene-welcome-2', src: 'icons/characters/scene-welcome-2.png', description: '哈皮 歡迎加入世界' },
-  { key: 'scene-welcome-3', src: 'icons/characters/scene-welcome-3.png', description: '哈皮 歡迎加入世界' }
+  { key: 'scene-welcome-3', src: 'icons/characters/scene-welcome-3.png', description: '哈皮 歡迎加入世界' },
+  { key: 'scene-player-explore-1', src: 'icons/characters/scene-player-explore-1.png', description: 'BLUE 探索新文字世界' },
+  { key: 'scene-player-explore-2', src: 'icons/characters/scene-player-explore-2.png', description: 'BLUE 探索新文字世界' },
+  { key: 'scene-player-explore-3', src: 'icons/characters/scene-player-explore-3.png', description: 'BLUE 探索新文字世界' },
+  { key: 'scene-player-explore-4', src: 'icons/characters/scene-player-explore-4.png', description: 'BLUE 探索新文字世界' },
+  { key: 'scene-player-explore-5', src: 'icons/characters/scene-player-explore-5.png', description: 'BLUE 探索新文字世界' },
+  { key: 'scene-player-explore-6', src: 'icons/characters/scene-player-explore-6.png', description: 'BLUE 探索新文字世界' },
+  { key: 'scene-player-explore-7', src: 'icons/characters/scene-player-explore-7.png', description: 'BLUE 探索新文字世界' },
+  { key: 'scene-player-explore-8', src: 'icons/characters/scene-player-explore-8.png', description: 'BLUE 探索新文字世界' },
+  { key: 'scene-player-encourage-1', src: 'icons/characters/scene-player-encourage-1.png', description: 'BLUE 伸手鼓勵' },
+  { key: 'scene-player-encourage-2', src: 'icons/characters/scene-player-encourage-2.png', description: 'BLUE 伸手鼓勵' },
+  { key: 'scene-player-encourage-3', src: 'icons/characters/scene-player-encourage-3.png', description: 'BLUE 伸手鼓勵' },
+  { key: 'scene-player-encourage-4', src: 'icons/characters/scene-player-encourage-4.png', description: 'BLUE 伸手鼓勵' }
 ];
 
 function getImageSrc(key, blob) {
