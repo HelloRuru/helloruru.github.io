@@ -607,7 +607,28 @@ const DEFAULT_IMAGES = {
   'writer-angry-2': 'icons/characters/writer-angry-2.png',
   'writer-angry-3': 'icons/characters/writer-angry-3.png',
   'writer-angry-4': 'icons/characters/writer-angry-4.png',
-  'writer-sad-1': 'icons/characters/writer-sad-1.png'
+  'writer-sad-1': 'icons/characters/writer-sad-1.png',
+  // BLUE（見習生）
+  'player-default-1': 'icons/characters/player-default-1.png',
+  'player-default-2': 'icons/characters/player-default-2.png',
+  'player-default-3': 'icons/characters/player-default-3.png',
+  'player-default-4': 'icons/characters/player-default-4.png',
+  'player-joy-1': 'icons/characters/player-joy-1.png',
+  'player-joy-2': 'icons/characters/player-joy-2.png',
+  'player-joy-3': 'icons/characters/player-joy-3.png',
+  'player-joy-4': 'icons/characters/player-joy-4.png',
+  'player-happy-1': 'icons/characters/player-happy-1.png',
+  'player-happy-2': 'icons/characters/player-happy-2.png',
+  'player-happy-3': 'icons/characters/player-happy-3.png',
+  'player-happy-4': 'icons/characters/player-happy-4.png',
+  'player-angry-1': 'icons/characters/player-angry-1.png',
+  'player-angry-2': 'icons/characters/player-angry-2.png',
+  'player-angry-3': 'icons/characters/player-angry-3.png',
+  'player-angry-4': 'icons/characters/player-angry-4.png',
+  'player-sad-1': 'icons/characters/player-sad-1.png',
+  'player-sad-2': 'icons/characters/player-sad-2.png',
+  'player-sad-3': 'icons/characters/player-sad-3.png',
+  'player-sad-4': 'icons/characters/player-sad-4.png'
 };
 
 // 預設情境圖（顯示在「其他」區，含備註）
@@ -647,7 +668,13 @@ const DEFAULT_SCENE_IMAGES = [
   { key: 'scene-player-encourage-1', src: 'icons/characters/scene-player-encourage-1.png', description: 'BLUE 伸手鼓勵' },
   { key: 'scene-player-encourage-2', src: 'icons/characters/scene-player-encourage-2.png', description: 'BLUE 伸手鼓勵' },
   { key: 'scene-player-encourage-3', src: 'icons/characters/scene-player-encourage-3.png', description: 'BLUE 伸手鼓勵' },
-  { key: 'scene-player-encourage-4', src: 'icons/characters/scene-player-encourage-4.png', description: 'BLUE 伸手鼓勵' }
+  { key: 'scene-player-encourage-4', src: 'icons/characters/scene-player-encourage-4.png', description: 'BLUE 伸手鼓勵' },
+  { key: 'scene-player-notes-1', src: 'icons/characters/scene-player-notes-1.png', description: 'BLUE 作筆記' },
+  { key: 'scene-player-notes-2', src: 'icons/characters/scene-player-notes-2.png', description: 'BLUE 作筆記' },
+  { key: 'scene-player-notes-3', src: 'icons/characters/scene-player-notes-3.png', description: 'BLUE 作筆記' },
+  { key: 'scene-player-notes-4', src: 'icons/characters/scene-player-notes-4.png', description: 'BLUE 作筆記' },
+  { key: 'scene-player-notes-5', src: 'icons/characters/scene-player-notes-5.png', description: 'BLUE 作筆記' },
+  { key: 'scene-player-notes-6', src: 'icons/characters/scene-player-notes-6.png', description: 'BLUE 作筆記' }
 ];
 
 function getImageSrc(key, blob) {
