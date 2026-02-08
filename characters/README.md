@@ -10,6 +10,7 @@
 |------|------|------|--------|------|
 | 哈皮 Happi | 吟遊詩人 | Nova Anime XL (NORA) | [v1.2](happi/Happi-角色設定集-v1.2.md) | [場景版 v1](happi/Happi-場景版Prompt補充-v1.md) |
 | 筱西 CopyC | 領航員 | Nova Anime XL (NORA) | [v1.0](copyc/CopyC-筱西-角色設定集-v1.0.md) | — |
+| 伊歐 SEO | 領航員 | Nova Anime XL (NORA) | [v1.0](seo/SEO-伊歐-角色設定集-v1.0.md) | — |
 
 ---
 
@@ -21,8 +22,10 @@ characters/
 ├── happi/
 │   ├── Happi-角色設定集-v1.2.md        ← 主設定集（LOCKED 區塊、配色、Prompt）
 │   └── Happi-場景版Prompt補充-v1.md    ← 場景版調校筆記（NORA 踩坑記錄）
-└── copyc/
-    └── CopyC-筱西-角色設定集-v1.0.md   ← 主設定集（禁慾系御姐、黑×棕×酒紅配色）
+├── copyc/
+│   └── CopyC-筱西-角色設定集-v1.0.md   ← 主設定集（禁慾系御姐、黑×棕×酒紅配色）
+└── seo/
+    └── SEO-伊歐-角色設定集-v1.0.md     ← 主設定集（優化文案領航員、同筱西外觀）
 ```
 
 ---
