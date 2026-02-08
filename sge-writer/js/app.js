@@ -23,7 +23,7 @@ const state = {
     strategy: null
   },
   partyNames: {
-    guide: '筱西',
+    guide: '伊歐',
     writer: '哈皮',
     player: 'BLUE'
   },
@@ -526,7 +526,7 @@ function closeNameModal() {
 function saveNames(e) {
   e.preventDefault();
 
-  state.partyNames.guide = elements.customGuide.value.trim() || '筱西';
+  state.partyNames.guide = elements.customGuide.value.trim() || '伊歐';
   state.partyNames.writer = elements.customWriter.value.trim() || '哈皮';
   state.partyNames.player = elements.customPlayer.value.trim() || 'BLUE';
 
@@ -561,7 +561,7 @@ function updatePartyNamesUI() {
 const activeObjectURLs = [];
 
 const IMAGE_ROLES = [
-  { id: 'guide', name: '筱西', subtitle: '領航員', labelClass: 'guide-label' },
+  { id: 'guide', name: '伊歐', subtitle: '領航員', labelClass: 'guide-label' },
   { id: 'writer', name: '哈皮', subtitle: '吟遊詩人', labelClass: 'writer-label' },
   { id: 'player', name: 'BLUE', subtitle: '見習生', labelClass: 'player-label' }
 ];
