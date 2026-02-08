@@ -534,12 +534,17 @@ const IMAGE_EMOTIONS = [
 const VARIANTS_PER_EMOTION = 4;
 
 // 預設立繪路徑（內建圖片，使用者未自訂時顯示）
+// 預設表情立繪（顯示在頭像 + Modal 表情格）
 const DEFAULT_IMAGES = {
   'writer-default-1': 'icons/characters/writer-default-1.png',
   'writer-angry-1': 'icons/characters/writer-angry-1.png',
-  'writer-sad-1': 'icons/characters/writer-sad-1.png',
-  'player-default-1': 'icons/characters/player-default-1.png'
+  'writer-sad-1': 'icons/characters/writer-sad-1.png'
 };
+
+// 預設情境圖（顯示在「其他」區，含備註）
+const DEFAULT_SCENE_IMAGES = [
+  { key: 'scene-player-writing', src: 'icons/characters/player-other-writing.png', description: 'BLUE 寫筆記中' }
+];
 
 function getImageSrc(key, blob) {
   if (blob) {
@@ -699,14 +704,24 @@ async function loadImageModalState() {
   // Load extra/other images
   const extraList = document.getElementById('extra-images-list');
   extraList.innerHTML = '';
-  const extras = images.filter(img => img.key.startsWith('extra-'));
+
+  // Built-in scene images (show defaults that user hasn't overridden)
+  for (const scene of DEFAULT_SCENE_IMAGES) {
+    const userOverride = images.find(img => img.key === scene.key);
+    addExtraImageRow(scene.key, userOverride ? userOverride.blob : null, scene.description, scene.src);
+  }
+
+  // User-added extra images
+  const extras = images.filter(img =>
+    img.key.startsWith('extra-') && !DEFAULT_SCENE_IMAGES.some(s => s.key === img.key)
+  );
   extras.sort((a, b) => a.updatedAt - b.updatedAt);
   for (const extra of extras) {
     addExtraImageRow(extra.key, extra.blob, extra.description);
   }
 }
 
-function addExtraImageRow(key, blob, description) {
+function addExtraImageRow(key, blob, description, defaultSrc) {
   if (!key) key = `extra-${Date.now()}`;
 
   const row = document.createElement('div');
@@ -714,7 +729,7 @@ function addExtraImageRow(key, blob, description) {
   row.dataset.key = key;
 
   row.innerHTML = `
-    <div class="image-slot${blob ? ' filled' : ''}" data-key="${key}">
+    <div class="image-slot${(blob || defaultSrc) ? ' filled' : ''}" data-key="${key}">
       <input type="file" accept="image/png,image/jpeg,image/webp" class="image-input" tabindex="-1">
       <div class="image-placeholder">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -723,7 +738,7 @@ function addExtraImageRow(key, blob, description) {
           <line x1="8" y1="12" x2="16" y2="12"/>
         </svg>
       </div>
-      <img class="image-preview" alt="其他圖片" ${blob ? `src="${imageStorage.createImageURL(blob)}"` : ''}>
+      <img class="image-preview" alt="其他圖片" ${blob ? `src="${imageStorage.createImageURL(blob)}"` : (defaultSrc ? `src="${defaultSrc}"` : '')}>
       <button class="image-delete" title="刪除圖片">
         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="18" y1="6" x2="6" y2="18"/>
