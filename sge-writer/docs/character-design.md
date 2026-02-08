@@ -45,7 +45,7 @@
 ### SD Prompt — Base
 
 ```
-masterpiece, best quality, 1girl, solo, (standing on white background:1.2), centered, full body, young adult anime girl, slender body, average to slightly tall stature, 7 heads tall proportion, mature reliable personality, warm gentle smile, amber brown eyes, oval face, medium length dark chestnut brown hair, natural slight wave, side-swept bangs, hair reaching just past shoulders, round gold-rimmed glasses on nose, important character trait, wearing white dress shirt with rose pink vest over it, rose pink short cape with subtle map pattern embroidery over shoulders, dark navy long skirt, brown leather belt, navigator badge pinned on left chest, holding a small leather-bound notebook in left hand, brown leather ankle boots, RPG character design, looking at viewer
+masterpiece, best quality, 1girl, solo, (standing on white background:1.2), centered, full body, young adult anime girl, slender body, average to slightly tall stature, 7 heads tall proportion, mature reliable personality, warm gentle smile, amber brown eyes, oval face, medium length dark chestnut brown hair, natural slight wave, side-swept bangs, hair reaching just past shoulders, wearing white dress shirt with rose pink vest over it, rose pink short cape with subtle map pattern embroidery over shoulders, dark navy long skirt, brown leather belt, navigator badge pinned on left chest, holding a small leather-bound notebook in left hand, brown leather ankle boots, RPG character design, looking at viewer
 ```
 
 ### 表情 Prompt（4 張）
@@ -63,7 +63,7 @@ masterpiece, best quality, 1girl, solo, (standing on white background:1.2), cent
 - **台詞感**：「太棒了！資料確認完成！」
 
 ```
-, bright happy expression, eyes sparkling behind glasses, big smile showing teeth, giving OK hand sign with right hand, notebook tucked under left arm, confident satisfied pose, pleased expression
+, bright happy expression, eyes sparkling, big smile showing teeth, giving OK hand sign with right hand, notebook tucked under left arm, confident satisfied pose, pleased expression
 ```
 
 #### C-3 怒（Angry）— 發現問題
@@ -71,7 +71,7 @@ masterpiece, best quality, 1girl, solo, (standing on white background:1.2), cent
 - **台詞感**：「等等，這裡有問題需要修正！」
 
 ```
-, serious stern expression, slight frown, lips pressed together in disapproval, pushing glasses up with one finger, other hand pointing forward at something, leaning forward slightly, strict but not scary, concerned mentor expression
+, serious stern expression, slight frown, lips pressed together in disapproval, one hand pointing forward at something, leaning forward slightly, strict but not scary, concerned mentor expression
 ```
 
 #### C-4 哀（Sad）— 資料不足

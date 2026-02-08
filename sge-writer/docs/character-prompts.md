@@ -9,7 +9,7 @@
 
 | 角色 | 一句話描述 | 主色 |
 |------|-----------|------|
-| 伊歐 | 推著眼鏡幫你抓錯字的碎念系溫柔領航員 | Rose `#D4A5A5` |
+| 伊歐 | 幫你抓錯字的碎念系溫柔領航員 | Rose `#D4A5A5` |
 | 哈皮 | 扛著巨大鋼筆的元氣虎牙小詩人 | Lavender `#B8A9C9` |
 | BLUE | 使用者化身，背著小背包的見習生 | Sage `#A8B5A0` |
 
@@ -19,28 +19,28 @@
 
 ### 角色感覺
 
-一個戴著圓框眼鏡的溫柔大姊姊，看起來就很會整理資料。總是拿著一本翻到起毛邊的筆記本，上面密密麻麻的待辦事項。粉色小披風上印著地圖紋路，像是隨時準備帶人去冒險。說話條理分明，偶爾碎念但都是出於關心。推眼鏡的時候特別認真，代表她發現問題了。會在你寫錯字的時候輕輕嘆氣，然後耐心幫你改。背心口袋裡插著好幾支不同顏色的筆，隨時準備標註重點。是那種會幫你檢查三遍才放心讓你出門的可靠前輩。嚴謹但不兇，溫柔但不軟弱，是冒險隊的定心丸。
+溫柔的大姊姊，看起來就很會整理資料。總是拿著一本翻到起毛邊的筆記本，上面密密麻麻的待辦事項。粉色小披風上印著地圖紋路，像是隨時準備帶人去冒險。說話條理分明，偶爾碎念但都是出於關心。會在你寫錯字的時候輕輕嘆氣，然後耐心幫你改。背心口袋裡插著好幾支不同顏色的筆，隨時準備標註重點。是那種會幫你檢查三遍才放心讓你出門的可靠前輩。嚴謹但不兇，溫柔但不軟弱，是冒險隊的定心丸。
 
 ### 生成 Prompt
 
 #### 樂 Joy
 ```
-chibi anime girl, 20-25 years old, gentle reliable older sister type, medium length brown hair, warm amber eyes, round glasses, wearing white shirt with rose pink vest, multiple colored pens in vest pocket, dark long skirt, short rose pink cape with map pattern print, navigator badge, holding worn notebook with many bookmarks, gentle warm smile, soft eyes, waving hand greeting, transparent background, 512x512, Q-style cute, RPG navigator character, full body
+chibi anime girl, 20-25 years old, gentle reliable older sister type, medium length brown hair, warm amber eyes, wearing white shirt with rose pink vest, multiple colored pens in vest pocket, dark long skirt, short rose pink cape with map pattern print, navigator badge, holding worn notebook with many bookmarks, gentle warm smile, soft eyes, waving hand greeting, transparent background, 512x512, Q-style cute, RPG navigator character, full body
 ```
 
 #### 喜 Happy
 ```
-chibi anime girl, 20-25 years old, gentle reliable older sister type, medium length brown hair, warm amber eyes, round glasses, wearing white shirt with rose pink vest, multiple colored pens in vest pocket, dark long skirt, short rose pink cape with map pattern print, navigator badge, holding worn notebook, big relieved happy smile, sparkling eyes, giving thumbs up or OK sign, proud expression, transparent background, 512x512, Q-style cute, RPG navigator character, full body
+chibi anime girl, 20-25 years old, gentle reliable older sister type, medium length brown hair, warm amber eyes, wearing white shirt with rose pink vest, multiple colored pens in vest pocket, dark long skirt, short rose pink cape with map pattern print, navigator badge, holding worn notebook, big relieved happy smile, sparkling eyes, giving thumbs up or OK sign, proud expression, transparent background, 512x512, Q-style cute, RPG navigator character, full body
 ```
 
 #### 怒 Angry
 ```
-chibi anime girl, 20-25 years old, gentle reliable older sister type, medium length brown hair, warm amber eyes, round glasses glinting, wearing white shirt with rose pink vest, multiple colored pens in vest pocket, dark long skirt, short rose pink cape with map pattern print, navigator badge, holding worn notebook, pushing up glasses with serious expression, slight frown, pointing at mistake, stern but not mean, transparent background, 512x512, Q-style cute, RPG navigator character, full body
+chibi anime girl, 20-25 years old, gentle reliable older sister type, medium length brown hair, warm amber eyes, wearing white shirt with rose pink vest, multiple colored pens in vest pocket, dark long skirt, short rose pink cape with map pattern print, navigator badge, holding worn notebook, serious expression, slight frown, pointing at mistake, stern but not mean, transparent background, 512x512, Q-style cute, RPG navigator character, full body
 ```
 
 #### 哀 Sad
 ```
-chibi anime girl, 20-25 years old, gentle reliable older sister type, medium length brown hair, warm amber eyes, round glasses, wearing white shirt with rose pink vest, multiple colored pens in vest pocket, dark long skirt, short rose pink cape with map pattern print, navigator badge, holding worn notebook, gentle sigh expression, slightly worried eyes, hand on chin thinking, concerned but patient, transparent background, 512x512, Q-style cute, RPG navigator character, full body
+chibi anime girl, 20-25 years old, gentle reliable older sister type, medium length brown hair, warm amber eyes, wearing white shirt with rose pink vest, multiple colored pens in vest pocket, dark long skirt, short rose pink cape with map pattern print, navigator badge, holding worn notebook, gentle sigh expression, slightly worried eyes, hand on chin thinking, concerned but patient, transparent background, 512x512, Q-style cute, RPG navigator character, full body
 ```
 
 ---
