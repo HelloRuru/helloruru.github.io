@@ -863,6 +863,9 @@ async function updateAvatars() {
       const existingSvg = el.querySelector('svg');
 
       if (avatarSrc) {
+        el.style.borderRadius = '0';
+        el.style.overflow = 'visible';
+        el.style.background = 'none';
         if (existingImg) {
           existingImg.src = avatarSrc;
         } else {
@@ -870,11 +873,14 @@ async function updateAvatars() {
           img.className = 'avatar-img';
           img.src = avatarSrc;
           img.alt = role;
-          img.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:top;border-radius:50%;';
+          img.style.cssText = 'width:100%;height:auto;object-fit:contain;';
           if (existingSvg) existingSvg.style.display = 'none';
           el.appendChild(img);
         }
       } else {
+        el.style.borderRadius = '';
+        el.style.overflow = '';
+        el.style.background = '';
         if (existingImg) existingImg.remove();
         if (existingSvg) existingSvg.style.display = '';
       }
