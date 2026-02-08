@@ -10,6 +10,14 @@ import { templates } from './templates.js';
 import { imageStorage } from './image-storage.js';
 
 // ========================================
+// Utilities
+// ========================================
+function escapeHTML(str) {
+  if (!str) return '';
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+// ========================================
 // State Management
 // ========================================
 const state = {
@@ -340,11 +348,11 @@ function handleStrategySelect(e) {
 // ========================================
 function buildFactCheckList() {
   const facts = [
-    { label: '核心關鍵字', value: state.questData.keyword, status: 'success' },
+    { label: '核心關鍵字', value: escapeHTML(state.questData.keyword), status: 'success' },
     { label: '目標字數', value: `${state.questData.wordMin}-${state.questData.wordMax} 字`, status: 'success' },
     { label: '策略方向', value: getStrategyLabel(state.questData.strategy), status: 'success' },
     { label: '店家資料', value: state.questData.source ? '已提供' : '未提供', status: state.questData.source ? 'success' : 'warning' },
-    { label: '文案重點', value: state.questData.focus || '未指定', status: state.questData.focus ? 'success' : 'warning' }
+    { label: '文案重點', value: escapeHTML(state.questData.focus) || '未指定', status: state.questData.focus ? 'success' : 'warning' }
   ];
 
   elements.factList.innerHTML = facts.map(fact => `
@@ -395,7 +403,7 @@ function startWriting() {
 }
 
 function generateSampleContent() {
-  const keyword = state.questData.keyword;
+  const keyword = escapeHTML(state.questData.keyword);
   const strategy = state.questData.strategy;
 
   // Generate sample H1 (target 28 characters)
@@ -856,12 +864,20 @@ async function loadImageModalState() {
 function addExtraImageRow(key, blob, description, defaultSrc) {
   if (!key) key = `extra-${Date.now()}`;
 
+  let previewSrc = '';
+  if (blob) {
+    previewSrc = imageStorage.createImageURL(blob);
+    activeObjectURLs.push(previewSrc);
+  } else if (defaultSrc) {
+    previewSrc = defaultSrc;
+  }
+
   const row = document.createElement('div');
   row.className = 'extra-image-row';
   row.dataset.key = key;
 
   row.innerHTML = `
-    <div class="image-slot${(blob || defaultSrc) ? ' filled' : ''}" data-key="${key}">
+    <div class="image-slot${previewSrc ? ' filled' : ''}" data-key="${escapeHTML(key)}">
       <input type="file" accept="image/png,image/jpeg,image/webp" class="image-input" tabindex="-1">
       <div class="image-placeholder">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -870,7 +886,7 @@ function addExtraImageRow(key, blob, description, defaultSrc) {
           <line x1="8" y1="12" x2="16" y2="12"/>
         </svg>
       </div>
-      <img class="image-preview" alt="其他圖片" ${blob ? `src="${imageStorage.createImageURL(blob)}"` : (defaultSrc ? `src="${defaultSrc}"` : '')}>
+      <img class="image-preview" alt="其他圖片" ${previewSrc ? `src="${previewSrc}"` : ''}>
       <button class="image-delete" title="刪除圖片">
         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="18" y1="6" x2="6" y2="18"/>
@@ -879,7 +895,7 @@ function addExtraImageRow(key, blob, description, defaultSrc) {
       </button>
     </div>
     <div class="extra-desc">
-      <input type="text" placeholder="備註用途（如「升級慶祝」、「寫筆記中」）" value="${description || ''}" maxlength="80">
+      <input type="text" placeholder="備註用途（如「升級慶祝」、「寫筆記中」）" value="${escapeHTML(description)}" maxlength="80">
     </div>
     <button class="extra-remove" title="移除此列">
       <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
@@ -1179,7 +1195,10 @@ function init() {
 
   // Initialize image modal and load saved avatars
   initImageModal();
-  updateAvatars();
+  updateAvatars().catch(err => {
+    console.warn('立繪載入失敗:', err);
+    showToast('立繪載入失敗，使用預設圖示', 'error');
+  });
 
   // Initialize party moods
   updatePartyMoods(1);

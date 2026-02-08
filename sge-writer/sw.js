@@ -3,7 +3,7 @@
  * 提供離線功能與快取管理
  */
 
-const CACHE_NAME = 'sge-writer-v1';
+const CACHE_NAME = 'sge-writer-v2';
 const STATIC_ASSETS = [
   '/sge-writer/',
   '/sge-writer/index.html',
@@ -14,6 +14,7 @@ const STATIC_ASSETS = [
   '/sge-writer/js/seo-analyzer.js',
   '/sge-writer/js/storage.js',
   '/sge-writer/js/templates.js',
+  '/sge-writer/js/image-storage.js',
   '/sge-writer/icons/favicon.svg',
   '/sge-writer/icons/favicon-32x32.png',
   '/sge-writer/icons/apple-touch-icon.png',
@@ -23,7 +24,7 @@ const STATIC_ASSETS = [
 
 // 外部資源（字體等）
 const EXTERNAL_ASSETS = [
-  'https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap'
+  'https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap'
 ];
 
 /**

@@ -1,6 +1,6 @@
 /**
  * SGE 文案助手 - 樣式表
- * Design System v1.6 — GenSenRounded (源泉圓體)
+ * Design System v1.7 — GenSenRounded (源泉圓體)
  */
 
 /* ========================================
@@ -218,9 +218,12 @@ hello-ruru-header {
 }
 
 .panel-left {
-  max-height: calc(100vh - var(--header-height) - var(--footer-height) - var(--space-2xl));
+  position: sticky;
+  top: calc(var(--header-height) + var(--space-md));
+  max-height: calc(100vh - var(--header-height) - var(--space-xl));
   overflow-y: auto;
   padding-right: var(--space-sm);
+  align-self: start;
 }
 
 .panel-left::-webkit-scrollbar {
@@ -565,6 +568,10 @@ hello-ruru-header {
 
 .writer-bubble .bubble-avatar {
   background: var(--color-secondary);
+}
+
+.player-bubble .bubble-avatar {
+  background: var(--color-success);
 }
 
 .bubble-content {
@@ -1043,7 +1050,7 @@ hello-ruru-header {
   padding: var(--space-sm);
   border-radius: var(--radius-sm);
   font-size: 0.8125rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--color-text-muted);
   transition: all var(--transition-fast);
   min-width: 32px;
@@ -1157,7 +1164,7 @@ hello-ruru-header {
 .editor table th {
   background: var(--gradient-primary);
   color: white;
-  font-weight: 600;
+  font-weight: 700;
   font-family: var(--font-ui);
 }
 
@@ -1851,9 +1858,11 @@ hello-ruru-header {
   }
 
   .panel-left {
+    position: static;
     max-height: none;
     overflow-y: visible;
     padding-right: 0;
+    align-self: auto;
   }
 
   .panel-right {
