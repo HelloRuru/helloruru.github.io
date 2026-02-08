@@ -537,13 +537,22 @@ const VARIANTS_PER_EMOTION = 4;
 // 預設表情立繪（顯示在頭像 + Modal 表情格）
 const DEFAULT_IMAGES = {
   'writer-default-1': 'icons/characters/writer-default-1.png',
+  'writer-default-2': 'icons/characters/writer-default-2.png',
+  'writer-default-3': 'icons/characters/writer-default-3.png',
+  'writer-default-4': 'icons/characters/writer-default-4.png',
+  'writer-joy-1': 'icons/characters/writer-joy-1.png',
+  'writer-joy-2': 'icons/characters/writer-joy-2.png',
   'writer-angry-1': 'icons/characters/writer-angry-1.png',
+  'writer-angry-2': 'icons/characters/writer-angry-2.png',
+  'writer-angry-3': 'icons/characters/writer-angry-3.png',
+  'writer-angry-4': 'icons/characters/writer-angry-4.png',
   'writer-sad-1': 'icons/characters/writer-sad-1.png'
 };
 
 // 預設情境圖（顯示在「其他」區，含備註）
 const DEFAULT_SCENE_IMAGES = [
-  { key: 'scene-player-writing', src: 'icons/characters/player-other-writing.png', description: 'BLUE 寫筆記中' }
+  { key: 'scene-player-writing', src: 'icons/characters/player-other-writing.png', description: 'BLUE 寫筆記中' },
+  { key: 'scene-writer-thinking', src: 'icons/characters/writer-scene-thinking.png', description: '哈皮 低頭沉思' }
 ];
 
 function getImageSrc(key, blob) {
