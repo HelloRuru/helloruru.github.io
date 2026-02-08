@@ -870,7 +870,7 @@ async function updateAvatars() {
           img.className = 'avatar-img';
           img.src = avatarSrc;
           img.alt = role;
-          img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;';
+          img.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:top;border-radius:50%;';
           if (existingSvg) existingSvg.style.display = 'none';
           el.appendChild(img);
         }
