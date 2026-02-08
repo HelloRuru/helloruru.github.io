@@ -552,7 +552,10 @@ const DEFAULT_IMAGES = {
 // 預設情境圖（顯示在「其他」區，含備註）
 const DEFAULT_SCENE_IMAGES = [
   { key: 'scene-player-writing', src: 'icons/characters/player-other-writing.png', description: 'BLUE 寫筆記中' },
-  { key: 'scene-writer-thinking', src: 'icons/characters/writer-scene-thinking.png', description: '哈皮 低頭沉思' }
+  { key: 'scene-writer-thinking', src: 'icons/characters/writer-scene-thinking.png', description: '哈皮 低頭沉思' },
+  { key: 'scene-welcome-1', src: 'icons/characters/scene-welcome-1.png', description: '哈皮 歡迎加入世界' },
+  { key: 'scene-welcome-2', src: 'icons/characters/scene-welcome-2.png', description: '哈皮 歡迎加入世界' },
+  { key: 'scene-welcome-3', src: 'icons/characters/scene-welcome-3.png', description: '哈皮 歡迎加入世界' }
 ];
 
 function getImageSrc(key, blob) {
