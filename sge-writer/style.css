@@ -256,6 +256,12 @@ hello-ruru-header {
   color: var(--color-text-muted);
 }
 
+.footer-art-notice {
+  font-size: 0.75rem;
+  color: var(--color-text-light);
+  margin-top: var(--space-xs);
+}
+
 /* ========================================
    Buttons
    ======================================== */
