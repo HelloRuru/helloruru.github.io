@@ -232,15 +232,15 @@ RPG character design, looking at viewer
 | 編號 | 表情 | 替換用 Prompt |
 |------|------|--------------|
 | 1 | 溫柔微笑（預設） | `calm expression, gentle smile, looking at viewer` |
-| 2 | 撥髮 | `eyes half closed, hand tucking hair behind ear, tilting head slightly, soft smile` |
-| 3 | 碎念中 | `slightly annoyed expression, one eyebrow raised, pointing at notebook, lecturing pose` |
-| 4 | 認真校對 | `focused expression, looking down at notebook, both hands holding notebook, serious face` |
-| 5 | 導航中 | `determined expression, holding compass staff forward, wind blowing hair, looking into distance` |
-| 6 | 意外害羞 | `blushing, one hand covering chest cutout, looking away, embarrassed smile` |
-| 7 | 自信微笑 | `confident smile, arms crossed, chin slightly raised, looking at viewer, cool expression` |
-| 8 | 疲累 | `tired expression, eyes half closed, leaning on compass staff, messy hair, yawning` |
-| 9 | 發現問題 | `wide eyes, surprised expression, pointing at notebook, mouth slightly open, leaning forward` |
-| 10 | 溫柔安慰 | `gentle expression, soft eyes, one hand reaching forward, comforting gesture, warm smile` |
+| 2 | 規劃策略 | `serious expression, looking down at open notebook, one hand flipping pages, thinking pose` |
+| 3 | 講解路線 | `confident expression, one hand pointing forward, other hand holding notebook open, explaining pose, looking at viewer` |
+| 4 | 碎念抓錯 | `slightly annoyed expression, one eyebrow raised, squinting at notebook, muttering, one finger tapping on page` |
+| 5 | 認真檢查 | `focused expression, both hands holding document close to face, serious eyes, concentrated` |
+| 6 | 出發冒險 | `determined expression, holding compass staff forward, wind blowing hair and coat, looking into distance, leading pose` |
+| 7 | 撥髮 | `eyes half closed, hand tucking hair behind ear, tilting head slightly, soft smile` |
+| 8 | 意外害羞 | `blushing, one hand covering chest cutout, looking away, embarrassed smile` |
+| 9 | 疲累加班 | `tired expression, eyes half closed, leaning on compass staff, messy hair, holding notebook loosely, yawning` |
+| 10 | 任務完成 | `satisfied smile, eyes closed happy, one hand on hip, other hand holding closed notebook at side, relaxed stance` |
 
 ---
 
@@ -296,6 +296,7 @@ A：場景版小偏移可接受，重點是氛圍。如需精準服裝校正用�
 |------|------|------|
 | v0 (Q版) | 2026-02-06 | 初版 chibi 設定，巧克力棕配色，圓框眼鏡 |
 | v1.0 (NORA) | 2026-02-08 | 全面重設計：7頭身御姐、黑×棕×酒紅配色、禁慾系高領開洞、移除眼鏡改八字瀏海、導航杖取代手持指南針 |
+| v1.1 (NORA) | 2026-02-08 | 表情替換表重寫：新增規劃策略、講解路線、碎念抓錯、認真檢查、出發冒險、疲累加班、任務完成等領航員專屬動作 |
 
 ---
 
