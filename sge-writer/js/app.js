@@ -579,6 +579,28 @@ const VARIANTS_PER_EMOTION = 4;
 // 預設立繪路徑（內建圖片，使用者未自訂時顯示）
 // 預設表情立繪（顯示在頭像 + Modal 表情格）
 const DEFAULT_IMAGES = {
+  // 伊歐（領航員）
+  'guide-default-1': 'icons/characters/guide-default-1.png',
+  'guide-default-2': 'icons/characters/guide-default-2.png',
+  'guide-default-3': 'icons/characters/guide-default-3.png',
+  'guide-default-4': 'icons/characters/guide-default-4.png',
+  'guide-joy-1': 'icons/characters/guide-joy-1.png',
+  'guide-joy-2': 'icons/characters/guide-joy-2.png',
+  'guide-joy-3': 'icons/characters/guide-joy-3.png',
+  'guide-joy-4': 'icons/characters/guide-joy-4.png',
+  'guide-happy-1': 'icons/characters/guide-happy-1.png',
+  'guide-happy-2': 'icons/characters/guide-happy-2.png',
+  'guide-happy-3': 'icons/characters/guide-happy-3.png',
+  'guide-happy-4': 'icons/characters/guide-happy-4.png',
+  'guide-angry-1': 'icons/characters/guide-angry-1.png',
+  'guide-angry-2': 'icons/characters/guide-angry-2.png',
+  'guide-angry-3': 'icons/characters/guide-angry-3.png',
+  'guide-angry-4': 'icons/characters/guide-angry-4.png',
+  'guide-sad-1': 'icons/characters/guide-sad-1.png',
+  'guide-sad-2': 'icons/characters/guide-sad-2.png',
+  'guide-sad-3': 'icons/characters/guide-sad-3.png',
+  'guide-sad-4': 'icons/characters/guide-sad-4.png',
+  // 哈皮（吟遊詩人）
   'writer-default-1': 'icons/characters/writer-default-1.png',
   'writer-default-2': 'icons/characters/writer-default-2.png',
   'writer-default-3': 'icons/characters/writer-default-3.png',
@@ -594,11 +616,30 @@ const DEFAULT_IMAGES = {
 
 // 預設情境圖（顯示在「其他」區，含備註）
 const DEFAULT_SCENE_IMAGES = [
-  { key: 'scene-player-writing', src: 'icons/characters/player-other-writing.png', description: 'BLUE 寫筆記中' },
+  // 伊歐場景
+  { key: 'scene-guide-magic-1', src: 'icons/characters/scene-guide-magic-1.png', description: '伊歐 施展法術' },
+  { key: 'scene-guide-magic-2', src: 'icons/characters/scene-guide-magic-2.png', description: '伊歐 施展法術' },
+  { key: 'scene-guide-magic-3', src: 'icons/characters/scene-guide-magic-3.png', description: '伊歐 施展法術' },
+  { key: 'scene-guide-navigate-1', src: 'icons/characters/scene-guide-navigate-1.png', description: '伊歐 伸手引導方向' },
+  { key: 'scene-guide-problem-1', src: 'icons/characters/scene-guide-problem-1.png', description: '伊歐 發現問題' },
+  { key: 'scene-guide-problem-2', src: 'icons/characters/scene-guide-problem-2.png', description: '伊歐 發現問題' },
+  { key: 'scene-guide-teleport-1', src: 'icons/characters/scene-guide-teleport-1.png', description: '傳送陣遇到伊歐' },
+  { key: 'scene-guide-teleport-2', src: 'icons/characters/scene-guide-teleport-2.png', description: '傳送陣遇到伊歐' },
+  { key: 'scene-guide-welcome-white', src: 'icons/characters/scene-guide-welcome-white.png', description: '伊歐 歡迎（白上衣）' },
+  { key: 'scene-guide-welcomeback-1', src: 'icons/characters/scene-guide-welcomeback-1.png', description: '伊歐 歡迎回來' },
+  { key: 'scene-guide-welcomeback-2', src: 'icons/characters/scene-guide-welcomeback-2.png', description: '伊歐 歡迎回來' },
+  { key: 'scene-guide-welcomeback-3', src: 'icons/characters/scene-guide-welcomeback-3.png', description: '伊歐 歡迎回來' },
+  { key: 'scene-guide-welcomeback-4', src: 'icons/characters/scene-guide-welcomeback-4.png', description: '伊歐 歡迎回來' },
+  { key: 'scene-guide-study-1', src: 'icons/characters/scene-guide-study-1.png', description: '伊歐 在書房' },
+  { key: 'scene-guide-study-2', src: 'icons/characters/scene-guide-study-2.png', description: '伊歐 在書房' },
+  { key: 'scene-guide-study-3', src: 'icons/characters/scene-guide-study-3.png', description: '伊歐 在書房' },
+  // 哈皮場景
   { key: 'scene-writer-thinking', src: 'icons/characters/writer-scene-thinking.png', description: '哈皮 低頭沉思' },
   { key: 'scene-welcome-1', src: 'icons/characters/scene-welcome-1.png', description: '哈皮 歡迎加入世界' },
   { key: 'scene-welcome-2', src: 'icons/characters/scene-welcome-2.png', description: '哈皮 歡迎加入世界' },
   { key: 'scene-welcome-3', src: 'icons/characters/scene-welcome-3.png', description: '哈皮 歡迎加入世界' },
+  // BLUE 場景
+  { key: 'scene-player-writing', src: 'icons/characters/player-other-writing.png', description: 'BLUE 寫筆記中' },
   { key: 'scene-player-explore-1', src: 'icons/characters/scene-player-explore-1.png', description: 'BLUE 探索新文字世界' },
   { key: 'scene-player-explore-2', src: 'icons/characters/scene-player-explore-2.png', description: 'BLUE 探索新文字世界' },
   { key: 'scene-player-explore-3', src: 'icons/characters/scene-player-explore-3.png', description: 'BLUE 探索新文字世界' },
