@@ -285,11 +285,32 @@
 | `newday.helloruru.com` | 離職全能導航幫手 | 必要 |
 | `lab.helloruru.com` | —（已有完整花朵 Hero） | 不需要 |
 
+### 間距規範
+
+> **v1.7 新增（2026-02-08）**：品牌頁首與主內容之間必須保持足夠間距，避免視覺擁擠。
+
+頁首下方的第一個內容元素（Hero 區塊或主容器）必須與品牌頁首保持至少 **24px** 的間距。
+
+**CSS 實作**（加在各站 `style.css`）：
+
+```css
+hello-ruru-header {
+  display: block;
+  margin-bottom: 28px;   /* 至少 24px，建議 28px */
+}
+```
+
+**注意事項**：
+- 品牌頁首使用 Shadow DOM，外部 CSS 無法改動其內部樣式，因此間距必須由外部元素（`hello-ruru-header` 本身或下方第一個元素的 `margin-top`）控制
+- 禁止將主內容緊貼品牌頁首（`margin: 0`），會造成視覺擁擠
+- 所有工具站（tools、newday）皆須遵守此規範
+
 ### 禁止事項
 
 - 禁止各站自行實作品牌 Logo / Header
 - 禁止修改 Web Component 的 Shadow DOM 內部樣式
 - 禁止移除品牌頁首
+- 禁止主內容緊貼品牌頁首（至少保持 24px 間距）
 
 ---
 

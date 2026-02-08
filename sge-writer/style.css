@@ -487,18 +487,14 @@ hello-ruru-header {
 }
 
 .member-mood {
-  display: none;
+  display: block;
   font-size: 0.7rem;
-  color: var(--color-text-sub);
+  color: var(--color-text-muted);
   font-style: italic;
   opacity: 0;
   transition: opacity 0.4s ease;
   max-width: 120px;
   line-height: 1.4;
-}
-
-.member.active .member-mood {
-  display: block;
 }
 
 .member-mood.visible {

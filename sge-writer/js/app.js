@@ -478,15 +478,6 @@ function generateSampleContent() {
 // ========================================
 function handleCommand(cmd) {
   switch (cmd) {
-    case '+100':
-      showToast('功能開發中：增加 100 字細節', 'warning');
-      break;
-    case '-100':
-      showToast('功能開發中：精簡內容', 'warning');
-      break;
-    case 'casual':
-      showToast('功能開發中：轉換口語風格', 'warning');
-      break;
     case 'rewrite':
       if (confirm('確定要重新開始嗎？')) {
         resetApp();
@@ -499,12 +490,11 @@ function handleCommand(cmd) {
 }
 
 async function copyToClipboard() {
-  const content = editor.getContent();
-  try {
-    await navigator.clipboard.writeText(content);
+  const success = await editor.copyFormatted();
+  if (success) {
     showToast('已複製到剪貼簿', 'success');
     levelSystem.addExp(10);
-  } catch (err) {
+  } else {
     showToast('複製失敗，請手動選取複製', 'error');
   }
 }
@@ -559,6 +549,12 @@ function updatePartyNamesUI() {
 // Image Management Modal
 // ========================================
 const activeObjectURLs = [];
+
+function revokeAllObjectURLs() {
+  while (activeObjectURLs.length > 0) {
+    imageStorage.revokeImageURL(activeObjectURLs.pop());
+  }
+}
 
 const IMAGE_ROLES = [
   { id: 'guide', name: '伊歐', subtitle: '領航員', labelClass: 'guide-label' },
@@ -786,6 +782,7 @@ function closeImageModal() {
 }
 
 async function loadImageModalState() {
+  revokeAllObjectURLs();
   const images = await imageStorage.loadAllImages();
 
   // Load core slots
@@ -905,6 +902,9 @@ function addExtraImageRow(key, blob, description, defaultSrc) {
 }
 
 async function updateAvatars() {
+  // 釋放舊的 Object URLs 避免記憶體洩漏
+  revokeAllObjectURLs();
+
   const images = await imageStorage.loadAllImages();
   const roles = ['guide', 'writer', 'player'];
 
