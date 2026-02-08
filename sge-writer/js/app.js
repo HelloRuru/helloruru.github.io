@@ -949,13 +949,8 @@ async function updateAvatars() {
 
       if (avatarSrc) {
         el.style.background = 'none';
-        if (isBubble) {
-          el.style.overflow = 'hidden';
-          el.style.borderRadius = '12px';
-        } else {
-          el.style.borderRadius = '0';
-          el.style.overflow = 'visible';
-        }
+        el.style.overflow = 'hidden';
+        el.style.borderRadius = '12px';
         if (existingImg) {
           existingImg.src = avatarSrc;
         } else {
@@ -963,11 +958,7 @@ async function updateAvatars() {
           img.className = 'avatar-img';
           img.src = avatarSrc;
           img.alt = role;
-          if (isBubble) {
-            img.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:top;';
-          } else {
-            img.style.cssText = 'width:100%;height:auto;object-fit:contain;';
-          }
+          img.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:top;';
           if (existingSvg) existingSvg.style.display = 'none';
           el.appendChild(img);
         }
