@@ -2,7 +2,7 @@
 
 > Claude Code / Happy Coder 進入任何 HelloRuru repo 時自動讀取此檔案。
 > 部署位置：`~/CLAUDE.md`（所有 repo 的共同上層）
-> 最後更新：2026-02-07
+> 最後更新：2026-02-08
 
 ---
 
