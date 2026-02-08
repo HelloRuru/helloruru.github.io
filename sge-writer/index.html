@@ -321,13 +321,23 @@
               </div>
             </div>
           </div>
-          <button class="btn-text customize-names-btn" id="customize-names">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-            </svg>
-            自訂夥伴名稱
-          </button>
+          <div class="party-actions">
+            <button class="btn-text customize-names-btn" id="customize-names">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+              自訂夥伴名稱
+            </button>
+            <button class="btn-text manage-images-btn" id="manage-images">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+              管理立繪
+            </button>
+          </div>
         </div>
 
         <!-- Dialog Area -->
@@ -735,6 +745,294 @@
           <button type="submit" class="btn-primary">儲存</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- Image Management Modal -->
+  <div class="modal" id="image-modal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content image-modal-content">
+      <div class="modal-header">
+        <h3>角色立繪管理</h3>
+        <button class="modal-close" id="close-image-modal">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="image-modal-body">
+        <!-- 核心立繪 12 格 -->
+        <div class="image-section">
+          <h4 class="image-section-title">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+            核心表情（3 角色 x 4 表情）
+          </h4>
+
+          <!-- 小C（領航員）-->
+          <div class="image-role-group">
+            <span class="image-role-label guide-label">小C（領航員）</span>
+            <div class="image-grid">
+              <div class="image-slot" data-key="guide-joy">
+                <input type="file" accept="image/png,image/jpeg,image/webp" class="image-input" tabindex="-1">
+                <div class="image-placeholder">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                  </svg>
+                </div>
+                <img class="image-preview" alt="小C 樂">
+                <button class="image-delete" title="刪除">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+                <span class="image-label">樂</span>
+              </div>
+              <div class="image-slot" data-key="guide-happy">
+                <input type="file" accept="image/png,image/jpeg,image/webp" class="image-input" tabindex="-1">
+                <div class="image-placeholder">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                  </svg>
+                </div>
+                <img class="image-preview" alt="小C 喜">
+                <button class="image-delete" title="刪除">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+                <span class="image-label">喜</span>
+              </div>
+              <div class="image-slot" data-key="guide-angry">
+                <input type="file" accept="image/png,image/jpeg,image/webp" class="image-input" tabindex="-1">
+                <div class="image-placeholder">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                  </svg>
+                </div>
+                <img class="image-preview" alt="小C 怒">
+                <button class="image-delete" title="刪除">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+                <span class="image-label">怒</span>
+              </div>
+              <div class="image-slot" data-key="guide-sad">
+                <input type="file" accept="image/png,image/jpeg,image/webp" class="image-input" tabindex="-1">
+                <div class="image-placeholder">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                  </svg>
+                </div>
+                <img class="image-preview" alt="小C 哀">
+                <button class="image-delete" title="刪除">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+                <span class="image-label">哀</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 哈皮（吟遊詩人）-->
+          <div class="image-role-group">
+            <span class="image-role-label writer-label">哈皮（吟遊詩人）</span>
+            <div class="image-grid">
+              <div class="image-slot" data-key="writer-joy">
+                <input type="file" accept="image/png,image/jpeg,image/webp" class="image-input" tabindex="-1">
+                <div class="image-placeholder">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                  </svg>
+                </div>
+                <img class="image-preview" alt="哈皮 樂">
+                <button class="image-delete" title="刪除">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+                <span class="image-label">樂</span>
+              </div>
+              <div class="image-slot" data-key="writer-happy">
+                <input type="file" accept="image/png,image/jpeg,image/webp" class="image-input" tabindex="-1">
+                <div class="image-placeholder">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                  </svg>
+                </div>
+                <img class="image-preview" alt="哈皮 喜">
+                <button class="image-delete" title="刪除">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+                <span class="image-label">喜</span>
+              </div>
+              <div class="image-slot" data-key="writer-angry">
+                <input type="file" accept="image/png,image/jpeg,image/webp" class="image-input" tabindex="-1">
+                <div class="image-placeholder">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                  </svg>
+                </div>
+                <img class="image-preview" alt="哈皮 怒">
+                <button class="image-delete" title="刪除">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+                <span class="image-label">怒</span>
+              </div>
+              <div class="image-slot" data-key="writer-sad">
+                <input type="file" accept="image/png,image/jpeg,image/webp" class="image-input" tabindex="-1">
+                <div class="image-placeholder">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                  </svg>
+                </div>
+                <img class="image-preview" alt="哈皮 哀">
+                <button class="image-delete" title="刪除">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+                <span class="image-label">哀</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- BLUE（見習生）-->
+          <div class="image-role-group">
+            <span class="image-role-label player-label">BLUE（見習生）</span>
+            <div class="image-grid">
+              <div class="image-slot" data-key="player-joy">
+                <input type="file" accept="image/png,image/jpeg,image/webp" class="image-input" tabindex="-1">
+                <div class="image-placeholder">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                  </svg>
+                </div>
+                <img class="image-preview" alt="BLUE 樂">
+                <button class="image-delete" title="刪除">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+                <span class="image-label">樂</span>
+              </div>
+              <div class="image-slot" data-key="player-happy">
+                <input type="file" accept="image/png,image/jpeg,image/webp" class="image-input" tabindex="-1">
+                <div class="image-placeholder">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                  </svg>
+                </div>
+                <img class="image-preview" alt="BLUE 喜">
+                <button class="image-delete" title="刪除">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+                <span class="image-label">喜</span>
+              </div>
+              <div class="image-slot" data-key="player-angry">
+                <input type="file" accept="image/png,image/jpeg,image/webp" class="image-input" tabindex="-1">
+                <div class="image-placeholder">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                  </svg>
+                </div>
+                <img class="image-preview" alt="BLUE 怒">
+                <button class="image-delete" title="刪除">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+                <span class="image-label">怒</span>
+              </div>
+              <div class="image-slot" data-key="player-sad">
+                <input type="file" accept="image/png,image/jpeg,image/webp" class="image-input" tabindex="-1">
+                <div class="image-placeholder">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                  </svg>
+                </div>
+                <img class="image-preview" alt="BLUE 哀">
+                <button class="image-delete" title="刪除">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+                <span class="image-label">哀</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 額外場景圖片 -->
+        <div class="image-section">
+          <h4 class="image-section-title">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+            額外場景圖片
+          </h4>
+          <p class="image-section-desc">新增角色在不同場景的圖片，並描述用途（如「升級慶祝」、「寫筆記中」等）</p>
+          <div class="extra-images-list" id="extra-images-list"></div>
+          <button type="button" class="btn-secondary add-extra-image" id="add-extra-image">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            新增場景圖片
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 

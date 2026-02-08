@@ -7,6 +7,7 @@ import { storage } from './storage.js';
 import { editor } from './editor.js';
 import { analyzer } from './seo-analyzer.js';
 import { templates } from './templates.js';
+import { imageStorage } from './image-storage.js';
 
 // ========================================
 // State Management
@@ -107,6 +108,13 @@ const elements = {
   customGuide: document.getElementById('custom-guide'),
   customWriter: document.getElementById('custom-writer'),
   customPlayer: document.getElementById('custom-player'),
+
+  // Image Modal
+  imageModal: document.getElementById('image-modal'),
+  manageImagesBtn: document.getElementById('manage-images'),
+  closeImageModalBtn: document.getElementById('close-image-modal'),
+  extraImagesList: document.getElementById('extra-images-list'),
+  addExtraImageBtn: document.getElementById('add-extra-image'),
 
   // Actions
   resetBtn: document.getElementById('reset-btn'),
@@ -507,6 +515,266 @@ function updatePartyNamesUI() {
 }
 
 // ========================================
+// Image Management Modal
+// ========================================
+let extraImageCounter = 0;
+const activeObjectURLs = [];
+
+function openImageModal() {
+  loadImageModalState();
+  elements.imageModal.classList.add('active');
+}
+
+function closeImageModal() {
+  elements.imageModal.classList.remove('active');
+}
+
+async function loadImageModalState() {
+  const images = await imageStorage.loadAllImages();
+  const coreSlots = elements.imageModal.querySelectorAll('.image-section:first-child .image-slot');
+
+  coreSlots.forEach(slot => {
+    const key = slot.dataset.key;
+    const record = images.find(img => img.key === key);
+    const preview = slot.querySelector('.image-preview');
+
+    if (record) {
+      const url = imageStorage.createImageURL(record.blob);
+      activeObjectURLs.push(url);
+      preview.src = url;
+      slot.classList.add('filled');
+    } else {
+      preview.src = '';
+      slot.classList.remove('filled');
+    }
+  });
+
+  // Load extra images
+  elements.extraImagesList.innerHTML = '';
+  extraImageCounter = 0;
+  const extras = images.filter(img => img.key.startsWith('extra-'));
+  extras.sort((a, b) => {
+    const numA = parseInt(a.key.split('-')[1]);
+    const numB = parseInt(b.key.split('-')[1]);
+    return numA - numB;
+  });
+  for (const extra of extras) {
+    addExtraImageRow(extra.key, extra.blob, extra.description);
+  }
+}
+
+function handleCoreImageUpload(slot, file) {
+  const key = slot.dataset.key;
+  const preview = slot.querySelector('.image-preview');
+
+  const url = imageStorage.createImageURL(file);
+  activeObjectURLs.push(url);
+  preview.src = url;
+  slot.classList.add('filled');
+
+  imageStorage.saveImage(key, file).then(() => {
+    updateAvatars();
+    showToast('立繪已儲存', 'success');
+  });
+}
+
+function handleCoreImageDelete(slot) {
+  const key = slot.dataset.key;
+  const preview = slot.querySelector('.image-preview');
+  const input = slot.querySelector('.image-input');
+
+  preview.src = '';
+  slot.classList.remove('filled');
+  input.value = '';
+
+  imageStorage.deleteImage(key).then(() => {
+    updateAvatars();
+    showToast('立繪已刪除', 'info');
+  });
+}
+
+function addExtraImageRow(key, blob, description) {
+  if (!key) {
+    key = `extra-${Date.now()}`;
+  }
+  extraImageCounter++;
+
+  const row = document.createElement('div');
+  row.className = 'extra-image-row';
+  row.dataset.key = key;
+
+  row.innerHTML = `
+    <div class="image-slot${blob ? ' filled' : ''}" data-key="${key}">
+      <input type="file" accept="image/png,image/jpeg,image/webp" class="image-input" tabindex="-1">
+      <div class="image-placeholder">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+          <line x1="12" y1="8" x2="12" y2="16"/>
+          <line x1="8" y1="12" x2="16" y2="12"/>
+        </svg>
+      </div>
+      <img class="image-preview" alt="場景圖片" ${blob ? `src="${imageStorage.createImageURL(blob)}"` : ''}>
+      <button class="image-delete" title="刪除">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="extra-desc">
+      <input type="text" placeholder="描述用途（如「升級慶祝」）" value="${description || ''}" maxlength="50">
+    </div>
+    <button class="extra-remove" title="移除此列">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="3 6 5 6 21 6"/>
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+      </svg>
+    </button>
+  `;
+
+  // Extra image upload
+  const slot = row.querySelector('.image-slot');
+  const input = row.querySelector('.image-input');
+  const deleteBtn = row.querySelector('.image-delete');
+  const descInput = row.querySelector('.extra-desc input');
+  const removeBtn = row.querySelector('.extra-remove');
+
+  input.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const preview = slot.querySelector('.image-preview');
+    const url = imageStorage.createImageURL(file);
+    activeObjectURLs.push(url);
+    preview.src = url;
+    slot.classList.add('filled');
+    imageStorage.saveImage(key, file, descInput.value);
+  });
+
+  deleteBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const preview = slot.querySelector('.image-preview');
+    preview.src = '';
+    slot.classList.remove('filled');
+    input.value = '';
+    imageStorage.deleteImage(key);
+  });
+
+  descInput.addEventListener('change', () => {
+    // Re-save with updated description if image exists
+    imageStorage.loadImage(key).then(record => {
+      if (record) {
+        imageStorage.saveImage(key, record.blob, descInput.value);
+      }
+    });
+  });
+
+  removeBtn.addEventListener('click', () => {
+    imageStorage.deleteImage(key);
+    row.remove();
+  });
+
+  elements.extraImagesList.appendChild(row);
+}
+
+async function updateAvatars() {
+  const images = await imageStorage.loadAllImages();
+  const roles = ['guide', 'writer', 'player'];
+
+  for (const role of roles) {
+    // Find the default expression image (joy first, then any available)
+    const expressions = ['joy', 'happy', 'angry', 'sad'];
+    let avatarRecord = null;
+    for (const expr of expressions) {
+      avatarRecord = images.find(img => img.key === `${role}-${expr}`);
+      if (avatarRecord) break;
+    }
+
+    // Update member-avatar in party card
+    const memberAvatar = document.querySelector(`.${role}-avatar`);
+    if (memberAvatar) {
+      const existingImg = memberAvatar.querySelector('img.avatar-img');
+      const existingSvg = memberAvatar.querySelector('svg');
+
+      if (avatarRecord) {
+        const url = imageStorage.createImageURL(avatarRecord.blob);
+        activeObjectURLs.push(url);
+
+        if (existingImg) {
+          existingImg.src = url;
+        } else {
+          const img = document.createElement('img');
+          img.className = 'avatar-img';
+          img.src = url;
+          img.alt = role;
+          img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;';
+          if (existingSvg) existingSvg.style.display = 'none';
+          memberAvatar.appendChild(img);
+        }
+      } else {
+        if (existingImg) existingImg.remove();
+        if (existingSvg) existingSvg.style.display = '';
+      }
+    }
+
+    // Update bubble-avatars in dialog area
+    const bubbleAvatars = document.querySelectorAll(`.${role}-bubble .bubble-avatar`);
+    bubbleAvatars.forEach(bubble => {
+      const existingImg = bubble.querySelector('img.avatar-img');
+      const existingSvg = bubble.querySelector('svg');
+
+      if (avatarRecord) {
+        const url = imageStorage.createImageURL(avatarRecord.blob);
+        activeObjectURLs.push(url);
+
+        if (existingImg) {
+          existingImg.src = url;
+        } else {
+          const img = document.createElement('img');
+          img.className = 'avatar-img';
+          img.src = url;
+          img.alt = role;
+          img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;';
+          if (existingSvg) existingSvg.style.display = 'none';
+          bubble.appendChild(img);
+        }
+      } else {
+        if (existingImg) existingImg.remove();
+        if (existingSvg) existingSvg.style.display = '';
+      }
+    });
+  }
+}
+
+function initImageModal() {
+  // Core image slots - upload and delete
+  const coreSlots = elements.imageModal.querySelectorAll('.image-section:first-child .image-slot');
+  coreSlots.forEach(slot => {
+    const input = slot.querySelector('.image-input');
+    const deleteBtn = slot.querySelector('.image-delete');
+
+    input.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) handleCoreImageUpload(slot, file);
+    });
+
+    deleteBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      handleCoreImageDelete(slot);
+    });
+  });
+
+  // Add extra image button
+  elements.addExtraImageBtn.addEventListener('click', () => {
+    addExtraImageRow();
+  });
+
+  // Modal open/close
+  elements.manageImagesBtn.addEventListener('click', openImageModal);
+  elements.closeImageModalBtn.addEventListener('click', closeImageModal);
+  elements.imageModal.querySelector('.modal-backdrop').addEventListener('click', closeImageModal);
+}
+
+// ========================================
 // Mobile Tabs
 // ========================================
 function handleTabSwitch(e) {
@@ -668,6 +936,10 @@ function init() {
 
   // Initialize templates
   templates.init(elements.templateButtons, editor);
+
+  // Initialize image modal and load saved avatars
+  initImageModal();
+  updateAvatars();
 
   // Editor change listener
   elements.editor.addEventListener('input', () => {
