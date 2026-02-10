@@ -27,7 +27,8 @@
           "description": "AI 搜尋最佳化文案產生器，三角色互動引導",
           "url": "/sge-writer/",
           "icon": "wand",
-          "iconColor": "lavender"
+          "iconColor": "lavender",
+          "badge": { "text": "開發中", "type": "dev" }
         }
       ]
     },
@@ -87,7 +88,7 @@
           "url": "https://tools.helloruru.com/post-writer/",
           "icon": "layout",
           "iconColor": "rose",
-          "badge": { "text": "製作中", "type": "dev" },
+          "badge": { "text": "調整中", "type": "dev" },
           "external": true
         },
         {
@@ -97,7 +98,7 @@
           "url": "https://tools.helloruru.com/cosmetics-for-you/",
           "icon": "palette",
           "iconColor": "sakura",
-          "badge": { "text": "製作中", "type": "dev" },
+          "badge": { "text": "調整中", "type": "dev" },
           "external": true
         }
       ]
