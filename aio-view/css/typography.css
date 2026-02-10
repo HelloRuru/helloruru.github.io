@@ -1,0 +1,64 @@
+/* ================================================
+   Typography — 文字樣式
+   ================================================ */
+
+/* Typography — Design System v1.4 */
+h1 {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--color-ink);
+}
+
+h2 {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--color-ink);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+h3 {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--color-ink);
+}
+
+p {
+  font-family: var(--font-body);
+  color: var(--color-text);
+}
+
+/* 小字（≤12px）使用 Noto Sans TC 確保清晰 */
+small,
+.hint,
+.caption,
+.stat-label,
+.code-header {
+  font-family: var(--font-small);
+}
+
+a {
+  color: var(--color-rose);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-dusty-rose);
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  background: var(--color-mist);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}

@@ -1,0 +1,9 @@
+/* ================================================
+   Empty State — 空白狀態
+   ================================================ */
+
+.empty-state {
+  text-align: center;
+  padding: var(--space-xl);
+  color: var(--color-gray);
+}

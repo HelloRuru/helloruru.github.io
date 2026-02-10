@@ -1,0 +1,78 @@
+/* ================================================
+   Table — 表格
+   ================================================ */
+
+.table-wrapper {
+  overflow-x: auto;
+  margin: var(--space-md) 0;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.data-table th,
+.data-table td {
+  padding: var(--space-md);
+  text-align: left;
+  border-bottom: 1px solid var(--color-mist);
+}
+
+.data-table th {
+  font-weight: 500;
+  color: var(--color-gray);
+  background: var(--bg-light);
+}
+
+.data-table tbody tr:hover {
+  background: rgba(212, 165, 165, 0.05);
+}
+
+.data-table input[type="text"] {
+  width: 100%;
+  padding: var(--space-sm);
+  font-size: 14px;
+  font-family: var(--font-body);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.data-table input[type="text"]:hover {
+  background: var(--bg-light);
+}
+
+.data-table input[type="text"]:focus {
+  outline: none;
+  border-color: var(--color-rose);
+  background: var(--bg-card);
+}
+
+.data-table input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-rose);
+  cursor: pointer;
+}
+
+.col-check {
+  width: 40px;
+}
+
+.col-title {
+  min-width: 200px;
+}
+
+.col-query {
+  min-width: 200px;
+}
+
+.col-status,
+.col-cited {
+  width: 100px;
+  text-align: center;
+}

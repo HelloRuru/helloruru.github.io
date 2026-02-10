@@ -1,0 +1,52 @@
+/* ================================================
+   Responsive — 響應式設計
+   ================================================ */
+
+@media (max-width: 768px) {
+  /* Typography */
+  h1 {
+    font-size: 30px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  /* Input */
+  .input-group {
+    flex-direction: column;
+  }
+
+  /* Stats */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Actions */
+  .actions {
+    flex-direction: column;
+  }
+
+  /* Buttons */
+  .btn {
+    width: 100%;
+  }
+
+  /* Table */
+  .col-title {
+    min-width: 150px;
+  }
+
+  .col-query {
+    min-width: 150px;
+  }
+
+  /* Guide */
+  .guide-content.expanded {
+    max-height: 2000px;
+  }
+
+  .guide-code {
+    font-size: 11px;
+  }
+}

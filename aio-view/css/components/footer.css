@@ -1,0 +1,17 @@
+/* ================================================
+   Footer — 頁尾
+   ================================================ */
+
+.site-footer {
+  padding: var(--space-xl) var(--space-md);
+  text-align: center;
+}
+
+.site-footer p {
+  font-size: 14px;
+  color: var(--color-gray);
+}
+
+.site-footer a {
+  color: var(--color-rose);
+}

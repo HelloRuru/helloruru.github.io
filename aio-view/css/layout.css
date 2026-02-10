@@ -1,0 +1,20 @@
+/* ================================================
+   Layout — 版面配置
+   ================================================ */
+
+/* App Layout */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main {
+  flex: 1;
+  padding: var(--space-xl) var(--space-md);
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+}

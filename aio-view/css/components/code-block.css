@@ -1,0 +1,55 @@
+/* ================================================
+   Code Block — 程式碼區塊
+   ================================================ */
+
+.code-block {
+  background: var(--color-charcoal);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--color-light-gray);
+  font-size: 12px;
+}
+
+.btn-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-family: var(--font-body);
+  color: var(--color-light-gray);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-copy:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+}
+
+.btn-copy .icon {
+  width: 14px;
+  height: 14px;
+}
+
+.code-block pre {
+  padding: var(--space-md);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  color: #E8E4E1;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}

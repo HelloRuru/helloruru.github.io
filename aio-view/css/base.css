@@ -1,0 +1,117 @@
+/* ================================================
+   AIO View — Design System v1.6
+   Font: GenSenRounded (源泉圓體)
+   ================================================ */
+
+/* Web Fonts — 源泉圓體 GenSenRounded TW */
+@font-face {
+  font-family: 'GenSenRounded';
+  src: url('/fonts/GenSenRounded-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GenSenRounded';
+  src: url('/fonts/GenSenRounded-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GenSenRounded';
+  src: url('/fonts/GenSenRounded-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* CSS Variables */
+:root {
+  /* Primary Colors */
+  --color-rose: #D4A5A5;
+  --color-lavender: #B8A9C9;
+
+  /* Pink Palette */
+  --color-blush: #F5D0C5;
+  --color-dusty-rose: #C9929A;
+  --color-nadeshiko: #E8B4B8;
+  --color-sakura: #FEDFE1;
+
+  /* Purple Palette */
+  --color-lotus: #9B7E93;
+  --color-wisteria: #C4B7D7;
+  --color-bellflower: #8F77B5;
+
+  /* Neutral */
+  --color-sage: #A8B5A0;
+  --color-mist: #E8E4E1;
+  --color-warm-gray: #B5ADA7;
+  --color-charcoal: #5C5856;
+
+  /* Text */
+  --color-ink: #333333;
+  --color-text: #4A4A4A;
+  --color-gray: #888888;
+  --color-light-gray: #AAAAAA;
+
+  /* Background */
+  --bg-light: #FAFAFA;
+  --bg-card: #FFFFFF;
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #D4A5A5, #B8A9C9);
+  --gradient-soft: linear-gradient(180deg, #FFFFFF, #FAFAFA);
+  --gradient-pink-purple: linear-gradient(135deg, #F5D0C5, #C4B7D7);
+
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 24px;
+  --radius-full: 50%;
+
+  /* Shadows */
+  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-deep: 0 8px 32px rgba(0, 0, 0, 0.12);
+
+  /* Typography — Design System v1.6 */
+  --font-display: 'GenSenRounded', 'Noto Sans TC', sans-serif;   /* H1, H2 標題 */
+  --font-heading: 'GenSenRounded', 'Noto Sans TC', sans-serif;  /* H3 標題 */
+  --font-body: 'GenSenRounded', 'Noto Sans TC', sans-serif;     /* 內文 */
+  --font-small: 'Noto Sans TC', sans-serif;                   /* 小字 ≤12px */
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;      /* 程式碼 */
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+}
+
+/* Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Base */
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  font-weight: 500; /* v1.5: 內文改用 Medium */
+  line-height: 1.8;
+  color: var(--color-text);
+  background: var(--bg-light);
+  min-height: 100vh;
+}

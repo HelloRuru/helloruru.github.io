@@ -1,0 +1,71 @@
+/* ================================================
+   Stats — 統計數據 + 篩選列
+   ================================================ */
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.stat-card {
+  background: var(--bg-light);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  text-align: center;
+}
+
+.stat-card.stat-highlight {
+  background: var(--gradient-pink-purple);
+}
+
+.stat-card.stat-highlight .stat-value,
+.stat-card.stat-highlight .stat-label {
+  color: #FFFFFF;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-ink);
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: var(--color-gray);
+  margin-top: var(--space-xs);
+}
+
+/* Filter Bar */
+.filter-bar {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: var(--space-sm) var(--space-md);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font-body);
+  color: var(--color-gray);
+  background: transparent;
+  border: 1px solid var(--color-mist);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+  background: var(--color-mist);
+}
+
+.filter-btn.active {
+  background: var(--color-rose);
+  color: #FFFFFF;
+  border-color: var(--color-rose);
+}

@@ -1,0 +1,21 @@
+/* ================================================
+   Card — 卡片
+   ================================================ */
+
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.card.hidden {
+  display: none;
+}
+
+.section-desc {
+  color: var(--color-gray);
+  font-size: 14px;
+  margin-bottom: var(--space-md);
+}
