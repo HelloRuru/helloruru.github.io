@@ -88,7 +88,6 @@
           "url": "https://tools.helloruru.com/post-writer/",
           "icon": "layout",
           "iconColor": "rose",
-          "badge": { "text": "調整中", "type": "dev" },
           "external": true
         },
         {
@@ -98,7 +97,6 @@
           "url": "https://tools.helloruru.com/cosmetics-for-you/",
           "icon": "palette",
           "iconColor": "sakura",
-          "badge": { "text": "調整中", "type": "dev" },
           "external": true
         }
       ]
