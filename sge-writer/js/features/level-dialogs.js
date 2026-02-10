@@ -95,6 +95,9 @@ export const levelDialogs = {
     // 顯示 Modal
     this._modal.classList.add('active');
 
+    // 🎮 GBA 遊戲風格：鎖定背景滾動
+    document.body.style.overflow = 'hidden';
+
     // 綁定繼續按鈕
     const continueBtn = document.getElementById('level-dialog-continue');
     continueBtn.onclick = () => this._nextLine();
@@ -188,6 +191,10 @@ export const levelDialogs = {
     if (this._modal) {
       this._modal.classList.remove('active');
     }
+
+    // 🎮 GBA 遊戲風格：恢復背景滾動
+    document.body.style.overflow = '';
+
     if (this._keyHandler) {
       document.removeEventListener('keydown', this._keyHandler);
       this._keyHandler = null;
@@ -196,3 +203,6 @@ export const levelDialogs = {
     if (this._onComplete) this._onComplete();
   }
 };
+
+// 🎮 測試用：在 console 輸入 testLevelUp(2) 即可觸發
+window.testLevelUp = (level) => levelDialogs.show(level || 2);

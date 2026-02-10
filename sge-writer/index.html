@@ -212,6 +212,8 @@
   <!-- Components -->
   <link rel="stylesheet" href="css/components/buttons.css">
   <link rel="stylesheet" href="css/components/cards.css">
+  <link rel="stylesheet" href="css/components/portrait-gallery.css">
+  <link rel="stylesheet" href="css/components/portrait-showcase.css">
   <link rel="stylesheet" href="css/components/adventure-map.css">
   <link rel="stylesheet" href="css/components/party.css">
   <link rel="stylesheet" href="css/components/dialog.css">
@@ -305,6 +307,17 @@
           <div class="progress-step" data-step="4">
             <div class="step-dot"></div>
             <span class="step-label">校對</span>
+          </div>
+        </div>
+
+        <!-- 🎮 GBA 角色立繪展示區 -->
+        <div class="card portrait-showcase" id="portrait-showcase">
+          <div class="portrait-frame">
+            <img id="main-portrait" src="icons/characters/guide-default-1.png" alt="伊歐">
+          </div>
+          <div class="portrait-nameplate" id="portrait-nameplate">
+            <span class="portrait-name" id="portrait-name">伊歐</span>
+            <span class="portrait-role" id="portrait-role">領航員</span>
           </div>
         </div>
 
@@ -995,13 +1008,19 @@
         <span class="level-dialog-badge">LEVEL UP!</span>
         <span class="level-dialog-level-badge" id="level-dialog-level">Lv.2</span>
       </div>
-      <div class="level-dialog-avatar" id="level-dialog-avatar">
-        <img src="icons/characters/guide-joy-1.png" alt="角色立繪">
+      <div class="level-dialog-body">
+        <!-- 🎮 GBA RPG 左側大幅立繪 -->
+        <div class="level-dialog-portrait" id="level-dialog-avatar">
+          <img src="icons/characters/guide-joy-1.png" alt="角色立繪">
+        </div>
+        <!-- 🎮 GBA RPG 右側對話區 -->
+        <div class="level-dialog-content">
+          <div class="level-dialog-speaker" id="level-dialog-speaker"></div>
+          <div class="level-dialog-text" id="level-dialog-text"></div>
+          <div class="level-dialog-reward" id="level-dialog-reward"></div>
+          <button class="level-dialog-continue" id="level-dialog-continue">▶ 繼續</button>
+        </div>
       </div>
-      <div class="level-dialog-speaker" id="level-dialog-speaker"></div>
-      <div class="level-dialog-text" id="level-dialog-text"></div>
-      <div class="level-dialog-reward" id="level-dialog-reward"></div>
-      <button class="level-dialog-continue" id="level-dialog-continue">▶ 繼續</button>
     </div>
   </div>
 

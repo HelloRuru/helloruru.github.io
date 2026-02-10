@@ -11,6 +11,7 @@ import { imageStorage } from './image-storage.js';
 import { faqUI } from './ui/faq-ui.js';
 import { CHARACTERS } from './data/characters.js';
 import { levelDialogs } from './features/level-dialogs.js';
+import { portraitDirector } from './features/portrait-director.js';
 
 // ========================================
 // Utilities
@@ -270,6 +271,9 @@ function goToStep(stepNumber) {
 
   // Update active party member
   updateActivePartyMember(stepNumber);
+
+  // 🎮 立繪隨劇情步驟切換
+  portraitDirector.onStepChange(stepNumber);
 }
 
 const PARTY_MOODS = {
@@ -1257,6 +1261,9 @@ function init() {
 
   // Initialize FAQ UI
   faqUI.init();
+
+  // 🎮 GBA 立繪導演系統
+  portraitDirector.init();
 
   // Update footer year
   updateFooterYear();

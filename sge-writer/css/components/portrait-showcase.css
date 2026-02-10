@@ -1,0 +1,95 @@
+/**
+ * SGE 文案助手 - GBA 角色立繪展示區
+ * 左側面板的大幅立繪，隨對話劇情切換
+ */
+
+/* ─── 立繪卡片 ─────────────────────── */
+
+.portrait-showcase {
+  padding: 0 !important;
+  overflow: hidden;
+  border: 3px solid #333333;
+  background: linear-gradient(180deg, #F5F0F2, #E8E4E6);
+  position: relative;
+}
+
+/* ─── 立繪框架 ─────────────────────── */
+
+.portrait-frame {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(212, 165, 165, 0.1), rgba(184, 169, 201, 0.15));
+}
+
+.portrait-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom center;
+  display: block;
+  transition: opacity 0.3s ease;
+}
+
+.portrait-frame img.switching {
+  opacity: 0;
+}
+
+/* ─── 角色名牌 ─────────────────────── */
+
+.portrait-nameplate {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: #333333;
+  color: #FFFFFF;
+}
+
+.portrait-name {
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.portrait-role {
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ─── 角色色彩主題 ─────────────────────── */
+
+.portrait-showcase[data-character="guide"] {
+  border-color: #D4A5A5;
+}
+.portrait-showcase[data-character="guide"] .portrait-nameplate {
+  background: linear-gradient(135deg, #D4A5A5, #C9929A);
+}
+
+.portrait-showcase[data-character="writer"] {
+  border-color: #B8A9C9;
+}
+.portrait-showcase[data-character="writer"] .portrait-nameplate {
+  background: linear-gradient(135deg, #B8A9C9, #9B7E93);
+}
+
+.portrait-showcase[data-character="player"] {
+  border-color: #A8B5A0;
+}
+.portrait-showcase[data-character="player"] .portrait-nameplate {
+  background: linear-gradient(135deg, #A8B5A0, #8FA88A);
+}
+
+/* ─── 響應式 ─────────────────────── */
+
+@media (max-width: 1023px) {
+  .portrait-showcase {
+    display: none;
+  }
+}
