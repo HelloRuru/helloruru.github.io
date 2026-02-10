@@ -8,6 +8,9 @@ import { editor } from './editor.js';
 import { analyzer } from './seo-analyzer.js';
 import { templates } from './templates.js';
 import { imageStorage } from './image-storage.js';
+import { faqUI } from './ui/faq-ui.js';
+import { CHARACTERS } from './data/characters.js';
+import { levelDialogs } from './features/level-dialogs.js';
 
 // ========================================
 // Utilities
@@ -22,6 +25,7 @@ function escapeHTML(str) {
 // ========================================
 const state = {
   currentStep: 1,
+  viewMode: 'quick', // 'quick' or 'detailed'
   questData: {
     keyword: '',
     wordMin: 650,
@@ -145,6 +149,7 @@ const elements = {
   // Actions
   resetBtn: document.getElementById('reset-btn'),
   themeToggle: document.getElementById('theme-toggle'),
+  viewToggleBtns: document.querySelectorAll('.toggle-btn'),
 
   // Footer
   footerYear: document.getElementById('footer-year'),
@@ -188,6 +193,8 @@ const levelSystem = {
 
     if (levelInfo.level > oldLevel) {
       showToast(`升級了！你現在是 Lv.${levelInfo.level} ${levelInfo.title}`, 'success');
+      // GBA 風格升級對話
+      levelDialogs.show(levelInfo.level);
     }
 
     this.updateUI();
@@ -1137,6 +1144,38 @@ function toggleTheme() {
 }
 
 // ========================================
+// View Mode Management
+// ========================================
+function handleViewModeChange(mode) {
+  if (mode === state.viewMode) return;
+
+  state.viewMode = mode;
+  localStorage.setItem('sge-view-mode', mode);
+  updateViewModeUI();
+
+  // Re-run analysis to update display
+  analyzer.analyze(elements.editor.innerHTML);
+
+  showToast(mode === 'quick' ? '⚡ 已切換為快速模式' : '📊 已切換為詳細模式');
+}
+
+function updateViewModeUI() {
+  elements.viewToggleBtns.forEach(btn => {
+    if (btn.dataset.view === state.viewMode) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+
+  // Toggle analysis panel visibility
+  const analysisPanel = document.querySelector('.panel-right');
+  if (analysisPanel) {
+    analysisPanel.dataset.viewMode = state.viewMode;
+  }
+}
+
+// ========================================
 // Initialize
 // ========================================
 function init() {
@@ -1157,6 +1196,16 @@ function init() {
   if (savedTheme === 'dark') {
     document.documentElement.classList.add('dark-mode');
   }
+
+  // Load saved view mode
+  const savedViewMode = localStorage.getItem('sge-view-mode');
+  if (savedViewMode && (savedViewMode === 'quick' || savedViewMode === 'detailed')) {
+    state.viewMode = savedViewMode;
+    updateViewModeUI();
+  }
+
+  // Initialize FAQ UI
+  faqUI.init();
 
   // Update footer year
   updateFooterYear();
@@ -1192,6 +1241,11 @@ function init() {
   });
 
   elements.themeToggle.addEventListener('click', toggleTheme);
+
+  // View mode toggle
+  elements.viewToggleBtns.forEach(btn => {
+    btn.addEventListener('click', () => handleViewModeChange(btn.dataset.view));
+  });
 
   // Initialize editor
   editor.init(elements.editor, elements.toolbarButtons);

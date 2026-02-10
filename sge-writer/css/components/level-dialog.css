@@ -1,0 +1,212 @@
+/**
+ * SGE 文案助手 - GBA 風格升級對話 Modal
+ * Pokémon GBA aesthetic: 白底 + 黑粗框 + 像素感
+ */
+
+/* ─── Modal 容器 ─────────────────────── */
+
+.level-dialog-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+
+.level-dialog-modal.active {
+  display: flex;
+}
+
+/* ─── 半透明背景 ─────────────────────── */
+
+.level-dialog-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* ─── 對話框主體 ─────────────────────── */
+
+.level-dialog-box {
+  position: relative;
+  background: #FFFFFF;
+  border: 4px solid #000000;
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 480px;
+  width: 90%;
+  z-index: 1;
+  animation: levelDialogIn 0.3s ease;
+}
+
+@keyframes levelDialogIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ─── 標題區 ─────────────────────── */
+
+.level-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 3px solid #000000;
+}
+
+.level-dialog-badge {
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, #D4A5A5, #B8A9C9);
+  border: 2px solid #000000;
+  border-radius: 8px;
+  padding: 4px 16px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.level-dialog-level-badge {
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #000000;
+  background: #FFD700;
+  border: 2px solid #000000;
+  border-radius: 8px;
+  padding: 4px 12px;
+}
+
+/* ─── 角色頭像 ─────────────────────── */
+
+.level-dialog-avatar {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 12px;
+  border: 3px solid #D4A5A5;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #D4A5A5, #B8A9C9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.level-dialog-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+/* ─── 角色名稱 ─────────────────────── */
+
+.level-dialog-speaker {
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #D4A5A5;
+  text-align: center;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ─── 對話文字 ─────────────────────── */
+
+.level-dialog-text {
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333333;
+  line-height: 1.8;
+  text-align: center;
+  min-height: 3em;
+  padding: 8px 4px;
+  margin-bottom: 16px;
+}
+
+/* ─── 獎勵文字 ─────────────────────── */
+
+.level-dialog-reward {
+  display: none;
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, #A8B5A0, #8FA88A);
+  border: 2px solid #000000;
+  border-radius: 8px;
+  padding: 8px 16px;
+  text-align: center;
+  margin-bottom: 16px;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* ─── 繼續按鈕 ─────────────────────── */
+
+.level-dialog-continue {
+  display: block;
+  width: 100%;
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #000000;
+  background: #FFFFFF;
+  border: 3px solid #000000;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.level-dialog-continue:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+}
+
+.level-dialog-continue:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* ─── 響應式 ─────────────────────── */
+
+@media (max-width: 768px) {
+  .level-dialog-box {
+    padding: 16px;
+    border-width: 3px;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.4);
+  }
+
+  .level-dialog-badge {
+    font-size: 16px;
+  }
+
+  .level-dialog-text {
+    font-size: 15px;
+  }
+
+  .level-dialog-avatar {
+    width: 52px;
+    height: 52px;
+  }
+}

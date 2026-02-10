@@ -1,7 +1,7 @@
 {
-  "name": "SGE 文案助手",
-  "short_name": "SGE助手",
-  "description": "AI Overview 優化寫作工具，幫助你的內容被 Google SGE 引用",
+  "name": "SEO文案升級攻略站",
+  "short_name": "SEO攻略站",
+  "description": "SEO 文案升級工具，目標為 Google SGE（AI Overview）引用",
   "start_url": "/sge-writer/",
   "scope": "/sge-writer/",
   "display": "standalone",
@@ -54,7 +54,7 @@
     {
       "name": "開始新文案",
       "short_name": "新文案",
-      "description": "開始撰寫新的 SGE 優化文案",
+      "description": "開始撰寫新的 SEO 文案，目標為 SGE 引用",
       "url": "/sge-writer/",
       "icons": [
         {

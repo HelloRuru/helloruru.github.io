@@ -1,0 +1,314 @@
+/**
+ * 支語小警察 — GBA 風格
+ * Pokémon GBA aesthetic: 白底 + 黑粗框 + 像素感
+ */
+
+/* ─── 警察卡片主體 ─────────────────────── */
+
+.zhiyu-police-card {
+  background: #FFFFFF;
+  border: 3px solid #000000;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.zhiyu-police-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #000000;
+}
+
+.zhiyu-police-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #D4A5A5, #B8A9C9);
+  border: 2px solid #000000;
+  border-radius: 50%;
+  font-size: 16px;
+}
+
+.zhiyu-police-title {
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #000000;
+}
+
+.zhiyu-police-status {
+  margin-left: auto;
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 12px;
+  border: 2px solid #000000;
+}
+
+.zhiyu-police-status.safe {
+  background: #A8B5A0;
+  color: #FFFFFF;
+}
+
+.zhiyu-police-status.warning {
+  background: #FFD700;
+  color: #000000;
+}
+
+.zhiyu-police-status.danger {
+  background: #FF6B6B;
+  color: #FFFFFF;
+}
+
+/* ─── 檢測結果顯示 ─────────────────────── */
+
+.zhiyu-police-result {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  background: #F5F5F5;
+  border: 2px solid #000000;
+  border-radius: 6px;
+}
+
+.zhiyu-police-result-icon {
+  font-size: 20px;
+}
+
+.zhiyu-police-result-text {
+  flex: 1;
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333333;
+  line-height: 1.5;
+}
+
+/* ─── 違規列表 ─────────────────────── */
+
+.zhiyu-violations {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.zhiyu-violation-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  background: #FFFFFF;
+  border: 2px solid #000000;
+  border-radius: 6px;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.15);
+}
+
+.zhiyu-violation-item:last-child {
+  margin-bottom: 0;
+}
+
+.zhiyu-violation-marker {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #000000;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.zhiyu-violation-marker.critical {
+  background: #FF6B6B;
+  color: #FFFFFF;
+}
+
+.zhiyu-violation-marker.normal {
+  background: #FFD700;
+  color: #000000;
+}
+
+.zhiyu-violation-content {
+  flex: 1;
+}
+
+.zhiyu-violation-word {
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #FF6B6B;
+  margin-bottom: 4px;
+}
+
+.zhiyu-violation-suggestion {
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #666666;
+  margin-bottom: 2px;
+}
+
+.zhiyu-violation-reason {
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #888888;
+  font-style: italic;
+}
+
+/* ─── GBA 風格對話框（角色提示） ─────────────────────── */
+
+.zhiyu-gba-dialog {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #FFFFFF;
+  border: 3px solid #000000;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+
+.zhiyu-dialog-avatar {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border: 2px solid #2C3E50;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(135deg, #2C3E50, #B8A9C9);
+}
+
+.zhiyu-dialog-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.zhiyu-gba-dialog::before {
+  content: '';
+  position: absolute;
+  left: 20px;
+  bottom: -12px;
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 12px solid #000000;
+}
+
+.zhiyu-gba-dialog::after {
+  content: '';
+  position: absolute;
+  left: 22px;
+  bottom: -8px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #FFFFFF;
+}
+
+.zhiyu-dialog-speaker {
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #B8A9C9;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.zhiyu-dialog-text {
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333333;
+  line-height: 1.6;
+}
+
+/* ─── 統計數據 ─────────────────────── */
+
+.zhiyu-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.zhiyu-stat {
+  background: #F5F5F5;
+  border: 2px solid #000000;
+  border-radius: 6px;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.zhiyu-stat-value {
+  display: block;
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 2px;
+}
+
+.zhiyu-stat-label {
+  display: block;
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #666666;
+}
+
+/* ─── 空狀態（無違規） ─────────────────────── */
+
+.zhiyu-empty-state {
+  text-align: center;
+  padding: 20px 16px;
+}
+
+.zhiyu-empty-icon {
+  font-size: 48px;
+  margin-bottom: 8px;
+}
+
+.zhiyu-empty-text {
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #A8B5A0;
+}
+
+/* ─── 響應式調整 ─────────────────────── */
+
+@media (max-width: 768px) {
+  .zhiyu-police-card {
+    border-width: 2px;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+  }
+
+  .zhiyu-police-badge {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+
+  .zhiyu-police-title {
+    font-size: 15px;
+  }
+}

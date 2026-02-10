@@ -64,6 +64,50 @@ hello-ruru-header {
   gap: var(--space-sm);
 }
 
+/* View Mode Toggle */
+.view-toggle {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+}
+
+.toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-main);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.toggle-btn svg {
+  flex-shrink: 0;
+}
+
+.toggle-btn:hover {
+  background: rgba(212, 165, 165, 0.1);
+  color: var(--color-text-body);
+}
+
+.toggle-btn.active {
+  background: var(--gradient-primary);
+  color: #FFFFFF;
+  box-shadow: 0 2px 4px rgba(212, 165, 165, 0.2);
+}
+
+.toggle-btn.active svg {
+  color: #FFFFFF;
+}
+
 /* Main Content */
 .main-content {
   flex: 1;

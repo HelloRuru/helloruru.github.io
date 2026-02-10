@@ -25,3 +25,34 @@
 .hidden {
   display: none !important;
 }
+
+/* ========================================
+   View Mode Styles
+   ======================================== */
+/* Quick Mode: Hide detailed analysis */
+.panel-right[data-view-mode="quick"] #sge-structure-card,
+.panel-right[data-view-mode="quick"] #ai-negative-list,
+.panel-right[data-view-mode="quick"] #ai-positive-list,
+.panel-right[data-view-mode="quick"] .check-item {
+  display: none;
+}
+
+/* Quick Mode: Emphasize AI Taste score */
+.panel-right[data-view-mode="quick"] #ai-taste-card {
+  margin-bottom: var(--space-xl);
+}
+
+.panel-right[data-view-mode="quick"] .ai-taste-score-container {
+  text-align: center;
+  padding: var(--space-xl) 0;
+}
+
+.panel-right[data-view-mode="quick"] #ai-taste-score {
+  font-size: 64px;
+  font-weight: 700;
+}
+
+.panel-right[data-view-mode="quick"] #ai-taste-message {
+  font-size: 20px;
+  margin-top: var(--space-md);
+}

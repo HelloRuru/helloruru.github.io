@@ -6,8 +6,10 @@
 import { VIOLATION_WORDS, ALL_VIOLATIONS } from './data/violation-words.js';
 import { AITasteAnalyzer } from './analyzers/ai-taste-analyzer.js';
 import { SGEStructureAnalyzer } from './analyzers/sge-structure-analyzer.js';
+import { ZhiyuAnalyzer } from './analyzers/zhiyu-analyzer.js';
 import { AITasteUI } from './ui/ai-taste-ui.js';
 import { SGEStructureUI } from './ui/sge-structure-ui.js';
+import { ZhiyuUI } from './ui/zhiyu-ui.js';
 
 export const analyzer = {
   elements: null,
@@ -91,6 +93,10 @@ export const analyzer = {
 
     // 更新 SGE 結構 UI
     SGEStructureUI.update(this.elements, sgeStructureResult);
+
+    // 支語小警察分析
+    const zhiyuResult = ZhiyuAnalyzer.analyze(content);
+    ZhiyuUI.update(zhiyuResult);
   },
 
   /**
