@@ -3,23 +3,53 @@
  * 提供離線功能與快取管理
  */
 
-const CACHE_NAME = 'sge-writer-v6';
+const CACHE_NAME = 'sge-writer-v7';
 const STATIC_ASSETS = [
   '/sge-writer/',
   '/sge-writer/index.html',
-  '/sge-writer/style.css',
   '/sge-writer/manifest.json',
-  '/sge-writer/js/app.js',
-  '/sge-writer/js/editor.js',
-  '/sge-writer/js/seo-analyzer.js',
-  '/sge-writer/js/storage.js',
-  '/sge-writer/js/templates.js',
-  '/sge-writer/js/image-storage.js',
   '/sge-writer/icons/favicon.svg',
   '/sge-writer/icons/favicon-32x32.png',
   '/sge-writer/icons/apple-touch-icon.png',
   '/sge-writer/icons/android-chrome-192x192.png',
-  '/sge-writer/icons/android-chrome-512x512.png'
+  '/sge-writer/icons/android-chrome-512x512.png',
+  // CSS 模組
+  '/sge-writer/css/base.css',
+  '/sge-writer/css/layout.css',
+  '/sge-writer/css/accessibility.css',
+  '/sge-writer/css/responsive.css',
+  '/sge-writer/css/utilities.css',
+  '/sge-writer/css/components/buttons.css',
+  '/sge-writer/css/components/cards.css',
+  '/sge-writer/css/components/adventure-map.css',
+  '/sge-writer/css/components/party.css',
+  '/sge-writer/css/components/dialog.css',
+  '/sge-writer/css/components/quest-form.css',
+  '/sge-writer/css/components/quick-input.css',
+  '/sge-writer/css/components/strategy.css',
+  '/sge-writer/css/components/fact-check.css',
+  '/sge-writer/css/components/quick-commands.css',
+  '/sge-writer/css/components/level.css',
+  '/sge-writer/css/components/mobile-tabs.css',
+  '/sge-writer/css/components/editor.css',
+  '/sge-writer/css/components/analysis.css',
+  '/sge-writer/css/components/modal.css',
+  '/sge-writer/css/components/toast.css',
+  '/sge-writer/css/components/animations.css',
+  '/sge-writer/css/components/portrait-showcase.css',
+  '/sge-writer/css/components/opening.css',
+  '/sge-writer/css/components/level-dialog.css',
+  '/sge-writer/css/components/zhiyu-police.css',
+  // JS 模組
+  '/sge-writer/js/app.js',
+  '/sge-writer/js/editor.js',
+  '/sge-writer/js/storage.js',
+  '/sge-writer/js/templates.js',
+  '/sge-writer/js/image-storage.js',
+  '/sge-writer/js/seo-analyzer.js',
+  '/sge-writer/js/features/portrait-director.js',
+  '/sge-writer/js/features/opening.js',
+  '/sge-writer/js/features/level-dialogs.js'
 ];
 
 // 外部資源（字體等）
