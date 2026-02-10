@@ -42,7 +42,7 @@ const OPENING_STORIES = {
   player: {
     name: 'BLUE',
     role: '文案見習生',
-    color: '#A8B5A0',
+    color: '#2C3E50',
     slogan: '......演算法不簡單，但我可以陪你研究。',
     cg: 'player-default-1.png',
     dialogs: [
@@ -85,7 +85,7 @@ export const opening = {
         <div class="opening-choices">
           ${Object.entries(OPENING_STORIES).map(([key, story]) => `
             <button class="opening-choice" data-character="${key}" style="border-color: ${story.color}">
-              <div class="choice-symbol" style="background: linear-gradient(135deg, ${story.color}, rgba(${story.color === '#D4A5A5' ? '212,165,165' : story.color === '#B8A9C9' ? '184,169,201' : '168,181,160'},0.3))">
+              <div class="choice-symbol" style="background: linear-gradient(135deg, ${story.color}, rgba(${story.color === '#D4A5A5' ? '212,165,165' : story.color === '#B8A9C9' ? '184,169,201' : '44,62,80'},0.3))">
                 <div class="choice-glow"></div>
               </div>
               <div class="choice-slogan">

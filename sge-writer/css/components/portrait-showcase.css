@@ -80,10 +80,10 @@
 }
 
 .portrait-showcase[data-character="player"] {
-  border-color: #A8B5A0;
+  border-color: #2C3E50;
 }
 .portrait-showcase[data-character="player"] .portrait-nameplate {
-  background: linear-gradient(135deg, #A8B5A0, #8FA88A);
+  background: linear-gradient(135deg, #2C3E50, #1A252F);
 }
 
 /* ─── 響應式 ─────────────────────── */
