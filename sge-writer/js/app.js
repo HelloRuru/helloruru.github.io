@@ -387,8 +387,10 @@ function handleQuickInputChange() {
   }
   analyzer.setWordRange(wordMin, wordMax);
 
-  // 觸發即時分析
-  editor.analyze();
+  // 觸發即時分析（確保編輯器有內容才分析）
+  if (elements.editor && elements.editor.innerText.trim()) {
+    analyzer.analyze();
+  }
 }
 
 // ========================================
@@ -599,9 +601,10 @@ function closeNameModal() {
 function saveNames(e) {
   e.preventDefault();
 
-  state.partyNames.guide = elements.customGuide.value.trim() || '伊歐';
-  state.partyNames.writer = elements.customWriter.value.trim() || '哈皮';
-  state.partyNames.player = elements.customPlayer.value.trim() || 'BLUE';
+  // 限制名稱長度（防止過長輸入），最多 20 字
+  state.partyNames.guide = (elements.customGuide.value.trim() || '伊歐').slice(0, 20);
+  state.partyNames.writer = (elements.customWriter.value.trim() || '哈皮').slice(0, 20);
+  state.partyNames.player = (elements.customPlayer.value.trim() || 'BLUE').slice(0, 20);
 
   updatePartyNamesUI();
   storage.saveNames(state.partyNames);

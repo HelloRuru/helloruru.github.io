@@ -203,6 +203,30 @@
   .bubble-content p {
     font-size: 0.875rem;
   }
+
+  /* 手機版 editor placeholder 簡化 */
+  .editor:empty::before {
+    font-size: 0.875rem;
+  }
+
+  /* 手機版 Modal 防溢出 */
+  .modal-content {
+    max-width: 90vw;
+    max-height: 85vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* 手機版升級對話框 */
+  .level-dialog-box {
+    margin: 16px;
+    max-height: 90vh;
+  }
+
+  .level-dialog-avatar {
+    width: 48px;
+    height: 48px;
+  }
 }
 
 /* Small Mobile */

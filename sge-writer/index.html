@@ -659,9 +659,9 @@
                   字數目標
                 </label>
                 <div class="word-target-inputs">
-                  <input type="number" id="word-min-quick" value="650" min="100" max="5000">
-                  <span>-</span>
-                  <input type="number" id="word-max-quick" value="700" min="100" max="5000">
+                  <input type="number" id="word-min-quick" aria-label="字數最少" value="650" min="100" max="5000">
+                  <span aria-hidden="true">-</span>
+                  <input type="number" id="word-max-quick" aria-label="字數最多" value="700" min="100" max="5000">
                   <span>字</span>
                 </div>
               </div>
@@ -695,7 +695,7 @@
           </div>
 
           <div class="editor-container">
-            <div class="editor" id="editor" contenteditable="true" data-placeholder="開始撰寫你的文案內容...&#10;&#10;💡 提示：你可以直接開始打字，系統會即時分析你的內容！"></div>
+            <div class="editor" id="editor" contenteditable="true" role="textbox" aria-label="文案編輯區" aria-multiline="true" data-placeholder="開始撰寫你的文案內容..."></div>
           </div>
         </div>
 

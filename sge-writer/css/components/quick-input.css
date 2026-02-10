@@ -1,14 +1,20 @@
 /**
  * SGE 文案助手 - 快速輸入區（GBA 風格）
  * 在編輯器上方顯示 H1、關鍵字、字數目標
+ *
+ * 紅隊修復：
+ * - 觸控目標 ≥44px（WCAG 2.5.5）
+ * - font-size ≥16px（防止 iOS 自動縮放）
+ * - focus-visible 鍵盤導航樣式
+ * - ARIA 標籤已在 HTML 中補充
  */
 
 /* ─── 快速輸入區容器 ─────────────────────── */
 
 .quick-input-area {
   background: #FFFFFF;
-  border: 3px solid #000000;
-  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+  border: 3px solid #333333;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   padding: 16px;
   margin-bottom: 16px;
@@ -34,11 +40,10 @@
   font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
   font-size: 13px;
   font-weight: 700;
-  color: #000000;
+  color: #333333;
   display: flex;
   align-items: center;
   gap: 4px;
-  text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
@@ -53,14 +58,15 @@
 .quick-input-group input[type="text"],
 .quick-input-group input[type="number"] {
   font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   color: #333333;
   background: #FFFFFF;
-  border: 2px solid #000000;
+  border: 2px solid #333333;
   border-radius: 6px;
-  padding: 8px 12px;
-  transition: all 0.15s;
+  padding: 10px 12px;
+  min-height: 44px;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
 
 .quick-input-group input[type="text"]:focus,
@@ -68,6 +74,13 @@
   outline: none;
   border-color: #D4A5A5;
   box-shadow: 2px 2px 0 rgba(212, 165, 165, 0.3);
+}
+
+/* 鍵盤導航焦點樣式（WCAG 2.4.7） */
+.quick-input-group input:focus-visible {
+  outline: 2px solid #D4A5A5;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(212, 165, 165, 0.2);
 }
 
 .quick-input-group input::placeholder {
@@ -79,7 +92,7 @@
 .char-counter {
   position: absolute;
   right: 12px;
-  bottom: 10px;
+  bottom: 14px;
   font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
   font-size: 12px;
   font-weight: 700;
@@ -119,14 +132,16 @@
   font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
   font-size: 13px;
   font-weight: 700;
-  color: #000000;
+  color: #333333;
 }
 
-/* ─── 響應式 ─────────────────────── */
+/* ─── 響應式：手機版 ─────────────────────── */
 
 @media (max-width: 768px) {
   .quick-input-area {
     padding: 12px;
+    border-width: 2px;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.15);
   }
 
   .quick-input-row {
@@ -139,12 +154,31 @@
   }
 
   .word-target-inputs input {
-    width: 70px;
+    width: 60px;
+    font-size: 16px;
+    min-height: 44px;
   }
 
   .char-counter {
     position: static;
     margin-top: 4px;
     text-align: right;
+  }
+}
+
+/* ─── 響應式：小螢幕手機 ─────────────────────── */
+
+@media (max-width: 480px) {
+  .quick-input-area {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .word-target-inputs {
+    gap: 6px;
+  }
+
+  .word-target-inputs input {
+    width: 55px;
   }
 }

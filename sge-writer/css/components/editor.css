@@ -147,8 +147,11 @@
   background: var(--color-bg);
 }
 
-.editor table tr:hover {
-  background: rgba(212, 165, 165, 0.05);
+/* 只在支援 hover 的裝置上顯示（避免手機觸控殘留） */
+@media (hover: hover) {
+  .editor table tr:hover {
+    background: rgba(212, 165, 165, 0.05);
+  }
 }
 
 .editor blockquote {
