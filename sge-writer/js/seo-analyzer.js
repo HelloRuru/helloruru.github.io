@@ -1,37 +1,13 @@
 /**
- * SGE 文案助手 - SEO 分析模組
+ * SGE 文案助手 - SEO 分析模組（主入口）
  * @module seo-analyzer
  */
 
-// 違規詞彙資料庫
-const VIOLATION_WORDS = {
-  absolute: [
-    '100%', '百分之百', '絕對', '保證', '根治', '完全',
-    '最好', '最佳', '最強', '最優', '第一', '首選',
-    '全台第一', '業界第一', '獨家', '唯一', '無敵',
-    '永久', '終身', '一輩子'
-  ],
-  promotional: [
-    '只要搜尋', '立即購買', '限時優惠', '錯過可惜',
-    '不買後悔', '手刀搶購', '秒殺', '爆款',
-    '瘋狂搶購', '即將售完'
-  ],
-  academic: [
-    '安全性', '便利性', '專業性', '可行性', '有效性',
-    '實用性', '穩定性', '可靠性', '耐久性'
-  ],
-  medical: [
-    '治療', '療效', '痊癒', '康復', '醫治',
-    '根除', '療程', '處方', '診斷'
-  ],
-  stiff: [
-    '綜上所述', '據悉', '筆者認為', '總而言之',
-    '不難發現', '眾所周知', '毋庸置疑'
-  ]
-};
-
-// 扁平化違規詞列表
-const ALL_VIOLATIONS = Object.values(VIOLATION_WORDS).flat();
+import { VIOLATION_WORDS, ALL_VIOLATIONS } from './data/violation-words.js';
+import { AITasteAnalyzer } from './analyzers/ai-taste-analyzer.js';
+import { SGEStructureAnalyzer } from './analyzers/sge-structure-analyzer.js';
+import { AITasteUI } from './ui/ai-taste-ui.js';
+import { SGEStructureUI } from './ui/sge-structure-ui.js';
 
 export const analyzer = {
   elements: null,
@@ -88,6 +64,18 @@ export const analyzer = {
       tone: toneResult
     });
 
+    // AI 味指數
+    const aiTasteResult = AITasteAnalyzer.calculateScore(content, this.escapeRegex.bind(this));
+
+    // SGE 結構分數
+    const sgeStructureResult = SGEStructureAnalyzer.calculateScore(
+      html,
+      content,
+      this.keyword,
+      this.analyzeH1.bind(this),
+      this.escapeRegex.bind(this)
+    );
+
     // 更新 UI
     this.updateUI({
       score,
@@ -97,6 +85,12 @@ export const analyzer = {
       violation: violationResult,
       tone: toneResult
     });
+
+    // 更新 AI 味指數 UI
+    AITasteUI.update(this.elements, aiTasteResult);
+
+    // 更新 SGE 結構 UI
+    SGEStructureUI.update(this.elements, sgeStructureResult);
   },
 
   /**

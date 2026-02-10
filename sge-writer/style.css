@@ -1363,6 +1363,215 @@ hello-ruru-header {
   color: var(--color-error);
 }
 
+/* AI Taste Index Card */
+.ai-taste-card {
+  background: linear-gradient(135deg, rgba(212, 165, 165, 0.05), rgba(184, 169, 201, 0.05));
+  border: 1px solid var(--color-border);
+}
+
+.ai-taste-card .card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.ai-taste-card h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex: 1;
+  font-size: 1rem;
+}
+
+.emoji-icon {
+  font-size: 1.25rem;
+}
+
+.ai-taste-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.ai-taste-max {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.ai-taste-bar {
+  height: 8px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: var(--space-md);
+}
+
+.ai-taste-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #A8B5A0, #D4A5A5, #BF1E33);
+  border-radius: var(--radius-full);
+  transition: width 0.5s ease;
+}
+
+.ai-taste-message {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-md);
+}
+
+.ai-taste-details summary {
+  font-size: 0.8125rem;
+  color: var(--color-secondary-dark);
+  cursor: pointer;
+  user-select: none;
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm);
+  transition: background 0.2s;
+}
+
+.ai-taste-details summary:hover {
+  background: rgba(184, 169, 201, 0.1);
+}
+
+.ai-taste-breakdown {
+  margin-top: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.breakdown-section h4 {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.breakdown-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.breakdown-list li {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  padding-left: var(--space-md);
+  position: relative;
+}
+
+.breakdown-list li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--color-primary);
+}
+
+/* SGE Structure Score Card */
+.sge-structure-card {
+  border: 1px solid var(--color-border);
+}
+
+.sge-structure-card .card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.sge-structure-card h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex: 1;
+  font-size: 1rem;
+}
+
+.sge-structure-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.sge-structure-max {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.sge-structure-bar {
+  height: 8px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: var(--space-md);
+}
+
+.sge-structure-fill {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-full);
+  transition: width 0.5s ease;
+}
+
+.sge-structure-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.sge-structure-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm);
+  transition: background 0.2s;
+}
+
+.sge-structure-item:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.structure-icon {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.structure-icon.pending {
+  color: var(--color-text-light);
+}
+
+.structure-icon.success {
+  color: var(--color-success);
+}
+
+.structure-icon.warning {
+  color: var(--color-warning);
+}
+
+.structure-icon.error {
+  color: var(--color-error);
+}
+
+.structure-label {
+  flex: 1;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.structure-value {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+
 /* Templates Card */
 .templates-card h3 {
   display: flex;

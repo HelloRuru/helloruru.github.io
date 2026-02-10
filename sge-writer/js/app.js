@@ -103,6 +103,26 @@ const elements = {
   violationList: document.getElementById('violation-list'),
   checkItems: document.querySelectorAll('.check-item'),
 
+  // AI Taste Index
+  aiTasteScore: document.getElementById('ai-taste-score'),
+  aiTasteFill: document.getElementById('ai-taste-fill'),
+  aiTasteEmoji: document.getElementById('ai-taste-emoji'),
+  aiTasteMessage: document.getElementById('ai-taste-message'),
+  aiNegativeList: document.getElementById('ai-negative-list'),
+  aiPositiveList: document.getElementById('ai-positive-list'),
+
+  // SGE Structure
+  sgeStructureScore: document.getElementById('sge-structure-score'),
+  sgeStructureFill: document.getElementById('sge-structure-fill'),
+  sgeH2Value: document.getElementById('sge-h2-value'),
+  sgeH2Icon: document.getElementById('sge-h2-icon'),
+  sgeDirectValue: document.getElementById('sge-direct-value'),
+  sgeDirectIcon: document.getElementById('sge-direct-icon'),
+  sgeInfoValue: document.getElementById('sge-info-value'),
+  sgeInfoIcon: document.getElementById('sge-info-icon'),
+  sgeSocialValue: document.getElementById('sge-social-value'),
+  sgeSocialIcon: document.getElementById('sge-social-icon'),
+
   // Mobile Tabs
   tabButtons: document.querySelectorAll('.tab-btn'),
   tabContents: document.querySelectorAll('.tab-content'),
