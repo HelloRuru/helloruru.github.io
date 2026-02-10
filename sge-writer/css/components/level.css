@@ -1,0 +1,49 @@
+/* SGE 文案助手 - Level Card */
+/* ========================================
+   Level Card
+   ======================================== */
+.level-card {
+  background: var(--gradient-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md) var(--space-lg);
+  color: white;
+}
+
+.level-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.level-badge {
+  font-family: var(--font-title);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.level-title {
+  font-size: 0.875rem;
+  opacity: 0.9;
+}
+
+.exp-bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: var(--space-xs);
+}
+
+.exp-fill {
+  height: 100%;
+  background: white;
+  border-radius: var(--radius-full);
+  transition: width var(--transition-slow);
+}
+
+.exp-text {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+

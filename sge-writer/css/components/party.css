@@ -1,0 +1,94 @@
+/* SGE 文案助手 - Party Card (Adventure Team) */
+/* ========================================
+   Party Card (Adventure Team)
+   ======================================== */
+.party-card {
+  background: var(--gradient-light);
+}
+
+.party-members {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.member {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  opacity: 0.6;
+}
+
+.member.active {
+  background: rgba(212, 165, 165, 0.1);
+  opacity: 1;
+}
+
+.member-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.guide-avatar {
+  background: var(--color-primary);
+}
+
+.writer-avatar {
+  background: var(--color-secondary);
+}
+
+.player-avatar {
+  background: var(--color-success);
+}
+
+.member-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.member-name {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--color-text);
+}
+
+.member-role {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.member-mood {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  font-style: italic;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  max-width: 120px;
+  line-height: 1.4;
+}
+
+.member-mood.visible {
+  opacity: 1;
+}
+
+.party-actions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.customize-names-btn,
+.manage-images-btn {
+  align-self: flex-start;
+}
+

@@ -1,0 +1,86 @@
+/* SGE 文案助手 - Quest Form */
+/* ========================================
+   Quest Form
+   ======================================== */
+.quest-form {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.form-group label svg {
+  color: var(--color-primary);
+}
+
+.form-group input,
+.form-group textarea {
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  color: var(--color-text);
+  transition: all var(--transition-fast);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(212, 165, 165, 0.15);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--color-text-light);
+}
+
+.form-row {
+  flex-direction: row;
+  align-items: flex-end;
+  gap: var(--space-md);
+}
+
+.form-field {
+  flex: 1;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.input-group input {
+  width: 80px;
+  text-align: center;
+}
+
+.input-group span {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.quest-form .btn-primary {
+  margin-top: var(--space-sm);
+}
+

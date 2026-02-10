@@ -1,0 +1,242 @@
+/* SGE 文案助手 - Responsive Design */
+/* ========================================
+   Responsive Design
+   ======================================== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .main-content {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-left {
+    position: static;
+    max-height: none;
+    overflow-y: visible;
+    padding-right: 0;
+    align-self: auto;
+  }
+
+  .panel-right {
+    min-height: 500px;
+  }
+
+  .mobile-tabs {
+    display: flex;
+  }
+
+  /* Hide inactive tabs on tablet/mobile */
+  .tab-content {
+    display: none;
+  }
+
+  .tab-content.active {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .editor-section.tab-content.active {
+    min-height: 400px;
+  }
+
+  .analysis-section.tab-content.active {
+    gap: var(--space-md);
+  }
+
+  /* Table scroll on tablet */
+  .editor table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  :root {
+    --header-height: 56px;
+  }
+
+  .header-content {
+    padding: 0 var(--space-md);
+  }
+
+  .app-title {
+    font-size: 1.125rem;
+  }
+
+  .main-content {
+    padding: var(--space-md);
+    gap: var(--space-md);
+  }
+
+  .card {
+    padding: var(--space-md);
+  }
+
+  .progress-bar {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .step-label {
+    display: none;
+  }
+
+  .party-members {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: var(--space-md);
+    padding-bottom: var(--space-sm);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .party-members::-webkit-scrollbar {
+    display: none;
+  }
+
+  .member {
+    flex-shrink: 0;
+    flex-direction: column;
+    text-align: center;
+    padding: var(--space-sm);
+    min-width: 80px;
+  }
+
+  .member-info {
+    align-items: center;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  .strategy-options {
+    gap: var(--space-xs);
+  }
+
+  .strategy-option {
+    padding: var(--space-sm);
+  }
+
+  .option-desc {
+    display: none;
+  }
+
+  .editor {
+    min-height: 250px;
+    padding: var(--space-md);
+    font-size: 0.9375rem;
+  }
+
+  .editor h1 {
+    font-size: 1.25rem;
+  }
+
+  .editor h2 {
+    font-size: 1.125rem;
+  }
+
+  .editor h3 {
+    font-size: 1rem;
+  }
+
+  /* Table mobile styling */
+  .editor table {
+    font-size: 0.8125rem;
+  }
+
+  .editor table th,
+  .editor table td {
+    padding: var(--space-sm);
+  }
+
+  .score-value {
+    font-size: 2rem;
+  }
+
+  .check-item {
+    flex-wrap: wrap;
+  }
+
+  .check-value {
+    width: 100%;
+    margin-top: var(--space-xs);
+    margin-left: calc(24px + var(--space-md));
+  }
+
+  .toast-container {
+    left: var(--space-md);
+    right: var(--space-md);
+    bottom: var(--space-md);
+  }
+
+  .toast {
+    max-width: none;
+  }
+
+  .fairy-whisper {
+    font-size: 0.75rem;
+  }
+
+  .goddess-revelation {
+    padding: var(--space-md);
+  }
+
+  .revelation-text {
+    font-size: 0.875rem;
+  }
+
+  .dialog-bubble {
+    gap: var(--space-sm);
+  }
+
+  .bubble-avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .bubble-content {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .bubble-content p {
+    font-size: 0.875rem;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .header-actions .btn-secondary span {
+    display: none;
+  }
+
+  .level-card {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .level-badge {
+    font-size: 1rem;
+  }
+
+  .toolbar-btn {
+    min-width: 28px;
+    height: 28px;
+    padding: var(--space-xs);
+  }
+
+  .cmd-btn {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 0.75rem;
+  }
+
+  .template-buttons {
+    flex-direction: column;
+  }
+
+  .template-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+

@@ -1,0 +1,125 @@
+/* SGE 文案助手 - Strategy Card (Socratic) */
+/* ========================================
+   Strategy Card (Socratic)
+   ======================================== */
+.strategy-card {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.strategy-card h4 {
+  font-size: 1rem;
+  margin-bottom: var(--space-md);
+  color: var(--color-text);
+}
+
+.strategy-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.strategy-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  text-align: left;
+  transition: all var(--transition-fast);
+}
+
+.strategy-option:hover {
+  border-color: var(--color-primary-light);
+  background: rgba(212, 165, 165, 0.05);
+}
+
+.strategy-option:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(212, 165, 165, 0.15);
+}
+
+.strategy-option.selected {
+  border-color: var(--color-primary);
+  background: rgba(212, 165, 165, 0.1);
+}
+
+.option-badge {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  background: var(--gradient-primary);
+  color: white;
+  font-weight: 700;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option-content {
+  flex: 1;
+}
+
+.option-title {
+  display: block;
+  font-weight: 500;
+  color: var(--color-text);
+  margin-bottom: 2px;
+}
+
+.option-desc {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+
+/* Fairy Whisper */
+.fairy-whisper {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  background: linear-gradient(135deg, rgba(212, 165, 165, 0.1), rgba(184, 169, 201, 0.1));
+  border-radius: var(--radius-md);
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+}
+
+.fairy-whisper svg {
+  flex-shrink: 0;
+  color: var(--color-warning);
+  margin-top: 2px;
+}
+
+/* Goddess Revelation */
+.goddess-revelation {
+  background: linear-gradient(135deg, rgba(184, 169, 201, 0.15), rgba(212, 165, 165, 0.15));
+  border: 1px solid rgba(184, 169, 201, 0.3);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-md);
+  animation: fadeInUp 0.4s ease;
+}
+
+.revelation-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+  color: var(--color-secondary-dark);
+  font-weight: 700;
+}
+
+.revelation-text {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+}
+

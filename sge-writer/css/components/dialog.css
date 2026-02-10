@@ -1,0 +1,95 @@
+/* SGE 文案助手 - Dialog Area */
+/* ========================================
+   Dialog Area
+   ======================================== */
+.dialog-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.dialog-step {
+  display: none;
+}
+
+.dialog-step.active {
+  display: block;
+}
+
+/* Dialog Bubbles */
+.dialog-bubble {
+  display: flex;
+  gap: var(--space-md);
+  animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bubble-avatar {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.guide-bubble .bubble-avatar {
+  background: var(--color-primary);
+}
+
+.writer-bubble .bubble-avatar {
+  background: var(--color-secondary);
+}
+
+.player-bubble .bubble-avatar {
+  background: var(--color-success);
+}
+
+.bubble-content {
+  flex: 1;
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  border-top-left-radius: var(--radius-sm);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.bubble-name {
+  display: block;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: var(--color-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.writer-bubble .bubble-name {
+  color: var(--color-secondary);
+}
+
+.bubble-content p {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  margin-bottom: var(--space-sm);
+}
+
+.bubble-content p:last-child {
+  margin-bottom: 0;
+}
+
+.player-name-display {
+  color: var(--color-success);
+  font-weight: 500;
+}
+

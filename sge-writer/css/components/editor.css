@@ -1,0 +1,198 @@
+/* SGE 文案助手 - Editor */
+/* ========================================
+   Editor
+   ======================================== */
+.editor-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--color-border-light);
+  background: var(--color-bg);
+}
+
+.toolbar-btn {
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  transition: all var(--transition-fast);
+  min-width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toolbar-btn:hover {
+  background: var(--color-bg-hover);
+  color: var(--color-text);
+}
+
+.toolbar-btn.active {
+  background: var(--color-primary);
+  color: white;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--color-border);
+  margin: 0 var(--space-xs);
+}
+
+.editor-container {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.editor {
+  min-height: 400px;
+  padding: var(--space-lg);
+  font-size: 1rem;
+  line-height: 1.8;
+  outline: none;
+}
+
+.editor:empty::before {
+  content: attr(data-placeholder);
+  color: var(--color-text-light);
+  pointer-events: none;
+}
+
+.editor h1 {
+  font-size: 1.5rem;
+  margin-bottom: var(--space-md);
+  color: var(--color-text);
+}
+
+.editor h2 {
+  font-size: 1.25rem;
+  margin: var(--space-lg) 0 var(--space-md);
+  color: var(--color-text);
+}
+
+.editor h3 {
+  font-size: 1.125rem;
+  margin: var(--space-md) 0 var(--space-sm);
+  color: var(--color-text);
+}
+
+.editor p {
+  margin-bottom: var(--space-md);
+}
+
+.editor strong,
+.editor b {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.editor ul,
+.editor ol {
+  margin: var(--space-md) 0;
+  padding-left: var(--space-lg);
+}
+
+.editor ul {
+  list-style-type: disc;
+}
+
+.editor ol {
+  list-style-type: decimal;
+}
+
+.editor li {
+  margin-bottom: var(--space-sm);
+  line-height: 1.7;
+}
+
+.editor table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-lg) 0;
+  font-size: 0.9375rem;
+  background: var(--color-bg-card);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.editor table th,
+.editor table td {
+  padding: var(--space-md);
+  text-align: left;
+  border: 1px solid var(--color-border);
+}
+
+.editor table th {
+  background: var(--gradient-primary);
+  color: white;
+  font-weight: 700;
+  font-family: var(--font-ui);
+}
+
+.editor table tr:nth-child(even) {
+  background: var(--color-bg);
+}
+
+.editor table tr:hover {
+  background: rgba(212, 165, 165, 0.05);
+}
+
+.editor blockquote {
+  margin: var(--space-md) 0;
+  padding: var(--space-md) var(--space-lg);
+  border-left: 4px solid var(--color-primary);
+  background: rgba(212, 165, 165, 0.08);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-style: italic;
+  color: var(--color-text-secondary);
+}
+
+.editor a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-decoration-color: rgba(212, 165, 165, 0.5);
+  transition: all var(--transition-fast);
+}
+
+.editor a:hover {
+  color: var(--color-primary-dark);
+  text-decoration-color: var(--color-primary-dark);
+}
+
+.editor hr {
+  margin: var(--space-xl) 0;
+  border: none;
+  height: 1px;
+  background: var(--gradient-primary);
+  opacity: 0.3;
+}
+
+.editor .keyword-highlight {
+  background: rgba(212, 165, 165, 0.3);
+  color: var(--color-primary-dark);
+  font-weight: 500;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+.editor .violation-highlight {
+  background: rgba(191, 30, 51, 0.15);
+  color: var(--color-error);
+  text-decoration: wavy underline;
+  text-decoration-color: var(--color-error);
+}
+
