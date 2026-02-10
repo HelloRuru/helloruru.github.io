@@ -1,86 +1,139 @@
-/* SGE 文案助手 - Quest Form */
-/* ========================================
-   Quest Form
-   ======================================== */
+/**
+ * SGE 文案助手 - GBA 風格任務表單
+ * Pokémon GBA aesthetic: 白底 + 黑粗框 + 簡潔
+ */
+
+/* ─── 表單容器 ─────────────────────── */
+
 .quest-form {
-  background: var(--color-bg-card);
-  border-radius: var(--radius-lg);
-  padding: var(--space-lg);
-  box-shadow: var(--shadow-sm);
+  background: #FFFFFF;
+  border: 3px solid #000000;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
+  gap: 12px;
 }
+
+/* ─── 表單欄位 ─────────────────────── */
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
+  gap: 6px;
 }
 
 .form-group label {
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #000000;
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  font-family: var(--font-ui);
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--color-text-secondary);
+  gap: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .form-group label svg {
-  color: var(--color-primary);
+  width: 14px;
+  height: 14px;
+  color: #D4A5A5;
 }
+
+/* ─── 輸入框樣式 ─────────────────────── */
 
 .form-group input,
 .form-group textarea {
-  padding: var(--space-md);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-bg);
-  color: var(--color-text);
-  transition: all var(--transition-fast);
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333333;
+  background: #FFFFFF;
+  border: 2px solid #000000;
+  border-radius: 6px;
+  padding: 8px 12px;
+  transition: all 0.15s;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(212, 165, 165, 0.15);
+  border-color: #D4A5A5;
+  box-shadow: 2px 2px 0 rgba(212, 165, 165, 0.3);
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: var(--color-text-light);
+  color: #AAAAAA;
 }
+
+/* ─── 橫向欄位 ─────────────────────── */
 
 .form-row {
   flex-direction: row;
   align-items: flex-end;
-  gap: var(--space-md);
+  gap: 12px;
 }
 
 .form-field {
   flex: 1;
 }
 
+/* ─── 輸入群組（字數區間） ─────────────────────── */
+
 .input-group {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
+  gap: 8px;
 }
 
 .input-group input {
-  width: 80px;
+  width: 70px;
   text-align: center;
 }
 
 .input-group span {
-  color: var(--color-text-muted);
-  font-size: 0.875rem;
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #000000;
 }
 
+/* ─── 提交按鈕 ─────────────────────── */
+
 .quest-form .btn-primary {
-  margin-top: var(--space-sm);
+  margin-top: 8px;
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #D4A5A5, #B8A9C9);
+  color: #FFFFFF;
+  border: 3px solid #000000;
+  border-radius: 8px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.quest-form .btn-primary:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+}
+
+.quest-form .btn-primary:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
+}
+
+.quest-form .btn-primary svg {
+  width: 14px;
+  height: 14px;
 }
 

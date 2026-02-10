@@ -219,6 +219,7 @@
   <link rel="stylesheet" href="css/components/strategy.css">
   <link rel="stylesheet" href="css/components/fact-check.css">
   <link rel="stylesheet" href="css/components/quick-commands.css">
+  <link rel="stylesheet" href="css/components/quick-input.css">
   <link rel="stylesheet" href="css/components/level.css">
   <link rel="stylesheet" href="css/components/mobile-tabs.css">
   <link rel="stylesheet" href="css/components/editor.css">
@@ -399,18 +400,26 @@
               </div>
             </div>
 
-            <form class="quest-form" id="quest-form">
-              <div class="form-group">
-                <label for="keyword">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="11" cy="11" r="8"/>
-                    <path d="m21 21-4.35-4.35"/>
-                  </svg>
-                  核心關鍵字
-                </label>
-                <input type="text" id="keyword" placeholder="例如：台北冷氣清洗" required>
+            <!-- 舊表單已隱藏，改用編輯器上方的快速輸入 -->
+            <div class="dialog-bubble guide-bubble">
+              <div class="bubble-avatar">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
+                  <path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+                </svg>
               </div>
+              <div class="bubble-content">
+                <span class="bubble-name">伊歐</span>
+                <p>很好！現在你可以直接開始寫作了。</p>
+                <p>💡 提示：在右側編輯器上方填寫 <strong>H1 標題</strong>、<strong>關鍵字</strong>和<strong>字數目標</strong>，然後直接開始打字，我會即時幫你分析！</p>
+              </div>
+            </div>
 
+            <form class="quest-form" id="quest-form" style="display: none;">
+              <div class="form-group">
+                <label for="keyword">核心關鍵字</label>
+                <input type="text" id="keyword" placeholder="例如：台北冷氣清洗">
+              </div>
               <div class="form-group form-row">
                 <div class="form-field">
                   <label for="word-min">字數區間</label>
@@ -422,36 +431,9 @@
                   </div>
                 </div>
               </div>
-
-              <div class="form-group">
-                <label for="source">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                    <polyline points="14,2 14,8 20,8"/>
-                    <line x1="16" y1="13" x2="8" y2="13"/>
-                    <line x1="16" y1="17" x2="8" y2="17"/>
-                  </svg>
-                  店家資料
-                </label>
-                <textarea id="source" rows="4" placeholder="貼上店家介紹、服務項目、特色..."></textarea>
-              </div>
-
-              <div class="form-group">
-                <label for="focus">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
-                  </svg>
-                  文案重點
-                </label>
-                <input type="text" id="focus" placeholder="想強調什麼？例如：專業、快速、價格實惠">
-              </div>
-
-              <button type="submit" class="btn-primary">
-                下一步
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </button>
+              <input type="text" id="source" style="display: none;">
+              <input type="text" id="focus" style="display: none;">
+              <button type="submit" class="btn-primary">下一步</button>
             </form>
           </div>
 
@@ -643,6 +625,49 @@
 
         <!-- Editor Area -->
         <div class="editor-section tab-content active" data-tab="editor">
+          <!-- Quick Input Area (GBA Style) -->
+          <div class="quick-input-area">
+            <div class="quick-input-group">
+              <label for="h1-input">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 12h8M4 18V6M12 18V6M17 12h3M21 18v-6"/>
+                </svg>
+                H1 標題
+              </label>
+              <input type="text" id="h1-input" placeholder="請輸入 H1 標題（28 字元內）" maxlength="50">
+              <span class="char-counter" id="h1-char-count">0/28</span>
+            </div>
+
+            <div class="quick-input-row">
+              <div class="quick-input-group small">
+                <label for="keyword-quick">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.35-4.35"/>
+                  </svg>
+                  關鍵字
+                </label>
+                <input type="text" id="keyword-quick" placeholder="例如：台北冷氣清洗">
+              </div>
+
+              <div class="quick-input-group small">
+                <label for="word-target">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14,2 14,8 20,8"/>
+                  </svg>
+                  字數目標
+                </label>
+                <div class="word-target-inputs">
+                  <input type="number" id="word-min-quick" value="650" min="100" max="5000">
+                  <span>-</span>
+                  <input type="number" id="word-max-quick" value="700" min="100" max="5000">
+                  <span>字</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="editor-toolbar">
             <button class="toolbar-btn" data-format="h1" title="H1 標題">H1</button>
             <button class="toolbar-btn" data-format="h2" title="H2 標題">H2</button>
@@ -670,7 +695,7 @@
           </div>
 
           <div class="editor-container">
-            <div class="editor" id="editor" contenteditable="true" data-placeholder="文案內容將在這裡顯示..."></div>
+            <div class="editor" id="editor" contenteditable="true" data-placeholder="開始撰寫你的文案內容...&#10;&#10;💡 提示：你可以直接開始打字，系統會即時分析你的內容！"></div>
           </div>
         </div>
 

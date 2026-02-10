@@ -61,13 +61,21 @@ const elements = {
   playerNameDisplays: document.querySelectorAll('.player-name-display'),
   partyMembers: document.querySelectorAll('.member'),
 
-  // Forms
+  // Forms (old)
   questForm: document.getElementById('quest-form'),
   keywordInput: document.getElementById('keyword'),
   wordMinInput: document.getElementById('word-min'),
   wordMaxInput: document.getElementById('word-max'),
   sourceInput: document.getElementById('source'),
   focusInput: document.getElementById('focus'),
+
+  // Quick Input (new)
+  h1Input: document.getElementById('h1-input'),
+  h1CharCount: document.getElementById('h1-char-count'),
+  keywordQuick: document.getElementById('keyword-quick'),
+  wordMinQuick: document.getElementById('word-min-quick'),
+  wordMaxQuick: document.getElementById('word-max-quick'),
+  wordTarget: document.getElementById('word-target'),
 
   // Strategy
   strategyOptions: document.querySelectorAll('.strategy-option'),
@@ -341,6 +349,46 @@ function handleQuestSubmit(e) {
   analyzer.setWordRange(state.questData.wordMin, state.questData.wordMax);
 
   goToStep(2);
+}
+
+// ========================================
+// Quick Input Handlers
+// ========================================
+function handleH1Input() {
+  const h1Value = elements.h1Input.value;
+  const charCount = [...h1Value].length; // 使用展開運算子正確計算 emoji
+  const charCounter = elements.h1CharCount;
+
+  charCounter.textContent = `${charCount}/28`;
+
+  // 顏色警示
+  charCounter.classList.remove('warning', 'danger');
+  if (charCount > 28) {
+    charCounter.classList.add('danger');
+  } else if (charCount > 24) {
+    charCounter.classList.add('warning');
+  }
+}
+
+function handleQuickInputChange() {
+  // 從快速輸入框讀取資料
+  const keyword = elements.keywordQuick.value.trim();
+  const wordMin = parseInt(elements.wordMinQuick.value) || 650;
+  const wordMax = parseInt(elements.wordMaxQuick.value) || 700;
+
+  // 更新 state
+  state.questData.keyword = keyword;
+  state.questData.wordMin = wordMin;
+  state.questData.wordMax = wordMax;
+
+  // 更新分析器
+  if (keyword) {
+    analyzer.setKeyword(keyword);
+  }
+  analyzer.setWordRange(wordMin, wordMax);
+
+  // 觸發即時分析
+  editor.analyze();
 }
 
 // ========================================
@@ -1212,6 +1260,20 @@ function init() {
 
   // Event Listeners
   elements.questForm.addEventListener('submit', handleQuestSubmit);
+
+  // Quick Input 事件監聽器
+  if (elements.h1Input) {
+    elements.h1Input.addEventListener('input', handleH1Input);
+  }
+  if (elements.keywordQuick) {
+    elements.keywordQuick.addEventListener('input', handleQuickInputChange);
+  }
+  if (elements.wordMinQuick) {
+    elements.wordMinQuick.addEventListener('input', handleQuickInputChange);
+  }
+  if (elements.wordMaxQuick) {
+    elements.wordMaxQuick.addEventListener('input', handleQuickInputChange);
+  }
 
   elements.strategyOptions.forEach(option => {
     option.addEventListener('click', handleStrategySelect);
