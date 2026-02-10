@@ -12,6 +12,7 @@ import { faqUI } from './ui/faq-ui.js';
 import { CHARACTERS } from './data/characters.js';
 import { levelDialogs } from './features/level-dialogs.js';
 import { portraitDirector } from './features/portrait-director.js';
+import { opening } from './features/opening.js';
 
 // ========================================
 // Utilities
@@ -1264,6 +1265,14 @@ function init() {
 
   // 🎮 GBA 立繪導演系統
   portraitDirector.init();
+
+  // 🎮 開場劇情（首次訪問）
+  if (opening.shouldShow()) {
+    opening.show((selectedCharacter) => {
+      // 開場結束後，左側立繪保持選定角色
+      console.log('開場完成，選擇的角色：', selectedCharacter.name);
+    });
+  }
 
   // Update footer year
   updateFooterYear();

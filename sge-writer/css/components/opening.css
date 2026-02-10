@@ -1,0 +1,322 @@
+/**
+ * SGE 文案助手 - 開場劇情系統樣式
+ * GBA RPG 風格的角色選擇 + 歡迎對話
+ */
+
+/* ─── Modal 容器 ─────────────────────── */
+
+.opening-modal,
+.opening-dialog-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+}
+
+.opening-modal.active,
+.opening-dialog-modal.active {
+  display: flex;
+}
+
+.opening-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  animation: backdropIn 0.4s ease;
+}
+
+@keyframes backdropIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ─── 角色選擇畫面 ─────────────────────── */
+
+.opening-box {
+  position: relative;
+  background: #FFFFFF;
+  border: 4px solid #333333;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 720px;
+  width: 90%;
+  z-index: 1;
+  animation: boxIn 0.5s ease;
+}
+
+@keyframes boxIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.opening-title {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.opening-title h2 {
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #333333;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #D4A5A5, #B8A9C9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.opening-title p {
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #888888;
+}
+
+/* ─── 角色選擇按鈕 ─────────────────────── */
+
+.opening-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.opening-choice {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  border: 3px solid #E8E4E1;
+  border-radius: 20px;
+  padding: 28px 32px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.opening-choice::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.opening-choice:hover::before {
+  left: 100%;
+}
+
+.opening-choice:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateX(6px);
+  box-shadow: -6px 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* 神秘符號（發光圓圈） */
+.choice-symbol {
+  width: 60px;
+  height: 60px;
+  min-width: 60px;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+
+.choice-glow {
+  width: 20px;
+  height: 20px;
+  background: #FFFFFF;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+}
+
+/* SLOGAN 文字 */
+.choice-slogan {
+  flex: 1;
+  min-width: 0;
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #333333;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+}
+
+/* ─── 開場對話框（GBA 風格） ─────────────────────── */
+
+.opening-dialog-box {
+  position: relative;
+  background: #FFFFFF;
+  border: 4px solid #000000;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 680px;
+  width: 90%;
+  z-index: 1;
+  animation: boxIn 0.5s ease;
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.opening-portrait {
+  width: 200px;
+  min-width: 200px;
+  border: 3px solid #000000;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #D4A5A5, #B8A9C9);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.opening-portrait img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: bottom;
+  display: block;
+  transition: opacity 0.15s ease;
+}
+
+.opening-portrait img.switching {
+  opacity: 0;
+}
+
+.opening-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.opening-speaker {
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: left;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.opening-text {
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333333;
+  line-height: 1.8;
+  text-align: left;
+  min-height: 4.5em;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  background: rgba(212, 165, 165, 0.08);
+  border: 2px solid #E8E4E1;
+  border-radius: 8px;
+  flex: 1;
+}
+
+.opening-continue {
+  display: block;
+  width: 100%;
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #000000;
+  background: #FFFFFF;
+  border: 3px solid #000000;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.opening-continue:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+}
+
+.opening-continue:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* ─── 響應式 ─────────────────────── */
+
+@media (max-width: 768px) {
+  .opening-box {
+    padding: 24px 20px;
+  }
+
+  .opening-title h2 {
+    font-size: 24px;
+  }
+
+  .opening-choice {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+    padding: 24px 20px;
+  }
+
+  .choice-symbol {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+  }
+
+  .choice-slogan {
+    font-size: 16px;
+  }
+
+  .opening-dialog-box {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .opening-portrait {
+    width: 100%;
+    min-width: unset;
+    height: 180px;
+  }
+
+  .opening-portrait img {
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .opening-text {
+    font-size: 15px;
+    min-height: 3em;
+  }
+}
