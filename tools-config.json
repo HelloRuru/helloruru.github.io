@@ -98,6 +98,15 @@
           "icon": "palette",
           "iconColor": "sakura",
           "external": true
+        },
+        {
+          "id": "find-color",
+          "title": "2026 數位色票庫",
+          "description": "收錄 Pantone 2026 與 8 大設計美學圈流行色",
+          "url": "https://tools.helloruru.com/find-color/",
+          "icon": "palette",
+          "iconColor": "lavender",
+          "external": true
         }
       ]
     },
