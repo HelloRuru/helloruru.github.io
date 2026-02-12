@@ -4,14 +4,13 @@ assets/scenes/encounters/*.png
 # 原始 WebP 備份（邊框處理前）
 assets/scenes/encounters-backup/
 
-# 批次處理腳本（開發用）
+# 批次處理腳本（開發用，已移至 scripts/）
+scripts/
 assets/scenes/batch-process.js
 assets/scenes/compress-image.js
 
 # 備份檔
 *.backup
 
-# 邊框處理腳本
-add-borders.sh
-add-borders.bat
-add-borders-simple.ps1
+# 測試檔
+test*.html
