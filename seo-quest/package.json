@@ -1,0 +1,19 @@
+{
+  "name": "seo-quest",
+  "version": "1.0.0",
+  "description": "> 透過 RPG 遊戲化學習，掌握 SEO 文案撰寫技巧\r > 部署於：`lab.helloruru.com/seo-quest/`",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "sharp": "^0.34.5"
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "tutorial": {
+    "character": "io",
+    "pool": [
+      "io-study-1.webp",
+      "io-study-2.webp",
+      "io-study-3.webp"
+    ],
+    "description": "伊歐書房 - 教學階段"
+  },
+  "demo": {
+    "character": "blue",
+    "pool": [
+      "blue-writing-1.webp",
+      "blue-writing-2.webp",
+      "blue-writing-3.webp",
+      "blue-writing-4.webp",
+      "blue-writing-5.webp",
+      "blue-writing-6.webp"
+    ],
+    "description": "BLUE 認真寫文章 - 示範階段"
+  },
+  "practice": {
+    "character": "blue",
+    "pool": [
+      "blue-writing-1.webp",
+      "blue-writing-2.webp",
+      "blue-writing-3.webp",
+      "blue-writing-4.webp",
+      "blue-writing-5.webp",
+      "blue-writing-6.webp"
+    ],
+    "description": "BLUE 認真寫文章 - 實作階段"
+  },
+  "score": {
+    "character": "io",
+    "pool": [
+      "io-complete-1.webp",
+      "io-complete-2.webp",
+      "io-complete-3.webp",
+      "io-complete-4.webp",
+      "io-complete-5.webp"
+    ],
+    "description": "伊歐任務完成 - 評分階段"
+  },
+  "levelup": {
+    "character": "mixed",
+    "pool": [
+      "io-complete-1.webp",
+      "io-complete-2.webp",
+      "io-complete-3.webp",
+      "io-complete-4.webp",
+      "io-complete-5.webp",
+      "blue-shopping-1.webp",
+      "blue-shopping-2.webp",
+      "blue-shopping-3.webp"
+    ],
+    "description": "伊歐任務完成 + BLUE 逛街 - 升級階段"
+  },
+  "welcome": {
+    "character": "io",
+    "pool": [
+      "io-welcome-1.webp",
+      "io-welcome-2.webp",
+      "io-welcome-3.webp",
+      "io-welcome-4.webp"
+    ],
+    "description": "伊歐歡迎回來 - 開場/返回"
+  },
+  "portal": {
+    "character": "io",
+    "pool": [
+      "io-portal-1.webp",
+      "io-portal-2.webp"
+    ],
+    "description": "伊歐傳送陣 - 特殊場景/轉場"
+  },
+  "happi_intro": {
+    "character": "happi",
+    "pool": [
+      "happi-meet-1.webp",
+      "happi-meet-2.webp",
+      "happi-meet-3.webp",
+      "happi-meet-4.webp"
+    ],
+    "description": "哈皮初相遇 - 溫暖陪伴場景"
+  }
+}

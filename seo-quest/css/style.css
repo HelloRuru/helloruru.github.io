@@ -1,0 +1,138 @@
+/* ================================================
+   SEO Quest — Modular CSS Structure
+   主入口檔案 - 雙層變數架構 (Palette + Semantic)
+   ================================================ */
+
+/**
+ * CSS 載入順序說明：
+ *
+ * 1. Tokens - 設計變數（Palette + Semantic）
+ * 2. Fonts - 字體引用
+ * 3. Reset - CSS 重置
+ * 4. Utilities - 工具類別
+ * 5. Layout - 版面配置
+ * 6. Typography - 文字排版
+ * 7. Components - 元件樣式
+ * 8. Transitions - 轉場動畫
+ */
+
+/* ================================================
+   基礎層 (Base)
+   ================================================ */
+
+@import url('./base/tokens.css');        /* 🎨 設計變數：Palette + Semantic */
+@import url('./base/fonts.css');         /* 📝 字體引用 */
+@import url('./base/reset.css');         /* 🔄 CSS Reset */
+@import url('./base/utilities.css');     /* 🛠️ 工具類別 */
+
+/* ================================================
+   版面配置 (Layout)
+   ================================================ */
+
+@import url('./layout.css');             /* 📐 Container, Grid, Flex */
+
+/* ================================================
+   文字排版 (Typography)
+   ================================================ */
+
+@import url('./typography.css');         /* ✍️ 標題、段落、列表、標籤 */
+
+/* ================================================
+   元件層 (Components)
+   ================================================ */
+
+/* 系統元件 */
+@import url('./components/error-boundary.css');  /* 🛡️ 錯誤邊界 */
+@import url('./components/resource-loader.css'); /* 📦 資源預載入 */
+@import url('./components/opening.css');         /* 🎬 開場序列（王道穿越）*/
+@import url('./components/mode-switch.css');     /* 🔄 模式切換器 */
+@import url('./components/progress.css');        /* 📊 進度條/經驗值 */
+@import url('./components/transitions.css');     /* ✨ 階段轉場動畫 */
+
+/* 遊戲元件（待實作）*/
+/* @import url('./components/level-map.css');      🗺️ 關卡地圖 */
+/* @import url('./components/dialogue.css');       💬 對話框 */
+/* @import url('./components/tutorial.css');       📚 教學介面 */
+/* @import url('./components/demo.css');           👀 示範介面 */
+/* @import url('./components/practice.css');       ✏️ 實作編輯器 */
+/* @import url('./components/score.css');          ⭐ 評分報告 */
+/* @import url('./components/levelup.css');        🎉 升級介面 */
+/* @import url('./components/achievement.css');    🏆 成就系統 */
+/* @import url('./components/tool-mode.css');      🔧 工具模式 */
+/* @import url('./components/toast.css');          💡 提示訊息 */
+
+/* ================================================
+   響應式層 (Responsive)
+   ================================================ */
+
+/* @import url('./responsive.css');      📱 RWD 響應式 */
+
+/* ================================================
+   全域樣式覆寫（如有需要）
+   ================================================ */
+
+/* 確保 body 最小高度 */
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 主容器 */
+#app {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 平滑滾動 */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 選取文字樣式 */
+::selection {
+  background-color: var(--color-primary-light);
+  color: var(--color-text-primary);
+}
+
+::-moz-selection {
+  background-color: var(--color-primary-light);
+  color: var(--color-text-primary);
+}
+
+/* ================================================
+   開發模式樣式（可選）
+   ================================================ */
+
+/* Debug 模式 - 顯示元素邊框 */
+[data-debug="true"] * {
+  outline: 1px solid rgba(255, 0, 0, 0.2);
+}
+
+/* ================================================
+   Print 樣式（可選）
+   ================================================ */
+
+@media print {
+  /* 隱藏非列印元素 */
+  .error-boundary-overlay,
+  .resource-loader-overlay,
+  .mode-switch,
+  button {
+    display: none !important;
+  }
+
+  /* 移除陰影和動畫 */
+  * {
+    box-shadow: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* 確保背景色 */
+  body {
+    background: white;
+    color: black;
+  }
+}

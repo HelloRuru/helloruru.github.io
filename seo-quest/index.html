@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO -->
+  <title>SEO Quest — 互動式 SEO 學習工具</title>
+  <meta name="description" content="用 RPG 冒險的方式學習 SEO！三位角色帶你從零開始掌握關鍵字優化、標題撰寫、段落結構等實戰技巧。">
+  <link rel="canonical" href="https://lab.helloruru.com/seo-quest/">
+
+  <!-- OG -->
+  <meta property="og:title" content="SEO Quest — 互動式 SEO 學習工具">
+  <meta property="og:description" content="用 RPG 冒險的方式學習 SEO！三位角色帶你掌握實戰技巧。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://lab.helloruru.com/seo-quest/">
+  <meta property="og:locale" content="zh_TW">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧭</text></svg>">
+
+  <!-- Font Preload -->
+  <link rel="preload" href="https://lab.helloruru.com/fonts/GenSenRounded-Medium.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "SEO Quest",
+    "description": "互動式 SEO 學習工具，用 RPG 冒險的方式學習搜尋引擎優化",
+    "url": "https://lab.helloruru.com/seo-quest/",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Web Browser",
+    "author": {
+      "@type": "Person",
+      "name": "Kaoru Tsai"
+    }
+  }
+  </script>
+</head>
+<body>
+
+  <!-- 資源載入畫面 -->
+  <div class="resource-loader-overlay" id="loader">
+    <div class="resource-loader-content">
+      <div class="loader-logo">🧭</div>
+      <div class="loader-title">SEO Quest</div>
+      <div class="loader-progress-bar">
+        <div class="loader-progress-fill" id="loader-progress"></div>
+      </div>
+      <div class="loader-status" id="loader-status">正在載入資源<span class="loader-dots"></span></div>
+      <div class="loader-percentage" id="loader-percent">0%</div>
+      <div class="loader-hint">三位領航員正在為你準備學習航道</div>
+    </div>
+  </div>
+
+  <!-- 開場序列覆蓋層（王道穿越）-->
+  <div class="opening-overlay" id="opening-overlay" role="dialog" aria-label="開場序列" aria-modal="true">
+    <!-- 場景背景層 -->
+    <div class="opening-scene" aria-hidden="true"></div>
+
+    <!-- 對話框容器 -->
+    <div class="opening-dialogue-container">
+      <!-- 對話框 -->
+      <div class="opening-dialogue-box" role="status" aria-live="polite">
+        <div class="opening-speaker"></div>
+        <div class="opening-text"></div>
+      </div>
+
+      <!-- 名字輸入 -->
+      <div class="opening-name-input">
+        <label for="opening-player-name" class="sr-only">你的名字</label>
+        <input type="text" id="opening-player-name" placeholder="請輸入你的名字" maxlength="20" autocomplete="off" />
+      </div>
+
+      <!-- 傳統 RPG 控制按鈕 -->
+      <div class="opening-controls" role="navigation" aria-label="對話控制">
+        <button class="opening-prev-button" aria-label="上一頁">← 上一頁</button>
+        <button class="opening-log-button" aria-label="開啟對話記錄">LOG</button>
+        <button class="opening-next-button" aria-label="下一頁">下一頁 →</button>
+      </div>
+    </div>
+
+    <!-- 跳過按鈕（開發測試用）-->
+    <button class="opening-skip-button" onclick="window.skipOpening()">
+      跳過開場 (Dev)
+    </button>
+  </div>
+
+  <!-- 對話 LOG 覆蓋層 -->
+  <div class="opening-log-overlay" role="dialog" aria-label="對話記錄" aria-modal="true">
+    <div class="opening-log-content">
+      <div class="opening-log-header">
+        <h2 class="opening-log-title">對話記錄</h2>
+        <button class="opening-log-close" aria-label="關閉對話記錄">✕ 關閉</button>
+      </div>
+      <!-- LOG 內容將由 JavaScript 動態填充 -->
+    </div>
+  </div>
+
+  <!-- 主應用 -->
+  <div id="app" class="app-wrapper" style="display:none;">
+
+    <!-- Header -->
+    <header class="app-header">
+      <div class="container flex-between">
+        <div class="app-logo flex" style="gap:var(--spacing-sm);align-items:center;">
+          <span style="font-size:28px;">🧭</span>
+          <span class="h4" style="margin:0;">SEO Quest</span>
+        </div>
+        <div id="header-right" class="flex" style="gap:var(--spacing-md);align-items:center;">
+          <!-- 等級徽章（進入教學模式後顯示） -->
+        </div>
+      </div>
+    </header>
+
+    <!-- 主內容區 -->
+    <main class="app-main">
+      <div class="container">
+
+        <!-- 模式選擇畫面 -->
+        <section id="view-mode-select" class="mode-switch-container">
+          <h1 class="mode-switch-title">選擇你的冒險方式</h1>
+          <p class="mode-switch-description">無論你是 SEO 新手還是老手，都能找到適合的學習路徑。</p>
+          <div class="mode-buttons">
+            <button class="mode-button" data-mode="tutorial">
+              <div class="mode-button-icon">📚</div>
+              <div class="mode-button-title">教學模式</div>
+              <div class="mode-button-description">跟著三位角色一起冒險，從零開始學習 SEO。包含劇情、實作練習和評分系統。</div>
+            </button>
+            <button class="mode-button" data-mode="tool">
+              <div class="mode-button-icon">🛠️</div>
+              <div class="mode-button-title">工具模式</div>
+              <div class="mode-button-description">直接使用 SEO 分析工具，快速檢查文案的關鍵字密度、結構和可讀性。</div>
+            </button>
+          </div>
+        </section>
+
+        <!-- 關卡地圖 -->
+        <section id="view-level-map" class="level-map" style="display:none;"></section>
+
+        <!-- 五階段遊戲區 -->
+        <section id="view-phase" class="phase-container" style="display:none;"></section>
+
+        <!-- 工具模式 -->
+        <section id="view-tool" style="display:none;">
+          <div class="phase-content text-center" style="padding:var(--spacing-3xl);">
+            <p class="h3" style="margin-bottom:var(--spacing-md);">🛠️ 工具模式開發中</p>
+            <p class="lead">此功能即將推出，敬請期待。</p>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="container">
+        <p style="margin:0;">SEO Quest &copy; 2026 — Made with 🧭 by <a href="https://kaorutsai.com" target="_blank" rel="noopener">Kaoru Tsai</a></p>
+        <p style="margin:0.5rem 0 0 0; font-size:0.8rem; color:#999;">
+          場景圖使用 AI 輔助創作並經人工編輯 |
+          <a href="#" onclick="document.getElementById('credits-modal').style.display='block'; return false;" style="color:#D4A574; text-decoration:none;">關於 / Credits</a>
+        </p>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Credits Modal -->
+  <div id="credits-modal" class="credits-modal" style="display:none;">
+    <div class="credits-modal-content">
+      <span class="credits-close" onclick="document.getElementById('credits-modal').style.display='none'">&times;</span>
+
+      <h2 style="text-align:center; color:#3D2817; margin-bottom:2rem;">SEO Quest - Credits</h2>
+
+      <div class="credits-section">
+        <h3 style="color:#D4A574; font-size:1.2rem; margin-bottom:0.5rem;">📖 企劃 / 劇本</h3>
+        <p style="margin:0.3rem 0; color:#333;">HelloRuru</p>
+      </div>
+
+      <div class="credits-section">
+        <h3 style="color:#D4A574; font-size:1.2rem; margin-bottom:0.5rem;">🎨 場景美術</h3>
+        <p style="margin:0.3rem 0; color:#333;">AI 輔助創作 + 人工編輯</p>
+        <p style="font-size:0.9rem; color:#666; margin-top:0.5rem; line-height:1.6;">
+          本遊戲使用 AI 工具輔助場景圖創作，<br>
+          並經過人工編輯與後製處理。
+        </p>
+      </div>
+
+      <div class="credits-section">
+        <h3 style="color:#D4A574; font-size:1.2rem; margin-bottom:0.5rem;">🎭 角色設定</h3>
+        <p style="margin:0.3rem 0; color:#333;">伊歐 / BLUE / 哈皮</p>
+      </div>
+
+      <div class="credits-section">
+        <h3 style="color:#D4A574; font-size:1.2rem; margin-bottom:0.5rem;">💻 程式開發</h3>
+        <p style="margin:0.3rem 0; color:#333;">HelloRuru</p>
+      </div>
+
+      <div style="text-align:center; margin-top:2rem; padding-top:1rem; border-top:2px solid #D4A574;">
+        <p style="margin:0.5rem 0; color:#666;">© 2026 HelloRuru | SEO Quest</p>
+        <p style="font-size:0.85rem; font-style:italic; color:#999;">
+          感謝開源 AI 社群讓獨立開發成為可能 💜
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Credits Modal CSS -->
+  <style>
+  .credits-modal {
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+
+  .credits-modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 2rem;
+    border: 3px solid #3D2817;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  .credits-close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 20px;
+  }
+
+  .credits-close:hover,
+  .credits-close:focus {
+    color: #000;
+  }
+
+  .credits-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+  }
+
+  .credits-section:last-of-type {
+    border-bottom: none;
+  }
+
+  /* 點擊外部關閉 */
+  .credits-modal {
+    cursor: pointer;
+  }
+
+  .credits-modal-content {
+    cursor: default;
+  }
+
+  /* 響應式 */
+  @media (max-width: 768px) {
+    .credits-modal-content {
+      margin: 10% auto;
+      padding: 1.5rem;
+      max-height: 70vh;
+    }
+
+    .credits-section h3 {
+      font-size: 1rem;
+    }
+  }
+  </style>
+
+  <!-- Credits Modal Script -->
+  <script>
+  // 點擊外部關閉 Modal
+  document.getElementById('credits-modal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.style.display = 'none';
+    }
+  });
+
+  // ESC 關閉 Modal
+  document.addEventListener('keydown', function(e) {
+    const modal = document.getElementById('credits-modal');
+    if (e.key === 'Escape' && modal.style.display === 'block') {
+      modal.style.display = 'none';
+    }
+  });
+  </script>
+
+  <!-- JS Entry -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

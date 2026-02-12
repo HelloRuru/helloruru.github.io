@@ -1,0 +1,291 @@
+/* ================================================
+   SEO Quest - Resource Loader
+   資源預載入畫面樣式
+   ================================================ */
+
+/* ==================== Overlay ==================== */
+
+.resource-loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-secondary)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-loader);
+  transition: opacity 0.3s ease;
+}
+
+/* ==================== Content ==================== */
+
+.resource-loader-content {
+  text-align: center;
+  color: var(--color-text-inverse);
+  max-width: 400px;
+  width: 90%;
+  padding: var(--spacing-xl);
+}
+
+/* ==================== Logo ==================== */
+
+.loader-logo {
+  font-size: 4rem;
+  line-height: 1;
+  margin-bottom: var(--spacing-md);
+  animation: pulse 2s ease-in-out infinite;
+  user-select: none;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ==================== 標題 ==================== */
+
+.loader-title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-2xl);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  letter-spacing: 0.5px;
+}
+
+/* ==================== 進度條容器 ==================== */
+
+.loader-progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: var(--spacing-lg);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+/* ==================== 進度填充 ==================== */
+
+.loader-progress-fill {
+  width: 0%;
+  height: 100%;
+  background: var(--color-text-inverse);
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 閃光效果 */
+.loader-progress-fill::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+/* ==================== 狀態文字 ==================== */
+
+.loader-status {
+  font-size: var(--font-size-sm);
+  opacity: 0.9;
+  margin-bottom: var(--spacing-xs);
+  min-height: 1.5em;
+  font-weight: var(--font-weight-medium);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* ==================== 百分比 ==================== */
+
+.loader-percentage {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-mono);
+  letter-spacing: 2px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  margin-top: var(--spacing-sm);
+}
+
+/* ==================== Animations ==================== */
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* 旋轉動畫（可選） */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==================== 額外的載入點點 ==================== */
+
+.loader-dots {
+  display: inline-block;
+  margin-left: var(--spacing-xs);
+}
+
+.loader-dots::after {
+  content: '';
+  animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+  0%, 20% {
+    content: '';
+  }
+  40% {
+    content: '.';
+  }
+  60% {
+    content: '..';
+  }
+  80%, 100% {
+    content: '...';
+  }
+}
+
+/* ==================== 載入圖示（可選） ==================== */
+
+.loader-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top-color: var(--color-text-inverse);
+  border-radius: var(--radius-full);
+  animation: rotate 1s linear infinite;
+  margin: 0 auto var(--spacing-lg);
+}
+
+/* ==================== 提示文字 ==================== */
+
+.loader-hint {
+  font-size: var(--font-size-xs);
+  opacity: 0.7;
+  margin-top: var(--spacing-xl);
+  font-style: italic;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* ==================== 響應式 ==================== */
+
+@media (max-width: 640px) {
+  .loader-logo {
+    font-size: 3rem;
+  }
+
+  .loader-title {
+    font-size: var(--font-size-xl);
+  }
+
+  .resource-loader-content {
+    width: 85%;
+    padding: var(--spacing-lg);
+  }
+
+  .loader-progress-bar {
+    height: 6px;
+  }
+
+  .loader-percentage {
+    font-size: var(--font-size-lg);
+  }
+}
+
+/* ==================== 減少動畫（無障礙）==================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .loader-logo,
+  .loader-progress-fill::before,
+  .loader-spinner {
+    animation: none;
+  }
+
+  .loader-progress-fill {
+    transition: none;
+  }
+}
+
+/* ==================== 載入完成狀態 ==================== */
+
+.resource-loader-overlay.loaded {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ==================== 錯誤狀態 ==================== */
+
+.resource-loader-overlay.error {
+  background: linear-gradient(
+    135deg,
+    var(--color-error),
+    var(--color-error-dark)
+  );
+}
+
+.resource-loader-overlay.error .loader-logo {
+  animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
+}
+
+/* ==================== 成功狀態 ==================== */
+
+.resource-loader-overlay.success .loader-logo {
+  animation: checkmark 0.6s ease;
+}
+
+@keyframes checkmark {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

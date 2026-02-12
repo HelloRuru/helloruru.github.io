@@ -1,0 +1,168 @@
+/* ================================================
+   進度條與經驗值系統
+   ================================================ */
+
+.progress-container {
+  margin: var(--spacing-lg) 0;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.progress-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+}
+
+.progress-value {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.progress-bar-wrapper {
+  width: 100%;
+  height: 24px;
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  border-radius: var(--radius-full);
+  transition: width var(--transition-slow);
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* 等級顯示 */
+.level-display {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-full);
+  font-weight: var(--font-weight-bold);
+}
+
+.level-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: white;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.level-title {
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+}
+
+/* 等級顏色變體 */
+.level-badge.level-1 {
+  background: linear-gradient(135deg, var(--color-level-1), #7AB5A8);
+}
+
+.level-badge.level-3 {
+  background: linear-gradient(135deg, var(--color-level-3), #E89580);
+}
+
+.level-badge.level-8 {
+  background: linear-gradient(135deg, var(--color-level-8), #9E8DB5);
+}
+
+.level-badge.level-10 {
+  background: linear-gradient(135deg, var(--color-level-10), #FFB700);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+/* 經驗值條 */
+.exp-bar {
+  margin-top: var(--spacing-md);
+}
+
+.exp-bar .progress-bar {
+  background: linear-gradient(90deg, #98C4BA, #7AB5A8);
+}
+
+/* 分數條 */
+.score-bar-container {
+  margin: var(--spacing-md) 0;
+}
+
+.score-bar {
+  height: 32px;
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing-md);
+  color: white;
+}
+
+.score-bar.excellent {
+  background: linear-gradient(90deg, var(--color-score-excellent), #45A049);
+}
+
+.score-bar.good {
+  background: linear-gradient(90deg, var(--color-score-good), #7CB342);
+}
+
+.score-bar.pass {
+  background: linear-gradient(90deg, var(--color-score-pass), #FFB300);
+}
+
+.score-bar.fail {
+  background: linear-gradient(90deg, var(--color-score-fail), #E53935);
+}
+
+/* 星級評分 */
+.star-rating {
+  display: flex;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-2xl);
+}
+
+.star {
+  color: var(--color-border);
+}
+
+.star.filled {
+  color: #FFD700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}

@@ -1,0 +1,523 @@
+/* ================================================
+   開場序列 - 王道穿越風格
+   ================================================ */
+
+/* 開場覆蓋層（用 visibility 代替 display:none 支援過渡動畫） */
+.opening-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.5s ease, visibility 0s 0.5s;
+}
+
+.opening-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.5s ease, visibility 0s 0s;
+}
+
+/* 場景背景層 */
+.opening-scene {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  filter: blur(2px);
+  transition: opacity 1s ease;
+  pointer-events: none;
+}
+
+.opening-scene.visible {
+  opacity: 0.3; /* 半透明，不搶對話焦點 */
+}
+
+/* 對話框容器 */
+.opening-dialogue-container {
+  position: relative;
+  z-index: 1;
+  width: 90%;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+/* 對話框 */
+.opening-dialogue-box {
+  background: rgba(255, 255, 255, 0.98);
+  border: 4px solid #333;
+  border-radius: 12px;
+  padding: var(--spacing-lg);
+  box-shadow:
+    0 8px 0 rgba(0, 0, 0, 0.2),
+    0 16px 24px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+}
+
+.opening-dialogue-box.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 說話者名稱 */
+.opening-speaker {
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-sm);
+  display: none;
+}
+
+.opening-speaker::before {
+  content: '\25B6 ';
+  color: var(--color-secondary);
+}
+
+/* 對話文字 */
+.opening-text {
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: #333;
+  min-height: 3em;
+}
+
+/* 名字輸入區域 */
+.opening-name-input {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.opening-name-input.visible {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+/* iOS 防止 auto-zoom：font-size 至少 16px */
+.opening-name-input input {
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: 1.125rem; /* 18px > 16px，安全 */
+  padding: var(--spacing-md);
+  border: 3px solid var(--color-primary);
+  border-radius: 8px;
+  background: #fff;
+  color: #333;
+  text-align: center;
+  min-height: 48px; /* 觸控目標 ≥ 44px */
+  transition: all 0.2s ease;
+}
+
+.opening-name-input input:focus {
+  outline: none;
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 4px rgba(184, 169, 201, 0.2);
+}
+
+/* focus-visible：僅鍵盤操作時顯示 */
+.opening-name-input input:focus-visible {
+  outline: 3px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
+.opening-name-input input::placeholder {
+  color: #999;
+}
+
+/* 名字輸入框抖動動畫（空白提交時） */
+.opening-name-input input.shake {
+  animation: shake-input 0.4s ease;
+}
+
+@keyframes shake-input {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(2px); }
+}
+
+/* 開始冒險按鈕 */
+.opening-start-button {
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 1.25rem;
+  padding: var(--spacing-lg) var(--spacing-xxl);
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  min-height: 48px;
+  box-shadow:
+    0 6px 0 rgba(0, 0, 0, 0.2),
+    0 12px 24px rgba(0, 0, 0, 0.3);
+  transition: all 0.15s ease;
+  opacity: 0;
+  transform: scale(0.9);
+  pointer-events: none;
+}
+
+.opening-start-button.visible {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.opening-start-button:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow:
+    0 8px 0 rgba(0, 0, 0, 0.2),
+    0 16px 28px rgba(0, 0, 0, 0.4);
+}
+
+.opening-start-button:active {
+  transform: translateY(2px) scale(0.98);
+  box-shadow:
+    0 4px 0 rgba(0, 0, 0, 0.2),
+    0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* 手機版調整 */
+@media (max-width: 768px) {
+  .opening-dialogue-container {
+    width: 95%;
+    max-width: none;
+  }
+
+  .opening-dialogue-box {
+    padding: var(--spacing-md);
+  }
+
+  .opening-speaker {
+    font-size: 1rem;
+  }
+
+  .opening-text {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  /* iOS 防止 auto-zoom：手機版必須 ≥ 16px */
+  .opening-name-input input {
+    font-size: 1rem; /* 16px，剛好不觸發 zoom */
+  }
+
+  .opening-start-button {
+    font-size: 1.125rem;
+    padding: var(--spacing-md) var(--spacing-xl);
+  }
+}
+
+/* 跳過開場按鈕（開發測試用）*/
+.opening-skip-button {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  cursor: pointer;
+  min-height: 44px;
+  transition: all 0.2s ease;
+}
+
+.opening-skip-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* 生產環境隱藏跳過按鈕 */
+body:not([data-dev-mode]) .opening-skip-button {
+  display: none;
+}
+
+/* ================================================
+   傳統 RPG 控制按鈕
+   ================================================ */
+
+/* 控制按鈕容器 */
+.opening-controls {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  align-items: center;
+  margin-top: var(--spacing-md);
+}
+
+/* 通用按鈕樣式 — 觸控目標 ≥ 44px */
+.opening-prev-button,
+.opening-next-button,
+.opening-log-button {
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 1rem;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: #fff;
+  border: 3px solid #333;
+  border-radius: 8px;
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 100px;
+  box-shadow:
+    0 4px 0 rgba(0, 0, 0, 0.2),
+    0 6px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.15s ease;
+}
+
+.opening-prev-button:hover:not(:disabled),
+.opening-next-button:hover:not(:disabled),
+.opening-log-button:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 0 rgba(0, 0, 0, 0.2),
+    0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.opening-prev-button:active:not(:disabled),
+.opening-next-button:active:not(:disabled),
+.opening-log-button:active {
+  transform: translateY(2px);
+  box-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.2),
+    0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* focus-visible：鍵盤導航時顯示聚焦框 */
+.opening-prev-button:focus-visible,
+.opening-next-button:focus-visible,
+.opening-log-button:focus-visible,
+.opening-log-close:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+
+/* 禁用狀態 */
+.opening-prev-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* LOG 按鈕（特殊樣式）*/
+.opening-log-button {
+  background: linear-gradient(135deg, #8B8680, #A8A29D);
+  min-width: 80px;
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
+/* ================================================
+   對話 LOG 覆蓋層（用 visibility 代替 display:none）
+   ================================================ */
+
+.opening-log-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0s 0.3s;
+  overflow-y: auto;
+}
+
+.opening-log-overlay.visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.3s ease, visibility 0s 0s;
+}
+
+/* LOG 內容區塊 */
+.opening-log-content {
+  background: rgba(255, 255, 255, 0.98);
+  border: 4px solid #333;
+  border-radius: 12px;
+  padding: var(--spacing-xl);
+  max-width: 800px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow:
+    0 8px 0 rgba(0, 0, 0, 0.2),
+    0 16px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* LOG 標題 */
+.opening-log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 3px solid #333;
+}
+
+.opening-log-title {
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--color-primary);
+}
+
+.opening-log-close {
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 1.25rem;
+  padding: var(--spacing-xs) var(--spacing-md);
+  background: #e74c3c;
+  color: #fff;
+  border: 2px solid #333;
+  border-radius: 6px;
+  cursor: pointer;
+  min-height: 44px;
+  transition: all 0.15s ease;
+}
+
+.opening-log-close:hover {
+  transform: scale(1.05);
+}
+
+.opening-log-close:active {
+  transform: scale(0.95);
+}
+
+/* LOG 空白狀態 */
+.opening-log-empty {
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: 1rem;
+  color: #999;
+  text-align: center;
+  padding: var(--spacing-xxl);
+}
+
+/* LOG 項目 */
+.opening-log-item {
+  background: #f8f8f8;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  transition: all 0.2s ease;
+}
+
+.opening-log-item:hover {
+  border-color: var(--color-secondary);
+  transform: translateX(4px);
+}
+
+.opening-log-item.current {
+  background: linear-gradient(135deg, rgba(212, 165, 165, 0.15), rgba(184, 169, 201, 0.15));
+  border-color: var(--color-primary);
+  border-width: 3px;
+}
+
+/* LOG 說話者 */
+.opening-log-speaker {
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.opening-log-speaker::before {
+  content: '\25B6 ';
+  color: var(--color-secondary);
+}
+
+/* LOG 對話文字 */
+.opening-log-text {
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: 0.975rem;
+  line-height: 1.7;
+  color: #333;
+}
+
+/* 手機版調整 */
+@media (max-width: 768px) {
+  .opening-controls {
+    gap: var(--spacing-sm);
+  }
+
+  /* 手機版按鈕保持 ≥ 44px 觸控目標 */
+  .opening-prev-button,
+  .opening-next-button {
+    min-width: 80px;
+    min-height: 44px;
+    font-size: 0.9rem;
+    padding: var(--spacing-xs) var(--spacing-md);
+  }
+
+  .opening-log-button {
+    min-width: 60px;
+    min-height: 44px;
+    font-size: 0.9rem;
+  }
+
+  .opening-log-overlay {
+    padding: var(--spacing-md);
+  }
+
+  .opening-log-content {
+    padding: var(--spacing-md);
+    max-height: 90vh;
+  }
+
+  .opening-log-title {
+    font-size: 1.25rem;
+  }
+
+  .opening-log-close {
+    font-size: 1rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    min-height: 44px;
+  }
+
+  .opening-log-item {
+    padding: var(--spacing-sm);
+  }
+
+  .opening-log-speaker {
+    font-size: 0.9rem;
+  }
+
+  .opening-log-text {
+    font-size: 0.9rem;
+  }
+}
