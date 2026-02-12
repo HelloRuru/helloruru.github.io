@@ -29,6 +29,15 @@
           "icon": "wand",
           "iconColor": "lavender",
           "badge": { "text": "開發中", "type": "dev" }
+        },
+        {
+          "id": "seo-quest",
+          "title": "SEO Quest",
+          "description": "RPG 風格 SEO 文案教學遊戲，三角色引導學習",
+          "url": "/seo-quest/",
+          "icon": "sparkles",
+          "iconColor": "sakura",
+          "badge": { "text": "開發中", "type": "dev" }
         }
       ]
     },

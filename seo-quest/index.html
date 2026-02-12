@@ -163,7 +163,7 @@
         <p style="margin:0;">SEO Quest &copy; 2026 — Made with 🧭 by <a href="https://kaorutsai.com" target="_blank" rel="noopener">Kaoru Tsai</a></p>
         <p style="margin:0.5rem 0 0 0; font-size:0.8rem; color:#999;">
           場景圖使用 AI 輔助創作並經人工編輯 |
-          <a href="#" onclick="window.openCredits(); return false;" style="color:#D4A574; text-decoration:none;">關於 / Credits</a>
+          <a href="javascript:void(0)" onclick="window.openCredits()" style="color:#D4A574; text-decoration:none;">關於 / Credits</a>
         </p>
       </div>
     </footer>
@@ -171,7 +171,7 @@
   </div>
 
   <!-- Credits Modal -->
-  <div id="credits-modal" class="credits-modal" style="display:none;">
+  <div id="credits-modal" class="credits-modal" role="dialog" aria-modal="true" aria-label="Credits 關於">
     <div class="credits-modal-content">
       <button class="credits-close" aria-label="關閉 Credits" onclick="window.closeCredits()">&times;</button>
 
@@ -260,6 +260,12 @@
     background: rgba(0, 0, 0, 0.05);
   }
 
+  .credits-close:active {
+    color: #000;
+    background: rgba(0, 0, 0, 0.1);
+    transform: scale(0.92);
+  }
+
   .credits-close:focus-visible {
     outline: 3px solid #D4A574;
     outline-offset: 2px;
@@ -285,7 +291,28 @@
     cursor: default;
   }
 
-  /* 響應式 */
+  /* Fade-in 動畫 */
+  .credits-modal {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+  }
+
+  .credits-modal.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .credits-modal-content {
+    transform: translateY(20px);
+    transition: transform 0.25s ease;
+  }
+
+  .credits-modal.active .credits-modal-content {
+    transform: translateY(0);
+  }
+
+  /* 響應式 — Tablet */
   @media (max-width: 768px) {
     .credits-modal-content {
       margin: 10% auto;
@@ -297,17 +324,40 @@
       font-size: 1rem;
     }
   }
+
+  /* 響應式 — 極小螢幕 */
+  @media (max-width: 480px) {
+    .credits-modal-content {
+      margin: 5% auto;
+      padding: 1.2rem;
+      width: 95%;
+      max-height: 80vh;
+    }
+
+    .credits-modal-content h2 {
+      font-size: 1.1rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .credits-section {
+      margin-bottom: 1rem;
+      padding-bottom: 0.8rem;
+    }
+  }
   </style>
 
   <!-- Credits Modal Script -->
   <script>
   window.openCredits = function() {
-    document.getElementById('credits-modal').style.display = 'block';
+    const modal = document.getElementById('credits-modal');
+    modal.classList.add('active');
     document.body.style.overflow = 'hidden';
+    modal.querySelector('.credits-close').focus();
   };
 
   window.closeCredits = function() {
-    document.getElementById('credits-modal').style.display = 'none';
+    const modal = document.getElementById('credits-modal');
+    modal.classList.remove('active');
     document.body.style.overflow = '';
   };
 
@@ -318,7 +368,7 @@
 
   // ESC 關閉 Modal
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && document.getElementById('credits-modal').style.display === 'block') {
+    if (e.key === 'Escape' && document.getElementById('credits-modal').classList.contains('active')) {
       window.closeCredits();
     }
   });
