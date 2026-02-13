@@ -29,11 +29,20 @@
 
 /* 全域字體設定 */
 body {
-  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-family: 'GenSenRounded', sans-serif;
   font-weight: 400;
 }
 
 h1, h2, h3 {
-  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-family: 'GenSenRounded', sans-serif;
   font-weight: 700;
+}
+
+h4, h5, h6 {
+  font-family: 'GenSenRounded', sans-serif;
+  font-weight: 500;
+}
+
+button, input, select, textarea {
+  font-family: 'GenSenRounded', sans-serif;
 }
