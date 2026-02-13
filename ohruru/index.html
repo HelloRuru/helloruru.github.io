@@ -164,67 +164,9 @@
     }
   </script>
 
-  <style>
-    /* GenSenRounded 字體（品牌字體） */
-    @font-face {
-      font-family: 'GenSenRounded';
-      src: url('https://lab.helloruru.com/fonts/GenSenRounded2TW-R.woff2') format('woff2');
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: 'GenSenRounded';
-      src: url('https://lab.helloruru.com/fonts/GenSenRounded2TW-M.woff2') format('woff2');
-      font-weight: 500;
-      font-style: normal;
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: 'GenSenRounded';
-      src: url('https://lab.helloruru.com/fonts/GenSenRounded2TW-B.woff2') format('woff2');
-      font-weight: 700;
-      font-style: normal;
-      font-display: swap;
-    }
-
-    body {
-      font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
-      font-weight: 400;
-    }
-
-    h1, h2, h3 {
-      font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
-      font-weight: 700;
-    }
-
-    .gradient-text {
-      background: linear-gradient(135deg, #B8A890 0%, #8B7355 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .card-hover {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .card-hover:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
-    }
-
-    /* SVG Icon 動畫 */
-    .tag-icon {
-      transition: transform 0.2s ease;
-    }
-
-    .tag-icon:hover {
-      transform: scale(1.1);
-    }
-  </style>
+  <!-- Modular CSS -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/utilities.css">
 </head>
 <body class="bg-beige-50 text-charcoal-800 antialiased">
 

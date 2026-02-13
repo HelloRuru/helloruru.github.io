@@ -1,0 +1,30 @@
+/* ========================================
+   Utilities — 工具類別
+   ======================================== */
+
+/* 漸層文字 */
+.gradient-text {
+  background: linear-gradient(135deg, #B8A890 0%, #8B7355 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 卡片 Hover 效果 */
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* SVG Icon 動畫 */
+.tag-icon {
+  transition: transform 0.2s ease;
+}
+
+.tag-icon:hover {
+  transform: scale(1.1);
+}
