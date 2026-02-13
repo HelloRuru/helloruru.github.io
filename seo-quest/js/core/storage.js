@@ -30,7 +30,14 @@ export const Storage = {
       data.lastUpdated = new Date().toISOString();
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch (e) {
-      console.warn('Storage save failed:', e);
+      if (e.name === 'QuotaExceededError') {
+        console.warn('[Storage] Quota exceeded, clearing old data');
+        this.reset();
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+        catch { console.error('[Storage] Save failed even after reset'); }
+      } else {
+        console.warn('[Storage] Save failed:', e);
+      }
     }
   },
 

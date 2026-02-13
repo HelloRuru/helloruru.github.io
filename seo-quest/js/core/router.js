@@ -11,7 +11,7 @@ export const Router = {
   navigate(view) {
     const views = ['mode-select', 'level-map', 'phase', 'tool'];
     views.forEach(v => {
-      const el = document.getElementById(`view-${v === 'mode-select' ? 'mode-select' : v === 'level-map' ? 'level-map' : v}`);
+      const el = document.getElementById(`view-${v}`);
       if (el) el.style.display = v === view ? '' : 'none';
     });
     State.update('currentView', view);
@@ -32,7 +32,11 @@ export const Router = {
       const worldNum = levelId.split('-')[0];
       const res = await fetch(`${Config.paths.levels}/world-${worldNum}/${levelId}.json`);
       if (!res.ok) throw new Error(`Failed to load level ${levelId}`);
-      const levelData = JSON.parse(await res.text());
+      const text = await res.text();
+      let levelData;
+      try { levelData = JSON.parse(text); }
+      catch { throw new Error(`Invalid JSON in level ${levelId}`); }
+      if (!levelData.phases) throw new Error(`Level ${levelId} missing phases data`);
       State.update('currentLevel', levelData);
       State.update('currentLevelId', levelId);
       this.goToPhase('tutorial');

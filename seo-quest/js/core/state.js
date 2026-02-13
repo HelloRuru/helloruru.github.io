@@ -44,14 +44,17 @@ export const State = {
 
   // 增加經驗值，自動升級
   addExp(amount) {
-    this.user.exp += amount;
-    const table = Config.levels.expTable;
-    while (this.user.level < Config.levels.maxLevel && this.user.exp >= table[this.user.level]) {
-      this.user.exp -= table[this.user.level];
-      this.user.level++;
+    try {
+      this.user.exp += amount;
+      const table = Config.levels.expTable;
+      while (this.user.level < Config.levels.maxLevel && this.user.exp >= table[this.user.level]) {
+        this.user.exp -= table[this.user.level];
+        this.user.level++;
+      }
+    } finally {
+      this.persist();
     }
     Events.emit('state:user', this.user);
-    this.persist();
   },
 
   // 取得當前等級稱號

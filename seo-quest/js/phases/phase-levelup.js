@@ -14,6 +14,7 @@ export const PhaseLevelup = {
         <div class="phase-content text-center" style="padding:var(--spacing-3xl);">
           <p class="h3" style="margin-bottom:var(--spacing-md);">載入失敗</p>
           <p class="lead">升級資料尚未準備好，請回到關卡地圖重試。</p>
+          <button class="back-button" data-back="level-map" style="margin-top:var(--spacing-lg);">← 返回關卡地圖</button>
         </div>`;
       return;
     }

@@ -5,6 +5,12 @@
 import { State } from '../core/state.js';
 import { Router } from '../core/router.js';
 
+function esc(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
 export const PhaseTutorial = {
   render(container) {
     const data = State.currentLevel?.phases?.tutorial;
@@ -13,6 +19,7 @@ export const PhaseTutorial = {
         <div class="phase-content text-center" style="padding:var(--spacing-3xl);">
           <p class="h3" style="margin-bottom:var(--spacing-md);">載入失敗</p>
           <p class="lead">教學資料尚未準備好，請回到關卡地圖重試。</p>
+          <button class="back-button" data-back="level-map" style="margin-top:var(--spacing-lg);">← 返回關卡地圖</button>
         </div>`;
       return;
     }
@@ -21,21 +28,24 @@ export const PhaseTutorial = {
     (data.content || []).forEach(item => {
       switch (item.type) {
         case 'text':
-          contentHtml += `<p>${item.content}</p>`;
+          contentHtml += `<p>${esc(item.content)}</p>`;
           break;
-        case 'heading':
-          contentHtml += `<h${item.level || 3} class="h${item.level || 3}">${item.content}</h${item.level || 3}>`;
+        case 'heading': {
+          const lvl = [2,3,4].includes(item.level) ? item.level : 3;
+          contentHtml += `<h${lvl} class="h${lvl}">${esc(item.content)}</h${lvl}>`;
           break;
-        case 'list':
+        }
+        case 'list': {
           const tag = item.style === 'numbered' ? 'ol' : 'ul';
           const cls = item.style === 'numbered' ? 'list-numbered' : 'list-styled';
-          contentHtml += `<${tag} class="${cls}">${item.items.map(i => `<li>${i}</li>`).join('')}</${tag}>`;
+          contentHtml += `<${tag} class="${cls}">${(item.items || []).map(i => `<li>${esc(i)}</li>`).join('')}</${tag}>`;
           break;
+        }
         case 'highlight':
-          contentHtml += `<div class="quote-highlight"><p style="margin:0;">${item.content}</p></div>`;
+          contentHtml += `<div class="quote-highlight"><p style="margin:0;">${esc(item.content)}</p></div>`;
           break;
         case 'code':
-          contentHtml += `<pre><code>${item.content}</code></pre>`;
+          contentHtml += `<pre><code>${esc(item.content)}</code></pre>`;
           break;
       }
     });

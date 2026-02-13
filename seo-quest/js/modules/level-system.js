@@ -30,7 +30,8 @@ export const LevelSystem = {
     const container = document.getElementById('view-level-map');
     if (!container) return;
 
-    let html = '<h2 class="section-title text-center" style="margin-bottom:var(--spacing-2xl);">關卡地圖</h2>';
+    let html = '<button class="back-button" data-back="mode-select" aria-label="返回模式選擇">← 返回</button>';
+    html += '<h2 class="section-title text-center" style="margin-bottom:var(--spacing-2xl);">關卡地圖</h2>';
 
     Config.worlds.forEach(world => {
       html += `
@@ -63,7 +64,7 @@ export const LevelSystem = {
                style="cursor:${locked ? 'not-allowed' : 'pointer'};">
             <div class="card-header flex-between">
               <span class="badge ${completed ? 'badge-success' : locked ? '' : 'badge-primary'}">
-                ${completed ? '✓ 完成' : locked ? '🔒 鎖定' : `${levelId}`}
+                ${completed ? '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;"><polyline points="20 6 9 17 4 12"/></svg> 完成' : locked ? '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> 鎖定' : `${levelId}`}
               </span>
               ${completed ? `<span class="small" style="color:var(--color-text-tertiary);">${completed.score}分</span>` : ''}
             </div>

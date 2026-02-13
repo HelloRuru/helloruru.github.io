@@ -10,7 +10,7 @@ export const Config = {
   paths: {
     levels: './data/levels',
     characters: './data/characters.json',
-    achievements: './data/achievements.json',
+    // achievements: './data/achievements.json',  // World 2+ 再啟用
   },
 
   // 等級系統

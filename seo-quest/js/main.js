@@ -99,7 +99,33 @@ function setupPhaseListener() {
     const renderer = phaseRenderers[phase];
     if (renderer) {
       container.innerHTML = '';
+      // 在階段內容前插入返回按鈕
+      const backBtn = document.createElement('button');
+      backBtn.className = 'back-button';
+      backBtn.setAttribute('data-back', 'level-map');
+      backBtn.setAttribute('aria-label', '返回關卡地圖');
+      backBtn.textContent = '← 返回關卡地圖';
+      container.appendChild(backBtn);
       renderer.render(container);
+    }
+  });
+}
+
+// ── 全域返回按鈕監聽 ──────────────────────
+function setupBackButtons() {
+  document.getElementById('app').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-back]');
+    if (!btn) return;
+
+    const target = btn.dataset.back;
+    if (target === 'mode-select') {
+      State.settings.mode = null;
+      State.persist();
+      // 清除模式按鈕 active 狀態
+      document.querySelectorAll('.mode-button').forEach(b => b.classList.remove('active'));
+      Router.showView('view-mode-select');
+    } else if (target === 'level-map') {
+      Router.showView('view-level-map');
     }
   });
 }
@@ -113,6 +139,7 @@ async function boot() {
     // 初始化模組
     LevelSystem.init();
     setupPhaseListener();
+    setupBackButtons();
 
     // 隱藏載入畫面
     hideLoader();

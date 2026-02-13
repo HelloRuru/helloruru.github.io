@@ -87,3 +87,90 @@
   font-weight: var(--font-weight-medium);
   z-index: var(--z-sticky);
 }
+
+/* ================================================
+   返回按鈕（通用）
+   ================================================ */
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  min-height: 44px;
+}
+
+.back-button:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.back-button:active {
+  transform: scale(0.95);
+}
+
+/* ================================================
+   響應式 — Tablet
+   ================================================ */
+
+@media (max-width: 768px) {
+  .mode-switch-container {
+    margin: var(--spacing-xl) auto;
+  }
+
+  .mode-switch-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .mode-switch-description {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .mode-button {
+    min-width: 200px;
+    padding: var(--spacing-lg);
+  }
+
+  .mode-button-icon {
+    font-size: 36px;
+  }
+
+  .mode-button-title {
+    font-size: var(--font-size-xl);
+  }
+}
+
+/* ================================================
+   響應式 — 手機
+   ================================================ */
+
+@media (max-width: 480px) {
+  .mode-switch-container {
+    margin: var(--spacing-lg) auto;
+  }
+
+  .mode-switch-title {
+    font-size: var(--font-size-xl);
+  }
+
+  .mode-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mode-button {
+    min-width: unset;
+    max-width: 100%;
+  }
+}

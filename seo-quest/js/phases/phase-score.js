@@ -20,6 +20,7 @@ export const PhaseScore = {
         <div class="phase-content text-center" style="padding:var(--spacing-3xl);">
           <p class="h3" style="margin-bottom:var(--spacing-md);">載入失敗</p>
           <p class="lead">評分資料尚未準備好，請回到關卡地圖重試。</p>
+          <button class="back-button" data-back="level-map" style="margin-top:var(--spacing-lg);">← 返回關卡地圖</button>
         </div>`;
       return;
     }
@@ -171,7 +172,7 @@ export const PhaseScore = {
       total += (dimScore / 100) * w;
     }
 
-    // 內容品質（35-40 分預設）
+    // 內容品質（35-40 分預設）— 與 goldenTriangle 互補不重疊
     if (criteria.contentQuality) {
       const w = criteria.contentQuality.weight || 35;
       let dimScore = 0;
@@ -181,12 +182,12 @@ export const PhaseScore = {
       const maxLen = level?.requirements?.content?.maxLength || 200;
       if (wordCount >= minLen && wordCount <= maxLen) dimScore += 40;
       else if (wordCount >= minLen * 0.7) dimScore += 20;
-      // 有換行/結構
-      if (content.includes('\n')) dimScore += 20;
-      // 長度合理
-      if (wordCount >= 50) dimScore += 20;
-      // 有使用標點
-      if (/[，。！？]/.test(content)) dimScore += 20;
+      // 有使用標點（多樣性）
+      if (/[，。！？]/.test(content)) dimScore += 25;
+      // 段落結構完整（3+ 段落）
+      const paragraphs = content.split('\n').filter(p => p.trim().length > 0);
+      if (paragraphs.length >= 3) dimScore += 35;
+      else if (paragraphs.length >= 2) dimScore += 15;
       total += (Math.min(dimScore, 100) / 100) * w;
     }
 

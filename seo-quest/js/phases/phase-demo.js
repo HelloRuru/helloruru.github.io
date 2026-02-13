@@ -22,6 +22,7 @@ export const PhaseDemo = {
         <div class="phase-content text-center" style="padding:var(--spacing-3xl);">
           <p class="h3" style="margin-bottom:var(--spacing-md);">載入失敗</p>
           <p class="lead">劇情示範資料尚未準備好，請回到關卡地圖重試。</p>
+          <button class="back-button" data-back="level-map" style="margin-top:var(--spacing-lg);">← 返回關卡地圖</button>
         </div>`;
       return;
     }
@@ -79,7 +80,7 @@ export const PhaseDemo = {
     bubble.style.opacity = '0';
     bubble.style.transform = 'translateY(10px)';
     bubble.innerHTML = `
-      <div class="dialogue-avatar" style="font-size:36px;">${charData.avatar || '💬'}</div>
+      <div class="dialogue-avatar" style="font-size:36px;">${charData.avatar || '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>'}</div>
       <div class="dialogue-bubble">
         <div class="dialogue-speaker" style="color:${color};">${name}</div>
         <div class="dialogue-text">${line.text}</div>
@@ -141,7 +142,7 @@ export const PhaseDemo = {
         const color = COLORS[c.speaker] || 'var(--color-text-primary)';
         exampleHtml += `
           <div class="dialogue-message" style="margin-bottom:var(--spacing-md);">
-            <div class="dialogue-avatar" style="font-size:28px;">${charData.avatar || '💬'}</div>
+            <div class="dialogue-avatar" style="font-size:28px;">${charData.avatar || '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>'}</div>
             <div class="dialogue-bubble">
               <div class="dialogue-speaker" style="color:${color};">${charData.name || c.speaker}</div>
               <div class="dialogue-text">${c.text}</div>

@@ -4,15 +4,8 @@
    ================================================ */
 
 /* ================================================
-   容器
+   容器（主定義在 base/utilities.css，此處僅放擴充）
    ================================================ */
-
-.container {
-  width: 100%;
-  max-width: var(--container-lg);
-  margin: 0 auto;
-  padding: 0 var(--spacing-md);
-}
 
 .container-sm {
   max-width: var(--container-sm);
@@ -324,11 +317,13 @@
 }
 
 .flex-center {
+  display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .flex-between {
+  display: flex;
   justify-content: space-between;
   align-items: center;
 }

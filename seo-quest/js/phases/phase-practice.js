@@ -14,6 +14,7 @@ export const PhasePractice = {
         <div class="phase-content text-center" style="padding:var(--spacing-3xl);">
           <p class="h3" style="margin-bottom:var(--spacing-md);">載入失敗</p>
           <p class="lead">實作挑戰資料尚未準備好，請回到關卡地圖重試。</p>
+          <button class="back-button" data-back="level-map" style="margin-top:var(--spacing-lg);">← 返回關卡地圖</button>
         </div>`;
       return;
     }
@@ -90,25 +91,32 @@ export const PhasePractice = {
     const statDensity = container.querySelector('#stat-density');
     const primaryInput = container.querySelector('#input-primary');
 
-    const updateStats = () => {
-      const text = textarea.value.trim();
-      const wordCount = [...text].length;
-      statWords.textContent = wordCount;
+    // Regex 跳脫（防止特殊字元造成 RegExp 錯誤）
+    const escRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-      // 計算關鍵字密度
-      const keywords = primaryInput.value.split(/[,，]/).map(k => k.trim()).filter(Boolean);
-      if (keywords.length && wordCount > 0) {
-        let kwCount = 0;
-        keywords.forEach(kw => {
-          const regex = new RegExp(kw, 'gi');
-          const matches = text.match(regex);
-          if (matches) kwCount += matches.length;
-        });
-        const density = ((kwCount * keywords[0].length) / wordCount * 100).toFixed(1);
-        statDensity.textContent = density;
-      } else {
-        statDensity.textContent = '0';
-      }
+    let _debounceTimer;
+    const updateStats = () => {
+      clearTimeout(_debounceTimer);
+      _debounceTimer = setTimeout(() => {
+        const text = textarea.value.trim();
+        const wordCount = [...text].length;
+        statWords.textContent = wordCount;
+
+        const keywords = primaryInput.value.split(/[,，]/).map(k => k.trim()).filter(Boolean);
+        if (keywords.length && wordCount > 0) {
+          let kwCount = 0;
+          keywords.forEach(kw => {
+            try {
+              const matches = text.match(new RegExp(escRe(kw), 'gi'));
+              if (matches) kwCount += matches.length;
+            } catch { /* skip invalid regex */ }
+          });
+          const density = ((kwCount * (keywords[0]?.length || 1)) / wordCount * 100).toFixed(1);
+          statDensity.textContent = isFinite(density) ? density : '0';
+        } else {
+          statDensity.textContent = '0';
+        }
+      }, 200);
     };
 
     textarea.addEventListener('input', updateStats);
