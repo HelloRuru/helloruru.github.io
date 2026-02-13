@@ -144,15 +144,15 @@
       ]
     },
     {
-      "id": "music",
-      "label": "ohruru.com — 音樂",
+      "id": "service",
+      "label": "ohruru.com — 接案服務",
       "tools": [
         {
-          "id": "suno",
+          "id": "ohruru-service",
           "title": "ohruru.com",
-          "description": "社群接案顧問",
+          "description": "你在前線加油，我在背後為你應援：持續生產品牌文案，不斷更的承諾。",
           "url": "https://ohruru.com/",
-          "icon": "music",
+          "icon": "pen",
           "iconColor": "blush",
           "fullWidth": true,
           "external": true
