@@ -22,15 +22,6 @@
           "iconColor": "sage"
         },
         {
-          "id": "sge-writer",
-          "title": "SGE 文案助手",
-          "description": "AI 搜尋最佳化文案產生器，三角色互動引導",
-          "url": "/sge-writer/",
-          "icon": "wand",
-          "iconColor": "lavender",
-          "badge": { "text": "開發中", "type": "dev" }
-        },
-        {
           "id": "seo-quest",
           "title": "SEO Quest",
           "description": "RPG 風格 SEO 文案教學遊戲，三角色引導學習",
