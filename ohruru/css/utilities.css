@@ -4,7 +4,7 @@
 
 /* 漸層文字 */
 .gradient-text {
-  background: linear-gradient(135deg, #B8A890 0%, #8B7355 100%);
+  background: linear-gradient(135deg, #D4A5A5 0%, #B8A9C9 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

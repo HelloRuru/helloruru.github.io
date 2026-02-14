@@ -28,6 +28,10 @@
 }
 
 /* 全域字體設定 */
+* {
+  font-family: 'GenSenRounded', sans-serif;
+}
+
 body {
   font-family: 'GenSenRounded', sans-serif;
   font-weight: 400;
@@ -43,6 +47,6 @@ h4, h5, h6 {
   font-weight: 500;
 }
 
-button, input, select, textarea {
+button, input, select, textarea, a, p, span, li, div {
   font-family: 'GenSenRounded', sans-serif;
 }
