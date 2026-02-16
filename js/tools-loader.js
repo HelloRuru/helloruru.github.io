@@ -61,9 +61,13 @@ async function loadTools() {
 function renderSection(section) {
   const toolsHTML = section.tools.map(tool => renderTool(tool)).join('');
 
+  const labelHTML = section.url
+    ? `<a href="${section.url}" class="section-label section-label-link" target="_blank" rel="noopener">${section.label}</a>`
+    : `<div class="section-label">${section.label}</div>`;
+
   return `
     <section class="section" data-section-id="${section.id}">
-      <div class="section-label">${section.label}</div>
+      ${labelHTML}
       <div class="card-grid">
         ${toolsHTML}
       </div>

@@ -3,6 +3,7 @@
     {
       "id": "lab",
       "label": "lab.helloruru.com — 數位實踐場",
+      "url": "https://lab.helloruru.com/",
       "tools": [
         {
           "id": "aio-view",
@@ -35,6 +36,7 @@
     {
       "id": "tools",
       "label": "tools.helloruru.com — 實用工具",
+      "url": "https://tools.helloruru.com/",
       "tools": [
         {
           "id": "txt-to-epub",
@@ -113,6 +115,7 @@
     {
       "id": "service",
       "label": "ohruru.com — 接案服務",
+      "url": "https://ohruru.com/",
       "tools": [
         {
           "id": "ohruru-service",
@@ -129,6 +132,7 @@
     {
       "id": "newday",
       "label": "newday.helloruru.com — 生活工具",
+      "url": "https://newday.helloruru.com/",
       "tools": [
         {
           "id": "happy-exit",
@@ -145,6 +149,7 @@
     {
       "id": "blog",
       "label": "kaorutsai.com — 部落格",
+      "url": "https://kaorutsai.com/",
       "tools": [
         {
           "id": "kaoru-blog",
