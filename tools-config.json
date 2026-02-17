@@ -15,11 +15,11 @@
           "badge": { "text": "開發中", "type": "dev" }
         },
         {
-          "id": "keyword-pro",
-          "title": "螢光筆 PRO",
-          "description": "鍵盤加速版關鍵字螢光筆，支援多色標記與深色模式",
-          "url": "/keyword-pro/",
-          "icon": "highlighter",
+          "id": "table-fixer",
+          "title": "表格修復工具",
+          "description": "把亂掉的表格文字貼上來，一鍵還原成乾淨表格",
+          "url": "/table-fixer/",
+          "icon": "table",
           "iconColor": "sage"
         },
         {
