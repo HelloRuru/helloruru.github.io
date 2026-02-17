@@ -147,43 +147,50 @@
     "@context": "https://schema.org",
     "@type": "HowTo",
     "name": "如何使用 AIO View 監測文章的 AI Overview 曝光",
-    "description": "透過 AIO View 監測你的網站文章是否出現在 Google AI Overview 摘要中，只需 5 個步驟。",
+    "description": "透過 AIO View 監測你的網站文章是否出現在 Google AI Overview 摘要中，只需 6 個步驟。",
     "totalTime": "PT130M",
     "step": [
       {
         "@type": "HowToStep",
         "position": 1,
-        "name": "輸入 Sitemap 網址",
-        "text": "在 AIO View 網頁輸入你的網站 sitemap.xml 網址，點擊解析按鈕，工具會自動提取所有文章。",
+        "name": "貼上 Sitemap 網址並解析",
+        "text": "輸入網站的 sitemap.xml 網址，按解析。若為 Sitemap Index 會出現下拉選單選擇子 Sitemap。",
         "url": "https://lab.helloruru.com/aio-view/#input-section"
       },
       {
         "@type": "HowToStep",
         "position": 2,
-        "name": "選擇要監測的文章",
-        "text": "從文章清單中勾選想監測的文章，可手動編輯搜尋語句，然後點擊產生 CLI 指令，會自動下載 queries.json。",
+        "name": "篩選並勾選要監測的文章",
+        "text": "用年份、月份篩選文章，勾選想監測的項目。",
         "url": "https://lab.helloruru.com/aio-view/#articles-section"
       },
       {
         "@type": "HowToStep",
         "position": 3,
-        "name": "在電腦執行掃描",
-        "text": "將 queries.json 放到 CLI 資料夾，在終端機執行掃描指令。工具會自動搜尋 Google 並偵測 AI Overview。",
-        "url": "https://lab.helloruru.com/aio-view/#cli-section"
+        "name": "填寫搜尋語句",
+        "text": "手動編輯搜尋語句，或用「複製 AI 提示詞」搭配 AI 產生語句後「批次貼入」。",
+        "url": "https://lab.helloruru.com/aio-view/#articles-section"
       },
       {
         "@type": "HowToStep",
         "position": 4,
-        "name": "上傳掃描結果",
-        "text": "掃描完成後，將 results.json 拖曳上傳到 AIO View 網頁。",
-        "url": "https://lab.helloruru.com/aio-view/#upload-section"
+        "name": "產生 CLI 指令並下載 queries.json",
+        "text": "按「產生 CLI 指令」下載 queries.json，放到 aio-view/cli 資料夾。",
+        "url": "https://lab.helloruru.com/aio-view/#cli-section"
       },
       {
         "@type": "HowToStep",
         "position": 5,
-        "name": "查看監測報告",
-        "text": "即時查看統計數據：總文章數、有 AIO 數、被引用數與引用率。可篩選結果並匯出 CSV 報告。",
-        "url": "https://lab.helloruru.com/aio-view/#results-section"
+        "name": "在電腦執行掃描",
+        "text": "在 PowerShell 執行 node scan.js 指令，工具會自動搜尋 Google 並偵測 AI Overview。",
+        "url": "https://lab.helloruru.com/aio-view/#cli-section"
+      },
+      {
+        "@type": "HowToStep",
+        "position": 6,
+        "name": "上傳結果看報告",
+        "text": "掃描完成後，把 results.json 拖到上傳區，即可查看監測報告與統計數據。",
+        "url": "https://lab.helloruru.com/aio-view/#upload-section"
       }
     ]
   }
@@ -263,76 +270,75 @@
           </button>
 
           <div class="guide-content expanded" id="guide-content">
-            <!-- 這是什麼 -->
             <div class="guide-intro">
-              <p><strong>AIO View</strong> 監測你的網站文章是否被 Google AI Overview（AI 摘要）引用。</p>
-              <p class="guide-note">由於瀏覽器限制，需要在你的電腦執行小工具來搜尋 Google。</p>
+              <p><strong>AIO View</strong> 幫你查看網站文章有沒有出現在 Google AI Overview（AI 摘要）裡。</p>
+              <p class="guide-note">需要在電腦跑一個小工具來搜尋 Google，第一次要先裝環境。</p>
             </div>
 
-            <!-- 事前準備 -->
             <div class="guide-section">
               <h3>
                 <svg class="guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M12 2L2 7l10 5 10-5-10-5z"/>
                   <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
                 </svg>
-                事前準備（只需做一次）
+                第一次使用？先裝這些
               </h3>
               <ol class="guide-steps">
                 <li>
-                  <strong>安裝 Node.js</strong>
-                  <p>前往 <a href="https://nodejs.org/" target="_blank" rel="noopener">nodejs.org</a> 下載安裝，選擇 LTS 版本，一直按下一步即可。</p>
+                  <strong>裝 Node.js</strong>
+                  <p>到 <a href="https://nodejs.org/" target="_blank" rel="noopener">nodejs.org</a> 下載 LTS 版，一直按下一步。</p>
                 </li>
                 <li>
-                  <strong>安裝 Git</strong>
-                  <p>前往 <a href="https://git-scm.com/download/win" target="_blank" rel="noopener">git-scm.com</a> 下載安裝，一直按下一步即可。</p>
+                  <strong>裝 Git</strong>
+                  <p>到 <a href="https://git-scm.com/download/win" target="_blank" rel="noopener">git-scm.com</a> 下載，一直按下一步。</p>
                 </li>
                 <li>
-                  <strong>下載 CLI 工具</strong>
-                  <p>開啟 <strong>PowerShell</strong>（在開始選單搜尋「PowerShell」），輸入：</p>
+                  <strong>下載工具</strong>
+                  <p>打開 <strong>PowerShell</strong>，貼上：</p>
                   <code class="guide-code">git clone https://github.com/helloruru/helloruru.github.io.git</code>
-                  <p>接著安裝相依套件：</p>
                   <code class="guide-code">cd helloruru.github.io/aio-view/cli<br>npm install<br>npx playwright install chromium</code>
                 </li>
               </ol>
             </div>
 
-            <!-- 使用流程 -->
             <div class="guide-section">
               <h3>
                 <svg class="guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <polyline points="4 17 10 11 4 5"/>
                   <line x1="12" y1="19" x2="20" y2="19"/>
                 </svg>
-                使用流程
+                怎麼用
               </h3>
               <ol class="guide-steps">
                 <li>
-                  <strong>在這個網頁：輸入 Sitemap 網址</strong>
-                  <p>在下方輸入你的網站 sitemap.xml 網址，點「解析」。</p>
+                  <strong>貼上 Sitemap 網址，按「解析」</strong>
+                  <p>如果是 Sitemap Index（WordPress 常見），會出現下拉選單讓你選子 Sitemap。</p>
                 </li>
                 <li>
-                  <strong>在這個網頁：選擇要監測的文章</strong>
-                  <p>勾選想監測的文章，可編輯搜尋關鍵字。點「產生 CLI 指令」會自動下載 <code>queries.json</code>。</p>
+                  <strong>挑選要監測的文章</strong>
+                  <p>用年份、月份篩選，勾選想監測的文章。</p>
                 </li>
                 <li>
-                  <strong>在電腦：把 queries.json 放到 CLI 資料夾</strong>
-                  <p>把下載的 <code>queries.json</code> 移到 <code>helloruru.github.io/aio-view/cli</code> 資料夾。</p>
+                  <strong>填寫搜尋語句</strong>
+                  <p>每篇文章需要一個搜尋語句（模擬使用者會怎麼搜）。可以手動編輯，也可以：</p>
+                  <p>按「複製 AI 提示詞」→ 貼到 ChatGPT 或 Claude → 拿到語句 → 按「批次貼入語句」一次貼回來。</p>
                 </li>
                 <li>
-                  <strong>在電腦：執行掃描</strong>
-                  <p>在 PowerShell 輸入（確保在 cli 資料夾）：</p>
+                  <strong>產生指令，下載 queries.json</strong>
+                  <p>按「產生 CLI 指令」，把下載的 <code>queries.json</code> 放到 <code>aio-view/cli</code> 資料夾。</p>
+                </li>
+                <li>
+                  <strong>在電腦跑掃描</strong>
+                  <p>在 PowerShell 輸入：</p>
                   <code class="guide-code">node scan.js --input queries.json --output results.json --domain 你的網域.com</code>
-                  <p>然後就會看到瀏覽器自動打開、搜尋，慢慢等它跑完。</p>
                 </li>
                 <li>
-                  <strong>在這個網頁：上傳結果</strong>
-                  <p>掃描完成後，在下方的「上傳結果」區塊上傳 <code>results.json</code>，就能看到監測報告！</p>
+                  <strong>上傳 results.json 看報告</strong>
+                  <p>掃描跑完後，把 <code>results.json</code> 拖到下方「上傳結果」區就好。</p>
                 </li>
               </ol>
             </div>
 
-            <!-- 注意事項 -->
             <div class="guide-section">
               <h3>
                 <svg class="guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -340,13 +346,12 @@
                   <line x1="12" y1="8" x2="12" y2="12"/>
                   <line x1="12" y1="16" x2="12.01" y2="16"/>
                 </svg>
-                注意事項
+                小提醒
               </h3>
               <ul class="guide-notes">
-                <li>每篇文章間隔 <strong>2.5 分鐘</strong>搜尋，避免被 Google 封鎖</li>
-                <li>50 篇文章約需 <strong>2 小時</strong>，建議睡前或外出時執行</li>
-                <li>執行中途可以關閉，下次會從上次進度繼續</li>
-                <li>請勿同時開其他 Chrome 視窗，可能會干擾掃描</li>
+                <li>每篇間隔 <strong>2.5 分鐘</strong>，50 篇約 <strong>2 小時</strong>，適合睡前放著跑</li>
+                <li>中途可以關掉，下次會接著上次的進度</li>
+                <li>跑的時候不要開其他 Chrome 視窗</li>
               </ul>
             </div>
           </div>
