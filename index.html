@@ -76,7 +76,7 @@
   
   <style>
     /* ============================================================
-     * Hello Ruru Design System v1.6 — Lab Directory
+     * Hello Ruru Design System v1.8 — Lab Directory
      * Font: GenSenRounded (源泉圓體)
      * ============================================================ */
 
@@ -255,8 +255,25 @@
 
     .card:hover {
       box-shadow: var(--shadow-md);
-      transform: translateY(-2px);
+      transform: translateY(-4px);
     }
+
+    /* Card accent bar */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: 24px 24px 0 0;
+      opacity: 0.5;
+      transition: opacity var(--transition);
+    }
+    .card:hover::before { opacity: 1; }
+    .card.accent-rose::before { background: linear-gradient(90deg, #D4A5A5, #F5D0C5); }
+    .card.accent-lavender::before { background: linear-gradient(90deg, #B8A9C9, #C9C1DC); }
+    .card.accent-sage::before { background: linear-gradient(90deg, #A8B5A0, #C5D4BD); }
+    .card.accent-blush::before { background: linear-gradient(90deg, #F5D0C5, #FEDFE1); }
+    .card.accent-sakura::before { background: linear-gradient(90deg, #FEDFE1, #E8B4B8); }
 
     .card-icon {
       width: 36px;
@@ -355,101 +372,6 @@
 
     .philosophy p:last-of-type {
       margin-bottom: 0;
-    }
-
-    /* === Color Playground === */
-    .color-playground {
-      margin-top: 32px;
-    }
-
-    .color-playground-label {
-      font-family: var(--font-small);
-      font-size: 12px;
-      font-weight: 400;
-      color: var(--color-text-muted);
-      margin-bottom: 16px;
-    }
-
-    .swatch-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 24px;
-    }
-
-    .swatch {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-      border: 3px solid transparent;
-      position: relative;
-    }
-
-    .swatch:hover {
-      transform: scale(1.15);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-    }
-
-    .swatch.active {
-      border-color: var(--color-text);
-      transform: scale(1.1);
-    }
-
-    .swatch-tooltip {
-      position: absolute;
-      bottom: calc(100% + 8px);
-      left: 50%;
-      transform: translateX(-50%) translateY(4px);
-      background: var(--color-text);
-      color: #fff;
-      font-family: var(--font-small);
-      font-size: 11px;
-      padding: 4px 10px;
-      border-radius: 8px;
-      white-space: nowrap;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s ease, transform 0.2s ease;
-    }
-
-    .swatch:hover .swatch-tooltip {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    /* Gradient Preview */
-    .gradient-preview {
-      height: 80px;
-      border-radius: var(--radius);
-      background: linear-gradient(135deg, var(--grad-from, #D4A5A5), var(--grad-to, #B8A9C9));
-      transition: background 0.6s ease;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .gradient-preview::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.08) 50%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .gradient-label {
-      font-family: var(--font-small);
-      font-size: 12px;
-      font-weight: 400;
-      color: rgba(255,255,255,0.85);
-      letter-spacing: 0.5px;
-      position: relative;
-      z-index: 1;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.15);
-      user-select: all;
     }
 
     /* === External Links === */
@@ -578,57 +500,26 @@
     .fade-in:nth-child(6) { animation-delay: 0.3s; }
   </style>
 
-  <!-- Structured Data / JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Hello Ruru Lab",
-    "alternateName": "Ruru Lab",
-    "url": "https://lab.helloruru.com/",
-    "description": "Hello Ruru 的數位實踐場。收錄 AI 工具、電子書轉檔、關鍵字分析等實用工具。",
-    "inLanguage": "zh-TW",
-    "author": {
-      "@type": "Person",
-      "name": "Kaoru Tsai",
-      "alternateName": "Ruru",
-      "email": "hello@helloruru.com",
-      "url": "https://kaorutsai.com"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Hello Ruru",
-      "url": "https://helloruru.com",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://lab.helloruru.com/icons/icon-512.svg"
-      }
-    }
-  }
-  </script>
+  <!-- Structured Data / JSON-LD (merged into head block above) -->
 </head>
 <body>
 
   <!-- Hero -->
   <header class="hero" id="top">
     <a href="#top" class="hero-logo" aria-label="回到頂部">
-      <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- 光芒 -->
-        <circle cx="32" cy="32" r="28" stroke="#D4A5A5" stroke-width="0.5" opacity="0.3"/>
-        <circle cx="32" cy="32" r="22" stroke="#B8A9C9" stroke-width="0.5" opacity="0.25"/>
-        <!-- 中心花朵 -->
-        <ellipse cx="32" cy="24" rx="4" ry="7" fill="#D4A5A5" opacity="0.6" transform="rotate(0 32 32)"/>
-        <ellipse cx="32" cy="24" rx="4" ry="7" fill="#B8A9C9" opacity="0.5" transform="rotate(60 32 32)"/>
-        <ellipse cx="32" cy="24" rx="4" ry="7" fill="#E8B4B8" opacity="0.5" transform="rotate(120 32 32)"/>
-        <ellipse cx="32" cy="24" rx="4" ry="7" fill="#C4B7D7" opacity="0.5" transform="rotate(180 32 32)"/>
-        <ellipse cx="32" cy="24" rx="4" ry="7" fill="#F5D0C5" opacity="0.5" transform="rotate(240 32 32)"/>
-        <ellipse cx="32" cy="24" rx="4" ry="7" fill="#FEDFE1" opacity="0.5" transform="rotate(300 32 32)"/>
-        <circle cx="32" cy="32" r="4" fill="#D4A5A5" opacity="0.8"/>
-        <!-- 葉片 -->
-        <path d="M32 42 C28 48, 22 50, 18 48" stroke="#A8B5A0" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.6"/>
-        <path d="M32 42 C36 48, 42 50, 46 48" stroke="#A8B5A0" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.6"/>
-        <path d="M30 44 C26 44, 22 42, 20 39" stroke="#A8B5A0" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.4"/>
-        <path d="M34 44 C38 44, 42 42, 44 39" stroke="#A8B5A0" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.4"/>
+      <svg width="64" height="76" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- DS v1.8 五色花 -->
+        <g transform="translate(50,46)">
+          <ellipse cx="0" cy="-20" rx="11" ry="18" fill="#E6B8C3" opacity="0.85"/>
+          <ellipse cx="0" cy="-20" rx="11" ry="18" fill="#D4A5A5" opacity="0.85" transform="rotate(72)"/>
+          <ellipse cx="0" cy="-20" rx="11" ry="18" fill="#C9C1DC" opacity="0.85" transform="rotate(144)"/>
+          <ellipse cx="0" cy="-20" rx="11" ry="18" fill="#E6B8C3" opacity="0.85" transform="rotate(216)"/>
+          <ellipse cx="0" cy="-20" rx="11" ry="18" fill="#B8A9C9" opacity="0.85" transform="rotate(288)"/>
+          <circle cx="0" cy="0" r="7" fill="#D4A5A5"/>
+        </g>
+        <!-- 莖 -->
+        <line x1="50" y1="54" x2="50" y2="82" stroke="#8FA88C" stroke-width="2.5" stroke-linecap="round"/>
+        <ellipse cx="42" cy="70" rx="7" ry="3.5" fill="#8FA88C" opacity="0.5" transform="rotate(-30, 42, 70)"/>
       </svg>
     </a>
     <div class="hero-brand" style="background: linear-gradient(135deg, #D4A5A5, #B8A9C9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 32px; font-weight: 700; letter-spacing: 3px;">Hello Ruru</div>
@@ -644,8 +535,8 @@
       <p style="padding-left: 16px;">1. SGE (Search Generative Experience) 最短路徑最佳化<br>2. 繁體中文語意分析的最佳指令邏輯。</p>
       <p>本站紀錄 AI 工具產製文案的實踐過程，並深入剖析演算法與語意分析邏輯。</p>
       <p style="font-size: 13px; color: var(--color-text-muted); margin-top: 8px; margin-bottom: 0;">
-        🪻 原創叮嚀：本站內容受著作權保護，未經授權請勿轉載。<br>
-        📧 聯繫窗口：<a href="mailto:hello@helloruru.com" style="color: var(--color-primary); text-decoration: underline; font-weight: 500;">hello@helloruru.com</a>
+        原創叮嚀：本站內容受著作權保護，未經授權請勿轉載。<br>
+        聯繫窗口：<a href="mailto:hello@helloruru.com" style="color: var(--color-primary); text-decoration: underline; font-weight: 500;">hello@helloruru.com</a>
       </p>
     </section>
 
@@ -702,7 +593,7 @@
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
   </a>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  <script>
     // === Footer Year ===
     document.getElementById('footerYear').textContent = new Date().getFullYear();
 
@@ -711,65 +602,6 @@
     window.addEventListener('scroll', () => {
       backToTop.classList.toggle('visible', window.scrollY > 300);
     }, { passive: true });
-
-    // === Color Playground ===
-    const PALETTE = [
-      { name: '乾燥玫瑰', hex: '#D4A5A5' },
-      { name: '薰衣草紫', hex: '#B8A9C9' },
-      { name: '腮紅粉',   hex: '#F5D0C5' },
-      { name: '灰玫瑰',   hex: '#C9929A' },
-      { name: '撫子粉',   hex: '#E8B4B8' },
-      { name: '櫻花粉',   hex: '#FEDFE1' },
-      { name: '藕荷',     hex: '#9B7E93' },
-      { name: '藤紫',     hex: '#C4B7D7' },
-      { name: '桔梗紫',   hex: '#8F77B5' },
-      { name: '鼠尾草綠', hex: '#A8B5A0' },
-    ];
-
-    const swatchRow = document.getElementById('swatchRow');
-    const gradientPreview = document.getElementById('gradientPreview');
-    const gradientLabel = document.getElementById('gradientLabel');
-
-    let selected = [0, 1]; // default: Rose → Lavender
-
-    function renderSwatches() {
-      swatchRow.innerHTML = '';
-      PALETTE.forEach((c, i) => {
-        const el = document.createElement('div');
-        el.className = 'swatch' + (selected.includes(i) ? ' active' : '');
-        el.style.background = c.hex;
-        el.setAttribute('role', 'button');
-        el.setAttribute('aria-label', c.name + ' ' + c.hex);
-        el.tabIndex = 0;
-
-        const tip = document.createElement('span');
-        tip.className = 'swatch-tooltip';
-        tip.textContent = c.name;
-        el.appendChild(tip);
-
-        el.addEventListener('click', () => pickColor(i));
-        el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickColor(i); }});
-        swatchRow.appendChild(el);
-      });
-    }
-
-    function pickColor(index) {
-      if (selected[0] === index) return;
-      selected = [selected[1], index];
-      updateGradient();
-      renderSwatches();
-    }
-
-    function updateGradient() {
-      const from = PALETTE[selected[0]].hex;
-      const to = PALETTE[selected[1]].hex;
-      gradientPreview.style.setProperty('--grad-from', from);
-      gradientPreview.style.setProperty('--grad-to', to);
-      gradientLabel.textContent = '135deg · ' + from + ' → ' + to;
-    }
-
-    renderSwatches();
-    updateGradient();
 
     // === Fade-in Observer ===
     const fadeEls = document.querySelectorAll('.fade-in');
