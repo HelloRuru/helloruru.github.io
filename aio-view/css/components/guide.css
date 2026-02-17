@@ -123,6 +123,7 @@
   padding-left: 36px;
   margin-bottom: var(--space-md);
   counter-increment: step;
+  overflow: hidden;
 }
 
 .guide-steps li:last-child {
@@ -146,12 +147,16 @@
   border-radius: var(--radius-full);
 }
 
-.guide-steps li strong {
+.guide-steps li > strong {
   display: block;
   font-size: 14px;
   font-weight: 500;
   color: var(--color-ink);
   margin-bottom: var(--space-xs);
+}
+
+.guide-steps li p strong {
+  font-weight: 700;
 }
 
 .guide-steps li p {
