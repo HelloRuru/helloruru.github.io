@@ -66,6 +66,56 @@ const App = {
     document.getElementById('export-csv-btn')?.addEventListener('click', () => {
       ResultsTable.exportCsv();
     });
+
+    // 複製 AI 提示詞
+    document.getElementById('copy-prompt-btn')?.addEventListener('click', () => {
+      const selected = ArticlesTable.getSelectedArticles();
+      if (selected.length === 0) {
+        Toast.error('請先選擇要監測的文章');
+        return;
+      }
+      const prompt = CliGenerator.getPromptTemplate(ArticlesTable.articles, this.domain);
+      Utils.copyToClipboard(prompt).then(ok => {
+        if (ok) Toast.success('AI 提示詞已複製，請貼到 ChatGPT 或 Claude');
+        else Toast.error('複製失敗，請手動選取');
+      });
+    });
+
+    // 批次編輯語句 — 開啟 Modal
+    document.getElementById('batch-edit-btn')?.addEventListener('click', () => {
+      document.getElementById('query-editor-modal')?.classList.remove('hidden');
+    });
+
+    // Modal 關閉
+    document.getElementById('modal-close-btn')?.addEventListener('click', () => {
+      document.getElementById('query-editor-modal')?.classList.add('hidden');
+    });
+    document.getElementById('modal-cancel-btn')?.addEventListener('click', () => {
+      document.getElementById('query-editor-modal')?.classList.add('hidden');
+    });
+
+    // Modal 套用
+    document.getElementById('modal-apply-btn')?.addEventListener('click', () => {
+      const text = document.getElementById('batch-query-input')?.value || '';
+      const pairs = text.split('\n')
+        .map(line => line.trim())
+        .filter(Boolean)
+        .map(line => {
+          const parts = line.split('|').map(s => s.trim());
+          return { title: parts[0] || '', query: parts[1] || '' };
+        })
+        .filter(p => p.title && p.query);
+
+      if (pairs.length === 0) {
+        Toast.error('未偵測到有效語句，請確認格式（標題 | 語句）');
+        return;
+      }
+
+      const count = ArticlesTable.batchUpdateQueries(pairs);
+      Toast.success(`已更新 ${count} 篇文章的搜尋語句`);
+      document.getElementById('query-editor-modal')?.classList.add('hidden');
+      document.getElementById('batch-query-input').value = '';
+    });
   },
 
   /**

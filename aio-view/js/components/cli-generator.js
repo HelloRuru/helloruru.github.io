@@ -154,6 +154,33 @@ node scan.js --input queries.json --output results.json --domain ${domain}
   },
 
   /**
+   * 產生 AI 提示詞範本
+   * @param {Array} articles - 文章清單
+   * @param {string} domain - 網域
+   * @returns {string} 提示詞
+   */
+  getPromptTemplate(articles, domain) {
+    const selected = articles.filter(a => a.selected);
+    const articleList = selected.map((a, i) =>
+      `${i + 1}. ${a.title} (${a.url})`
+    ).join('\n');
+
+    return `我有以下 ${selected.length} 篇文章，想監測它們是否出現在 Google AI Overview 搜尋結果中。
+請為每篇文章各產生 1 條最可能觸發 AI Overview 的搜尋語句。
+
+規則：
+- 搜尋語句用繁體中文
+- 模擬一般使用者的搜尋習慣（口語化、5-8 個字）
+- 不要加引號、site: 等搜尋指令
+- 回覆格式：每行一條，「文章標題 | 搜尋語句」
+
+文章清單：
+${articleList}
+
+網域：${domain}`;
+  },
+
+  /**
    * 顯示區塊
    */
   show() {

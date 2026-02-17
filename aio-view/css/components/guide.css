@@ -100,7 +100,7 @@
   color: var(--color-ink);
   margin-bottom: var(--space-md);
   padding-bottom: var(--space-sm);
-  border-bottom: 1px solid var(--color-fog);
+  border-bottom: 1px solid var(--color-mist);
 }
 
 .guide-section h3 .guide-icon {

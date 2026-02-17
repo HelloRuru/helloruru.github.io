@@ -84,7 +84,11 @@ const Sitemap = {
     if (sitemapIndex.length > 0) {
       return {
         type: 'index',
-        sitemaps: Array.from(sitemapIndex).map(loc => loc.textContent)
+        sitemaps: Array.from(sitemapIndex).map(loc => {
+          const parent = loc.closest('sitemap');
+          const lastmod = parent?.querySelector('lastmod')?.textContent || '';
+          return { url: loc.textContent, lastmod };
+        })
       };
     }
 
@@ -100,11 +104,13 @@ const Sitemap = {
       // 過濾非文章頁面
       if (this.isArticleUrl(loc)) {
         const title = this.extractTitle(loc);
+        const lastmod = urlEl.querySelector('lastmod')?.textContent || '';
         articles.push({
           id: `article-${index}`,
           url: loc,
           title: title,
           query: this.generateQuery(title, domain),
+          lastmod: lastmod,
           selected: true
         });
       }

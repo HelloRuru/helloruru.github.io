@@ -1,0 +1,92 @@
+/* ================================================
+   Modal — 彈窗
+   ================================================ */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--space-md);
+}
+.modal-overlay.hidden {
+  display: none;
+}
+
+.modal-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-deep);
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-lg);
+  border-bottom: 1px solid var(--color-mist);
+}
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-gray);
+  padding: var(--space-xs);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-close:hover {
+  background: var(--color-mist);
+}
+
+.modal-body {
+  padding: var(--space-lg);
+  overflow-y: auto;
+}
+
+.textarea-input {
+  width: 100%;
+  padding: var(--space-md);
+  font-size: 14px;
+  font-family: var(--font-body);
+  border: 1px solid var(--color-mist);
+  border-radius: var(--radius-md);
+  resize: vertical;
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--bg-card);
+  box-sizing: border-box;
+  margin-top: var(--space-sm);
+}
+.textarea-input:focus {
+  outline: none;
+  border-color: var(--color-rose);
+  box-shadow: 0 0 0 3px rgba(212, 165, 165, 0.2);
+}
+.textarea-input::placeholder {
+  color: var(--color-light-gray);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  border-top: 1px solid var(--color-mist);
+}

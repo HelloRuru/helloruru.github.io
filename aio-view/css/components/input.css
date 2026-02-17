@@ -65,3 +65,36 @@
 .upload-zone p {
   text-align: center;
 }
+
+/* Sitemap Picker */
+.sitemap-picker {
+  margin-top: var(--space-md);
+}
+.sitemap-picker.hidden {
+  display: none;
+}
+.sitemap-picker label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+  margin-bottom: var(--space-sm);
+}
+.select-input {
+  flex: 1;
+  padding: var(--space-md);
+  font-size: 14px;
+  font-family: var(--font-body);
+  border: 1px solid var(--color-mist);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  color: var(--color-text);
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.select-input:focus {
+  outline: none;
+  border-color: var(--color-rose);
+  box-shadow: 0 0 0 3px rgba(212, 165, 165, 0.2);
+}

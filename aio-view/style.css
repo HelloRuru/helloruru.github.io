@@ -1,6 +1,6 @@
 /* ================================================
    AIO View — Modular CSS Structure
-   Design System v1.6
+   Design System v1.9
    ================================================ */
 
 /* 基礎層 */
@@ -23,6 +23,7 @@
 @import url('./css/components/footer.css');       /* 頁尾 */
 @import url('./css/components/empty-state.css');  /* 空白狀態 */
 @import url('./css/components/guide.css');        /* 使用說明 */
+@import url('./css/components/modal.css');        /* 彈窗 */
 
 /* 響應式 */
 @import url('./css/responsive.css');     /* 所有 @media queries */

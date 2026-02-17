@@ -194,7 +194,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-  <!-- 源泉圓體 GenSenRounded — Design System v1.6 -->
+  <!-- 源泉圓體 GenSenRounded — Design System v1.9 -->
   <style>
     @font-face {
       font-family: 'GenSenRounded';
@@ -228,8 +228,8 @@
           <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
             <defs>
               <linearGradient id="logo-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.95"/>
-                <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:0.85"/>
+                <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1"/>
+                <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:1"/>
               </linearGradient>
             </defs>
             <circle cx="13" cy="13" r="6" stroke="url(#logo-bg)" stroke-width="2.5" fill="none"/>
@@ -374,6 +374,13 @@
             </button>
           </div>
           <p class="hint" id="fetch-status"></p>
+          <div class="sitemap-picker hidden" id="sitemap-picker">
+            <label for="sitemap-select">選擇子 Sitemap：</label>
+            <div class="input-group">
+              <select id="sitemap-select" class="select-input"></select>
+              <button class="btn btn-primary" id="fetch-sub-btn">載入</button>
+            </div>
+          </div>
         </section>
 
         <!-- Step 2: Articles List -->
@@ -385,11 +392,28 @@
           </h2>
           <p class="section-desc">自動產生搜尋語句，可手動編輯</p>
 
+          <div class="article-filters hidden" id="article-filters">
+            <div class="filter-row">
+              <select id="filter-year" class="select-input select-sm">
+                <option value="">全部年份</option>
+              </select>
+              <select id="filter-month" class="select-input select-sm">
+                <option value="">全部月份</option>
+              </select>
+              <span class="filter-count" id="filter-count"></span>
+            </div>
+            <div class="filter-row">
+              <label class="checkbox-label">
+                <input type="checkbox" id="select-all"> 全選
+              </label>
+            </div>
+          </div>
+
           <div class="table-wrapper">
             <table class="data-table" id="articles-table">
               <thead>
                 <tr>
-                  <th class="col-check"><input type="checkbox" id="select-all"></th>
+                  <th class="col-check"></th>
                   <th class="col-title">文章標題</th>
                   <th class="col-query">搜尋語句</th>
                 </tr>
@@ -401,6 +425,20 @@
           </div>
 
           <div class="actions">
+            <button class="btn btn-ghost" id="copy-prompt-btn">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+              </svg>
+              複製 AI 提示詞
+            </button>
+            <button class="btn btn-ghost" id="batch-edit-btn">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+              批次貼入語句
+            </button>
             <button class="btn btn-secondary" id="export-queries-btn">
               <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
@@ -528,6 +566,29 @@
 
       </div>
     </main>
+
+    <!-- Batch Query Editor Modal -->
+    <div class="modal-overlay hidden" id="query-editor-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>批次貼入搜尋語句</h3>
+          <button class="btn-close" id="modal-close-btn">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p class="section-desc">貼上 AI 產生的語句（每行格式：文章標題 | 搜尋語句）</p>
+          <textarea id="batch-query-input" class="textarea-input" rows="10" placeholder="高雄左營美食推薦 | 左營 美食&#10;鳳山夜市必吃 | 鳳山 夜市 推薦"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="modal-cancel-btn">取消</button>
+          <button class="btn btn-primary" id="modal-apply-btn">套用</button>
+        </div>
+      </div>
+    </div>
 
     <!-- Footer -->
     <footer class="site-footer">
