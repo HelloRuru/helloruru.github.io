@@ -11,7 +11,8 @@
           "description": "監測文章是否出現在 Google AI Overview",
           "url": "/aio-view/",
           "icon": "search-check",
-          "iconColor": "rose"
+          "iconColor": "rose",
+          "badge": { "text": "開發中", "type": "dev" }
         },
         {
           "id": "table-fixer",
