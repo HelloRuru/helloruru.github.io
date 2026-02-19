@@ -1,5 +1,5 @@
 /* ================================================
-   SEO Quest - Design Tokens
+   SEO Quest - Design Tokens (DS v1.9)
    雙層變數架構：Palette + Semantic
    ================================================ */
 
@@ -71,26 +71,41 @@
   --gray-800: #1F2937;
   --gray-900: #111827;
 
-  /* ==================== 功能色 ==================== */
+  /* ==================== 功能色 (v1.9 DS 標準) ==================== */
   --green-50: #F0FDF4;
   --green-100: #DCFCE7;
-  --green-500: #22C55E;   /* 成功 */
-  --green-600: #16A34A;
+  --green-500: #7BAE7F;   /* 成功 — v1.9 */
+  --green-600: #6A9D6E;
 
   --red-50: #FEF2F2;
   --red-100: #FEE2E2;
-  --red-500: #EF4444;     /* 錯誤 */
-  --red-600: #DC2626;
+  --red-500: #C97070;     /* 錯誤 — v1.9 */
+  --red-600: #B85E5E;
 
   --yellow-50: #FEFCE8;
   --yellow-100: #FEF9C3;
-  --yellow-500: #EAB308;  /* 警告 */
-  --yellow-600: #CA8A04;
+  --yellow-500: #D4A85A;  /* 警告 — v1.9 */
+  --yellow-600: #C09548;
 
   --blue-50: #EFF6FF;
   --blue-100: #DBEAFE;
-  --blue-500: #3B82F6;    /* 資訊 */
-  --blue-600: #2563EB;
+  --blue-500: #6B9EC2;    /* 資訊 — v1.9 */
+  --blue-600: #5A8DB1;
+
+  /* ==================== v1.9 品牌色別名 ==================== */
+  --color-rose: var(--rose-500);
+  --color-lavender: var(--purple-500);
+  --color-blush: #F5D0C5;
+  --color-dusty-rose: #C9929A;
+  --color-nadeshiko: #E8B4B8;
+  --color-sakura: #FEDFE1;
+  --color-lotus: #9B7E93;
+  --color-wisteria: #C4B7D7;
+  --color-bellflower: #8F77B5;
+  --color-sage: #A8B5A0;
+  --color-mist: #E8E4E1;
+  --color-warm-gray: #B5ADA7;
+  --color-charcoal: #5C5856;
 
   /* ==================== 評分顏色 ==================== */
   --gold-500: #FFD700;    /* 優秀 - 金色 */
@@ -335,30 +350,36 @@
 }
 
 /* ================================================
-   深色模式（未來擴充）
+   深色模式 — v1.9 暖可可配色
    ================================================ */
 
 [data-theme="dark"] {
   /* 重新定義語意變數即可，不需改動 Palette */
-  --color-background: var(--gray-900);
-  --color-background-alt: var(--gray-800);
-  --color-background-hover: var(--gray-700);
+  --color-background: #1E181B;
+  --color-background-alt: #282224;
+  --color-background-hover: #3D3538;
 
-  --color-surface: var(--gray-800);
-  --color-surface-hover: var(--gray-700);
-  --color-surface-elevated: var(--gray-900);
+  --color-surface: #282224;
+  --color-surface-hover: #3D3538;
+  --color-surface-elevated: #1E181B;
 
-  --color-text-primary: var(--gray-50);
-  --color-text-secondary: var(--gray-300);
-  --color-text-tertiary: var(--gray-400);
-  --color-text-inverse: var(--gray-900);
+  --color-text-primary: #EDE8E9;
+  --color-text-secondary: #C8C0C2;
+  --color-text-tertiary: #9E9496;
+  --color-text-inverse: #1E181B;
 
-  --color-border: var(--gray-700);
-  --color-border-hover: var(--gray-600);
+  --color-border: #4D4548;
+  --color-border-hover: #5D5558;
 
-  /* 品牌色調整為較亮的版本 */
-  --color-primary: var(--rose-400);
-  --color-primary-hover: var(--rose-300);
-  --color-secondary: var(--purple-400);
-  --color-secondary-hover: var(--purple-300);
+  /* 品牌色 — 亮度 +10% */
+  --color-primary: #E0AFAF;
+  --color-primary-hover: #EBC4C4;
+  --color-secondary: #C8B9DB;
+  --color-secondary-hover: #D4C9E5;
+
+  /* 狀態色 — 深色模式版 */
+  --color-success: #8FC093;
+  --color-warning: #DEBB78;
+  --color-error: #D48A8A;
+  --color-info: #88B5D4;
 }

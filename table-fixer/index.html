@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    /* === Design System v1.6 Font Faces — GenSenRounded (源泉圓體) === */
+    /* === Design System v1.9 Font Faces — GenSenRounded (源泉圓體) === */
     @font-face {
       font-family: 'GenSenRounded';
       src: url('https://lab.helloruru.com/fonts/GenSenRounded-Regular.woff2') format('woff2');
@@ -31,38 +31,65 @@
       font-display: swap;
     }
 
-    /* === CSS Variables === */
+    /* === CSS Variables — DS v1.9 === */
     :root {
+      /* Primary */
       --color-rose: #D4A5A5;
       --color-lavender: #B8A9C9;
+      /* Pink Palette */
       --color-blush: #F5D0C5;
-      --color-grey-rose: #C9929A;
+      --color-dusty-rose: #C9929A;
+      --color-grey-rose: #C9929A; /* 舊名相容 */
       --color-nadeshiko: #E8B4B8;
       --color-sakura: #FEDFE1;
-      --color-fuji: #C4B7D7;
+      /* Purple Palette */
+      --color-lotus: #9B7E93;
+      --color-wisteria: #C4B7D7;
+      --color-fuji: #C4B7D7; /* 舊名相容 */
       --color-bellflower: #8F77B5;
+      /* Neutral */
       --color-sage: #A8B5A0;
       --color-mist: #E8E4E1;
-      --color-warm-grey: #B5ADA7;
+      --color-warm-gray: #B5ADA7;
+      --color-warm-grey: #B5ADA7; /* 舊名相容 */
       --color-charcoal: #5C5856;
+      /* Text */
       --color-ink: #333333;
       --color-body: #4A4A4A;
       --color-caption: #888888;
-      --color-light-grey: #AAAAAA;
+      --color-light-gray: #AAAAAA;
+      --color-light-grey: #AAAAAA; /* 舊名相容 */
+      /* Status — v1.9 */
+      --color-success: #7BAE7F;
+      --color-warning: #D4A85A;
+      --color-error: #C97070;
+      --color-info: #6B9EC2;
+      /* Background */
       --color-bg: #FAFAFA;
       --color-card: #FFFFFF;
+      /* Gradients */
       --gradient-main: linear-gradient(135deg, #D4A5A5, #B8A9C9);
       --gradient-pink-purple: linear-gradient(135deg, #F5D0C5, #C4B7D7);
+      /* Radius */
       --radius-sm: 8px;
       --radius-md: 12px;
       --radius-lg: 24px;
       --radius-full: 50%;
+      /* Shadows */
       --shadow-soft: 0 2px 8px rgba(0,0,0,0.06);
       --shadow-mid: 0 4px 16px rgba(0,0,0,0.08);
       --shadow-deep: 0 8px 32px rgba(0,0,0,0.12);
+      /* Typography */
       --font-title: 'GenSenRounded', 'Noto Sans TC', sans-serif;
       --font-body: 'GenSenRounded', 'Noto Sans TC', sans-serif;
       --font-small: 'Noto Sans TC', sans-serif;
+      /* Spacing — 4px 基準 */
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+      --space-2xl: 48px;
     }
 
     /* === Reset & Base === */

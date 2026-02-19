@@ -1,13 +1,13 @@
 /**
  * SGE 文案助手 - Base Styles
- * Design System v1.7 — CSS Variables + Reset
+ * Design System v1.9 — CSS Variables + Reset
  */
 
 /* ========================================
    CSS Variables
    ======================================== */
 :root {
-  /* Colors */
+  /* Primary Colors */
   --color-primary: #D4A5A5;
   --color-primary-light: #E8C4C4;
   --color-primary-dark: #C08A8A;
@@ -15,16 +15,34 @@
   --color-secondary-light: #D4C9E0;
   --color-secondary-dark: #9B8AB0;
 
-  --color-success: #A8B5A0;
-  --color-warning: #E5A853;
-  --color-error: #BF1E33;
-  --color-info: #6B9AC4;
+  /* v1.9 Palette — DS 標準名稱 */
+  --color-rose: #D4A5A5;
+  --color-lavender: #B8A9C9;
+  --color-blush: #F5D0C5;
+  --color-dusty-rose: #C9929A;
+  --color-nadeshiko: #E8B4B8;
+  --color-sakura: #FEDFE1;
+  --color-lotus: #9B7E93;
+  --color-wisteria: #C4B7D7;
+  --color-bellflower: #8F77B5;
+  --color-sage: #A8B5A0;
+  --color-mist: #E8E4E1;
+  --color-warm-gray: #B5ADA7;
+  --color-charcoal: #5C5856;
 
+  /* Status Colors — v1.9 */
+  --color-success: #7BAE7F;
+  --color-warning: #D4A85A;
+  --color-error: #C97070;
+  --color-info: #6B9EC2;
+
+  /* Text */
   --color-text: #333333;
   --color-text-secondary: #4A4A4A;
   --color-text-muted: #888888;
   --color-text-light: #AAAAAA;
 
+  /* Background */
   --color-bg: #FAFAFA;
   --color-bg-card: #FFFFFF;
   --color-bg-hover: #F5F5F5;
@@ -40,14 +58,19 @@
   --font-title: 'GenSenRounded', 'Noto Sans TC', sans-serif;
   --font-body: 'GenSenRounded', 'Noto Sans TC', sans-serif;
   --font-ui: 'Noto Sans TC', sans-serif;
+  --font-display: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  --font-heading: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  --font-small: 'Noto Sans TC', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
-  /* Spacing */
+  /* Spacing — 4px 基準 */
   --space-xs: 4px;
   --space-sm: 8px;
   --space-md: 16px;
   --space-lg: 24px;
   --space-xl: 32px;
   --space-2xl: 48px;
+  --space-3xl: 64px;
 
   /* Border Radius */
   --radius-sm: 8px;
@@ -71,17 +94,23 @@
   --panel-gap: 24px;
 }
 
-/* Dark Mode */
+/* Dark Mode — v1.9 暖可可配色 */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #1A1A1A;
-    --color-bg-card: #242424;
-    --color-bg-hover: #2A2A2A;
-    --color-text: #E8E8E8;
-    --color-text-secondary: #CCCCCC;
-    --color-text-muted: #888888;
-    --color-border: #3A3A3A;
-    --color-border-light: #2F2F2F;
+    --color-bg: #1E181B;
+    --color-bg-card: #282224;
+    --color-bg-hover: #3D3538;
+    --color-text: #EDE8E9;
+    --color-text-secondary: #C8C0C2;
+    --color-text-muted: #9E9496;
+    --color-border: #4D4548;
+    --color-border-light: #3D3538;
+    --color-primary: #E0AFAF;
+    --color-secondary: #C8B9DB;
+    --color-success: #8FC093;
+    --color-warning: #DEBB78;
+    --color-error: #D48A8A;
+    --color-info: #88B5D4;
   }
 }
 
