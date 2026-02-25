@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIO View // 操作手冊 — SYSTEM MANUAL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --cyan:#00f0ff;
+  --magenta:#ff00aa;
+  --green:#00ff88;
+  --yellow:#ffdd00;
+  --bg:#06060c;
+  --surface:#0c0c18;
+  --surface2:#12121f;
+  --border:rgba(0,240,255,.12);
+  --text:#c8d6e5;
+  --text-dim:#5a6a7a;
+  --mono:'JetBrains Mono','Fira Code','Consolas',monospace;
+  --sans:'Noto Sans TC',sans-serif;
+  --display:'Orbitron','JetBrains Mono',monospace;
+  --glow-cyan:0 0 8px rgba(0,240,255,.4),0 0 24px rgba(0,240,255,.15);
+  --glow-magenta:0 0 8px rgba(255,0,170,.4),0 0 24px rgba(255,0,170,.15);
+  --glow-green:0 0 8px rgba(0,255,136,.4),0 0 24px rgba(0,255,136,.15);
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:15px;
+  line-height:1.8;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ========= BOOT SCREEN ========= */
+#boot-screen{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  transition:opacity .6s,visibility .6s;
+}
+#boot-screen.done{opacity:0;visibility:hidden;pointer-events:none}
+
+.boot-text{
+  font-family:var(--mono);
+  color:var(--cyan);
+  font-size:14px;
+  text-align:left;
+  width:min(480px,90vw);
+  white-space:pre-wrap;
+  opacity:0;
+}
+.boot-text.visible{opacity:1}
+
+.boot-logo{
+  font-family:var(--display);
+  font-size:clamp(28px,5vw,42px);
+  font-weight:900;
+  letter-spacing:.15em;
+  color:var(--cyan);
+  text-shadow:var(--glow-cyan),0 0 60px rgba(0,240,255,.2);
+  margin-top:24px;
+  opacity:0;
+  transform:scale(.9);
+  transition:all .8s cubic-bezier(.16,1,.3,1);
+}
+.boot-logo.visible{opacity:1;transform:scale(1)}
+
+.boot-status{
+  font-family:var(--mono);
+  font-size:12px;
+  color:var(--green);
+  margin-top:12px;
+  opacity:0;
+  transition:opacity .4s;
+}
+.boot-status.visible{opacity:1}
+
+/* ========= SCANLINES ========= */
+.scanlines{
+  position:fixed;inset:0;z-index:9998;
+  pointer-events:none;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,240,255,.015) 2px,
+    rgba(0,240,255,.015) 4px
+  );
+  animation:scanShift 8s linear infinite;
+}
+@keyframes scanShift{0%{background-position-y:0}100%{background-position-y:100px}}
+
+/* ========= GRID BG ========= */
+.grid-bg{
+  position:fixed;inset:0;z-index:-1;
+  background-image:
+    linear-gradient(rgba(0,240,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,240,255,.03) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+
+/* ========= LAYOUT ========= */
+.page{
+  max-width:860px;
+  margin:0 auto;
+  padding:40px 24px 80px;
+  opacity:0;
+  transition:opacity .6s .2s;
+}
+.page.visible{opacity:1}
+
+/* ========= TOP BAR ========= */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 0;
+  border-bottom:1px solid var(--border);
+  margin-bottom:40px;
+}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.topbar-back{
+  font-family:var(--mono);
+  font-size:13px;
+  color:var(--cyan);
+  text-decoration:none;
+  display:flex;align-items:center;gap:6px;
+  transition:text-shadow .2s;
+}
+.topbar-back:hover{text-shadow:var(--glow-cyan)}
+.topbar-back svg{width:16px;height:16px}
+.topbar-tag{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--bg);
+  background:var(--cyan);
+  padding:2px 8px;
+  border-radius:2px;
+  letter-spacing:.08em;
+  font-weight:700;
+}
+.topbar-right{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--text-dim);
+}
+
+/* ========= HERO ========= */
+.hero{
+  text-align:center;
+  margin-bottom:56px;
+  position:relative;
+}
+.hero-label{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.3em;
+  text-transform:uppercase;
+  color:var(--magenta);
+  margin-bottom:8px;
+}
+.hero h1{
+  font-family:var(--display);
+  font-size:clamp(24px,4.5vw,38px);
+  font-weight:900;
+  letter-spacing:.08em;
+  color:#fff;
+  text-shadow:var(--glow-cyan);
+  line-height:1.3;
+  margin-bottom:12px;
+}
+.hero-sub{
+  font-size:15px;
+  color:var(--text-dim);
+  max-width:560px;
+  margin:0 auto;
+}
+.hero-line{
+  width:120px;height:2px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+  margin:20px auto 0;
+  box-shadow:var(--glow-cyan);
+}
+
+/* ========= HUD SECTION ========= */
+.section{
+  margin-bottom:48px;
+  position:relative;
+}
+
+.section-header{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:20px;
+  padding-bottom:12px;
+  border-bottom:1px solid var(--border);
+}
+.section-icon{
+  width:36px;height:36px;
+  border:1px solid var(--cyan);
+  border-radius:4px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--cyan);
+  flex-shrink:0;
+  box-shadow:var(--glow-cyan);
+  background:rgba(0,240,255,.04);
+}
+.section-icon svg{width:18px;height:18px}
+.section-title{
+  font-family:var(--display);
+  font-size:clamp(14px,2.5vw,17px);
+  font-weight:700;
+  letter-spacing:.1em;
+  color:var(--cyan);
+  text-shadow:0 0 12px rgba(0,240,255,.3);
+}
+.section-tag{
+  font-family:var(--mono);
+  font-size:10px;
+  padding:2px 8px;
+  border:1px solid var(--magenta);
+  color:var(--magenta);
+  border-radius:2px;
+  letter-spacing:.08em;
+}
+
+/* ========= STEP CARDS ========= */
+.steps{display:flex;flex-direction:column;gap:16px}
+
+.step{
+  display:flex;gap:16px;
+  padding:20px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:6px;
+  position:relative;
+  overflow:hidden;
+  transition:border-color .3s,box-shadow .3s;
+}
+.step:hover{
+  border-color:rgba(0,240,255,.3);
+  box-shadow:inset 0 0 30px rgba(0,240,255,.03),var(--glow-cyan);
+}
+.step::before{
+  content:'';
+  position:absolute;top:0;left:0;
+  width:3px;height:100%;
+  background:linear-gradient(180deg,var(--cyan),var(--magenta));
+  opacity:.6;
+}
+
+.step-num{
+  font-family:var(--display);
+  font-size:28px;
+  font-weight:900;
+  color:var(--cyan);
+  text-shadow:var(--glow-cyan);
+  line-height:1;
+  min-width:36px;
+  padding-top:2px;
+}
+.step-body{flex:1;min-width:0}
+.step-title{
+  font-weight:700;
+  font-size:16px;
+  color:#eee;
+  margin-bottom:4px;
+}
+.step-desc{
+  font-size:14px;
+  color:var(--text-dim);
+  line-height:1.7;
+}
+.step-desc code{
+  font-family:var(--mono);
+  font-size:12px;
+  background:rgba(0,240,255,.08);
+  color:var(--cyan);
+  padding:2px 6px;
+  border-radius:3px;
+  border:1px solid rgba(0,240,255,.15);
+}
+
+/* ========= SETUP TERMINAL ========= */
+.terminal{
+  background:#0a0a14;
+  border:1px solid var(--border);
+  border-radius:6px;
+  overflow:hidden;
+  margin-top:12px;
+}
+.terminal-bar{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 14px;
+  background:rgba(0,240,255,.04);
+  border-bottom:1px solid var(--border);
+}
+.terminal-dot{width:8px;height:8px;border-radius:50%;background:var(--text-dim)}
+.terminal-dot:nth-child(1){background:#ff5f57}
+.terminal-dot:nth-child(2){background:#ffbd2e}
+.terminal-dot:nth-child(3){background:#28c840}
+.terminal-label{
+  font-family:var(--mono);font-size:11px;color:var(--text-dim);margin-left:auto;
+}
+.terminal-body{
+  padding:16px;
+  font-family:var(--mono);
+  font-size:13px;
+  line-height:1.9;
+  color:var(--text);
+  overflow-x:auto;
+}
+.terminal-body .cmd{color:var(--green)}
+.terminal-body .comment{color:var(--text-dim);font-style:italic}
+.terminal-body .highlight{color:var(--yellow)}
+
+/* ========= FEATURE CARDS ========= */
+.features{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+.feature{
+  padding:20px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:6px;
+  position:relative;
+  overflow:hidden;
+  transition:border-color .3s,transform .2s;
+}
+.feature:hover{
+  border-color:rgba(255,0,170,.3);
+  transform:translateY(-2px);
+}
+.feature::after{
+  content:'';
+  position:absolute;top:0;right:0;
+  width:40px;height:40px;
+  background:radial-gradient(circle at top right,rgba(255,0,170,.08),transparent 70%);
+}
+.feature-badge{
+  display:inline-block;
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:.08em;
+  padding:2px 8px;
+  border-radius:2px;
+  margin-bottom:10px;
+  font-weight:700;
+}
+.feature-badge.new{background:var(--magenta);color:#fff}
+.feature-badge.ai{background:var(--green);color:var(--bg)}
+.feature-badge.chart{background:var(--cyan);color:var(--bg)}
+.feature-badge.time{background:var(--yellow);color:var(--bg)}
+
+.feature h4{
+  font-size:15px;
+  font-weight:700;
+  color:#eee;
+  margin-bottom:6px;
+}
+.feature p{
+  font-size:13px;
+  color:var(--text-dim);
+  line-height:1.6;
+}
+
+/* ========= TIPS ========= */
+.tips{display:flex;flex-direction:column;gap:10px}
+.tip{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:14px 16px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:6px;
+  font-size:14px;
+  transition:border-color .2s;
+}
+.tip:hover{border-color:rgba(0,255,136,.2)}
+.tip-icon{
+  color:var(--green);
+  font-family:var(--mono);
+  font-weight:700;
+  font-size:16px;
+  flex-shrink:0;
+  margin-top:1px;
+}
+.tip-text{color:var(--text)}
+.tip-text strong{color:var(--green)}
+
+/* ========= FOOTER ========= */
+.page-footer{
+  text-align:center;
+  padding:40px 0 20px;
+  border-top:1px solid var(--border);
+  margin-top:56px;
+}
+.page-footer p{
+  font-family:var(--mono);
+  font-size:12px;
+  color:var(--text-dim);
+}
+.page-footer a{color:var(--cyan);text-decoration:none}
+.page-footer a:hover{text-shadow:var(--glow-cyan)}
+
+.footer-hex{
+  display:flex;justify-content:center;gap:4px;
+  margin-top:8px;
+}
+.footer-hex span{
+  font-family:var(--mono);
+  font-size:10px;
+  color:var(--text-dim);
+  opacity:.4;
+}
+
+/* ========= GLITCH EFFECT ========= */
+.glitch{position:relative;display:inline-block}
+.glitch::before,.glitch::after{
+  content:attr(data-text);
+  position:absolute;left:0;top:0;
+  width:100%;height:100%;
+  overflow:hidden;
+}
+.glitch::before{
+  color:var(--cyan);
+  z-index:-1;
+  animation:glitch1 3s infinite linear alternate-reverse;
+}
+.glitch::after{
+  color:var(--magenta);
+  z-index:-2;
+  animation:glitch2 2s infinite linear alternate-reverse;
+}
+@keyframes glitch1{
+  0%,94%{clip-path:inset(0 0 0 0);transform:none}
+  95%{clip-path:inset(20% 0 40% 0);transform:translateX(-3px)}
+  96%{clip-path:inset(60% 0 10% 0);transform:translateX(3px)}
+  97%{clip-path:inset(40% 0 30% 0);transform:translateX(-2px)}
+  98%,100%{clip-path:inset(0 0 0 0);transform:none}
+}
+@keyframes glitch2{
+  0%,93%{clip-path:inset(0 0 0 0);transform:none}
+  94%{clip-path:inset(50% 0 20% 0);transform:translateX(4px)}
+  95%{clip-path:inset(10% 0 60% 0);transform:translateX(-4px)}
+  96%{clip-path:inset(30% 0 40% 0);transform:translateX(2px)}
+  97%,100%{clip-path:inset(0 0 0 0);transform:none}
+}
+
+/* ========= PULSE DECORATION ========= */
+.pulse-dot{
+  width:6px;height:6px;
+  border-radius:50%;
+  background:var(--cyan);
+  box-shadow:var(--glow-cyan);
+  animation:pulse 2s ease-in-out infinite;
+  display:inline-block;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ========= DATA STREAM ========= */
+.data-stream{
+  position:fixed;
+  top:0;right:20px;
+  width:1px;height:100vh;
+  z-index:-1;
+  overflow:hidden;
+}
+.data-stream::before{
+  content:'';
+  position:absolute;
+  top:-40px;left:0;
+  width:1px;height:40px;
+  background:linear-gradient(180deg,transparent,var(--cyan),transparent);
+  animation:dataFall 4s linear infinite;
+}
+@keyframes dataFall{0%{top:-40px}100%{top:100vh}}
+
+.data-stream-2{right:auto;left:20px}
+.data-stream-2::before{animation-delay:-2s;background:linear-gradient(180deg,transparent,var(--magenta),transparent)}
+
+/* ========= CORNER HUD ========= */
+.hud-corner{
+  position:fixed;
+  width:40px;height:40px;
+  z-index:100;
+  pointer-events:none;
+}
+.hud-corner svg{width:100%;height:100%}
+.hud-tl{top:12px;left:12px}
+.hud-tr{top:12px;right:12px;transform:scaleX(-1)}
+.hud-bl{bottom:12px;left:12px;transform:scaleY(-1)}
+.hud-br{bottom:12px;right:12px;transform:scale(-1)}
+
+/* ========= CTA BUTTON ========= */
+.cta-wrap{text-align:center;margin-top:32px}
+.cta{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--display);
+  font-size:13px;
+  letter-spacing:.12em;
+  font-weight:700;
+  color:var(--bg);
+  background:var(--cyan);
+  padding:12px 32px;
+  border:none;border-radius:4px;
+  text-decoration:none;
+  cursor:pointer;
+  transition:all .3s;
+  box-shadow:var(--glow-cyan);
+}
+.cta:hover{
+  background:#fff;
+  box-shadow:0 0 12px rgba(0,240,255,.6),0 0 40px rgba(0,240,255,.3);
+  transform:translateY(-1px);
+}
+.cta svg{width:16px;height:16px}
+
+/* ========= SCROLL REVEAL ========= */
+.reveal{opacity:0;transform:translateY(20px);transition:all .6s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:none}
+
+/* ========= RESPONSIVE ========= */
+@media(max-width:768px){
+  .page{padding:24px 16px 60px}
+  .features{grid-template-columns:1fr}
+  .step{flex-direction:column;gap:8px}
+  .step-num{font-size:22px}
+  .hud-corner{display:none}
+  .data-stream,.data-stream-2{display:none}
+  .topbar{flex-wrap:wrap;gap:8px}
+  .topbar-right{width:100%;text-align:right}
+}
+
+@media(max-width:480px){
+  .hero h1{font-size:22px;letter-spacing:.04em}
+  .terminal-body{font-size:11px;padding:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- Boot Screen -->
+<div id="boot-screen">
+  <pre class="boot-text" id="boot-text"></pre>
+  <div class="boot-logo" id="boot-logo">AIO VIEW</div>
+  <div class="boot-status" id="boot-status">// SYSTEM MANUAL LOADED — TRANSMISSION COMPLETE</div>
+</div>
+
+<!-- Overlays -->
+<div class="scanlines"></div>
+<div class="grid-bg"></div>
+<div class="data-stream"></div>
+<div class="data-stream data-stream-2"></div>
+
+<!-- HUD Corners -->
+<div class="hud-corner hud-tl"><svg viewBox="0 0 40 40" fill="none" stroke="rgba(0,240,255,.25)" stroke-width="1"><path d="M0 20 L0 2 Q0 0 2 0 L20 0"/></svg></div>
+<div class="hud-corner hud-tr"><svg viewBox="0 0 40 40" fill="none" stroke="rgba(0,240,255,.25)" stroke-width="1"><path d="M0 20 L0 2 Q0 0 2 0 L20 0"/></svg></div>
+<div class="hud-corner hud-bl"><svg viewBox="0 0 40 40" fill="none" stroke="rgba(0,240,255,.25)" stroke-width="1"><path d="M0 20 L0 2 Q0 0 2 0 L20 0"/></svg></div>
+<div class="hud-corner hud-br"><svg viewBox="0 0 40 40" fill="none" stroke="rgba(0,240,255,.25)" stroke-width="1"><path d="M0 20 L0 2 Q0 0 2 0 L20 0"/></svg></div>
+
+<!-- Page Content -->
+<div class="page" id="page">
+
+  <!-- Top Bar -->
+  <nav class="topbar reveal">
+    <div class="topbar-left">
+      <a href="./" class="topbar-back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        RETURN
+      </a>
+      <span class="topbar-tag">v2.0</span>
+    </div>
+    <div class="topbar-right">
+      <span class="pulse-dot"></span>&ensp;SYS_MANUAL // <span id="datetime"></span>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero reveal">
+    <div class="hero-label">// CLASSIFIED DOCUMENT</div>
+    <h1><span class="glitch" data-text="AIO VIEW 操作手冊">AIO VIEW 操作手冊</span></h1>
+    <p class="hero-sub">監測你的文章是否出現在 Google AI Overview 搜尋摘要。<br>從 Sitemap 解析到報告分析，一站完成。</p>
+    <div class="hero-line"></div>
+  </header>
+
+  <!-- Section: How It Works -->
+  <section class="section reveal">
+    <div class="section-header">
+      <div class="section-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <div class="section-title">OPERATION FLOW</div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <div class="step-title">貼上 Sitemap，按「解析」</div>
+          <div class="step-desc">輸入你網站的 <code>sitemap.xml</code> 網址。如果是 Sitemap Index（WordPress 常見），會讓你選子 Sitemap。系統自動擷取所有文章。</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <div class="step-title">挑選要監測的文章</div>
+          <div class="step-desc">用年份、月份篩選。勾選你想監測的項目——不需要全選，挑重點文章就好。</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <div class="step-title">填寫搜尋語句</div>
+          <div class="step-desc">每篇文章需要一條搜尋語句，模擬使用者怎麼搜。兩種方式：<br>
+          <strong style="color:var(--green)">免費模式</strong> — 複製提示詞 → 貼到 ChatGPT/Claude → 把回覆貼回來，系統自動配對<br>
+          <strong style="color:var(--cyan)">API 模式</strong> — 用 CLI 工具一鍵產生（需 API Key，50 篇約 NT$1-3）</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-body">
+          <div class="step-title">產生 CLI 指令，下載 queries.json</div>
+          <div class="step-desc">按「產生 CLI 指令」，把下載的 <code>queries.json</code> 放到 <code>aio-view/cli</code> 資料夾。</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">05</div>
+        <div class="step-body">
+          <div class="step-title">在電腦跑掃描</div>
+          <div class="step-desc">打開 Terminal，執行掃描指令。每篇間隔 <strong style="color:var(--yellow)">2.5 分鐘</strong>，50 篇約 2 小時——適合睡前放著跑。</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">06</div>
+        <div class="step-body">
+          <div class="step-title">上傳 results.json，看報告</div>
+          <div class="step-desc">掃描完成後拖曳 <code>results.json</code> 到上傳區。自動產生圖表分析、引用來源排名、歷史趨勢。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: Setup -->
+  <section class="section reveal">
+    <div class="section-header">
+      <div class="section-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <div class="section-title">FIRST-TIME SETUP</div>
+    </div>
+
+    <p style="color:var(--text-dim);margin-bottom:16px;font-size:14px">第一次使用需要裝環境，只需要做一次。之後直接跑指令就好。</p>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="terminal-dot"></span>
+        <span class="terminal-dot"></span>
+        <span class="terminal-dot"></span>
+        <span class="terminal-label">PowerShell</span>
+      </div>
+      <div class="terminal-body">
+<span class="comment"># 1. 裝 Node.js — 到 nodejs.org 下載 LTS 版，一直按下一步</span>
+<span class="comment"># 2. 裝 Git — 到 git-scm.com/download/win 下載，一直按下一步</span>
+<span class="comment"># 3. 下載工具 + 安裝依賴</span>
+
+<span class="cmd">git clone</span> https://github.com/helloruru/helloruru.github.io.git
+<span class="cmd">cd</span> helloruru.github.io/aio-view/cli
+<span class="cmd">npm install</span>
+<span class="cmd">npx playwright install</span> chromium
+
+<span class="comment"># 完成！可以開始掃描了</span>
+<span class="cmd">node scan.js</span> <span class="highlight">--input queries.json --output results.json --domain 你的網域.com</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: New Features -->
+  <section class="section reveal">
+    <div class="section-header">
+      <div class="section-icon" style="border-color:var(--magenta);box-shadow:var(--glow-magenta);background:rgba(255,0,170,.04)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--magenta)" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      </div>
+      <div class="section-title" style="color:var(--magenta);text-shadow:0 0 12px rgba(255,0,170,.3)">NEW FEATURES</div>
+      <span class="section-tag">v2.0</span>
+    </div>
+
+    <div class="features">
+      <div class="feature">
+        <span class="feature-badge ai">AI ASSIST</span>
+        <h4>AI 輔助面板</h4>
+        <p>超過 15 篇自動分批。複製提示詞給 AI → 把回覆貼回來 → 系統用模糊比對自動配對標題和語句。</p>
+      </div>
+
+      <div class="feature">
+        <span class="feature-badge chart">CHARTS</span>
+        <h4>圖表分析</h4>
+        <p>AIO 狀態甜甜圈圖（被引用 / 有 AIO 未引用 / 無 AIO），加上引用來源 Top 10 柱狀圖。</p>
+      </div>
+
+      <div class="feature">
+        <span class="feature-badge time">TIMELINE</span>
+        <h4>時間軸報告</h4>
+        <p>趨勢折線圖追蹤引用率變化。歷史記錄卡片、兩次掃描對比（新增/失去/持續引用）。</p>
+      </div>
+
+      <div class="feature">
+        <span class="feature-badge new">CLI</span>
+        <h4>AI 語句產生器</h4>
+        <p>用 API Key 自動產生搜尋語句。支援 OpenAI、Anthropic。50 篇約 NT$1-3。</p>
+      </div>
+    </div>
+
+    <div class="terminal" style="margin-top:16px">
+      <div class="terminal-bar">
+        <span class="terminal-dot"></span>
+        <span class="terminal-dot"></span>
+        <span class="terminal-dot"></span>
+        <span class="terminal-label">AI Generate</span>
+      </div>
+      <div class="terminal-body">
+<span class="comment"># OpenAI（GPT-4o-mini，最便宜）</span>
+<span class="cmd">node ai-generate.js</span> <span class="highlight">--input queries.json --provider openai --model gpt-4o-mini</span>
+
+<span class="comment"># Anthropic（Claude Haiku，最快）</span>
+<span class="cmd">node ai-generate.js</span> <span class="highlight">--input queries.json --provider anthropic --model claude-haiku-4-5-20251001</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: Tips -->
+  <section class="section reveal">
+    <div class="section-header">
+      <div class="section-icon" style="border-color:var(--green);box-shadow:var(--glow-green);background:rgba(0,255,136,.04)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <div class="section-title" style="color:var(--green);text-shadow:0 0 12px rgba(0,255,136,.3)">INTEL NOTES</div>
+    </div>
+
+    <div class="tips">
+      <div class="tip">
+        <span class="tip-icon">&gt;</span>
+        <div class="tip-text">每篇間隔 <strong>2.5 分鐘</strong>，50 篇約 <strong>2 小時</strong>。適合睡前放著跑，起床就有報告。</div>
+      </div>
+      <div class="tip">
+        <span class="tip-icon">&gt;</span>
+        <div class="tip-text">中途可以關掉，下次會<strong>接著上次的進度</strong>繼續，不會遺失已完成的結果。</div>
+      </div>
+      <div class="tip">
+        <span class="tip-icon">&gt;</span>
+        <div class="tip-text">歷史記錄存在瀏覽器 <strong>IndexedDB</strong>，關閉分頁、重開瀏覽器都不會消失。</div>
+      </div>
+      <div class="tip">
+        <span class="tip-icon">&gt;</span>
+        <div class="tip-text">AI 語句產生費用參考：50 篇約 <strong>NT$1-3</strong>（GPT-4o-mini）或 <strong>NT$0.5</strong>（Claude Haiku）。</div>
+      </div>
+      <div class="tip">
+        <span class="tip-icon">&gt;</span>
+        <div class="tip-text">掃描時<strong>不要另開 Chrome 視窗</strong>，讓 Playwright 用獨立瀏覽器跑就好。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-wrap reveal">
+    <a href="./" class="cta">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+      LAUNCH AIO VIEW
+    </a>
+  </div>
+
+  <!-- Footer -->
+  <footer class="page-footer reveal">
+    <p>&copy; 2026 <a href="https://helloruru.com">Kaoru Tsai</a> // All Rights Reserved</p>
+    <div class="footer-hex">
+      <span>4F</span><span>48</span><span>52</span><span>55</span><span>52</span><span>55</span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+/* ========= BOOT SEQUENCE ========= */
+const bootLines = [
+  '> INITIALIZING AIO_VIEW SYSTEM...',
+  '> LOADING MODULES: [sitemap] [charts] [timeline] [ai-assist]',
+  '> CONNECTING TO DATABASE... OK',
+  '> CHART.JS ENGINE READY',
+  '> INDEXEDDB STORAGE: ONLINE',
+  '> SCANNING PROTOCOLS: LOADED',
+  '',
+  '> ALL SYSTEMS OPERATIONAL',
+];
+
+const bootEl = document.getElementById('boot-text');
+const logoEl = document.getElementById('boot-logo');
+const statusEl = document.getElementById('boot-status');
+const screenEl = document.getElementById('boot-screen');
+const pageEl = document.getElementById('page');
+
+let lineIndex = 0;
+let charIndex = 0;
+let currentText = '';
+
+function typeBoot() {
+  if (lineIndex >= bootLines.length) {
+    // Done typing — show logo
+    setTimeout(() => {
+      logoEl.classList.add('visible');
+      setTimeout(() => {
+        statusEl.classList.add('visible');
+        setTimeout(() => {
+          screenEl.classList.add('done');
+          pageEl.classList.add('visible');
+          initScrollReveal();
+        }, 800);
+      }, 400);
+    }, 300);
+    return;
+  }
+
+  const line = bootLines[lineIndex];
+  if (charIndex <= line.length) {
+    currentText = bootLines.slice(0, lineIndex).join('\n') +
+      (lineIndex > 0 ? '\n' : '') + line.substring(0, charIndex);
+    bootEl.textContent = currentText;
+    charIndex++;
+    setTimeout(typeBoot, 12);
+  } else {
+    lineIndex++;
+    charIndex = 0;
+    setTimeout(typeBoot, 80);
+  }
+}
+
+bootEl.classList.add('visible');
+setTimeout(typeBoot, 400);
+
+/* ========= SCROLL REVEAL ========= */
+function initScrollReveal() {
+  const els = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  els.forEach(el => observer.observe(el));
+}
+
+/* ========= DATETIME ========= */
+function updateTime() {
+  const now = new Date();
+  const str = now.toISOString().replace('T', ' ').substring(0, 19);
+  document.getElementById('datetime').textContent = str;
+}
+updateTime();
+setInterval(updateTime, 1000);
+</script>
+</body>
+</html>
