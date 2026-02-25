@@ -4,11 +4,11 @@
    ================================================ */
 
 const Sitemap = {
-  /** CORS Proxy 清單（多來源避免單點限流） */
+  /** CORS Proxy 清單（自家 Worker 優先，公共服務備用） */
   PROXIES: [
+    { url: 'https://helloruru-cors-proxy.vmpvmp1017.workers.dev/?url=', type: 'raw' },
     { url: 'https://api.allorigins.win/get?url=', type: 'json', key: 'contents' },
     { url: 'https://api.allorigins.win/raw?url=', type: 'raw' },
-    { url: 'https://corsproxy.io/?url=', type: 'raw' }
   ],
 
   /** 排除的 URL 模式 */
