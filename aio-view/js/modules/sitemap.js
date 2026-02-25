@@ -209,13 +209,13 @@ const Sitemap = {
 
         if (!html || html.length < 50) continue;
 
-        // og:title（兩種寫法都抓）
+        // 依序嘗試：og:title → <title> → <h1>
         const ogMatch = html.match(/<meta[^>]*property="og:title"[^>]*content="([^"]+)"/i)
           || html.match(/<meta[^>]*content="([^"]+)"[^>]*property="og:title"/i);
-        // <title>
         const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
+        const h1Match = html.match(/<h1[^>]*>([^<]+)<\/h1>/i);
 
-        const raw = ogMatch?.[1] || titleMatch?.[1] || null;
+        const raw = ogMatch?.[1] || titleMatch?.[1] || h1Match?.[1] || null;
         if (!raw) continue;
 
         // 解碼 HTML entities
