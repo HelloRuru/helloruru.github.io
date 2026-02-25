@@ -1,0 +1,397 @@
+/* ================================================
+   Manual Check — Cyberpunk
+   手動檢查模式：逐篇搜尋 Google，回報 AIO 狀態
+   ================================================ */
+
+/* ========= Mode Tabs ========= */
+.check-mode-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.check-mode-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: var(--space-sm) var(--space-md);
+  font-size: 14px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  border: none;
+  background: transparent;
+  color: var(--color-gray);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.check-mode-tab .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.check-mode-tab:hover {
+  color: var(--color-text);
+}
+
+.check-mode-tab.active {
+  color: var(--color-rose);
+  border-bottom-color: var(--color-rose);
+}
+
+/* ========= CLI sub-section titles ========= */
+.check-sub-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-ink);
+  margin: var(--space-lg) 0 var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--color-mist);
+}
+
+.check-sub-title:first-child {
+  margin-top: 0;
+}
+
+.check-sub-title .icon {
+  width: 18px;
+  height: 18px;
+  color: var(--color-rose);
+}
+
+/* ========= 進度條 ========= */
+.check-progress {
+  position: relative;
+  height: 6px;
+  background: rgba(0, 240, 255, 0.08);
+  border-radius: 3px;
+  margin-bottom: var(--space-md);
+  overflow: hidden;
+}
+
+.check-progress-fill {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+.check-progress-text {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: var(--color-gray);
+  margin-bottom: var(--space-lg);
+  font-family: var(--font-small);
+}
+
+.check-progress-text .progress-nums {
+  color: var(--color-rose);
+  font-weight: 500;
+}
+
+/* ========= 卡片容器 ========= */
+.check-cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* ========= 單張檢查卡片 ========= */
+.check-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  background: rgba(12, 12, 24, 0.6);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.check-card:hover {
+  border-color: rgba(0, 240, 255, 0.2);
+}
+
+/* 已檢查的卡片：稍微透明 */
+.check-card.checked {
+  opacity: 0.6;
+}
+
+.check-card.checked:hover {
+  opacity: 0.85;
+}
+
+/* ========= 卡片 Header ========= */
+.check-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.check-card-num {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--color-gray);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.check-card-title {
+  color: var(--color-ink);
+  text-decoration: none;
+  font-size: 15px;
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+.check-card-title:hover {
+  color: var(--color-rose);
+}
+
+/* ========= 搜尋語句 ========= */
+.check-card-query {
+  font-size: 13px;
+  color: var(--color-gray);
+  margin-bottom: var(--space-md);
+  padding-left: 36px;
+  font-family: var(--font-small);
+}
+
+.check-card-query-text {
+  color: var(--color-nadeshiko);
+}
+
+/* ========= 卡片操作列 ========= */
+.check-card-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding-left: 36px;
+  flex-wrap: wrap;
+}
+
+/* 搜尋 Google 按鈕 */
+.check-google-btn {
+  flex-shrink: 0;
+}
+
+/* ========= 狀態按鈕組 ========= */
+.check-status-btns {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.check-status-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-gray);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.check-status-btn:hover {
+  border-color: rgba(0, 240, 255, 0.3);
+  color: var(--color-text);
+}
+
+.check-status-btn .status-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* 有引用 — 綠色 */
+.check-status-btn.active[data-status="cited"] {
+  border-color: #00ff88;
+  color: #00ff88;
+  background: rgba(0, 255, 136, 0.1);
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.2);
+}
+
+/* 有 AIO 沒引用 — 青色 */
+.check-status-btn.active[data-status="aio"] {
+  border-color: var(--color-rose);
+  color: var(--color-rose);
+  background: rgba(0, 240, 255, 0.1);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
+}
+
+/* 沒有 AIO — 暗灰 */
+.check-status-btn.active[data-status="none"] {
+  border-color: #666;
+  color: #999;
+  background: rgba(100, 100, 100, 0.1);
+}
+
+/* ========= 報告按鈕區 ========= */
+.check-actions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+/* ========= Bookmarklet 安裝區 ========= */
+.bookmarklet-install {
+  background: rgba(0, 240, 255, 0.04);
+  border: 1px dashed rgba(0, 240, 255, 0.2);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.bookmarklet-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.bookmarklet-label {
+  font-size: 13px;
+  color: var(--color-gray);
+}
+
+.bookmarklet-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  color: #fff;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  cursor: grab;
+  transition: box-shadow 0.2s ease;
+  white-space: nowrap;
+}
+
+.bookmarklet-link:hover {
+  box-shadow: var(--glow-cyan);
+}
+
+.bookmarklet-link:active {
+  cursor: grabbing;
+}
+
+.bookmarklet-logo {
+  width: 16px;
+  height: 16px;
+  stroke: #fff;
+}
+
+.bookmarklet-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--color-gray);
+  animation: arrowPulse 2s ease-in-out infinite;
+}
+
+@keyframes arrowPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.bookmarklet-desc {
+  font-size: 12px;
+  color: var(--color-gray);
+  margin-top: var(--space-sm);
+}
+
+.bookmarklet-domain {
+  color: var(--color-nadeshiko);
+  font-family: var(--font-mono);
+}
+
+/* ========= 篩選標籤列 ========= */
+.check-filter-bar {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.check-filter-btn {
+  padding: 4px 12px;
+  font-size: 13px;
+  font-family: var(--font-body);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-gray);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.check-filter-btn:hover {
+  border-color: rgba(0, 240, 255, 0.3);
+  color: var(--color-text);
+}
+
+.check-filter-btn.active {
+  border-color: var(--color-rose);
+  color: var(--color-rose);
+  background: rgba(0, 240, 255, 0.08);
+}
+
+/* ========= 響應式 ========= */
+@media (max-width: 768px) {
+  .check-card-actions {
+    padding-left: 0;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .check-status-btns {
+    width: 100%;
+  }
+
+  .check-status-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 8px 8px;
+    font-size: 12px;
+  }
+
+  .check-card-query {
+    padding-left: 0;
+  }
+
+  .check-card-header {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .check-card-num {
+    width: auto;
+    height: auto;
+    padding: 2px 8px;
+    font-size: 11px;
+  }
+}

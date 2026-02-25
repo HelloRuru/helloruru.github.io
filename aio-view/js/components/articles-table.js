@@ -180,14 +180,38 @@ const ArticlesTable = {
     const tr = document.createElement('tr');
     tr.dataset.index = index;
 
+    // 日期格式化
+    let dateHtml = '';
+    if (article.lastmod) {
+      const d = new Date(article.lastmod);
+      if (!isNaN(d)) {
+        dateHtml = `<span class="article-date">${d.toLocaleDateString('zh-TW')}</span>`;
+      }
+    }
+
+    // 標題是否為 URL（需要抓取中）
+    const isUrl = article.title === article.url || article.title.startsWith('http');
+    const titleClass = isUrl ? ' class="is-url"' : '';
+
+    // 搜尋語句預覽
+    const queryPreview = article.query && !article.query.startsWith('http')
+      ? `<span class="article-query-preview">搜尋「${Utils.escapeHtml(article.query)}」</span>`
+      : '';
+
+    // 副資訊：日期 + 搜尋語句
+    const meta = (dateHtml || queryPreview)
+      ? `<div class="article-meta">${dateHtml}${dateHtml && queryPreview ? '<span class="meta-dot"></span>' : ''}${queryPreview}</div>`
+      : '';
+
     tr.innerHTML = `
       <td class="col-check">
         <input type="checkbox" ${article.selected ? 'checked' : ''}>
       </td>
       <td class="col-title">
-        <a href="${Utils.escapeHtml(article.url)}" target="_blank" rel="noopener">
+        <a href="${Utils.escapeHtml(article.url)}" target="_blank" rel="noopener"${titleClass}>
           ${Utils.escapeHtml(article.title)}
         </a>
+        ${meta}
       </td>
       <td class="col-query">
         <input type="text" value="${Utils.escapeHtml(article.query)}" placeholder="輸入搜尋語句">
@@ -257,6 +281,52 @@ const ArticlesTable = {
     this.saveArticles();
     this.applyFilter(); // 重新渲染
     return updated;
+  },
+
+  /**
+   * 動態更新單篇文章的標題和語句（不重繪整張表）
+   * @param {Object} article - 已更新的文章物件
+   */
+  updateArticle(article) {
+    const index = this.articles.indexOf(article);
+    if (index === -1) return;
+
+    const tr = this.elements.tbody?.querySelector(`tr[data-index="${index}"]`);
+    if (!tr) return;
+
+    // 更新標題
+    const titleLink = tr.querySelector('.col-title a');
+    if (titleLink) {
+      titleLink.textContent = article.title;
+      titleLink.classList.remove('is-url');
+    }
+
+    // 更新搜尋語句輸入框
+    const queryInput = tr.querySelector('.col-query input[type="text"]');
+    if (queryInput) queryInput.value = article.query;
+
+    // 更新搜尋語句預覽
+    const preview = tr.querySelector('.article-query-preview');
+    if (preview && article.query && !article.query.startsWith('http')) {
+      preview.textContent = `搜尋「${article.query}」`;
+    } else if (!preview && article.query && !article.query.startsWith('http')) {
+      // 如果之前沒有預覽（因為 query 是垃圾值），現在新增
+      let meta = tr.querySelector('.article-meta');
+      if (!meta) {
+        meta = document.createElement('div');
+        meta.className = 'article-meta';
+        tr.querySelector('.col-title')?.appendChild(meta);
+      }
+      if (meta.children.length > 0) {
+        const dot = document.createElement('span');
+        dot.className = 'meta-dot';
+        meta.appendChild(dot);
+      }
+      const span = document.createElement('span');
+      span.className = 'article-query-preview';
+      span.textContent = `搜尋「${article.query}」`;
+      meta.appendChild(span);
+    }
   },
 
   /**

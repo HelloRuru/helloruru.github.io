@@ -147,50 +147,29 @@
     "@context": "https://schema.org",
     "@type": "HowTo",
     "name": "如何使用 AIO View 監測文章的 AI Overview 曝光",
-    "description": "透過 AIO View 監測你的網站文章是否出現在 Google AI Overview 摘要中，只需 6 個步驟。",
-    "totalTime": "PT130M",
+    "description": "透過 AIO View 監測你的網站文章是否出現在 Google AI Overview 摘要中，只需 3 個步驟。",
+    "totalTime": "PT30M",
     "step": [
       {
         "@type": "HowToStep",
         "position": 1,
-        "name": "貼上 Sitemap 網址並解析",
-        "text": "輸入網站的 sitemap.xml 網址，按解析。若為 Sitemap Index 會出現下拉選單選擇子 Sitemap。",
+        "name": "貼 Sitemap + 選文章",
+        "text": "輸入網站的 sitemap.xml 網址按解析，搜尋語句自動產生。勾選想監測的文章，可手動編輯語句。",
         "url": "https://lab.helloruru.com/aio-view/#input-section"
       },
       {
         "@type": "HowToStep",
         "position": 2,
-        "name": "篩選並勾選要監測的文章",
-        "text": "用年份、月份篩選文章，勾選想監測的項目。",
-        "url": "https://lab.helloruru.com/aio-view/#articles-section"
+        "name": "檢查 AIO",
+        "text": "點「開始手動檢查」逐篇搜尋 Google，回報是否有 AI Overview。也可使用 CLI 自動掃描（進階）。",
+        "url": "https://lab.helloruru.com/aio-view/#check-section"
       },
       {
         "@type": "HowToStep",
         "position": 3,
-        "name": "填寫搜尋語句",
-        "text": "手動編輯搜尋語句，或用「複製 AI 提示詞」搭配 AI 產生語句後「批次貼入」。",
-        "url": "https://lab.helloruru.com/aio-view/#articles-section"
-      },
-      {
-        "@type": "HowToStep",
-        "position": 4,
-        "name": "產生 CLI 指令並下載 queries.json",
-        "text": "按「產生 CLI 指令」下載 queries.json，放到 aio-view/cli 資料夾。",
-        "url": "https://lab.helloruru.com/aio-view/#cli-section"
-      },
-      {
-        "@type": "HowToStep",
-        "position": 5,
-        "name": "在電腦執行掃描",
-        "text": "在 PowerShell 執行 node scan.js 指令，工具會自動搜尋 Google 並偵測 AI Overview。",
-        "url": "https://lab.helloruru.com/aio-view/#cli-section"
-      },
-      {
-        "@type": "HowToStep",
-        "position": 6,
-        "name": "上傳結果看報告",
-        "text": "掃描完成後，把 results.json 拖到上傳區，即可查看監測報告與統計數據。",
-        "url": "https://lab.helloruru.com/aio-view/#upload-section"
+        "name": "看報告",
+        "text": "查看監測結果的統計數據、圖表分析與引用來源排行，支援 CSV 匯出與歷史趨勢比較。",
+        "url": "https://lab.helloruru.com/aio-view/#results-section"
       }
     ]
   }
@@ -250,7 +229,7 @@
             <p class="guide-subtitle">監測你的文章是否出現在 Google AI Overview</p>
           </div>
 
-          <!-- 六步視覺流程 -->
+          <!-- 三步視覺流程 -->
           <div class="step-flow">
             <div class="flow-step">
               <div class="flow-num">01</div>
@@ -258,53 +237,22 @@
                 <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
                 <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
               </svg>
-              <span class="flow-label">貼 Sitemap</span>
-              <span class="flow-desc">輸入網站地圖網址</span>
+              <span class="flow-label">貼 Sitemap + 選文章</span>
+              <span class="flow-desc">自動產生搜尋語句</span>
             </div>
 
             <div class="flow-step">
               <div class="flow-num">02</div>
               <svg class="flow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M9 11l3 3L22 4"/>
-                <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
               </svg>
-              <span class="flow-label">選文章</span>
-              <span class="flow-desc">勾選要監測的頁面</span>
+              <span class="flow-label">檢查 AIO</span>
+              <span class="flow-desc">手動搜尋或 CLI 掃描</span>
             </div>
 
             <div class="flow-step">
               <div class="flow-num">03</div>
-              <svg class="flow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
-              </svg>
-              <span class="flow-label">AI 語句</span>
-              <span class="flow-desc">產生搜尋關鍵字</span>
-            </div>
-
-            <div class="flow-step">
-              <div class="flow-num">04</div>
-              <svg class="flow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
-              </svg>
-              <span class="flow-label">下載指令</span>
-              <span class="flow-desc">匯出 queries.json</span>
-            </div>
-
-            <div class="flow-step">
-              <div class="flow-num">05</div>
-              <svg class="flow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <polyline points="4 17 10 11 4 5"/>
-                <line x1="12" y1="19" x2="20" y2="19"/>
-              </svg>
-              <span class="flow-label">跑掃描</span>
-              <span class="flow-desc">電腦背景執行</span>
-            </div>
-
-            <div class="flow-step">
-              <div class="flow-num">06</div>
               <svg class="flow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <line x1="18" y1="20" x2="18" y2="10"/>
                 <line x1="12" y1="20" x2="12" y2="4"/>
@@ -321,12 +269,12 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
               </svg>
-              每篇 ~2.5 min
+              手動檢查免安裝
             </span>
             <span class="tip-divider"></span>
-            <span class="tip-item">50 篇約 2 小時</span>
+            <span class="tip-item">CLI 可自動掃描</span>
             <span class="tip-divider"></span>
-            <span class="tip-item">適合睡前放著跑</span>
+            <span class="tip-item">報告自動存歷史</span>
           </div>
 
           <!-- 操作按鈕 -->
@@ -406,10 +354,9 @@ npx playwright install chromium</code>
           </div>
         </section>
 
-        <!-- Step 2: Articles List -->
+        <!-- Articles List (Step 1 continuation) -->
         <section class="card hidden" id="articles-section">
           <h2>
-            <span class="step-badge">2</span>
             文章清單
             <span class="count-badge" id="article-count">0</span>
           </h2>
@@ -558,53 +505,168 @@ node ai-generate.js --input queries.json --provider anthropic --model claude-hai
               產生 CLI 指令
             </button>
           </div>
+
+          <!-- 手動檢查入口 -->
+          <div class="actions" style="margin-top: 0; padding-top: var(--space-md); border-top: 1px solid var(--color-border);">
+            <button class="btn btn-primary" id="start-check-btn">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              開始手動檢查
+            </button>
+            <span style="font-size: 13px; color: var(--color-gray);">零安裝、零 API — 用瀏覽器直接確認 Google AI Overview</span>
+          </div>
         </section>
 
-        <!-- Step 3: CLI Instructions -->
-        <section class="card hidden" id="cli-section">
+        <!-- Step 2: Check AIO -->
+        <section class="card hidden" id="check-section">
           <h2>
-            <span class="step-badge">3</span>
-            執行掃描
+            <span class="step-badge">2</span>
+            檢查 AIO
+            <span class="count-badge" id="check-count">0/0</span>
           </h2>
-          <p class="section-desc">在本機執行以下指令，完成後上傳結果</p>
 
-          <div class="code-block">
-            <div class="code-header">
-              <span>Terminal</span>
-              <button class="btn-copy" id="copy-cli-btn">
+          <!-- Mode Tabs -->
+          <div class="check-mode-tabs" id="check-mode-tabs">
+            <button class="check-mode-tab active" data-mode="manual">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              手動檢查
+            </button>
+            <button class="check-mode-tab" data-mode="cli">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="4 17 10 11 4 5"/>
+                <line x1="12" y1="19" x2="20" y2="19"/>
+              </svg>
+              CLI 掃描（進階）
+            </button>
+          </div>
+
+          <!-- Manual Check Content -->
+          <div id="check-manual-content">
+            <p class="section-desc">逐篇搜尋 Google，回報是否有 AI Overview</p>
+
+            <!-- Bookmarklet 安裝區 -->
+            <div class="bookmarklet-install" id="bookmarklet-install">
+              <div class="bookmarklet-row">
+                <span class="bookmarklet-label">自動偵測小工具:</span>
+                <a href="#" class="bookmarklet-link" id="bookmarklet-link" title="拖到書籤列，在 Google 搜尋頁點一下就自動偵測 AIO"
+                   onclick="event.preventDefault(); Toast.info('請把這個按鈕拖到書籤列（不是點它）');">
+                  <svg class="bookmarklet-logo" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <circle cx="13" cy="13" r="6"/>
+                    <line x1="17" y1="17" x2="24" y2="24" stroke-linecap="round"/>
+                    <path d="M22 8 L25 11 L29 6" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  AIO Check
+                </a>
+                <span class="bookmarklet-arrow">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                  拖到書籤列
+                </span>
+              </div>
+              <p class="bookmarklet-desc">
+                在 Google 搜尋結果頁點書籤，自動偵測 AIO 並回傳結果
+                <span class="bookmarklet-domain" id="bookmarklet-hint"></span>
+              </p>
+            </div>
+
+            <!-- 篩選列 -->
+            <div class="check-filter-bar" id="check-filter-bar">
+              <button class="check-filter-btn active" data-filter="all">全部</button>
+              <button class="check-filter-btn" data-filter="unchecked">未檢查</button>
+              <button class="check-filter-btn" data-filter="cited">有引用</button>
+              <button class="check-filter-btn" data-filter="aio">有 AIO</button>
+              <button class="check-filter-btn" data-filter="none">沒有</button>
+            </div>
+
+            <!-- 進度條 -->
+            <div class="check-progress">
+              <div class="check-progress-fill" id="check-progress-fill"></div>
+            </div>
+            <div class="check-progress-text" id="check-progress-text">
+              <span class="progress-nums">0 / 0</span>
+              <span>已檢查 0%</span>
+            </div>
+
+            <!-- 卡片容器 -->
+            <div class="check-cards" id="check-cards">
+              <!-- 動態產生 -->
+            </div>
+
+            <!-- 操作按鈕 -->
+            <div class="check-actions">
+              <button class="btn btn-primary" id="check-view-report" disabled>
                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                  <line x1="18" y1="20" x2="18" y2="10"/>
+                  <line x1="12" y1="20" x2="12" y2="4"/>
+                  <line x1="6" y1="20" x2="6" y2="14"/>
                 </svg>
-                複製
+                查看報告
               </button>
             </div>
-            <pre id="cli-commands"></pre>
+          </div>
+
+          <!-- CLI + Upload Content (Advanced) -->
+          <div id="check-cli-content" class="hidden">
+            <p class="section-desc">在本機執行掃描指令，完成後上傳結果</p>
+
+            <!-- CLI Instructions -->
+            <div class="cli-block" id="cli-section">
+              <h3 class="check-sub-title">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="4 17 10 11 4 5"/>
+                  <line x1="12" y1="19" x2="20" y2="19"/>
+                </svg>
+                CLI 指令
+              </h3>
+              <div class="code-block">
+                <div class="code-header">
+                  <span>Terminal</span>
+                  <button class="btn-copy" id="copy-cli-btn">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                      <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                    </svg>
+                    複製
+                  </button>
+                </div>
+                <pre id="cli-commands"></pre>
+              </div>
+            </div>
+
+            <!-- Upload Results -->
+            <div class="upload-block" id="upload-section">
+              <h3 class="check-sub-title">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                  <polyline points="17,8 12,3 7,8"/>
+                  <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                上傳掃描結果
+              </h3>
+              <div class="upload-zone" id="upload-zone">
+                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                  <polyline points="17,8 12,3 7,8"/>
+                  <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                <p>拖曳 <code>results.json</code> 到這裡</p>
+                <p class="hint">或點擊選擇檔案</p>
+                <input type="file" id="file-input" accept=".json" hidden>
+              </div>
+            </div>
           </div>
         </section>
 
-        <!-- Step 4: Upload Results -->
-        <section class="card" id="upload-section">
-          <h2>
-            <span class="step-badge">4</span>
-            上傳結果
-          </h2>
-          <div class="upload-zone" id="upload-zone">
-            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-              <polyline points="17,8 12,3 7,8"/>
-              <line x1="12" y1="3" x2="12" y2="15"/>
-            </svg>
-            <p>拖曳 <code>results.json</code> 到這裡</p>
-            <p class="hint">或點擊選擇檔案</p>
-            <input type="file" id="file-input" accept=".json" hidden>
-          </div>
-        </section>
-
-        <!-- Results Dashboard -->
+        <!-- Step 3: Results Dashboard -->
         <section class="card hidden" id="results-section">
           <h2>
-            <span class="step-badge">5</span>
+            <span class="step-badge">3</span>
             監測結果
           </h2>
 
@@ -760,6 +822,7 @@ node ai-generate.js --input queries.json --provider anthropic --model claude-hai
   <script src="js/modules/utils.js"></script>
   <script src="js/modules/toast.js"></script>
   <script src="js/modules/storage.js"></script>
+  <script src="js/modules/query-engine.js"></script>
   <script src="js/modules/sitemap.js"></script>
   <script src="js/modules/db.js"></script>
 
@@ -772,6 +835,7 @@ node ai-generate.js --input queries.json --provider anthropic --model claude-hai
   <script src="js/components/cli-generator.js"></script>
   <script src="js/components/sitemap-input.js"></script>
   <script src="js/components/ai-assist.js"></script>
+  <script src="js/components/manual-check.js"></script>
   <script src="js/components/charts.js"></script>
   <script src="js/components/timeline.js"></script>
 

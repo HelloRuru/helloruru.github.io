@@ -32,8 +32,14 @@ const App = {
     ResultsTable.init();
     CliGenerator.init();
     AiAssist.init();
+    ManualCheck.init();
     Charts.init();
     Timeline.init();
+
+    // 手動檢查完成回呼
+    ManualCheck.onComplete = (results) => {
+      this.handleResultsUploaded(results);
+    };
 
     // 初始化輸入元件（帶回呼）
     SitemapInput.init((result) => {
@@ -55,14 +61,36 @@ const App = {
       this.reset();
     });
 
+    // 開始手動檢查
+    document.getElementById('start-check-btn')?.addEventListener('click', () => {
+      const selected = ArticlesTable.getSelectedArticles();
+      if (selected.length === 0) {
+        Toast.error('請先勾選要監測的文章');
+        return;
+      }
+      ManualCheck.show(selected, this.domain);
+      this.switchCheckTab('manual');
+    });
+
+    // Check mode tabs
+    document.querySelectorAll('.check-mode-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        this.switchCheckTab(tab.dataset.mode);
+      });
+    });
+
     // 匯出搜尋語句
     document.getElementById('export-queries-btn')?.addEventListener('click', () => {
       CliGenerator.exportQueries(ArticlesTable.articles);
     });
 
-    // 產生 CLI 指令
+    // 產生 CLI 指令 → 切到 CLI tab
     document.getElementById('generate-cli-btn')?.addEventListener('click', () => {
       CliGenerator.generate(ArticlesTable.articles, this.domain);
+      // 顯示 check-section 並切到 CLI tab
+      document.getElementById('check-section')?.classList.remove('hidden');
+      this.switchCheckTab('cli');
+      document.getElementById('check-section')?.scrollIntoView({ behavior: 'smooth' });
     });
 
     // 匯出 CSV
@@ -136,6 +164,7 @@ const App = {
     ArticlesTable.hide();
     ResultsTable.hide();
     CliGenerator.hide();
+    ManualCheck.reset();
 
     // 重置統計與圖表
     Stats.reset();
@@ -196,6 +225,58 @@ const App = {
 
     // 更新 AI 輔助面板
     AiAssist.update(result.articles, result.domain);
+
+    // 背景抓取真實文章標題
+    this.fetchTitlesInBackground(result.articles, result.domain);
+  },
+
+  /**
+   * 切換 check-section 的 tab（手動檢查 / CLI 進階）
+   * @param {string} mode - 'manual' or 'cli'
+   */
+  switchCheckTab(mode) {
+    // 更新 tab 按鈕
+    document.querySelectorAll('.check-mode-tab').forEach(tab => {
+      tab.classList.toggle('active', tab.dataset.mode === mode);
+    });
+
+    // 切換內容
+    const manualContent = document.getElementById('check-manual-content');
+    const cliContent = document.getElementById('check-cli-content');
+    if (mode === 'manual') {
+      manualContent?.classList.remove('hidden');
+      cliContent?.classList.add('hidden');
+    } else {
+      manualContent?.classList.add('hidden');
+      cliContent?.classList.remove('hidden');
+    }
+  },
+
+  /**
+   * 背景抓取文章標題（不阻塞主流程）
+   * @param {Array} articles - 文章清單
+   * @param {string} domain - 網域
+   */
+  async fetchTitlesInBackground(articles, domain) {
+    const needCount = articles.filter(a => Sitemap.needsTitleFetch(a)).length;
+    if (needCount === 0) return;
+
+    Toast.info(`正在抓取 ${needCount} 篇文章標題...`);
+
+    const fetched = await Sitemap.fetchTitlesForArticles(articles, domain, (article, done, total) => {
+      // 即時更新單列（不重繪整表）
+      ArticlesTable.updateArticle(article);
+    });
+
+    if (fetched > 0) {
+      // 儲存更新後的文章
+      Storage.saveArticles(articles);
+      // 更新 AI 輔助面板
+      AiAssist.update(articles, domain);
+      Toast.success(`已抓取 ${fetched} 篇文章標題`);
+    } else if (needCount > 0) {
+      Toast.info('標題抓取未成功（可能為 SPA 網站），可手動編輯');
+    }
   },
 
   /**

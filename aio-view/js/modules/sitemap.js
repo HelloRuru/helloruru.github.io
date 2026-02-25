@@ -109,7 +109,9 @@ const Sitemap = {
           id: `article-${index}`,
           url: loc,
           title: title,
-          query: this.generateQuery(title, domain),
+          query: typeof QueryEngine !== 'undefined'
+            ? QueryEngine.generate(title, domain)
+            : this.generateQuery(title, domain),
           lastmod: lastmod,
           selected: true
         });
@@ -185,22 +187,93 @@ const Sitemap = {
   },
 
   /**
-   * 從頁面抓取實際標題（可選用）
+   * 從頁面抓取實際標題
    * @param {string} url - 頁面 URL
    * @returns {Promise<string|null>} 標題
    */
   async fetchPageTitle(url) {
     try {
       const proxy = this.PROXIES[0];
-      const response = await fetch(proxy + encodeURIComponent(url));
-      const html = await response.text();
+      const proxyUrl = proxy.url + encodeURIComponent(url);
+      const response = await fetch(proxyUrl);
 
-      const ogTitleMatch = html.match(/<meta[^>]*property="og:title"[^>]*content="([^"]+)"/i);
+      let html;
+      if (proxy.type === 'json') {
+        const data = await response.json();
+        html = data[proxy.key];
+      } else {
+        html = await response.text();
+      }
+
+      if (!html) return null;
+
+      // og:title（兩種寫法都抓）
+      const ogMatch = html.match(/<meta[^>]*property="og:title"[^>]*content="([^"]+)"/i)
+        || html.match(/<meta[^>]*content="([^"]+)"[^>]*property="og:title"/i);
+      // <title>
       const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
 
-      return ogTitleMatch?.[1] || titleMatch?.[1] || null;
+      const raw = ogMatch?.[1] || titleMatch?.[1] || null;
+      if (!raw) return null;
+
+      // 解碼 HTML entities
+      const tmp = document.createElement('textarea');
+      tmp.innerHTML = raw;
+      return tmp.value.trim();
     } catch {
       return null;
     }
+  },
+
+  /**
+   * 判斷文章標題是否需要抓取真實標題
+   * @param {Object} article - 文章
+   * @returns {boolean}
+   */
+  needsTitleFetch(article) {
+    const t = article.title;
+    // 全 URL、以 http 開頭、純數字、純 ASCII slug
+    return t === article.url
+      || t.startsWith('http')
+      || /^\d+$/.test(t.trim())
+      || !/[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af]/.test(t);
+  },
+
+  /**
+   * 批次抓取文章標題（背景執行）
+   * @param {Array} articles - 文章清單
+   * @param {string} domain - 網域
+   * @param {Function} onUpdate - 每篇更新後的回呼 (article, done, total)
+   * @returns {Promise<number>} 成功抓取的數量
+   */
+  async fetchTitlesForArticles(articles, domain, onUpdate) {
+    const needFetch = articles.filter(a => this.needsTitleFetch(a));
+    if (needFetch.length === 0) return 0;
+
+    let fetched = 0;
+    const batchSize = 3;
+
+    for (let i = 0; i < needFetch.length; i += batchSize) {
+      const batch = needFetch.slice(i, i + batchSize);
+      const promises = batch.map(async (article) => {
+        const title = await this.fetchPageTitle(article.url);
+        if (title && title !== article.title) {
+          article.title = title;
+          // 用真實標題重新產生搜尋語句
+          article.query = typeof QueryEngine !== 'undefined'
+            ? QueryEngine.generate(title, domain)
+            : this.generateQuery(title, domain);
+          fetched++;
+          if (onUpdate) onUpdate(article, fetched, needFetch.length);
+        }
+      });
+      await Promise.all(promises);
+      // 批次間延遲，避免打爆 proxy
+      if (i + batchSize < needFetch.length) {
+        await new Promise(r => setTimeout(r, 600));
+      }
+    }
+
+    return fetched;
   }
 };

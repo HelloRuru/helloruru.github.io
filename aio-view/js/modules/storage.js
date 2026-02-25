@@ -12,7 +12,8 @@ const Storage = {
     ARTICLES: 'articles',
     RESULTS: 'results',
     HISTORY: 'history',
-    SETTINGS: 'settings'
+    SETTINGS: 'settings',
+    MANUAL_CHECK: 'manual_check'
   },
 
   /**

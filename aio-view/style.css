@@ -27,6 +27,7 @@
 @import url('./css/components/ai-assist.css');    /* AI 輔助面板 */
 @import url('./css/components/charts.css');       /* 圖表分析 */
 @import url('./css/components/timeline.css');     /* 時間軸報告 */
+@import url('./css/components/manual-check.css'); /* 手動檢查模式 */
 
 /* 響應式 */
 @import url('./css/responsive.css');     /* 所有 @media queries */
