@@ -1,0 +1,116 @@
+/* ================================================
+   圖表分析區塊
+   Chart.js 容器 + DS v1.9 配色
+   ================================================ */
+
+/* 圖表區 */
+.charts-section {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-border, #E8E4E1);
+}
+
+.charts-section h3 {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color-ink, #333);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.charts-section h3 .icon {
+  width: 18px;
+  height: 18px;
+  color: var(--color-rose, #D4A5A5);
+}
+
+/* 圖表格線 */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* 單一圖表卡片 */
+.chart-card {
+  background: var(--bg-card, #fff);
+  border: 1px solid var(--color-border, #E8E4E1);
+  border-radius: var(--radius-lg, 24px);
+  padding: 20px;
+}
+
+.chart-card-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text, #4A4A4A);
+  margin-bottom: 12px;
+}
+
+/* Canvas 容器 */
+.chart-canvas-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.chart-canvas-wrap canvas {
+  width: 100% !important;
+  max-height: 280px;
+}
+
+/* 引用源列表（柱狀圖旁） */
+.source-list {
+  margin-top: 12px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.source-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--color-border, #E8E4E1);
+  font-size: 13px;
+}
+
+.source-item:last-child {
+  border-bottom: none;
+}
+
+.source-domain {
+  color: var(--color-text, #4A4A4A);
+  font-weight: 500;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.source-count {
+  color: var(--color-rose, #D4A5A5);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* 空狀態 */
+.chart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+  color: var(--color-gray, #888);
+  font-size: 14px;
+}
+
+/* 響應式 */
+@media (max-width: 768px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-canvas-wrap canvas {
+    max-height: 220px;
+  }
+}

@@ -1,0 +1,207 @@
+/* ================================================
+   時間軸報告
+   趨勢折線圖 + 歷史記錄清單
+   ================================================ */
+
+/* 時間軸區塊 */
+.timeline-section {
+  margin-top: 24px;
+}
+
+.timeline-section h3 {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color-ink, #333);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.timeline-section h3 .icon {
+  width: 18px;
+  height: 18px;
+  color: var(--color-lavender, #B8A9C9);
+}
+
+/* 趨勢圖容器 */
+.trend-chart-wrap {
+  background: var(--bg-card, #fff);
+  border: 1px solid var(--color-border, #E8E4E1);
+  border-radius: var(--radius-lg, 24px);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.trend-chart-wrap canvas {
+  width: 100% !important;
+  max-height: 260px;
+}
+
+/* 歷史記錄清單 */
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.history-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: var(--bg-card, #fff);
+  border: 1px solid var(--color-border, #E8E4E1);
+  border-radius: var(--radius-md, 12px);
+  transition: border-color 0.2s;
+  cursor: pointer;
+}
+
+.history-card:hover {
+  border-color: var(--color-rose, #D4A5A5);
+}
+
+.history-card-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.history-date {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-ink, #333);
+  white-space: nowrap;
+}
+
+.history-domain {
+  font-size: 13px;
+  color: var(--color-gray, #888);
+}
+
+.history-card-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.history-stat {
+  text-align: center;
+}
+
+.history-stat-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-ink, #333);
+}
+
+.history-stat-label {
+  font-size: 11px;
+  color: var(--color-gray, #888);
+}
+
+.history-rate {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-rose, #D4A5A5);
+  min-width: 50px;
+  text-align: right;
+}
+
+/* 對比模式 */
+.compare-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.compare-select {
+  padding: 6px 12px;
+  border: 1px solid var(--color-border, #E8E4E1);
+  border-radius: var(--radius-sm, 8px);
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-text, #4A4A4A);
+  background: #fff;
+}
+
+.compare-label {
+  font-size: 13px;
+  color: var(--color-gray, #888);
+}
+
+/* 對比結果 */
+.compare-results {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.compare-card {
+  padding: 16px;
+  border-radius: var(--radius-md, 12px);
+  text-align: center;
+}
+
+.compare-card.gained {
+  background: rgba(123, 174, 127, 0.08);
+  border: 1px solid rgba(123, 174, 127, 0.2);
+}
+
+.compare-card.lost {
+  background: rgba(201, 112, 112, 0.08);
+  border: 1px solid rgba(201, 112, 112, 0.2);
+}
+
+.compare-card.kept {
+  background: rgba(212, 165, 165, 0.08);
+  border: 1px solid rgba(212, 165, 165, 0.2);
+}
+
+.compare-value {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.compare-card.gained .compare-value { color: #5A8F5E; }
+.compare-card.lost .compare-value { color: #C97070; }
+.compare-card.kept .compare-value { color: var(--color-rose, #D4A5A5); }
+
+.compare-label-text {
+  font-size: 13px;
+  color: var(--color-text, #4A4A4A);
+  margin-top: 4px;
+}
+
+/* 空狀態 */
+.timeline-empty {
+  padding: 32px;
+  text-align: center;
+  color: var(--color-gray, #888);
+  font-size: 14px;
+}
+
+/* 響應式 */
+@media (max-width: 768px) {
+  .history-card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .history-card-right {
+    justify-content: space-between;
+  }
+
+  .compare-results {
+    grid-template-columns: 1fr;
+  }
+
+  .compare-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

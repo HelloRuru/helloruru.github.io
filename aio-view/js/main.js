@@ -31,6 +31,9 @@ const App = {
     ArticlesTable.init();
     ResultsTable.init();
     CliGenerator.init();
+    AiAssist.init();
+    Charts.init();
+    Timeline.init();
 
     // 初始化輸入元件（帶回呼）
     SitemapInput.init((result) => {
@@ -134,8 +137,9 @@ const App = {
     ResultsTable.hide();
     CliGenerator.hide();
 
-    // 重置統計
+    // 重置統計與圖表
     Stats.reset();
+    Charts.reset();
 
     // 清空輸入框
     const sitemapInput = document.getElementById('sitemap-url');
@@ -164,12 +168,16 @@ const App = {
       if (savedArticles[0]?.url) {
         this.domain = Utils.getDomain(savedArticles[0].url);
       }
+
+      // 更新 AI 輔助面板
+      AiAssist.update(savedArticles, this.domain);
     }
 
     // 載入掃描結果
     const savedResults = Storage.getResults();
     if (savedResults) {
       ResultsTable.render(savedResults);
+      Charts.render(savedResults);
     }
   },
 
@@ -185,6 +193,9 @@ const App = {
 
     // 顯示文章清單
     ArticlesTable.render(result.articles);
+
+    // 更新 AI 輔助面板
+    AiAssist.update(result.articles, result.domain);
   },
 
   /**
@@ -197,6 +208,12 @@ const App = {
 
     // 顯示結果
     ResultsTable.render(results);
+
+    // 渲染圖表
+    Charts.render(results);
+
+    // 更新時間軸（存入 IndexedDB + 重新整理）
+    Timeline.onResultsUploaded(results);
   }
 };
 

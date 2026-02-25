@@ -24,6 +24,9 @@
 @import url('./css/components/empty-state.css');  /* 空白狀態 */
 @import url('./css/components/guide.css');        /* 使用說明 */
 @import url('./css/components/modal.css');        /* 彈窗 */
+@import url('./css/components/ai-assist.css');    /* AI 輔助面板 */
+@import url('./css/components/charts.css');       /* 圖表分析 */
+@import url('./css/components/timeline.css');     /* 時間軸報告 */
 
 /* 響應式 */
 @import url('./css/responsive.css');     /* 所有 @media queries */

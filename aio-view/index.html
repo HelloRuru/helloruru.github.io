@@ -223,6 +223,9 @@
     }
   </style>
 
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
+
   <!-- Styles -->
   <link rel="stylesheet" href="style.css">
 </head>
@@ -429,6 +432,86 @@
             </table>
           </div>
 
+          <!-- AI 輔助面板 -->
+          <div class="ai-assist-panel hidden" id="ai-assist-panel">
+            <button class="ai-assist-header" id="ai-assist-toggle" aria-expanded="false">
+              <span>
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2a4 4 0 014 4v1a1 1 0 001 1h1a4 4 0 010 8h-1a1 1 0 00-1 1v1a4 4 0 01-8 0v-1a1 1 0 00-1-1H6a4 4 0 010-8h1a1 1 0 001-1V6a4 4 0 014-4z"/>
+                </svg>
+                AI 輔助產生搜尋語句
+              </span>
+              <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6,9 12,15 18,9"/>
+              </svg>
+            </button>
+
+            <div class="ai-assist-body" id="ai-assist-body">
+              <!-- 模式 Tabs -->
+              <div class="ai-mode-tabs">
+                <button class="ai-mode-tab active" id="ai-mode-free">免費模式</button>
+                <button class="ai-mode-tab" id="ai-mode-cli">API 自動模式</button>
+              </div>
+
+              <!-- 免費模式內容 -->
+              <div id="ai-free-content">
+                <!-- 批次導覽 -->
+                <div class="batch-nav hidden" id="ai-batch-nav">
+                  <span class="batch-nav-label" id="ai-batch-label"></span>
+                  <div class="batch-nav-buttons" id="ai-batch-buttons"></div>
+                </div>
+
+                <!-- 提示詞 -->
+                <div class="prompt-block">
+                  <textarea class="prompt-text" id="ai-prompt-text" readonly rows="8"></textarea>
+                  <div class="prompt-actions">
+                    <button class="btn btn-primary btn-sm" id="ai-copy-prompt">
+                      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                      </svg>
+                      複製這批提示詞
+                    </button>
+                  </div>
+                </div>
+
+                <!-- 貼回區塊 -->
+                <div class="paste-back-section">
+                  <h4>貼回 AI 的回覆</h4>
+                  <textarea class="paste-back-textarea" id="ai-paste-textarea"
+                    placeholder="把 ChatGPT / Claude 的回覆貼到這裡，例如：&#10;高雄左營美食推薦 | 左營 美食&#10;鳳山夜市必吃攻略 | 鳳山 夜市 推薦" rows="6"></textarea>
+                  <div class="prompt-actions">
+                    <button class="btn btn-secondary btn-sm" id="ai-apply-paste">
+                      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                      套用語句
+                    </button>
+                  </div>
+                </div>
+
+                <!-- 完整度 -->
+                <div class="completeness-bar incomplete" id="ai-completeness"></div>
+              </div>
+
+              <!-- CLI API 模式內容 -->
+              <div id="ai-cli-content" class="hidden">
+                <div class="cli-api-hint">
+                  <p>進階模式：用你的 API Key 自動產生搜尋語句。先匯出搜尋語句 JSON，再用 CLI 工具一鍵產生。</p>
+                  <p style="margin-top: 8px;"><strong>步驟 1：</strong>匯出 queries.json（上方「匯出搜尋語句」按鈕）</p>
+                  <p><strong>步驟 2：</strong>在 aio-view/cli 資料夾執行：</p>
+                  <code># 使用 OpenAI（GPT-4o-mini，最便宜）
+node ai-generate.js --input queries.json --provider openai --model gpt-4o-mini
+
+# 或使用 Claude（Haiku，最快）
+node ai-generate.js --input queries.json --provider anthropic --model claude-haiku-4-5-20251001</code>
+                  <p style="margin-top: 12px;"><strong>步驟 3：</strong>產生完的 queries.json 會自動更新語句欄位，直接用來掃描即可。</p>
+                  <p style="margin-top: 8px; color: var(--color-gray);">費用參考：50 篇約 NT$1-3（GPT-4o-mini）或 NT$0.5（Claude Haiku）</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="actions">
             <button class="btn btn-ghost" id="copy-prompt-btn">
               <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -530,6 +613,33 @@
             </div>
           </div>
 
+          <!-- Charts -->
+          <div class="charts-section hidden" id="charts-section">
+            <h3>
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="20" x2="18" y2="10"/>
+                <line x1="12" y1="20" x2="12" y2="4"/>
+                <line x1="6" y1="20" x2="6" y2="14"/>
+              </svg>
+              圖表分析
+            </h3>
+            <div class="charts-grid">
+              <div class="chart-card">
+                <div class="chart-card-title">AIO 狀態分佈</div>
+                <div class="chart-canvas-wrap">
+                  <canvas id="chart-status"></canvas>
+                </div>
+              </div>
+              <div class="chart-card">
+                <div class="chart-card-title">引用來源 Top 10</div>
+                <div class="chart-canvas-wrap" style="height: 280px;">
+                  <canvas id="chart-sources"></canvas>
+                </div>
+                <div class="source-list" id="sources-list"></div>
+              </div>
+            </div>
+          </div>
+
           <!-- Filter -->
           <div class="filter-bar">
             <button class="filter-btn active" data-filter="all">全部</button>
@@ -566,6 +676,36 @@
               </svg>
               匯出 CSV
             </button>
+          </div>
+        </section>
+
+        <!-- Timeline: 時間軸報告 -->
+        <section class="card hidden" id="timeline-section">
+          <div class="timeline-section">
+            <h3>
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+              歷史趨勢
+            </h3>
+
+            <!-- 趨勢折線圖 -->
+            <div class="trend-chart-wrap">
+              <canvas id="chart-trend"></canvas>
+            </div>
+
+            <!-- 對比 -->
+            <div class="compare-bar hidden" id="timeline-compare-bar">
+              <span class="compare-label">對比：</span>
+              <select class="compare-select" id="compare-date-1"></select>
+              <span class="compare-label">vs</span>
+              <select class="compare-select" id="compare-date-2"></select>
+              <button class="btn btn-sm btn-secondary" id="timeline-compare-btn">比較</button>
+            </div>
+            <div class="compare-results hidden" id="compare-results"></div>
+
+            <!-- 歷史記錄清單 -->
+            <div class="history-list" id="history-list"></div>
           </div>
         </section>
 
@@ -606,6 +746,7 @@
   <script src="js/modules/toast.js"></script>
   <script src="js/modules/storage.js"></script>
   <script src="js/modules/sitemap.js"></script>
+  <script src="js/modules/db.js"></script>
 
   <!-- Scripts: Components -->
   <script src="js/components/guide.js"></script>
@@ -615,6 +756,9 @@
   <script src="js/components/file-upload.js"></script>
   <script src="js/components/cli-generator.js"></script>
   <script src="js/components/sitemap-input.js"></script>
+  <script src="js/components/ai-assist.js"></script>
+  <script src="js/components/charts.js"></script>
+  <script src="js/components/timeline.js"></script>
 
   <!-- Scripts: Main Entry -->
   <script src="js/main.js"></script>
