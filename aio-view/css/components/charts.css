@@ -1,19 +1,18 @@
 /* ================================================
-   圖表分析區塊
-   Chart.js 容器 + DS v1.9 配色
+   Charts — Cyberpunk
    ================================================ */
 
-/* 圖表區 */
+/* Charts Section */
 .charts-section {
   margin-top: 24px;
   padding-top: 24px;
-  border-top: 1px solid var(--color-border, #E8E4E1);
+  border-top: 1px solid var(--color-border);
 }
 
 .charts-section h3 {
   font-size: 16px;
   font-weight: 500;
-  color: var(--color-ink, #333);
+  color: var(--color-ink);
   margin-bottom: 16px;
   display: flex;
   align-items: center;
@@ -23,32 +22,32 @@
 .charts-section h3 .icon {
   width: 18px;
   height: 18px;
-  color: var(--color-rose, #D4A5A5);
+  color: var(--color-rose);
 }
 
-/* 圖表格線 */
+/* Charts Grid */
 .charts-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
 
-/* 單一圖表卡片 */
+/* Chart Card */
 .chart-card {
-  background: var(--bg-card, #fff);
-  border: 1px solid var(--color-border, #E8E4E1);
-  border-radius: var(--radius-lg, 24px);
+  background: var(--bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   padding: 20px;
 }
 
 .chart-card-title {
   font-size: 14px;
   font-weight: 500;
-  color: var(--color-text, #4A4A4A);
+  color: var(--color-text);
   margin-bottom: 12px;
 }
 
-/* Canvas 容器 */
+/* Canvas Container */
 .chart-canvas-wrap {
   position: relative;
   width: 100%;
@@ -59,7 +58,7 @@
   max-height: 280px;
 }
 
-/* 引用源列表（柱狀圖旁） */
+/* Source List */
 .source-list {
   margin-top: 12px;
   max-height: 200px;
@@ -71,7 +70,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 6px 0;
-  border-bottom: 1px solid var(--color-border, #E8E4E1);
+  border-bottom: 1px solid var(--color-border);
   font-size: 13px;
 }
 
@@ -80,7 +79,7 @@
 }
 
 .source-domain {
-  color: var(--color-text, #4A4A4A);
+  color: var(--color-text);
   font-weight: 500;
   max-width: 200px;
   overflow: hidden;
@@ -89,22 +88,22 @@
 }
 
 .source-count {
-  color: var(--color-rose, #D4A5A5);
+  color: var(--color-rose);
   font-weight: 700;
   font-size: 14px;
 }
 
-/* 空狀態 */
+/* Empty State */
 .chart-empty {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 160px;
-  color: var(--color-gray, #888);
+  color: var(--color-gray);
   font-size: 14px;
 }
 
-/* 響應式 */
+/* Responsive */
 @media (max-width: 768px) {
   .charts-grid {
     grid-template-columns: 1fr;

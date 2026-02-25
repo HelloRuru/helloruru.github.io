@@ -1,5 +1,5 @@
 /* ================================================
-   Badges — 徽章（Step Badge + Count Badge + Status Badge）
+   Badges — Cyberpunk
    ================================================ */
 
 /* Step Badge */
@@ -14,6 +14,7 @@
   font-size: 14px;
   font-weight: 500;
   border-radius: var(--radius-full);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
 }
 
 /* Count Badge */
@@ -44,8 +45,8 @@
 }
 
 .status-badge.yes {
-  background: rgba(168, 181, 160, 0.2);
-  color: var(--color-sage);
+  background: rgba(0, 255, 136, 0.12);
+  color: #00ff88;
 }
 
 .status-badge.no {
@@ -54,6 +55,6 @@
 }
 
 .status-badge.cited {
-  background: rgba(212, 165, 165, 0.2);
-  color: var(--color-dusty-rose);
+  background: rgba(0, 240, 255, 0.12);
+  color: #00f0ff;
 }

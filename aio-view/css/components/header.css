@@ -1,11 +1,24 @@
 /* ================================================
-   Header — 頁首
+   Header — Cyberpunk
    ================================================ */
 
 .header {
-  background: var(--gradient-primary);
+  background: linear-gradient(180deg, rgba(0, 240, 255, 0.08), transparent);
+  border-bottom: 1px solid rgba(0, 240, 255, 0.15);
   padding: var(--space-2xl) var(--space-md);
   text-align: center;
+  position: relative;
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #00f0ff, transparent);
 }
 
 .header .container {
@@ -18,27 +31,31 @@
   justify-content: center;
   gap: var(--space-sm);
   text-decoration: none;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition: transform 0.2s ease, filter 0.2s ease;
   margin-bottom: var(--space-sm);
 }
 
 .logo-link:hover {
   transform: scale(1.02);
-  opacity: 0.9;
+  filter: brightness(1.2);
 }
 
 .logo-icon {
   width: 40px;
   height: 40px;
   flex-shrink: 0;
+  filter: drop-shadow(0 0 6px rgba(0, 240, 255, 0.4));
 }
 
 .logo {
-  color: #FFFFFF;
+  color: #e0e8f0;
   margin: 0;
+  text-shadow: 0 0 16px rgba(0, 240, 255, 0.5), 0 0 32px rgba(0, 240, 255, 0.2);
 }
 
 .tagline {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 16px;
+  color: rgba(200, 214, 229, 0.8);
+  font-size: 15px;
+  font-family: var(--font-small);
+  letter-spacing: 1px;
 }

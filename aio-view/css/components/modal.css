@@ -1,16 +1,17 @@
 /* ================================================
-   Modal — 彈窗
+   Modal — Cyberpunk
    ================================================ */
 
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   padding: var(--space-md);
+  backdrop-filter: blur(4px);
 }
 .modal-overlay.hidden {
   display: none;
@@ -18,8 +19,9 @@
 
 .modal-card {
   background: var(--bg-card);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-deep);
+  box-shadow: 0 0 32px rgba(0, 240, 255, 0.1), var(--shadow-deep);
   max-width: 600px;
   width: 100%;
   max-height: 80vh;
@@ -53,6 +55,7 @@
 }
 .btn-close:hover {
   background: var(--color-mist);
+  color: var(--color-rose);
 }
 
 .modal-body {
@@ -77,7 +80,7 @@
 .textarea-input:focus {
   outline: none;
   border-color: var(--color-rose);
-  box-shadow: 0 0 0 3px rgba(212, 165, 165, 0.2);
+  box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.2);
 }
 .textarea-input::placeholder {
   color: var(--color-light-gray);

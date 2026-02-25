@@ -1,5 +1,5 @@
 /* ================================================
-   Toast — 通知提示
+   Toast — Cyberpunk
    ================================================ */
 
 /* Toast Notification */
@@ -8,9 +8,10 @@
   bottom: var(--space-lg);
   right: var(--space-lg);
   padding: var(--space-md) var(--space-lg);
-  background: var(--color-charcoal);
-  color: #FFFFFF;
+  background: #12121f;
+  color: #e0e8f0;
   font-size: 14px;
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-deep);
   transform: translateY(100px);
@@ -25,11 +26,15 @@
 }
 
 .toast.success {
-  background: var(--color-sage);
+  background: rgba(0, 255, 136, 0.1);
+  border-color: rgba(0, 255, 136, 0.3);
+  color: #00ff88;
 }
 
 .toast.error {
-  background: var(--color-dusty-rose);
+  background: rgba(255, 0, 170, 0.1);
+  border-color: rgba(255, 0, 170, 0.3);
+  color: #ff00aa;
 }
 
 /* Toast Container */

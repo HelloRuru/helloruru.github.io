@@ -13,17 +13,17 @@
   <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon.svg">
   <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.svg">
-  <link rel="mask-icon" href="icons/safari-pinned-tab.svg" color="#D4A5A5">
+  <link rel="mask-icon" href="icons/safari-pinned-tab.svg" color="#00f0ff">
 
   <!-- PWA -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#D4A5A5">
+  <meta name="theme-color" content="#06060c">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="AIO View">
 
   <!-- Microsoft Tile -->
-  <meta name="msapplication-TileColor" content="#D4A5A5">
+  <meta name="msapplication-TileColor" content="#06060c">
   <meta name="msapplication-config" content="browserconfig.xml">
 
   <!-- Open Graph -->
@@ -196,32 +196,10 @@
   }
   </script>
 
-  <!-- Fonts -->
+  <!-- Fonts: Orbitron (Display) + JetBrains Mono + Noto Sans TC -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
-  <!-- 源泉圓體 GenSenRounded — Design System v1.9 -->
-  <style>
-    @font-face {
-      font-family: 'GenSenRounded';
-      src: url('https://lab.helloruru.com/fonts/GenSenRounded-Regular.woff2') format('woff2');
-      font-weight: 400;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'GenSenRounded';
-      src: url('https://lab.helloruru.com/fonts/GenSenRounded-Medium.woff2') format('woff2');
-      font-weight: 500;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'GenSenRounded';
-      src: url('https://lab.helloruru.com/fonts/GenSenRounded-Bold.woff2') format('woff2');
-      font-weight: 700;
-      font-display: swap;
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
@@ -230,6 +208,10 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Cyberpunk Visual Effects -->
+  <div class="scanlines"></div>
+  <div class="grid-bg"></div>
+
   <div class="app">
     <!-- Header -->
     <header class="header">
@@ -238,15 +220,15 @@
           <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
             <defs>
               <linearGradient id="logo-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1"/>
-                <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:1"/>
+                <stop offset="0%" style="stop-color:#00f0ff;stop-opacity:1"/>
+                <stop offset="100%" style="stop-color:#ff00aa;stop-opacity:1"/>
               </linearGradient>
             </defs>
             <circle cx="13" cy="13" r="6" stroke="url(#logo-bg)" stroke-width="2.5" fill="none"/>
             <line x1="17" y1="17" x2="24" y2="24" stroke="url(#logo-bg)" stroke-width="2.5" stroke-linecap="round"/>
             <path d="M22 8 L25 11 L29 6" fill="none" stroke="url(#logo-bg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <h1 class="logo">AIO View</h1>
+          <h1 class="logo glitch" data-text="AIO View">AIO View</h1>
         </a>
         <p class="tagline">監測你的文章是否出現在 Google AI Overview</p>
       </div>
@@ -256,36 +238,121 @@
     <main class="main">
       <div class="container">
 
-        <!-- Guide: 使用說明 -->
+        <!-- Guide: 操作流程 -->
         <section class="card guide-card" id="guide-section">
-          <button class="guide-header" id="guide-toggle" aria-expanded="true">
+          <div class="guide-hero">
             <h2>
               <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
-                <line x1="12" y1="17" x2="12.01" y2="17"/>
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
               </svg>
-              使用說明
+              OPERATION FLOW
             </h2>
-            <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="6,9 12,15 18,9"/>
-            </svg>
-          </button>
+            <p class="guide-subtitle">監測你的文章是否出現在 Google AI Overview</p>
+          </div>
 
-          <div class="guide-content expanded" id="guide-content">
-            <div class="guide-intro">
-              <p><strong>AIO View</strong> 幫你查看網站文章有沒有出現在 Google AI Overview（AI 摘要）裡。</p>
-              <p class="guide-note">需要在電腦跑一個小工具來搜尋 Google，第一次要先裝環境。</p>
+          <!-- 六步視覺流程 -->
+          <div class="step-flow">
+            <div class="flow-step">
+              <div class="flow-num">01</div>
+              <svg class="flow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
+                <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+              </svg>
+              <span class="flow-label">貼 Sitemap</span>
+              <span class="flow-desc">輸入網站地圖網址</span>
             </div>
 
+            <div class="flow-step">
+              <div class="flow-num">02</div>
+              <svg class="flow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M9 11l3 3L22 4"/>
+                <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+              </svg>
+              <span class="flow-label">選文章</span>
+              <span class="flow-desc">勾選要監測的頁面</span>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-num">03</div>
+              <svg class="flow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+              </svg>
+              <span class="flow-label">AI 語句</span>
+              <span class="flow-desc">產生搜尋關鍵字</span>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-num">04</div>
+              <svg class="flow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              <span class="flow-label">下載指令</span>
+              <span class="flow-desc">匯出 queries.json</span>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-num">05</div>
+              <svg class="flow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <polyline points="4 17 10 11 4 5"/>
+                <line x1="12" y1="19" x2="20" y2="19"/>
+              </svg>
+              <span class="flow-label">跑掃描</span>
+              <span class="flow-desc">電腦背景執行</span>
+            </div>
+
+            <div class="flow-step">
+              <div class="flow-num">06</div>
+              <svg class="flow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <line x1="18" y1="20" x2="18" y2="10"/>
+                <line x1="12" y1="20" x2="12" y2="4"/>
+                <line x1="6" y1="20" x2="6" y2="14"/>
+              </svg>
+              <span class="flow-label">看報告</span>
+              <span class="flow-desc">圖表 + 時間軸分析</span>
+            </div>
+          </div>
+
+          <!-- 快速提示 -->
+          <div class="flow-tips">
+            <span class="tip-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+              </svg>
+              每篇 ~2.5 min
+            </span>
+            <span class="tip-divider"></span>
+            <span class="tip-item">50 篇約 2 小時</span>
+            <span class="tip-divider"></span>
+            <span class="tip-item">適合睡前放著跑</span>
+          </div>
+
+          <!-- 操作按鈕 -->
+          <div class="flow-actions">
+            <button class="btn btn-ghost btn-sm" id="guide-toggle" aria-expanded="false">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+              </svg>
+              第一次？看環境安裝
+              <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6,9 12,15 18,9"/>
+              </svg>
+            </button>
+            <a href="guide.html" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/>
+                <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/>
+              </svg>
+              完整操作手冊
+            </a>
+          </div>
+
+          <!-- 可收合：環境安裝 -->
+          <div class="setup-content" id="guide-content">
             <div class="guide-section">
-              <h3>
-                <svg class="guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                  <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
-                </svg>
-                第一次使用？先裝這些
-              </h3>
+              <h3>環境安裝（只需一次）</h3>
               <ol class="guide-steps">
                 <li>
                   <strong>裝 Node.js</strong>
@@ -299,63 +366,11 @@
                   <strong>下載工具</strong>
                   <p>打開 <strong>PowerShell</strong>，貼上：</p>
                   <code class="guide-code">git clone https://github.com/helloruru/helloruru.github.io.git</code>
-                  <code class="guide-code">cd helloruru.github.io/aio-view/cli<br>npm install<br>npx playwright install chromium</code>
+                  <code class="guide-code">cd helloruru.github.io/aio-view/cli
+npm install
+npx playwright install chromium</code>
                 </li>
               </ol>
-            </div>
-
-            <div class="guide-section">
-              <h3>
-                <svg class="guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="4 17 10 11 4 5"/>
-                  <line x1="12" y1="19" x2="20" y2="19"/>
-                </svg>
-                怎麼用
-              </h3>
-              <ol class="guide-steps">
-                <li>
-                  <strong>貼上 Sitemap 網址，按「解析」</strong>
-                  <p>如果是 Sitemap Index（WordPress 常見），會出現下拉選單讓你選子 Sitemap。</p>
-                </li>
-                <li>
-                  <strong>挑選要監測的文章</strong>
-                  <p>用年份、月份篩選，勾選想監測的文章。</p>
-                </li>
-                <li>
-                  <strong>填寫搜尋語句</strong>
-                  <p>每篇文章需要一個搜尋語句（模擬使用者會怎麼搜）。可以手動編輯，也可以：</p>
-                  <p>按「複製 AI 提示詞」→ 貼到 ChatGPT 或 Claude → 拿到語句 → 按「批次貼入語句」一次貼回來。</p>
-                </li>
-                <li>
-                  <strong>產生指令，下載 queries.json</strong>
-                  <p>按「產生 CLI 指令」，把下載的 <code>queries.json</code> 放到 <code>aio-view/cli</code> 資料夾。</p>
-                </li>
-                <li>
-                  <strong>在電腦跑掃描</strong>
-                  <p>在 PowerShell 輸入：</p>
-                  <code class="guide-code">node scan.js --input queries.json --output results.json --domain 你的網域.com</code>
-                </li>
-                <li>
-                  <strong>上傳 results.json 看報告</strong>
-                  <p>掃描跑完後，把 <code>results.json</code> 拖到下方「上傳結果」區就好。</p>
-                </li>
-              </ol>
-            </div>
-
-            <div class="guide-section">
-              <h3>
-                <svg class="guide-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="12" y1="8" x2="12" y2="12"/>
-                  <line x1="12" y1="16" x2="12.01" y2="16"/>
-                </svg>
-                小提醒
-              </h3>
-              <ul class="guide-notes">
-                <li>每篇間隔 <strong>2.5 分鐘</strong>，50 篇約 <strong>2 小時</strong>，適合睡前放著跑</li>
-                <li>中途可以關掉，下次會接著上次的進度</li>
-                <li>跑的時候不要開其他 Chrome 視窗</li>
-              </ul>
             </div>
           </div>
         </section>

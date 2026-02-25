@@ -1,5 +1,5 @@
 /* ================================================
-   Table — 表格
+   Table — Cyberpunk
    ================================================ */
 
 .table-wrapper {
@@ -24,10 +24,14 @@
   font-weight: 500;
   color: var(--color-gray);
   background: var(--bg-light);
+  font-family: var(--font-small);
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.5px;
 }
 
 .data-table tbody tr:hover {
-  background: rgba(212, 165, 165, 0.05);
+  background: rgba(0, 240, 255, 0.04);
 }
 
 .data-table input[type="text"] {

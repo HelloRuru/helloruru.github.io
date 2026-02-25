@@ -1,5 +1,5 @@
 /* ================================================
-   Buttons — 按鈕
+   Buttons — Cyberpunk
    ================================================ */
 
 .btn {
@@ -24,18 +24,35 @@
 }
 
 .btn-primary:hover {
-  box-shadow: var(--shadow-medium);
+  box-shadow: var(--glow-cyan);
   transform: translateY(-1px);
 }
 
 .btn-secondary {
   background: var(--bg-card);
   color: var(--color-text);
-  border: 1px solid var(--color-mist);
+  border: 1px solid var(--color-border);
 }
 
 .btn-secondary:hover {
-  background: var(--color-mist);
+  border-color: var(--color-rose);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.15);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid transparent;
+}
+
+.btn-ghost:hover {
+  border-color: var(--color-border);
+  color: var(--color-rose);
+}
+
+.btn-sm {
+  padding: var(--space-sm) var(--space-md);
+  font-size: 14px;
 }
 
 .btn:disabled {

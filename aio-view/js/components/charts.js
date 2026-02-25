@@ -1,54 +1,52 @@
 /* ================================================
    AIO View — Charts Component
-   圖表分析（使用 Chart.js）
+   Cyberpunk Theme
    ================================================ */
 
 const Charts = {
-  /** Chart.js 實例 */
+  /** Chart.js instances */
   instances: {
     status: null,
     sources: null
   },
 
-  /** DS v1.9 配色 */
+  /** Cyberpunk color palette */
   colors: {
-    rose: '#D4A5A5',
-    lavender: '#B8A9C9',
-    sage: '#A8B5A0',
-    blush: '#F5D0C5',
-    warmGray: '#B5ADA7',
-    charcoal: '#5C5856',
-    grayRose: '#C9929A',
-    wisteria: '#C4B7D7',
-    fog: '#E8E4E1'
+    cyan: '#00f0ff',
+    magenta: '#ff00aa',
+    green: '#00ff88',
+    purple: '#cc88dd',
+    darkCyan: '#00c8d4',
+    amber: '#ffaa00',
+    pink: '#ff66cc',
+    teal: '#00d4aa',
+    surface: '#12121f'
   },
 
   /**
-   * 初始化
+   * Init
    */
   init() {
-    // Chart.js 全域設定
     if (typeof Chart !== 'undefined') {
-      Chart.defaults.font.family = "'GenSenRounded', 'Noto Sans TC', sans-serif";
+      Chart.defaults.font.family = "'JetBrains Mono', 'Noto Sans TC', sans-serif";
       Chart.defaults.font.size = 13;
-      Chart.defaults.color = '#4A4A4A';
+      Chart.defaults.color = '#c8d6e5';
     }
   },
 
   /**
-   * 渲染所有圖表
-   * @param {Object} results - 掃描結果
+   * Render all charts
+   * @param {Object} results
    */
   render(results) {
     if (typeof Chart === 'undefined') {
-      console.warn('[Charts] Chart.js \u672A\u8F09\u5165');
+      console.warn('[Charts] Chart.js not loaded');
       return;
     }
 
     const items = results.results || [];
     if (items.length === 0) return;
 
-    // 顯示圖表區塊
     const section = document.getElementById('charts-section');
     if (section) section.classList.remove('hidden');
 
@@ -57,19 +55,17 @@ const Charts = {
   },
 
   /**
-   * AIO 狀態圓餅圖
-   * @param {Array} items - 結果項目
+   * Status doughnut chart
+   * @param {Array} items
    */
   renderStatusChart(items) {
     const canvas = document.getElementById('chart-status');
     if (!canvas) return;
 
-    // 計算三種狀態
     const cited = items.filter(r => r.isCited).length;
     const aioNotCited = items.filter(r => r.hasAIO && !r.isCited).length;
     const noAio = items.filter(r => !r.hasAIO).length;
 
-    // 銷毀舊圖表
     if (this.instances.status) {
       this.instances.status.destroy();
     }
@@ -81,9 +77,9 @@ const Charts = {
         datasets: [{
           data: [cited, aioNotCited, noAio],
           backgroundColor: [
-            this.colors.rose,
-            this.colors.lavender,
-            this.colors.fog
+            this.colors.cyan,
+            this.colors.magenta,
+            '#3a3a4a'
           ],
           borderWidth: 0,
           hoverOffset: 6
@@ -100,14 +96,19 @@ const Charts = {
               padding: 16,
               usePointStyle: true,
               pointStyleWidth: 10,
-              font: { size: 13, weight: 500 }
+              font: { size: 13, weight: 500 },
+              color: '#c8d6e5'
             }
           },
           tooltip: {
-            backgroundColor: '#333',
+            backgroundColor: this.colors.surface,
+            borderColor: 'rgba(0, 240, 255, 0.2)',
+            borderWidth: 1,
             cornerRadius: 8,
             padding: 10,
             titleFont: { weight: 500 },
+            titleColor: '#e0e8f0',
+            bodyColor: '#c8d6e5',
             callbacks: {
               label: function(ctx) {
                 const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
@@ -122,15 +123,14 @@ const Charts = {
   },
 
   /**
-   * 引用源分佈柱狀圖
-   * @param {Array} items - 結果項目
+   * Sources bar chart
+   * @param {Array} items
    */
   renderSourcesChart(items) {
     const canvas = document.getElementById('chart-sources');
     const listEl = document.getElementById('sources-list');
     if (!canvas) return;
 
-    // 提取所有引用來源網域
     const sourceCounts = {};
 
     items.forEach(item => {
@@ -138,12 +138,11 @@ const Charts = {
         item.aioSources.forEach(src => {
           let domain = src;
           try {
-            // 嘗試解析完整 URL
             if (src.startsWith('http')) {
               domain = new URL(src).hostname;
             }
           } catch (e) {
-            // 不是 URL，當作 domain 直接用
+            // not a URL, use as domain
           }
           domain = domain.replace(/^www\./, '').split('/')[0];
           sourceCounts[domain] = (sourceCounts[domain] || 0) + 1;
@@ -151,13 +150,11 @@ const Charts = {
       }
     });
 
-    // 排序取 Top 10
     const sorted = Object.entries(sourceCounts)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 10);
 
     if (sorted.length === 0) {
-      // 顯示空狀態
       canvas.parentElement.innerHTML = '<div class="chart-empty">\u7121\u5F15\u7528\u4F86\u6E90\u8CC7\u6599</div>';
       if (listEl) listEl.innerHTML = '';
       return;
@@ -166,13 +163,12 @@ const Charts = {
     const labels = sorted.map(s => s[0]);
     const data = sorted.map(s => s[1]);
 
-    // 漸層色
+    // Gradient from cyan to magenta
     const barColors = sorted.map((_, i) => {
       const ratio = i / Math.max(sorted.length - 1, 1);
-      return this.lerpColor(this.colors.rose, this.colors.lavender, ratio);
+      return this.lerpColor(this.colors.cyan, this.colors.magenta, ratio);
     });
 
-    // 銷毀舊圖表
     if (this.instances.sources) {
       this.instances.sources.destroy();
     }
@@ -196,9 +192,13 @@ const Charts = {
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: '#333',
+            backgroundColor: this.colors.surface,
+            borderColor: 'rgba(0, 240, 255, 0.2)',
+            borderWidth: 1,
             cornerRadius: 8,
             padding: 10,
+            titleColor: '#e0e8f0',
+            bodyColor: '#c8d6e5',
             callbacks: {
               label: function(ctx) {
                 return ` ${ctx.raw} \u6B21\u5F15\u7528`;
@@ -209,12 +209,13 @@ const Charts = {
         scales: {
           x: {
             beginAtZero: true,
-            ticks: { stepSize: 1, font: { size: 12 } },
-            grid: { color: 'rgba(0,0,0,0.04)' }
+            ticks: { stepSize: 1, font: { size: 12 }, color: '#5a6a7a' },
+            grid: { color: 'rgba(0, 240, 255, 0.06)' }
           },
           y: {
             ticks: {
               font: { size: 12 },
+              color: '#7a8a9a',
               callback: function(value) {
                 const label = this.getLabelForValue(value);
                 return label.length > 20 ? label.substring(0, 20) + '\u2026' : label;
@@ -226,7 +227,6 @@ const Charts = {
       }
     });
 
-    // 渲染來源列表
     if (listEl) {
       listEl.innerHTML = sorted.map(([domain, count]) =>
         `<div class="source-item">
@@ -238,9 +238,9 @@ const Charts = {
   },
 
   /**
-   * 線性內插顏色
-   * @param {string} c1 - 起始色 hex
-   * @param {string} c2 - 結束色 hex
+   * Linear color interpolation
+   * @param {string} c1 - start hex
+   * @param {string} c2 - end hex
    * @param {number} t - 0~1
    * @returns {string} hex
    */
@@ -258,7 +258,7 @@ const Charts = {
   },
 
   /**
-   * 重置
+   * Reset
    */
   reset() {
     if (this.instances.status) {

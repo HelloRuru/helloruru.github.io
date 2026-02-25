@@ -1,6 +1,6 @@
 /* ================================================
    AIO View — Guide Component
-   使用說明區塊
+   操作流程區塊（收合安裝說明）
    ================================================ */
 
 const Guide = {
@@ -11,7 +11,7 @@ const Guide = {
     content: null
   },
 
-  /** 是否展開 */
+  /** 安裝說明是否展開 */
   isExpanded: false,
 
   /**
@@ -70,16 +70,15 @@ const Guide = {
   },
 
   /**
-   * 載入展開狀態
+   * 載入展開狀態（預設收合）
    */
   loadState() {
     try {
       const saved = localStorage.getItem('aio_view_guide_expanded');
-      // 預設展開（首次使用者）
-      this.isExpanded = saved === null ? true : saved === 'true';
+      this.isExpanded = saved === 'true';
       this.updateUI();
     } catch {
-      this.isExpanded = true;
+      this.isExpanded = false;
       this.updateUI();
     }
   }

@@ -1,5 +1,5 @@
 /* ================================================
-   Guide — 使用說明
+   Guide — Cyberpunk Step Flow
    ================================================ */
 
 .guide-card {
@@ -7,81 +7,168 @@
   overflow: hidden;
 }
 
-.guide-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: var(--space-lg);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s ease;
+/* Hero Header */
+.guide-hero {
+  padding: var(--space-lg) var(--space-lg) 0;
 }
 
-.guide-header:hover {
-  background: rgba(212, 165, 165, 0.05);
-}
-
-.guide-header h2 {
+.guide-hero h2 {
   margin: 0;
   display: flex;
   align-items: center;
   gap: var(--space-sm);
 }
 
-.guide-header h2 .icon {
+.guide-hero h2 .icon {
   color: var(--color-rose);
 }
 
-.toggle-icon {
-  width: 20px;
-  height: 20px;
+.guide-subtitle {
+  font-size: 14px;
   color: var(--color-gray);
-  transition: transform 0.3s ease;
+  margin: var(--space-xs) 0 0;
+  font-family: var(--font-body);
 }
 
-.toggle-icon.expanded {
-  transform: rotate(180deg);
+/* ---- Step Flow Grid ---- */
+.step-flow {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-sm);
+  padding: var(--space-lg);
 }
 
-.guide-content {
+.flow-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--space-md) var(--space-sm);
+  border: 1px solid rgba(0, 240, 255, 0.08);
+  border-radius: var(--radius-md);
+  background: rgba(0, 240, 255, 0.02);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.flow-step:hover {
+  border-color: rgba(0, 240, 255, 0.25);
+  background: rgba(0, 240, 255, 0.05);
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+/* Connector arrow (desktop only) */
+.flow-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: -9px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 6px solid rgba(0, 240, 255, 0.25);
+}
+
+.flow-num {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-rose);
+  letter-spacing: 1px;
+  margin-bottom: var(--space-xs);
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+}
+
+.flow-icon {
+  width: 28px;
+  height: 28px;
+  color: var(--color-rose);
+  margin-bottom: var(--space-sm);
+  opacity: 0.85;
+}
+
+.flow-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-ink);
+  line-height: 1.3;
+}
+
+.flow-desc {
+  font-size: 11px;
+  color: var(--color-gray);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+/* ---- Quick Tips ---- */
+.flow-tips {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: 0 var(--space-lg) var(--space-md);
+  flex-wrap: wrap;
+}
+
+.tip-item {
+  font-size: 12px;
+  color: var(--color-gray);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-small);
+}
+
+.tip-item svg {
+  color: var(--color-rose);
+  opacity: 0.7;
+}
+
+.tip-divider {
+  width: 1px;
+  height: 12px;
+  background: var(--color-mist);
+}
+
+/* ---- Action Buttons ---- */
+.flow-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  padding: 0 var(--space-lg) var(--space-lg);
+}
+
+/* ---- Collapsible Setup ---- */
+.setup-content {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.4s ease, padding 0.3s ease;
   padding: 0 var(--space-lg);
 }
 
-.guide-content.expanded {
-  max-height: 1000px;
-  padding: 0 var(--space-lg) var(--space-lg);
+.setup-content.expanded {
+  max-height: 600px;
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
+  border-top: 1px solid var(--color-mist);
 }
 
-/* Guide Intro */
-.guide-intro {
-  padding: var(--space-md);
-  background: linear-gradient(135deg, rgba(212, 165, 165, 0.1), rgba(184, 169, 201, 0.1));
-  border-radius: var(--radius-md);
-  margin-bottom: var(--space-lg);
-}
-
-.guide-intro p {
-  font-size: 15px;
-  line-height: 1.7;
-  color: var(--color-text);
-  margin: 0;
-}
-
-.guide-intro p + p {
-  margin-top: var(--space-sm);
-}
-
-.guide-intro .guide-note {
-  font-size: 13px;
+/* Toggle icon rotation */
+.toggle-icon {
+  transition: transform 0.3s ease;
   color: var(--color-gray);
+  flex-shrink: 0;
 }
 
-/* Guide Sections */
+.toggle-icon.expanded {
+  transform: rotate(180deg);
+}
+
+/* ---- Reused: Guide Section / Steps / Code / Notes ---- */
 .guide-section {
   margin-bottom: var(--space-lg);
 }
@@ -103,14 +190,6 @@
   border-bottom: 1px solid var(--color-mist);
 }
 
-.guide-section h3 .guide-icon {
-  width: 18px;
-  height: 18px;
-  color: var(--color-rose);
-  flex-shrink: 0;
-}
-
-/* Guide Steps */
 .guide-steps {
   margin: 0;
   padding: 0;
@@ -145,6 +224,7 @@
   font-size: 12px;
   font-weight: 500;
   border-radius: var(--radius-full);
+  box-shadow: 0 0 6px rgba(0, 240, 255, 0.3);
 }
 
 .guide-steps li > strong {
@@ -170,17 +250,17 @@
   margin-bottom: 0;
 }
 
-/* Guide Code */
 .guide-code {
   display: block;
   padding: var(--space-sm) var(--space-md);
   margin: var(--space-xs) 0;
-  background: var(--color-charcoal);
-  color: #E8E4E1;
+  background: #0a0a14;
+  color: #c8d6e5;
   font-family: var(--font-mono);
   font-size: 12px;
   line-height: 1.6;
   border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
   overflow-x: auto;
   white-space: pre-wrap;
   word-break: break-all;
@@ -188,35 +268,13 @@
 
 .guide-steps code:not(.guide-code) {
   padding: 2px 6px;
-  background: var(--bg-light);
-  color: var(--color-bellflower);
+  background: rgba(0, 240, 255, 0.08);
+  color: #00f0ff;
   font-family: var(--font-mono);
   font-size: 12px;
   border-radius: 4px;
 }
 
-/* Guide Notes */
-.guide-notes {
-  margin: 0;
-  padding: 0 0 0 var(--space-md);
-  font-size: 13px;
-  line-height: 1.8;
-  color: var(--color-text);
-}
-
-.guide-notes li {
-  margin-bottom: var(--space-xs);
-}
-
-.guide-notes li:last-child {
-  margin-bottom: 0;
-}
-
-.guide-notes strong {
-  color: var(--color-ink);
-}
-
-/* Guide Links */
 .guide-section a {
   color: var(--color-bellflower);
   text-decoration: underline;
@@ -224,4 +282,39 @@
 
 .guide-section a:hover {
   color: var(--color-rose);
+  text-shadow: 0 0 6px rgba(0, 240, 255, 0.3);
+}
+
+/* ---- Mobile: 2 columns ---- */
+@media (max-width: 767px) {
+  .step-flow {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
+  }
+
+  .flow-step:not(:last-child)::after {
+    display: none;
+  }
+
+  .flow-actions {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .flow-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Tablet: 3 columns */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .step-flow {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .flow-step:nth-child(3)::after,
+  .flow-step:nth-child(6)::after {
+    display: none;
+  }
 }

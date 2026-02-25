@@ -1,23 +1,22 @@
 /* ================================================
-   AI 輔助面板
-   分批提示詞 + 智慧貼回
+   AI Assist Panel — Cyberpunk
    ================================================ */
 
-/* 面板容器 */
+/* Panel Container */
 .ai-assist-panel {
   margin-top: 16px;
-  border: 1px solid var(--color-border, #E8E4E1);
-  border-radius: var(--radius-lg, 24px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   overflow: hidden;
 }
 
-/* 摺疊標題 */
+/* Collapsible Header */
 .ai-assist-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px;
-  background: linear-gradient(135deg, rgba(212, 165, 165, 0.06), rgba(184, 169, 201, 0.04));
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.06), rgba(255, 0, 170, 0.04));
   border: none;
   cursor: pointer;
   width: 100%;
@@ -25,12 +24,12 @@
   font-family: var(--font-body);
   font-size: 15px;
   font-weight: 500;
-  color: var(--color-ink, #333);
+  color: var(--color-ink);
   transition: background 0.2s;
 }
 
 .ai-assist-header:hover {
-  background: linear-gradient(135deg, rgba(212, 165, 165, 0.1), rgba(184, 169, 201, 0.08));
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(255, 0, 170, 0.06));
 }
 
 .ai-assist-header .icon {
@@ -38,21 +37,21 @@
   height: 18px;
   margin-right: 8px;
   vertical-align: middle;
-  color: var(--color-rose, #D4A5A5);
+  color: var(--color-rose);
 }
 
 .ai-assist-header .toggle-icon {
   width: 16px;
   height: 16px;
   transition: transform 0.25s;
-  color: var(--color-gray, #888);
+  color: var(--color-gray);
 }
 
 .ai-assist-header[aria-expanded="true"] .toggle-icon {
   transform: rotate(180deg);
 }
 
-/* 面板內容 */
+/* Panel Body */
 .ai-assist-body {
   padding: 20px;
   display: none;
@@ -62,7 +61,7 @@
   display: block;
 }
 
-/* 模式切換 Tabs */
+/* Mode Tabs */
 .ai-mode-tabs {
   display: flex;
   gap: 8px;
@@ -71,43 +70,44 @@
 
 .ai-mode-tab {
   padding: 8px 16px;
-  border: 1px solid var(--color-border, #E8E4E1);
-  border-radius: var(--radius-sm, 8px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   background: transparent;
   font-family: var(--font-body);
   font-size: 14px;
   font-weight: 500;
-  color: var(--color-text, #4A4A4A);
+  color: var(--color-text);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .ai-mode-tab:hover {
-  border-color: var(--color-rose, #D4A5A5);
-  color: var(--color-rose, #D4A5A5);
+  border-color: var(--color-rose);
+  color: var(--color-rose);
 }
 
 .ai-mode-tab.active {
-  background: var(--gradient-primary, linear-gradient(135deg, #D4A5A5, #B8A9C9));
+  background: var(--gradient-primary);
   border-color: transparent;
   color: #fff;
 }
 
-/* 分批導覽 */
+/* Batch Navigation */
 .batch-nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 12px;
   padding: 8px 12px;
-  background: var(--bg-light, #FAFAFA);
-  border-radius: var(--radius-sm, 8px);
+  background: var(--bg-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
 }
 
 .batch-nav-label {
   font-size: 14px;
   font-weight: 500;
-  color: var(--color-text, #4A4A4A);
+  color: var(--color-text);
 }
 
 .batch-nav-buttons {
@@ -117,27 +117,27 @@
 
 .batch-nav-btn {
   padding: 4px 12px;
-  border: 1px solid var(--color-border, #E8E4E1);
-  border-radius: var(--radius-sm, 8px);
-  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
   font-family: var(--font-body);
   font-size: 13px;
-  color: var(--color-text, #4A4A4A);
+  color: var(--color-text);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .batch-nav-btn:hover {
-  border-color: var(--color-rose, #D4A5A5);
+  border-color: var(--color-rose);
 }
 
 .batch-nav-btn.active {
-  background: var(--color-rose, #D4A5A5);
-  border-color: var(--color-rose, #D4A5A5);
-  color: #fff;
+  background: var(--color-rose);
+  border-color: var(--color-rose);
+  color: #0c0c18;
 }
 
-/* 提示詞區塊 */
+/* Prompt Block */
 .prompt-block {
   position: relative;
   margin-bottom: 12px;
@@ -148,21 +148,21 @@
   width: 100%;
   min-height: 120px;
   padding: 16px;
-  border: 1px solid var(--color-border, #E8E4E1);
-  border-radius: var(--radius-md, 12px);
-  background: var(--bg-light, #FAFAFA);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--bg-light);
   font-family: var(--font-body);
   font-size: 14px;
   line-height: 1.6;
-  color: var(--color-text, #4A4A4A);
+  color: var(--color-text);
   resize: vertical;
   white-space: pre-wrap;
 }
 
 .prompt-text:focus {
-  outline: 3px solid var(--color-rose, #D4A5A5);
+  outline: 3px solid rgba(0, 240, 255, 0.25);
   outline-offset: -1px;
-  border-color: var(--color-rose, #D4A5A5);
+  border-color: var(--color-rose);
 }
 
 .prompt-actions {
@@ -171,17 +171,17 @@
   margin-top: 8px;
 }
 
-/* 貼回區塊 */
+/* Paste-back Section */
 .paste-back-section {
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid var(--color-border, #E8E4E1);
+  border-top: 1px solid var(--color-border);
 }
 
 .paste-back-section h4 {
   font-size: 14px;
   font-weight: 500;
-  color: var(--color-ink, #333);
+  color: var(--color-ink);
   margin-bottom: 8px;
 }
 
@@ -190,46 +190,48 @@
   width: 100%;
   min-height: 100px;
   padding: 16px;
-  border: 1px solid var(--color-border, #E8E4E1);
-  border-radius: var(--radius-md, 12px);
-  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
   font-family: var(--font-body);
   font-size: 14px;
   line-height: 1.6;
-  color: var(--color-text, #4A4A4A);
+  color: var(--color-text);
   resize: vertical;
 }
 
 .paste-back-textarea:focus {
-  outline: 3px solid var(--color-rose, #D4A5A5);
+  outline: 3px solid rgba(0, 240, 255, 0.25);
   outline-offset: -1px;
-  border-color: var(--color-rose, #D4A5A5);
+  border-color: var(--color-rose);
 }
 
 .paste-back-textarea::placeholder {
-  color: var(--color-gray, #888);
+  color: var(--color-gray);
 }
 
-/* 完整度提示 */
+/* Completeness Bar */
 .completeness-bar {
   display: flex;
   align-items: center;
   gap: 8px;
   margin-top: 12px;
   padding: 10px 16px;
-  border-radius: var(--radius-sm, 8px);
+  border-radius: var(--radius-sm);
   font-size: 14px;
   font-weight: 500;
 }
 
 .completeness-bar.complete {
-  background: rgba(123, 174, 127, 0.1);
-  color: #5A8F5E;
+  background: rgba(0, 255, 136, 0.08);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  color: #00ff88;
 }
 
 .completeness-bar.incomplete {
-  background: rgba(212, 168, 90, 0.1);
-  color: #B08A3E;
+  background: rgba(255, 170, 0, 0.08);
+  border: 1px solid rgba(255, 170, 0, 0.2);
+  color: #ffaa00;
 }
 
 .completeness-bar .icon {
@@ -238,30 +240,32 @@
   flex-shrink: 0;
 }
 
-/* CLI API 模式提示 */
+/* CLI API Mode */
 .cli-api-hint {
   padding: 16px;
-  background: var(--bg-light, #FAFAFA);
-  border-radius: var(--radius-md, 12px);
+  background: var(--bg-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   font-size: 14px;
   line-height: 1.6;
-  color: var(--color-text, #4A4A4A);
+  color: var(--color-text);
 }
 
 .cli-api-hint code {
   display: block;
   margin-top: 8px;
   padding: 12px;
-  background: #2D2A2E;
-  color: #E8E4E1;
-  border-radius: var(--radius-sm, 8px);
-  font-family: var(--font-mono, monospace);
+  background: #0a0a14;
+  color: #c8d6e5;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
   font-size: 13px;
   white-space: pre-wrap;
   word-break: break-all;
 }
 
-/* 響應式 */
+/* Responsive */
 @media (max-width: 768px) {
   .ai-assist-header {
     padding: 12px 16px;
