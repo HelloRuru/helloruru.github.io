@@ -263,19 +263,23 @@ const App = {
 
     Toast.info(`正在抓取 ${needCount} 篇文章標題...`);
 
-    const fetched = await Sitemap.fetchTitlesForArticles(articles, domain, (article, done, total) => {
-      // 即時更新單列（不重繪整表）
+    const result = await Sitemap.fetchTitlesForArticles(articles, domain, (article) => {
       ArticlesTable.updateArticle(article);
     });
 
+    const fetched = result.fetched;
     if (fetched > 0) {
-      // 儲存更新後的文章
       Storage.saveArticles(articles);
-      // 更新 AI 輔助面板
       AiAssist.update(articles, domain);
       Toast.success(`已抓取 ${fetched} 篇文章標題`);
     } else if (needCount > 0) {
       Toast.info('標題抓取未成功（可能為 SPA 網站），可手動編輯');
+    }
+
+    // 偵測重複標題（分類頁常見）
+    if (result.duplicates?.length > 0) {
+      const dup = result.duplicates[0];
+      Toast.info(`${dup.count} 篇文章共用標題「${dup.title}」，可能是分類頁，建議手動填搜尋語句`);
     }
   },
 

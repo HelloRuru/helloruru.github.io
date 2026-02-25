@@ -238,6 +238,15 @@ const QueryEngine = {
       if (text.length >= this.MIN_LENGTH) {
         return this.generate(text, domain);
       }
+
+      // 最後一段是純數字時，往上一層找有意義的 segment
+      if (/^\d+$/.test(last) && segments.length >= 2) {
+        const prev = decodeURIComponent(segments[segments.length - 2])
+          .replace(/[-_]/g, ' ');
+        if (prev.length >= this.MIN_LENGTH) {
+          return this.generate(prev, domain);
+        }
+      }
     } catch { /* ignore */ }
 
     return domain ? domain.replace(/\.(com|tw|org|net)$/i, '') : '';

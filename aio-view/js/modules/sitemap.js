@@ -4,10 +4,11 @@
    ================================================ */
 
 const Sitemap = {
-  /** CORS Proxy 清單 */
+  /** CORS Proxy 清單（多來源避免單點限流） */
   PROXIES: [
     { url: 'https://api.allorigins.win/get?url=', type: 'json', key: 'contents' },
-    { url: 'https://api.allorigins.win/raw?url=', type: 'raw' }
+    { url: 'https://api.allorigins.win/raw?url=', type: 'raw' },
+    { url: 'https://corsproxy.io/?url=', type: 'raw' }
   ],
 
   /** 排除的 URL 模式 */
@@ -192,37 +193,38 @@ const Sitemap = {
    * @returns {Promise<string|null>} 標題
    */
   async fetchPageTitle(url) {
-    try {
-      const proxy = this.PROXIES[0];
-      const proxyUrl = proxy.url + encodeURIComponent(url);
-      const response = await fetch(proxyUrl);
+    for (const proxy of this.PROXIES) {
+      try {
+        const proxyUrl = proxy.url + encodeURIComponent(url);
+        const response = await fetch(proxyUrl);
+        if (!response.ok) continue;
 
-      let html;
-      if (proxy.type === 'json') {
-        const data = await response.json();
-        html = data[proxy.key];
-      } else {
-        html = await response.text();
-      }
+        let html;
+        if (proxy.type === 'json') {
+          const data = await response.json();
+          html = data[proxy.key];
+        } else {
+          html = await response.text();
+        }
 
-      if (!html) return null;
+        if (!html || html.length < 50) continue;
 
-      // og:title（兩種寫法都抓）
-      const ogMatch = html.match(/<meta[^>]*property="og:title"[^>]*content="([^"]+)"/i)
-        || html.match(/<meta[^>]*content="([^"]+)"[^>]*property="og:title"/i);
-      // <title>
-      const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
+        // og:title（兩種寫法都抓）
+        const ogMatch = html.match(/<meta[^>]*property="og:title"[^>]*content="([^"]+)"/i)
+          || html.match(/<meta[^>]*content="([^"]+)"[^>]*property="og:title"/i);
+        // <title>
+        const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
 
-      const raw = ogMatch?.[1] || titleMatch?.[1] || null;
-      if (!raw) return null;
+        const raw = ogMatch?.[1] || titleMatch?.[1] || null;
+        if (!raw) continue;
 
-      // 解碼 HTML entities
-      const tmp = document.createElement('textarea');
-      tmp.innerHTML = raw;
-      return tmp.value.trim();
-    } catch {
-      return null;
+        // 解碼 HTML entities
+        const tmp = document.createElement('textarea');
+        tmp.innerHTML = raw;
+        return tmp.value.trim();
+      } catch { continue; }
     }
+    return null;
   },
 
   /**
@@ -244,11 +246,11 @@ const Sitemap = {
    * @param {Array} articles - 文章清單
    * @param {string} domain - 網域
    * @param {Function} onUpdate - 每篇更新後的回呼 (article, done, total)
-   * @returns {Promise<number>} 成功抓取的數量
+   * @returns {Promise<Object>} { fetched, duplicates }
    */
   async fetchTitlesForArticles(articles, domain, onUpdate) {
     const needFetch = articles.filter(a => this.needsTitleFetch(a));
-    if (needFetch.length === 0) return 0;
+    if (needFetch.length === 0) return { fetched: 0, duplicates: [] };
 
     let fetched = 0;
     const batchSize = 3;
@@ -259,7 +261,6 @@ const Sitemap = {
         const title = await this.fetchPageTitle(article.url);
         if (title && title !== article.title) {
           article.title = title;
-          // 用真實標題重新產生搜尋語句
           article.query = typeof QueryEngine !== 'undefined'
             ? QueryEngine.generate(title, domain)
             : this.generateQuery(title, domain);
@@ -268,12 +269,22 @@ const Sitemap = {
         }
       });
       await Promise.all(promises);
-      // 批次間延遲，避免打爆 proxy
       if (i + batchSize < needFetch.length) {
         await new Promise(r => setTimeout(r, 600));
       }
     }
 
-    return fetched;
+    // 偵測重複標題（分類頁常見）
+    const titleCounts = {};
+    for (const a of articles) {
+      if (a.title && !a.title.startsWith('http')) {
+        titleCounts[a.title] = (titleCounts[a.title] || 0) + 1;
+      }
+    }
+    const duplicates = Object.entries(titleCounts)
+      .filter(([, count]) => count >= 3)
+      .map(([title, count]) => ({ title: title.substring(0, 30), count }));
+
+    return { fetched, duplicates };
   }
 };
