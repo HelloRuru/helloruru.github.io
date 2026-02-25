@@ -32,7 +32,7 @@ const Toast = {
 
     // 建立 Toast 元素
     const toast = document.createElement('div');
-    toast.className = `toast toast-${type}`;
+    toast.className = `toast ${type}`;
     toast.textContent = message;
 
     // 加入容器

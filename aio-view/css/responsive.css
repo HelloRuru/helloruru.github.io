@@ -41,8 +41,8 @@
     min-width: 150px;
   }
 
-  /* Guide */
-  .guide-content.expanded {
+  /* Guide: Setup content (collapsible) */
+  .setup-content.expanded {
     max-height: 2000px;
   }
 
