@@ -602,50 +602,28 @@ body{
       <div class="step">
         <div class="step-num">01</div>
         <div class="step-body">
-          <div class="step-title">貼上 Sitemap，按「解析」</div>
-          <div class="step-desc">輸入你網站的 <code>sitemap.xml</code> 網址。如果是 Sitemap Index（WordPress 常見），會讓你選子 Sitemap。系統自動擷取所有文章。</div>
+          <div class="step-title">貼 Sitemap + 選文章</div>
+          <div class="step-desc">輸入你網站的 <code>sitemap.xml</code> 網址，按「解析」。系統自動擷取所有文章，並用<strong style="color:var(--green)">規則引擎</strong>自動產生搜尋語句（不需 API）。<br>
+          用年份、月份篩選，勾選你想監測的項目。語句也可以手動編輯。</div>
         </div>
       </div>
 
       <div class="step">
         <div class="step-num">02</div>
         <div class="step-body">
-          <div class="step-title">挑選要監測的文章</div>
-          <div class="step-desc">用年份、月份篩選。勾選你想監測的項目——不需要全選，挑重點文章就好。</div>
+          <div class="step-title">檢查 AIO</div>
+          <div class="step-desc">兩種方式檢查你的文章是否出現在 Google AI Overview：<br>
+          <strong style="color:var(--green)">手動檢查（免安裝）</strong> — 按「開始手動檢查」，系統會逐篇開啟 Google 搜尋，你在搜尋結果頁面點「有 AIO / 沒有 AIO」回報。也可以拖曳<strong style="color:var(--cyan)">書籤列按鈕</strong>到瀏覽器書籤列，之後在任何 Google 搜尋頁面一鍵回報。<br>
+          <strong style="color:var(--cyan)">CLI 自動掃描（進階）</strong> — 產生 <code>queries.json</code> 後，在電腦跑 <code>node scan.js</code>，每篇間隔 <strong style="color:var(--yellow)">2.5 分鐘</strong>，適合睡前放著跑。</div>
         </div>
       </div>
 
       <div class="step">
         <div class="step-num">03</div>
         <div class="step-body">
-          <div class="step-title">填寫搜尋語句</div>
-          <div class="step-desc">每篇文章需要一條搜尋語句，模擬使用者怎麼搜。兩種方式：<br>
-          <strong style="color:var(--green)">免費模式</strong> — 複製提示詞 → 貼到 ChatGPT/Claude → 把回覆貼回來，系統自動配對<br>
-          <strong style="color:var(--cyan)">API 模式</strong> — 用 CLI 工具一鍵產生（需 API Key，50 篇約 NT$1-3）</div>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-num">04</div>
-        <div class="step-body">
-          <div class="step-title">產生 CLI 指令，下載 queries.json</div>
-          <div class="step-desc">按「產生 CLI 指令」，把下載的 <code>queries.json</code> 放到 <code>aio-view/cli</code> 資料夾。</div>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-num">05</div>
-        <div class="step-body">
-          <div class="step-title">在電腦跑掃描</div>
-          <div class="step-desc">打開 Terminal，執行掃描指令。每篇間隔 <strong style="color:var(--yellow)">2.5 分鐘</strong>，50 篇約 2 小時——適合睡前放著跑。</div>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-num">06</div>
-        <div class="step-body">
-          <div class="step-title">上傳 results.json，看報告</div>
-          <div class="step-desc">掃描完成後拖曳 <code>results.json</code> 到上傳區。自動產生圖表分析、引用來源排名、歷史趨勢。</div>
+          <div class="step-title">看報告</div>
+          <div class="step-desc">手動檢查的結果即時顯示在報告區。CLI 掃描完成後拖曳 <code>results.json</code> 到上傳區。<br>
+          自動產生<strong style="color:var(--cyan)">圖表分析</strong>（AIO 分布、引用來源排行）、<strong style="color:var(--magenta)">時間軸報告</strong>（歷史趨勢、前後對比），支援 CSV 匯出。</div>
         </div>
       </div>
     </div>
@@ -660,7 +638,7 @@ body{
       <div class="section-title">FIRST-TIME SETUP</div>
     </div>
 
-    <p style="color:var(--text-dim);margin-bottom:16px;font-size:14px">第一次使用需要裝環境，只需要做一次。之後直接跑指令就好。</p>
+    <p style="color:var(--text-dim);margin-bottom:16px;font-size:14px"><strong style="color:var(--green)">手動檢查模式不需要安裝任何東西</strong>，直接在瀏覽器操作即可。<br>以下安裝只有使用 CLI 自動掃描（進階模式）才需要，而且只需做一次。</p>
 
     <div class="terminal">
       <div class="terminal-bar">
