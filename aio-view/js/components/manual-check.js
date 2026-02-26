@@ -230,8 +230,16 @@ const ManualCheck = {
       }
     }
 
-    // 用搜尋語句比對文章
-    const article = this.findArticleByQuery(query);
+    // 找對應文章
+    let article;
+    if (this.autoCheck.active && this.autoCheck.currentIndex < this.articles.length) {
+      // 自動檢查模式：直接用 index（不靠 query 配對，避免重複 query 撞車）
+      article = this.articles[this.autoCheck.currentIndex];
+    } else {
+      // 手動模式：用 query 比對
+      article = this.findArticleByQuery(query);
+    }
+
     if (!article) {
       Toast.info(`收到結果，但找不到對應文章: "${data.q}"`);
       return;
@@ -246,10 +254,29 @@ const ManualCheck = {
       ? article.title.substring(0, 15) + '...'
       : article.title;
 
-    // 自動檢查模式：推進下一篇
+    // 自動檢查模式：把相同 query 的文章也一併套用（搜一次用 N 次）
     if (this.autoCheck.active) {
       clearTimeout(this.autoCheck.timeoutTimer);
-      Toast.success(`${shortTitle} → ${label}`);
+      const currentQuery = (article.query || '').trim().toLowerCase();
+      let duplicateCount = 0;
+
+      if (currentQuery) {
+        this.articles.forEach(a => {
+          if (a.id === article.id) return;
+          if (this.checkResults[a.id]) return;
+          if ((a.query || '').trim().toLowerCase() === currentQuery) {
+            this.setStatus(a.id, status);
+            duplicateCount++;
+          }
+        });
+      }
+
+      if (duplicateCount > 0) {
+        Toast.success(`${shortTitle} → ${label}（同 query 共 ${duplicateCount + 1} 篇已套用）`);
+      } else {
+        Toast.success(`${shortTitle} → ${label}`);
+      }
+
       this.autoCheck.currentIndex++;
       this.scheduleNextAutoCheck();
     } else {
@@ -424,7 +451,7 @@ const ManualCheck = {
   autoCheckNext() {
     if (!this.autoCheck.active) return;
 
-    // 跳過已檢查的
+    // 跳過已檢查的（含被 duplicate query 套用的）
     while (this.autoCheck.currentIndex < this.articles.length) {
       if (!this.checkResults[this.articles[this.autoCheck.currentIndex].id]) break;
       this.autoCheck.currentIndex++;
