@@ -1,8 +1,7 @@
 /* ================================================
    AIO View — Manual Check Mode
-   手動檢查模式：逐篇搜尋 Google，回報 AIO 狀態
-   零 CLI、零 API，用瀏覽器直接確認
-   支援 Bookmarklet 自動偵測 + BroadcastChannel 回傳
+   手動檢查 + 自動檢查（油猴腳本 + BroadcastChannel）
+   按一個按鈕，背景自動跑完全部文章
    ================================================ */
 
 const ManualCheck = {
@@ -27,6 +26,23 @@ const ManualCheck = {
   /** DOM 快取 */
   els: {},
 
+  /** 自動檢查狀態 */
+  autoCheck: {
+    active: false,
+    currentIndex: 0,
+    popup: null,
+    timer: null,
+    timeoutTimer: null
+  },
+
+  /** 自動檢查時間設定（毫秒） */
+  AUTO_DELAY_MIN: 8000,
+  AUTO_DELAY_MAX: 15000,
+  AUTO_TIMEOUT: 20000,
+
+  /** Google 彈窗名稱（同名復用同一個視窗） */
+  POPUP_NAME: 'aio-auto-check',
+
   /**
    * 初始化
    */
@@ -39,8 +55,12 @@ const ManualCheck = {
       count: document.getElementById('check-count'),
       viewReportBtn: document.getElementById('check-view-report'),
       filterBar: document.getElementById('check-filter-bar'),
-      bookmarkletLink: document.getElementById('bookmarklet-link'),
-      bookmarkletHint: document.getElementById('bookmarklet-hint')
+      // 油猴腳本
+      copyScriptBtn: document.getElementById('copy-userscript-btn'),
+      // 自動檢查
+      autoStartBtn: document.getElementById('auto-check-start'),
+      autoStopBtn: document.getElementById('auto-check-stop'),
+      autoStatus: document.getElementById('auto-check-status')
     };
 
     this.bindEvents();
@@ -79,6 +99,26 @@ const ManualCheck = {
         this.setStatus(card.dataset.id, statusBtn.dataset.status);
       }
     });
+
+    // 複製油猴腳本
+    this.els.copyScriptBtn?.addEventListener('click', () => {
+      const script = this.generateUserscript();
+      Utils.copyToClipboard(script).then(ok => {
+        if (ok) Toast.success('腳本已複製！貼到 Tampermonkey 新增腳本，儲存即可');
+        else Toast.error('複製失敗');
+      });
+    });
+
+    // 開始自動檢查
+    this.els.autoStartBtn?.addEventListener('click', () => {
+      this.startAutoCheck();
+    });
+
+    // 停止自動檢查
+    this.els.autoStopBtn?.addEventListener('click', () => {
+      this.stopAutoCheck();
+      Toast.info('自動檢查已停止');
+    });
   },
 
   /**
@@ -90,18 +130,21 @@ const ManualCheck = {
     this.articles = articles;
     this.domain = domain;
 
+    // 確保每篇文章有唯一 ID（用 URL 當 ID）
+    this.articles.forEach(a => {
+      if (!a.id) a.id = a.url;
+    });
+
     // 從 Storage 載入進度
     this.checkResults = Storage.get('manual_check', {});
 
     // 啟動 BroadcastChannel 監聽
     this.initChannel();
 
-    // 更新 Bookmarklet 連結
-    this.updateBookmarklet();
-
     // 渲染卡片
     this.renderCards();
     this.updateProgress();
+    this.updateAutoCheckUI();
 
     // 顯示區塊
     this.els.section?.classList.remove('hidden');
@@ -125,18 +168,18 @@ const ManualCheck = {
     this.domain = '';
     this.checkResults = {};
     this.currentFilter = 'all';
+    this.stopAutoCheck();
     this.destroyChannel();
     if (this.els.cards) this.els.cards.innerHTML = '';
     this.hide();
   },
 
   /* ============================================
-     Bookmarklet + BroadcastChannel
+     BroadcastChannel
      ============================================ */
 
   /**
    * 啟動 BroadcastChannel 監聽
-   * 接收 Bookmarklet 從 Google 搜尋頁回傳的 AIO 偵測結果
    */
   initChannel() {
     this.destroyChannel();
@@ -149,7 +192,6 @@ const ManualCheck = {
         }
       };
     } catch {
-      // BroadcastChannel 不支援（Safari < 15.4）
       console.warn('BroadcastChannel not supported');
     }
   },
@@ -165,35 +207,60 @@ const ManualCheck = {
   },
 
   /**
-   * 處理從 Bookmarklet 回傳的訊息
-   * @param {Object} data - { t:'r', q:搜尋語句, s:狀態, src:引用來源 }
+   * 處理回傳訊息（支援油猴腳本 + 舊版 bookmarklet 兩種格式）
+   * @param {Object} data - { t:'r', q, aio?, s?, src }
    */
   handleChannelMessage(data) {
     const query = (data.q || '').trim().toLowerCase();
     if (!query) return;
 
+    // 判斷狀態（支援兩種格式）
+    let status;
+    if (data.s) {
+      // 舊版 bookmarklet 格式：{ s: 'cited'|'aio'|'none' }
+      status = data.s;
+    } else {
+      // 油猴腳本格式：{ aio: boolean, src: [...] }
+      if (!data.aio) {
+        status = 'none';
+      } else {
+        const domain = this.domain.replace(/^www\./, '').toLowerCase();
+        const cited = (data.src || []).some(s => s.includes(domain));
+        status = cited ? 'cited' : 'aio';
+      }
+    }
+
     // 用搜尋語句比對文章
     const article = this.findArticleByQuery(query);
     if (!article) {
-      Toast.info(`收到 Bookmarklet 結果，但找不到對應文章: "${data.q}"`);
+      Toast.info(`收到結果，但找不到對應文章: "${data.q}"`);
       return;
     }
 
     // 設定狀態
-    this.setStatus(article.id, data.s);
+    this.setStatus(article.id, status);
 
-    // 顯示通知
-    const statusLabel = data.s === 'cited' ? '有 AIO + 已引用'
-      : data.s === 'aio' ? '有 AIO 沒引用' : '沒有 AIO';
-    Toast.success(`Bookmarklet: ${statusLabel}`);
+    // 通知
+    const label = status === 'cited' ? '有引用' : status === 'aio' ? '有 AIO' : '沒有';
+    const shortTitle = article.title.length > 15
+      ? article.title.substring(0, 15) + '...'
+      : article.title;
 
-    // 捲動到該卡片
-    const card = this.els.cards?.querySelector(`[data-id="${article.id}"]`);
-    if (card) {
-      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      // 短暫高亮
-      card.style.boxShadow = '0 0 16px rgba(0, 240, 255, 0.4)';
-      setTimeout(() => { card.style.boxShadow = ''; }, 2000);
+    // 自動檢查模式：推進下一篇
+    if (this.autoCheck.active) {
+      clearTimeout(this.autoCheck.timeoutTimer);
+      Toast.success(`${shortTitle} → ${label}`);
+      this.autoCheck.currentIndex++;
+      this.scheduleNextAutoCheck();
+    } else {
+      // 手動模式：捲動到該卡片
+      Toast.success(`${shortTitle} → ${label}`);
+      const card = this.els.cards?.querySelector(`[data-id="${article.id}"]`);
+      if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        card.style.boxShadow = '0 0 16px rgba(0, 240, 255, 0.4)';
+        setTimeout(() => { card.style.boxShadow = ''; }, 2000);
+      }
     }
   },
 
@@ -209,7 +276,7 @@ const ManualCheck = {
     );
     if (match) return match;
 
-    // 2. 包含匹配（搜尋語句包含在 Google query 裡，或反過來）
+    // 2. 包含匹配
     match = this.articles.find(a => {
       const q = (a.query || '').trim().toLowerCase();
       return q && (query.includes(q) || q.includes(query));
@@ -218,63 +285,272 @@ const ManualCheck = {
     return match || null;
   },
 
+  /* ============================================
+     油猴腳本（Userscript）
+     ============================================ */
+
   /**
-   * 產生 Bookmarklet JavaScript 程式碼
-   * @returns {string} javascript: URL
+   * 產生 Tampermonkey / Violentmonkey 腳本
+   * @returns {string} 完整腳本文字
    */
-  generateBookmarklet() {
-    const domain = (this.domain || '').replace(/^www\./, '').toLowerCase();
+  generateUserscript() {
+    return `// ==UserScript==
+// @name         AIO View 自動偵測
+// @namespace    https://lab.helloruru.com
+// @version      1.0
+// @description  自動偵測 Google AI Overview，回傳結果給 AIO View
+// @match        *://www.google.com/search*
+// @match        *://www.google.com.tw/search*
+// @match        *://www.google.co.jp/search*
+// @match        *://www.google.co.uk/search*
+// @match        *://www.google.com.hk/search*
+// @match        *://www.google.com.sg/search*
+// @grant        none
+// @run-at       document-idle
+// ==/UserScript==
 
-    // Bookmarklet 程式碼（壓縮版）
-    // 功能：偵測 Google 搜尋結果上的 AIO，透過 BroadcastChannel 回傳結果
-    // 偵測策略：1. data-rl 容器  2. heading 文字比對  3. 舊版 selector
-    const code = `(function(){` +
-      `if(!location.hostname.includes('google'))return alert('AIO View: 請在 Google 搜尋結果頁使用');` +
-      // 策略 1：data-rl 屬性（2025+ AIO 格式）
-      `var a=document.querySelector('div[data-rl]');` +
-      // 策略 2：找含 "AI" 的 heading
-      `if(!a){var hs=document.querySelectorAll('[role="heading"]');for(var i=0;i<hs.length;i++){var t=hs[i].textContent;if(t.indexOf('AI Overview')>=0||t.indexOf('AI 總覽')>=0){a=hs[i].closest('div[jsname]')||hs[i].parentElement;break}}}` +
-      // 策略 3：舊版 selector fallback
-      `if(!a){var S=['[data-attrid="wa:/description"]','.ILfuVd','.wDYxhc[data-md]','.kp-wholepage-osrp'];for(var i=0;i<S.length;i++){a=document.querySelector(S[i]);if(a)break}}` +
-      // 取搜尋語句
-      `var q=(document.querySelector('textarea[name="q"],input[name="q"]')||{}).value||'';` +
-      // 收集引用來源
-      `var src=[];` +
-      `if(a){var ls=a.querySelectorAll('a[href]');for(var i=0;i<ls.length;i++){try{src.push(new URL(ls[i].href).hostname.replace(/^www\\./,''))}catch(e){}}}` +
-      `var u={};src=src.filter(function(x){return u[x]?0:u[x]=1});` +
-      `var D='${domain}';` +
-      `var c=!!a&&src.some(function(x){return x.indexOf(D)>=0});` +
-      `var st=a?(c?'cited':'aio'):'none';` +
-      // 回傳結果
-      `try{var ch=new BroadcastChannel('${this.CHANNEL_NAME}');ch.postMessage({t:'r',q:q,s:st,src:src});ch.close()}catch(e){}` +
-      // 顯示浮動提示
-      `var b=st=='cited'?'linear-gradient(135deg,#00cc66,#00aa88)':st=='aio'?'linear-gradient(135deg,#00c8d4,#0088cc)':'linear-gradient(135deg,#555,#444)';` +
-      `var m=st=='cited'?'AIO + 已引用':st=='aio'?'有 AIO 沒引用':'沒有 AIO';` +
-      `var d=document.createElement('div');` +
-      `d.style.cssText='position:fixed;top:16px;right:16px;z-index:99999;padding:14px 24px;border-radius:12px;font:600 15px/1 sans-serif;color:#fff;background:'+b+';box-shadow:0 4px 20px rgba(0,0,0,0.4);cursor:pointer;display:flex;align-items:center;gap:8px;';` +
-      `d.innerHTML='<svg width="18" height="18" viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="2.5"><circle cx="13" cy="13" r="6"/><line x1="17" y1="17" x2="24" y2="24" stroke-linecap="round"/><path d="M22 8L25 11L29 6" stroke-linecap="round" stroke-linejoin="round"/></svg> '+m;` +
-      `d.onclick=function(){d.remove()};` +
-      `document.body.appendChild(d);` +
-      `setTimeout(function(){if(d.parentNode)d.remove()},6000)` +
-      `})()`;
+(function() {
+  'use strict';
 
-    return 'javascript:' + encodeURIComponent(code);
+  // 等 Google 動態內容載入
+  setTimeout(function() {
+    // 策略 1：data-rl（2025+ 格式）
+    var a = document.querySelector('div[data-rl]');
+
+    // 策略 2：heading 文字比對
+    if (!a) {
+      var hs = document.querySelectorAll('[role="heading"]');
+      for (var i = 0; i < hs.length; i++) {
+        var t = hs[i].textContent;
+        if (t.indexOf('AI Overview') >= 0 || t.indexOf('AI \\u7E3D\\u89BD') >= 0) {
+          a = hs[i].closest('div[jsname]') || hs[i].parentElement;
+          break;
+        }
+      }
+    }
+
+    // 策略 3：舊版 selector
+    if (!a) {
+      var S = ['[data-attrid="wa:/description"]', '.ILfuVd', '.wDYxhc[data-md]', '.kp-wholepage-osrp'];
+      for (var i = 0; i < S.length; i++) {
+        a = document.querySelector(S[i]);
+        if (a) break;
+      }
+    }
+
+    // 取搜尋語句
+    var q = (document.querySelector('textarea[name="q"],input[name="q"]') || {}).value || '';
+
+    // 收集引用來源
+    var src = [];
+    if (a) {
+      var ls = a.querySelectorAll('a[href]');
+      for (var i = 0; i < ls.length; i++) {
+        try { src.push(new URL(ls[i].href).hostname.replace(/^www\\\\./, '')); } catch(e) {}
+      }
+    }
+    var u = {};
+    src = src.filter(function(x) { return u[x] ? 0 : u[x] = 1; });
+
+    // 回傳結果給 AIO View
+    try {
+      var ch = new BroadcastChannel('${this.CHANNEL_NAME}');
+      ch.postMessage({ t: 'r', q: q, aio: !!a, src: src });
+      ch.close();
+    } catch(e) {}
+
+    // 小型浮動提示（3 秒後消失）
+    var color = a ? '#00f0ff' : '#666';
+    var text = a ? 'AIO \\u2714' : 'No AIO';
+    var d = document.createElement('div');
+    d.style.cssText = 'position:fixed;bottom:16px;right:16px;z-index:99999;padding:6px 12px;border-radius:8px;font:500 12px/1 sans-serif;color:#fff;background:' + color + ';opacity:0.8;pointer-events:none;';
+    d.textContent = text;
+    document.body.appendChild(d);
+    setTimeout(function() { if (d.parentNode) d.remove(); }, 3000);
+  }, 3000);
+})();`;
+  },
+
+  /* ============================================
+     自動檢查
+     ============================================ */
+
+  /**
+   * 開始自動檢查
+   * 背景開 Google 搜尋彈窗，油猴腳本自動偵測回傳
+   */
+  startAutoCheck() {
+    if (this.articles.length === 0) return;
+
+    // 找第一個未檢查的
+    const startIndex = this.articles.findIndex(a => !this.checkResults[a.id]);
+    if (startIndex === -1) {
+      Toast.info('所有文章都已檢查完畢');
+      return;
+    }
+
+    this.autoCheck.active = true;
+    this.autoCheck.currentIndex = startIndex;
+
+    this.updateAutoCheckUI();
+    Toast.success('自動檢查開始！Google 搜尋會在背景視窗跑');
+
+    // 第一次由使用者點擊觸發 window.open，避免被彈窗阻擋
+    this.autoCheckNext();
   },
 
   /**
-   * 更新 Bookmarklet 連結
+   * 停止自動檢查
    */
-  updateBookmarklet() {
-    if (!this.els.bookmarkletLink) return;
+  stopAutoCheck() {
+    this.autoCheck.active = false;
+    clearTimeout(this.autoCheck.timer);
+    clearTimeout(this.autoCheck.timeoutTimer);
 
-    const href = this.generateBookmarklet();
-    this.els.bookmarkletLink.href = href;
+    // 嘗試關閉彈窗
+    try {
+      if (this.autoCheck.popup && !this.autoCheck.popup.closed) {
+        this.autoCheck.popup.close();
+      }
+    } catch (e) { /* 跨域視窗可能無法關閉 */ }
+    this.autoCheck.popup = null;
 
-    // 顯示提示
-    if (this.els.bookmarkletHint) {
-      this.els.bookmarkletHint.textContent = `偵測網域: ${this.domain}`;
+    this.updateAutoCheckUI();
+  },
+
+  /**
+   * 執行下一篇自動檢查
+   */
+  autoCheckNext() {
+    if (!this.autoCheck.active) return;
+
+    // 跳過已檢查的
+    while (this.autoCheck.currentIndex < this.articles.length) {
+      if (!this.checkResults[this.articles[this.autoCheck.currentIndex].id]) break;
+      this.autoCheck.currentIndex++;
+    }
+
+    // 全部完成
+    if (this.autoCheck.currentIndex >= this.articles.length) {
+      this.autoCheck.active = false;
+      Toast.success('自動檢查完成！可以查看報告了');
+      this.updateAutoCheckUI();
+
+      try {
+        if (this.autoCheck.popup && !this.autoCheck.popup.closed) {
+          this.autoCheck.popup.close();
+        }
+      } catch (e) {}
+      return;
+    }
+
+    const article = this.articles[this.autoCheck.currentIndex];
+    const query = article.query || article.title;
+    const url = `https://www.google.com/search?q=${encodeURIComponent(query)}&hl=zh-TW`;
+
+    // 同名彈窗復用（不會開一堆分頁）
+    try {
+      this.autoCheck.popup = window.open(url, this.POPUP_NAME, 'width=1024,height=700');
+      if (!this.autoCheck.popup) {
+        Toast.error('彈出視窗被阻擋！請允許此網站的彈出視窗，然後重新點「開始自動檢查」');
+        this.stopAutoCheck();
+        return;
+      }
+      // 嘗試讓 AIO View 保持前景
+      try { window.focus(); } catch (e) {}
+    } catch (e) {
+      Toast.error('無法開啟 Google 搜尋視窗');
+      this.stopAutoCheck();
+      return;
+    }
+
+    this.updateAutoCheckUI();
+
+    // 高亮目前卡片
+    this.highlightCurrentCard();
+
+    // 逾時：沒結果就跳過
+    clearTimeout(this.autoCheck.timeoutTimer);
+    this.autoCheck.timeoutTimer = setTimeout(() => {
+      if (!this.autoCheck.active) return;
+      this.autoCheck.currentIndex++;
+      this.scheduleNextAutoCheck();
+    }, this.AUTO_TIMEOUT);
+  },
+
+  /**
+   * 排程下一篇（隨機延遲 8-15 秒，避免觸發 Google 驗證碼）
+   */
+  scheduleNextAutoCheck() {
+    if (!this.autoCheck.active) return;
+
+    const delay = this.AUTO_DELAY_MIN +
+      Math.random() * (this.AUTO_DELAY_MAX - this.AUTO_DELAY_MIN);
+
+    this.updateAutoCheckUI();
+
+    this.autoCheck.timer = setTimeout(() => {
+      this.autoCheckNext();
+    }, delay);
+  },
+
+  /**
+   * 高亮目前正在檢查的卡片
+   */
+  highlightCurrentCard() {
+    // 清除所有高亮
+    this.els.cards?.querySelectorAll('.check-card-active').forEach(c => {
+      c.classList.remove('check-card-active');
+    });
+
+    // 高亮目前的
+    if (this.autoCheck.currentIndex < this.articles.length) {
+      const article = this.articles[this.autoCheck.currentIndex];
+      const card = this.els.cards?.querySelector(`[data-id="${article.id}"]`);
+      if (card) {
+        card.classList.add('check-card-active');
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
   },
+
+  /**
+   * 更新自動檢查 UI（按鈕 + 狀態文字）
+   */
+  updateAutoCheckUI() {
+    const { active } = this.autoCheck;
+    const total = this.articles.length;
+    const checked = this.articles.filter(a => this.checkResults[a.id]).length;
+
+    // 按鈕狀態
+    if (this.els.autoStartBtn) {
+      this.els.autoStartBtn.classList.toggle('hidden', active);
+    }
+    if (this.els.autoStopBtn) {
+      this.els.autoStopBtn.classList.toggle('hidden', !active);
+    }
+
+    // 狀態文字
+    if (this.els.autoStatus) {
+      if (active) {
+        const current = Math.min(this.autoCheck.currentIndex + 1, total);
+        this.els.autoStatus.textContent = `正在檢查 ${current}/${total}...（已完成 ${checked}）`;
+        this.els.autoStatus.classList.remove('hidden');
+      } else if (checked > 0 && checked < total) {
+        this.els.autoStatus.textContent = `已停止（${checked}/${total} 完成）`;
+        this.els.autoStatus.classList.remove('hidden');
+      } else if (checked === total && total > 0) {
+        this.els.autoStatus.textContent = '全部完成！';
+        this.els.autoStatus.classList.remove('hidden');
+      } else {
+        this.els.autoStatus.classList.add('hidden');
+      }
+    }
+  },
+
+  /* ============================================
+     卡片渲染 + 操作
+     ============================================ */
 
   /**
    * 渲染所有卡片
@@ -394,6 +670,7 @@ const ManualCheck = {
     // 更新卡片視覺
     this.updateCardVisual(articleId);
     this.updateProgress();
+    this.updateAutoCheckUI();
   },
 
   /**
@@ -484,6 +761,9 @@ const ManualCheck = {
       Toast.error('還沒有檢查任何文章');
       return;
     }
+
+    // 停止自動檢查（如果還在跑）
+    this.stopAutoCheck();
 
     // 觸發 onComplete 回呼（由 main.js 設定）
     if (typeof this.onComplete === 'function') {

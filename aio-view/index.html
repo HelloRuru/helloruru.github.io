@@ -547,32 +547,46 @@ node ai-generate.js --input queries.json --provider anthropic --model claude-hai
 
           <!-- Manual Check Content -->
           <div id="check-manual-content">
-            <p class="section-desc">逐篇搜尋 Google，回報是否有 AI Overview</p>
+            <p class="section-desc">安裝偵測腳本，按一個按鈕就自動跑完全部文章</p>
 
-            <!-- Bookmarklet 安裝區 -->
-            <div class="bookmarklet-install" id="bookmarklet-install">
-              <div class="bookmarklet-row">
-                <span class="bookmarklet-label">自動偵測小工具:</span>
-                <a href="#" class="bookmarklet-link" id="bookmarklet-link" title="拖到書籤列，在 Google 搜尋頁點一下就自動偵測 AIO"
-                   onclick="event.preventDefault(); Toast.info('請把這個按鈕拖到書籤列（不是點它）');">
-                  <svg class="bookmarklet-logo" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <circle cx="13" cy="13" r="6"/>
-                    <line x1="17" y1="17" x2="24" y2="24" stroke-linecap="round"/>
-                    <path d="M22 8 L25 11 L29 6" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  AIO Check
-                </a>
-                <span class="bookmarklet-arrow">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                  </svg>
-                  拖到書籤列
-                </span>
-              </div>
-              <p class="bookmarklet-desc">
-                在 Google 搜尋結果頁點書籤，自動偵測 AIO 並回傳結果
-                <span class="bookmarklet-domain" id="bookmarklet-hint"></span>
+            <!-- 油猴腳本安裝區 -->
+            <div class="userscript-install" id="userscript-install">
+              <p class="userscript-title">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2a4 4 0 014 4v1a1 1 0 001 1h1a4 4 0 010 8h-1a1 1 0 00-1 1v1a4 4 0 01-8 0v-1a1 1 0 00-1-1H6a4 4 0 010-8h1a1 1 0 001-1V6a4 4 0 014-4z"/>
+                </svg>
+                自動偵測腳本（安裝一次，永久有效）
               </p>
+              <ol class="userscript-steps">
+                <li>安裝 <a href="https://www.tampermonkey.net/" target="_blank" rel="noopener">Tampermonkey</a> 瀏覽器擴充</li>
+                <li>
+                  <button class="btn btn-primary btn-sm" id="copy-userscript-btn">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                      <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                    </svg>
+                    複製偵測腳本
+                  </button>
+                </li>
+                <li>Tampermonkey → 新增腳本 → 全選貼上 → 儲存</li>
+              </ol>
+            </div>
+
+            <!-- 自動檢查控制列 -->
+            <div class="auto-check-bar" id="auto-check-bar">
+              <button class="btn btn-primary" id="auto-check-start">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                開始自動檢查
+              </button>
+              <button class="btn btn-secondary hidden" id="auto-check-stop">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="6" y="6" width="12" height="12" rx="2"/>
+                </svg>
+                停止
+              </button>
+              <span class="auto-check-status hidden" id="auto-check-status"></span>
             </div>
 
             <!-- 篩選列 -->

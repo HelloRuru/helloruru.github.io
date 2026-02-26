@@ -252,8 +252,8 @@
   flex-wrap: wrap;
 }
 
-/* ========= Bookmarklet 安裝區 ========= */
-.bookmarklet-install {
+/* ========= 油猴腳本安裝區 ========= */
+.userscript-install {
   background: rgba(0, 240, 255, 0.04);
   border: 1px dashed rgba(0, 240, 255, 0.2);
   border-radius: var(--radius-md);
@@ -261,72 +261,90 @@
   margin-bottom: var(--space-lg);
 }
 
-.bookmarklet-row {
+.userscript-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-ink);
+  margin-bottom: var(--space-sm);
+}
+
+.userscript-title .icon {
+  width: 16px;
+  height: 16px;
+  color: var(--color-rose);
+}
+
+.userscript-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  font-size: 13px;
+  color: var(--color-gray);
+  counter-reset: step;
+}
+
+.userscript-steps li {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
+}
+
+.userscript-steps li::before {
+  counter-increment: step;
+  content: counter(step);
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--color-rose);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  border-radius: 50%;
+}
+
+.userscript-steps a {
+  color: var(--color-rose);
+  text-decoration: none;
+}
+
+.userscript-steps a:hover {
+  text-decoration: underline;
+}
+
+/* ========= 自動檢查控制列 ========= */
+.auto-check-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
   flex-wrap: wrap;
 }
 
-.bookmarklet-label {
+.auto-check-status {
   font-size: 13px;
-  color: var(--color-gray);
+  font-family: var(--font-small);
+  color: var(--color-rose);
+  font-weight: 500;
 }
 
-.bookmarklet-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  font-size: 14px;
-  font-weight: 600;
-  font-family: var(--font-body);
-  color: #fff;
-  background: var(--gradient-primary);
-  border-radius: var(--radius-sm);
-  text-decoration: none;
-  cursor: grab;
-  transition: box-shadow 0.2s ease;
-  white-space: nowrap;
+/* ========= 自動檢查中的卡片高亮 ========= */
+.check-card-active {
+  border-color: var(--color-rose) !important;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
 }
 
-.bookmarklet-link:hover {
-  box-shadow: var(--glow-cyan);
-}
-
-.bookmarklet-link:active {
-  cursor: grabbing;
-}
-
-.bookmarklet-logo {
-  width: 16px;
-  height: 16px;
-  stroke: #fff;
-}
-
-.bookmarklet-arrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 12px;
-  color: var(--color-gray);
-  animation: arrowPulse 2s ease-in-out infinite;
-}
-
-@keyframes arrowPulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
-}
-
-.bookmarklet-desc {
-  font-size: 12px;
-  color: var(--color-gray);
-  margin-top: var(--space-sm);
-}
-
-.bookmarklet-domain {
-  color: var(--color-nadeshiko);
-  font-family: var(--font-mono);
+.check-card-active .check-card-num {
+  color: var(--color-rose);
+  border-color: var(--color-rose);
 }
 
 /* ========= 篩選標籤列 ========= */
