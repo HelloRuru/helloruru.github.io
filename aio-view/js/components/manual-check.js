@@ -227,18 +227,27 @@ const ManualCheck = {
 
     // Bookmarklet 程式碼（壓縮版）
     // 功能：偵測 Google 搜尋結果上的 AIO，透過 BroadcastChannel 回傳結果
+    // 偵測策略：1. data-rl 容器  2. heading 文字比對  3. 舊版 selector
     const code = `(function(){` +
       `if(!location.hostname.includes('google'))return alert('AIO View: 請在 Google 搜尋結果頁使用');` +
-      `var S=['[data-attrid="wa:/description"]','.ILfuVd','[data-async-type="editableDirectAnswer"]','.wDYxhc[data-md]','[jsname="N760b"]','.kp-wholepage-osrp'],a,i;` +
-      `for(i=0;i<S.length;i++){a=document.querySelector(S[i]);if(a)break}` +
+      // 策略 1：data-rl 屬性（2025+ AIO 格式）
+      `var a=document.querySelector('div[data-rl]');` +
+      // 策略 2：找含 "AI" 的 heading
+      `if(!a){var hs=document.querySelectorAll('[role="heading"]');for(var i=0;i<hs.length;i++){var t=hs[i].textContent;if(t.indexOf('AI Overview')>=0||t.indexOf('AI 總覽')>=0){a=hs[i].closest('div[jsname]')||hs[i].parentElement;break}}}` +
+      // 策略 3：舊版 selector fallback
+      `if(!a){var S=['[data-attrid="wa:/description"]','.ILfuVd','.wDYxhc[data-md]','.kp-wholepage-osrp'];for(var i=0;i<S.length;i++){a=document.querySelector(S[i]);if(a)break}}` +
+      // 取搜尋語句
       `var q=(document.querySelector('textarea[name="q"],input[name="q"]')||{}).value||'';` +
+      // 收集引用來源
       `var src=[];` +
-      `if(a){var ls=a.querySelectorAll('a[href]');for(i=0;i<ls.length;i++){try{src.push(new URL(ls[i].href).hostname.replace(/^www\\./,''))}catch(e){}}}` +
+      `if(a){var ls=a.querySelectorAll('a[href]');for(var i=0;i<ls.length;i++){try{src.push(new URL(ls[i].href).hostname.replace(/^www\\./,''))}catch(e){}}}` +
       `var u={};src=src.filter(function(x){return u[x]?0:u[x]=1});` +
       `var D='${domain}';` +
       `var c=!!a&&src.some(function(x){return x.indexOf(D)>=0});` +
       `var st=a?(c?'cited':'aio'):'none';` +
+      // 回傳結果
       `try{var ch=new BroadcastChannel('${this.CHANNEL_NAME}');ch.postMessage({t:'r',q:q,s:st,src:src});ch.close()}catch(e){}` +
+      // 顯示浮動提示
       `var b=st=='cited'?'linear-gradient(135deg,#00cc66,#00aa88)':st=='aio'?'linear-gradient(135deg,#00c8d4,#0088cc)':'linear-gradient(135deg,#555,#444)';` +
       `var m=st=='cited'?'AIO + 已引用':st=='aio'?'有 AIO 沒引用':'沒有 AIO';` +
       `var d=document.createElement('div');` +
@@ -246,7 +255,7 @@ const ManualCheck = {
       `d.innerHTML='<svg width="18" height="18" viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="2.5"><circle cx="13" cy="13" r="6"/><line x1="17" y1="17" x2="24" y2="24" stroke-linecap="round"/><path d="M22 8L25 11L29 6" stroke-linecap="round" stroke-linejoin="round"/></svg> '+m;` +
       `d.onclick=function(){d.remove()};` +
       `document.body.appendChild(d);` +
-      `setTimeout(function(){if(d.parentNode)d.remove()},4000)` +
+      `setTimeout(function(){if(d.parentNode)d.remove()},6000)` +
       `})()`;
 
     return 'javascript:' + encodeURIComponent(code);
