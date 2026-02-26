@@ -10,6 +10,12 @@ const ArticlesTable = {
   /** 目前可見的文章索引 */
   visibleIndices: [],
 
+  /** 標題頻率表（偵測分類頁） */
+  titleCounts: {},
+
+  /** 搜尋語句快速修飾詞 */
+  QUERY_CHIPS: ['推薦', '評價', '口碑', '店家', '價格', '哪裡'],
+
   /** DOM 元素 */
   elements: {
     section: null,
@@ -66,6 +72,14 @@ const ArticlesTable = {
     this.articles = articles;
 
     if (!this.elements.tbody) return;
+
+    // 建立標題頻率表（偵測分類頁）
+    this.titleCounts = {};
+    articles.forEach(a => {
+      if (a.title && !a.title.startsWith('http')) {
+        this.titleCounts[a.title] = (this.titleCounts[a.title] || 0) + 1;
+      }
+    });
 
     // 更新總數
     if (this.elements.countBadge) {
@@ -193,15 +207,27 @@ const ArticlesTable = {
     const isUrl = article.title === article.url || article.title.startsWith('http');
     const titleClass = isUrl ? ' class="is-url"' : '';
 
+    // 分類頁偵測（同標題出現 2 次以上）
+    const isDuplicate = !isUrl && this.titleCounts[article.title] >= 2;
+    const dupBadge = isDuplicate
+      ? '<span class="badge-category">分類頁</span>'
+      : '';
+
     // 搜尋語句預覽
     const queryPreview = article.query && !article.query.startsWith('http')
       ? `<span class="article-query-preview">搜尋「${Utils.escapeHtml(article.query)}」</span>`
       : '';
 
-    // 副資訊：日期 + 搜尋語句
-    const meta = (dateHtml || queryPreview)
-      ? `<div class="article-meta">${dateHtml}${dateHtml && queryPreview ? '<span class="meta-dot"></span>' : ''}${queryPreview}</div>`
+    // 副資訊：日期 + 搜尋語句 + 分類頁標記
+    const metaParts = [dateHtml, queryPreview, dupBadge].filter(Boolean);
+    const meta = metaParts.length
+      ? `<div class="article-meta">${metaParts.join('<span class="meta-dot"></span>')}</div>`
       : '';
+
+    // 快速修飾方塊
+    const chips = this.QUERY_CHIPS.map(c =>
+      `<button class="query-chip" data-chip="${c}">${c}</button>`
+    ).join('');
 
     tr.innerHTML = `
       <td class="col-check">
@@ -215,6 +241,7 @@ const ArticlesTable = {
       </td>
       <td class="col-query">
         <input type="text" value="${Utils.escapeHtml(article.query)}" placeholder="輸入搜尋語句">
+        <div class="query-chips">${chips}</div>
       </td>
     `;
 
@@ -242,6 +269,24 @@ const ArticlesTable = {
     input?.addEventListener('change', (e) => {
       this.articles[index].query = e.target.value;
       this.saveArticles();
+    });
+
+    // 快速修飾方塊
+    tr.querySelectorAll('.query-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const word = chip.dataset.chip;
+        const current = input.value.trim();
+        // 如果語句裡已有這個詞，就移除；否則附加
+        if (current.includes(word)) {
+          input.value = current.replace(word, '').replace(/\s+/g, ' ').trim();
+          chip.classList.remove('active');
+        } else {
+          input.value = current + word;
+          chip.classList.add('active');
+        }
+        this.articles[index].query = input.value;
+        this.saveArticles();
+      });
     });
   },
 
