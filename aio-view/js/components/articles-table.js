@@ -372,6 +372,32 @@ const ArticlesTable = {
       span.textContent = `搜尋「${article.query}」`;
       meta.appendChild(span);
     }
+
+    // 更新標題頻率表 + 分類頁標記
+    this.titleCounts[article.title] = (this.titleCounts[article.title] || 0) + 1;
+    if (this.titleCounts[article.title] >= 2) {
+      // 幫所有同標題的列加上標記
+      this.articles.forEach((a, i) => {
+        if (a.title !== article.title) return;
+        const row = this.elements.tbody?.querySelector(`tr[data-index="${i}"]`);
+        if (!row || row.querySelector('.badge-category')) return;
+        let meta = row.querySelector('.article-meta');
+        if (!meta) {
+          meta = document.createElement('div');
+          meta.className = 'article-meta';
+          row.querySelector('.col-title')?.appendChild(meta);
+        }
+        if (meta.children.length > 0) {
+          const dot = document.createElement('span');
+          dot.className = 'meta-dot';
+          meta.appendChild(dot);
+        }
+        const badge = document.createElement('span');
+        badge.className = 'badge-category';
+        badge.textContent = '分類頁';
+        meta.appendChild(badge);
+      });
+    }
   },
 
   /**
