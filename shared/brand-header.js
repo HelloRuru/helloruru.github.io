@@ -78,6 +78,12 @@ class HelloRuruHeader extends HTMLElement {
           font-size: 12px;
           color: #9CA3AF;
           letter-spacing: 0.5px;
+          text-decoration: none;
+          transition: opacity 0.2s;
+        }
+
+        .site-title:hover {
+          opacity: 0.7;
         }
 
         .flower {
@@ -105,7 +111,7 @@ class HelloRuruHeader extends HTMLElement {
           </svg>
           <span class="brand-text">Hello Ruru</span>
         </a>
-        ${siteTitle ? `<span class="divider">|</span><span class="site-title">${siteTitle}</span>` : ''}
+        ${siteTitle ? `<span class="divider">|</span><a class="site-title" href="${brandHref}">${siteTitle}</a>` : ''}
       </header>
     `;
   }
