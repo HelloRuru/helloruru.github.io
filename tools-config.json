@@ -30,6 +30,14 @@
           "icon": "sparkles",
           "iconColor": "sakura",
           "badge": { "text": "開發中", "type": "dev" }
+        },
+        {
+          "id": "sge-writer",
+          "title": "SGE 文案升級攻略站",
+          "description": "H1 字數檢測、關鍵字密度分析、支語小警察、AI 味檢測、即時 SGE 評分",
+          "url": "/sge-writer/",
+          "icon": "highlighter",
+          "iconColor": "lavender"
         }
       ]
     },
@@ -42,7 +50,7 @@
           "id": "txt-to-epub",
           "title": "TXT 轉 EPUB",
           "description": "純文字轉電子書，支援繁簡轉換",
-          "url": "https://tools.helloruru.com/txt-to-epub/",
+          "url": "https://tools.helloruru.com/epub",
           "icon": "book",
           "iconColor": "rose",
           "external": true
@@ -51,45 +59,90 @@
           "id": "epub-converter",
           "title": "EPUB 簡轉繁",
           "description": "簡體電子書批次轉繁體，保留格式與封面",
-          "url": "https://tools.helloruru.com/epub-converter/",
+          "url": "https://tools.helloruru.com/epub-convert",
           "icon": "pen",
           "iconColor": "lavender",
           "external": true
         },
         {
-          "id": "hihi",
-          "title": "問安圖產生器",
-          "description": "早安圖、問候圖線上製作工具，支援自訂文字與背景",
-          "url": "https://tools.helloruru.com/hihi/",
-          "icon": "sun",
-          "iconColor": "sakura",
-          "external": true
-        },
-        {
-          "id": "reader-quiz",
-          "title": "電子書閱讀器選購測驗",
-          "description": "8 題精準推薦最適合你的電子書閱讀器",
-          "url": "https://tools.helloruru.com/reader-quiz/",
-          "icon": "book-open",
-          "iconColor": "blush",
-          "external": true
-        },
-        {
-          "id": "spell",
-          "title": "SD 咒語產生器",
-          "description": "Stable Diffusion 提示詞快速組合工具",
-          "url": "https://tools.helloruru.com/spell/",
-          "icon": "sparkles",
+          "id": "bg-removal",
+          "title": "批次去背",
+          "description": "AI 自動去背，4 種模式、不限解析度，全程本機處理",
+          "url": "https://tools.helloruru.com/bg-remove",
+          "icon": "wand",
           "iconColor": "lavender",
           "external": true
         },
         {
           "id": "post-writer",
           "title": "社群貼文排版",
-          "description": "Instagram / Threads 文案排版工具，支援標題樣式",
-          "url": "https://tools.helloruru.com/post-writer/",
+          "description": "解決 FB、IG、Threads 換行消失問題，即時預覽",
+          "url": "https://tools.helloruru.com/post-writer",
           "icon": "layout",
           "iconColor": "rose",
+          "external": true
+        },
+        {
+          "id": "pdf-editor",
+          "title": "PDF 編輯工具",
+          "description": "手寫簽名、打字簽名、圖片簽名、文字覆蓋，全程本機處理",
+          "url": "https://tools.helloruru.com/pdf-editor/",
+          "icon": "pen",
+          "iconColor": "rose",
+          "external": true
+        },
+        {
+          "id": "hihi",
+          "title": "問安圖產生器",
+          "description": "早安圖、問候圖線上製作，7 種字體、配件貼紙",
+          "url": "https://tools.helloruru.com/hihi/",
+          "icon": "sun",
+          "iconColor": "sakura",
+          "external": true
+        },
+        {
+          "id": "card-maker",
+          "title": "Card Maker 卡片製造機",
+          "description": "社群貼文圖片產生器，4 款質感模板，一鍵下載 PNG",
+          "url": "https://tools.helloruru.com/card-maker/",
+          "icon": "layout",
+          "iconColor": "rose",
+          "external": true
+        },
+        {
+          "id": "find-color",
+          "title": "2026 數位色票庫",
+          "description": "收錄 Pantone 2026 與 8 大設計美學圈流行色",
+          "url": "https://tools.helloruru.com/find-color/",
+          "icon": "palette",
+          "iconColor": "lavender",
+          "external": true
+        },
+        {
+          "id": "lyric-player",
+          "title": "Lyric Player 歌詞播放器",
+          "description": "上傳 MP3 即可 AI 辨識歌詞並同步播放，中英日韓多語言",
+          "url": "https://tools.helloruru.com/lyric-player/",
+          "icon": "music",
+          "iconColor": "lavender",
+          "external": true
+        },
+        {
+          "id": "spotify-goods",
+          "title": "Spotify Goods 歌曲整理",
+          "description": "貼上 YouTube 網址自動抓歌，一鍵建立 Spotify 歌單",
+          "url": "https://tools.helloruru.com/spotify-goods/",
+          "icon": "music",
+          "iconColor": "sage",
+          "external": true
+        },
+        {
+          "id": "reader-quiz",
+          "title": "電子書閱讀器測驗",
+          "description": "8 題精準推薦最適合你的電子書閱讀器",
+          "url": "https://tools.helloruru.com/reader-quiz/",
+          "icon": "book-open",
+          "iconColor": "blush",
           "external": true
         },
         {
@@ -102,12 +155,30 @@
           "external": true
         },
         {
-          "id": "find-color",
-          "title": "2026 數位色票庫",
-          "description": "收錄 Pantone 2026 與 8 大設計美學圈流行色",
-          "url": "https://tools.helloruru.com/find-color/",
-          "icon": "palette",
+          "id": "spell",
+          "title": "SD 咒語產生器",
+          "description": "Stable Diffusion 提示詞快速組合工具",
+          "url": "https://tools.helloruru.com/spell/",
+          "icon": "sparkles",
           "iconColor": "lavender",
+          "external": true
+        },
+        {
+          "id": "book-manager",
+          "title": "電子書書櫃管理",
+          "description": "登入讀墨、Kobo，一鍵撈出全部藏書，跨平台比對重複書籍",
+          "url": "https://tools.helloruru.com/book-manager/",
+          "icon": "book-open",
+          "iconColor": "lavender",
+          "external": true
+        },
+        {
+          "id": "readmoo-ap",
+          "title": "讀墨 AP 串串樂",
+          "description": "讀墨 1500 日挑戰 LINE 群專用，自動產生串接推薦文案",
+          "url": "https://tools.helloruru.com/readmoo-ap/",
+          "icon": "book",
+          "iconColor": "sage",
           "external": true
         }
       ]
