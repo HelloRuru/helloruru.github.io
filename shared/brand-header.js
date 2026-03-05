@@ -109,7 +109,7 @@ class HelloRuruHeader extends HTMLElement {
             <ellipse cx="32" cy="24" rx="4" ry="7" fill="#FEDFE1" opacity="0.5" transform="rotate(300 32 32)"/>
             <circle cx="32" cy="32" r="4" fill="#D4A5A5" opacity="0.8"/>
           </svg>
-          <span class="brand-text">Hello Ruru</span>
+          <span class="brand-text">HelloRuru</span>
         </a>
         ${siteTitle ? `<span class="divider">|</span><a class="site-title" href="${brandHref}">${siteTitle}</a>` : ''}
       </header>
