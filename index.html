@@ -28,7 +28,7 @@
   <meta name="twitter:image" content="https://lab.helloruru.com/og-image.png">
 
   <!-- Icons -->
-  <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+  <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#D4A5A5">
@@ -177,6 +177,17 @@
       background: radial-gradient(circle, rgba(212,165,165,0.15) 0%, rgba(184,169,201,0.08) 50%, transparent 70%);
       border-radius: 50%;
       pointer-events: none;
+    }
+
+    .hero-watermark {
+      position: absolute;
+      right: 24px;
+      bottom: 16px;
+      width: 48px;
+      height: 48px;
+      opacity: 0.18;
+      pointer-events: none;
+      user-select: none;
     }
 
     .hero-logo {
@@ -605,6 +616,7 @@
     </a>
     <div class="hero-brand" style="background: linear-gradient(135deg, #D4A5A5, #B8A9C9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 32px; font-weight: 700; letter-spacing: 3px;">Hello Ruru</div>
     <p class="hero-subtitle">工具，實驗，以及正在編寫的美好篇章</p>
+    <img src="/images/rabbit-watermark.png" alt="" class="hero-watermark" aria-hidden="true">
   </header>
 
   <main class="container">
