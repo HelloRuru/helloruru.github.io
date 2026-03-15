@@ -184,6 +184,16 @@ const ManualCheck = {
   initChannel() {
     this.destroyChannel();
 
+    // postMessage 跨域監聽（油猴腳本從 Google 頁面回傳）
+    this._onMessage = (event) => {
+      if (!/^https:\/\/www\.google\./.test(event.origin)) return;
+      if (event.data?.t === 'r') {
+        this.handleChannelMessage(event.data);
+      }
+    };
+    window.addEventListener('message', this._onMessage);
+
+    // 保留 BroadcastChannel 做備援（同域場景）
     try {
       this.channel = new BroadcastChannel(this.CHANNEL_NAME);
       this.channel.onmessage = (event) => {
@@ -200,6 +210,10 @@ const ManualCheck = {
    * 關閉 BroadcastChannel
    */
   destroyChannel() {
+    if (this._onMessage) {
+      window.removeEventListener('message', this._onMessage);
+      this._onMessage = null;
+    }
     if (this.channel) {
       this.channel.close();
       this.channel = null;
@@ -379,10 +393,17 @@ const ManualCheck = {
     var u = {};
     src = src.filter(function(x) { return u[x] ? 0 : u[x] = 1; });
 
-    // 回傳結果給 AIO View
+    // 回傳結果給 AIO View（postMessage 跨域）
+    var msg = { t: 'r', q: q, aio: !!a, src: src };
+    try {
+      if (window.opener) {
+        window.opener.postMessage(msg, 'https://lab.helloruru.com');
+      }
+    } catch(e) {}
+    // 備援：BroadcastChannel（同域場景）
     try {
       var ch = new BroadcastChannel('${this.CHANNEL_NAME}');
-      ch.postMessage({ t: 'r', q: q, aio: !!a, src: src });
+      ch.postMessage(msg);
       ch.close();
     } catch(e) {}
 
