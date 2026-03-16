@@ -39,6 +39,17 @@
   box-shadow: 0 0 8px rgba(57, 197, 187, 0.15);
 }
 
+.btn-danger {
+  background: rgba(255, 80, 80, 0.15);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 80, 80, 0.4);
+}
+
+.btn-danger:hover {
+  background: rgba(255, 80, 80, 0.25);
+  box-shadow: 0 0 8px rgba(255, 80, 80, 0.3);
+}
+
 .btn-ghost {
   background: transparent;
   color: var(--color-text);
