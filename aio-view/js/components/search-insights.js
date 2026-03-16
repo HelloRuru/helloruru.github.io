@@ -162,6 +162,11 @@ const SearchInsights = {
     const citedCount = group.items.filter(item => item.isCited).length;
     const verdict = this.resolveVerdict(verifiedFacets.length, group.items.length, missingFacets.length);
     const locations = this.extractLocations(baseQuery || group.title);
+    const totalFacets = new Set([
+      ...verifiedFacets.map(f => f.key),
+      ...attemptedFacets.map(f => f.key),
+      ...missingFacets.map(f => f.key)
+    ]).size;
 
     return {
       articleKey: group.articleKey,
@@ -173,6 +178,7 @@ const SearchInsights = {
       aioCount,
       citedCount,
       totalQueries: group.items.length,
+      totalFacets,
       verifiedFacets,
       citedFacets,
       attemptedFacets,
@@ -217,6 +223,7 @@ const SearchInsights = {
   },
 
   resolveVerdict(verifiedCount, queryCount, missingCount) {
+    if (queryCount === 0) return 'pending';
     if (verifiedCount >= 2) return 'validated';
     if (verifiedCount >= 1 || queryCount >= 2 || missingCount === 0) return 'partial';
     return 'pending';
@@ -331,7 +338,7 @@ const SearchInsights = {
       <details class="topic-node"${index < 2 ? ' open' : ''}>
         <summary class="topic-node-summary">
           <span class="topic-node-title">${Utils.escapeHtml(article.title)}</span>
-          <span class="topic-node-meta">${Utils.escapeHtml(article.verdictLabel)} · 已驗 ${article.verifiedFacets.length}/${article.verifiedFacets.length + article.attemptedFacets.length + article.missingFacets.length} 面向</span>
+          <span class="topic-node-meta">${Utils.escapeHtml(article.verdictLabel)} · 已驗 ${article.verifiedFacets.length}/${article.totalFacets} 面向</span>
         </summary>
         <div class="topic-node-body">
           <div class="topic-branch">
