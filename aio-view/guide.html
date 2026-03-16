@@ -612,10 +612,11 @@ body{
         <div class="step-num">02</div>
         <div class="step-body">
           <div class="step-title">檢查 AIO</div>
-          <div class="step-desc">兩種方式檢查你的文章是否出現在 Google AI Overview：<br>
-          <strong style="color:var(--green)">手動檢查（免安裝）</strong> — 按「開始手動檢查」，系統會逐篇開啟 Google 搜尋，你在搜尋結果頁面點「有 AIO / 沒有 AIO」回報。<br>
-          <strong style="color:var(--cyan)">Chrome 擴充功能自動檢查（推薦）</strong> — 載入 repo 內建的未封裝擴充功能後，AIO View 會在背景彈窗自動接收 Google 搜尋頁的偵測結果。<br>
-          <strong style="color:var(--cyan)">CLI 自動掃描（建議批次使用）</strong> — 產生 <code>queries.json</code> 後，在電腦跑 <code>node scan.js</code>，工具會自動比對新版 <code>AI 摘要 / AI Overview</code> heading、區塊結構與引用來源，每篇間隔 <strong style="color:var(--yellow)">2.5 分鐘</strong>，適合睡前放著跑。</div>
+          <div class="step-desc">勾選文章後，每篇會自動展開<strong style="color:var(--magenta)">多個搜尋面向</strong>（推薦、價格、決策、比較、教學），全面檢查不同問法是否觸發 AIO。<br><br>
+          <strong style="color:var(--green)">手動檢查（免安裝）</strong> — 按「開始手動檢查」，系統逐篇逐面向開啟 Google 搜尋，你手動回報結果。<br>
+          <strong style="color:var(--cyan)">Chrome 擴充功能自動檢查（推薦）</strong> — 載入擴充功能後，背景彈窗自動偵測 AIO 並回傳結果，搜完自動關閉視窗。<br>
+          <strong style="color:var(--cyan)">CLI 自動掃描（建議批次使用）</strong> — 產生 <code>queries.json</code> 後，跑 <code>node scan.js</code>，每篇間隔 <strong style="color:var(--yellow)">2.5 分鐘</strong>，適合睡前放著跑。<br><br>
+          三種結果狀態：<strong style="color:var(--green)">有引用</strong> = AIO 引用了你的文章、<strong style="color:var(--cyan)">有 AIO</strong> = AIO 出現但引用別人、<strong style="color:var(--text-dim)">沒有</strong> = 沒出現 AIO。</div>
         </div>
       </div>
 
@@ -623,7 +624,8 @@ body{
         <div class="step-num">03</div>
         <div class="step-body">
           <div class="step-title">看報告</div>
-          <div class="step-desc">手動檢查的結果即時顯示在報告區。CLI 掃描完成後拖曳 <code>results.json</code> 到上傳區。<br>
+          <div class="step-desc">報告區即時更新，包含五大指標：總文章數、有 AIO、被引用、引用率、<strong style="color:var(--cyan)">AIO 能見度指數</strong>（0-100 分）。<br>
+          每篇文章有單篇分析：已驗證面向、使用者在意的（Google 搜尋建議）、延伸寫作方向（你還沒寫的題目）。<br>
           自動產生<strong style="color:var(--cyan)">圖表分析</strong>（AIO 分布、引用來源排行）、<strong style="color:var(--magenta)">時間軸報告</strong>（歷史趨勢、前後對比），支援 CSV 匯出。</div>
         </div>
       </div>
@@ -679,6 +681,18 @@ body{
         <span class="feature-badge ai">AI ASSIST</span>
         <h4>AI 輔助面板</h4>
         <p>超過 15 篇自動分批。複製提示詞給 AI → 把回覆貼回來 → 系統用模糊比對自動配對標題和語句。</p>
+      </div>
+
+      <div class="feature">
+        <span class="feature-badge new">INSIGHTS</span>
+        <h4>單篇面向分析</h4>
+        <p>每篇文章自動展開多個搜尋面向驗證，顯示已驗/未驗進度。整合 Google 搜尋建議，找出使用者在意的方向和你還沒寫的延伸題目。</p>
+      </div>
+
+      <div class="feature">
+        <span class="feature-badge new">RANK</span>
+        <h4>AIO 能見度指數</h4>
+        <p>0-100 分綜合指標，結合 AIO 出現率（40%）和引用率（60%）。60 分以上代表你的內容在 AI 搜尋結果裡很有存在感。</p>
       </div>
 
       <div class="feature">
