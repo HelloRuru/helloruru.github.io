@@ -77,6 +77,7 @@ const ManualCheck = {
       // 自動檢查
       autoStartBtn: document.getElementById('auto-check-start'),
       autoStopBtn: document.getElementById('auto-check-stop'),
+      autoCloseBtn: document.getElementById('auto-check-close-popup'),
       autoStatus: document.getElementById('auto-check-status')
     };
 
@@ -127,6 +128,12 @@ const ManualCheck = {
     this.els.autoStopBtn?.addEventListener('click', () => {
       this.stopAutoCheck();
       Toast.info('自動檢查已停止');
+    });
+
+    // 手動關閉 Google 搜尋視窗
+    this.els.autoCloseBtn?.addEventListener('click', () => {
+      this.closePopup();
+      Toast.info('已關閉 Google 搜尋視窗');
     });
   },
 
@@ -372,6 +379,9 @@ const ManualCheck = {
         Toast.success(`${shortTitle} → ${label}`);
       }
 
+      // 收到結果後立刻關掉 Google 彈窗
+      this.closePopup();
+
       this.autoCheck.currentIndex++;
       this.updateProgress();
       if (this.autoCheck.currentIndex >= this.articles.length) {
@@ -443,20 +453,25 @@ const ManualCheck = {
   },
 
   /**
-   * 停止自動檢查
+   * 關閉 Google 搜尋彈窗
    */
-  stopAutoCheck() {
-    this.autoCheck.active = false;
-    clearTimeout(this.autoCheck.timer);
-    clearTimeout(this.autoCheck.timeoutTimer);
-
-    // 嘗試關閉彈窗
+  closePopup() {
     try {
       if (this.autoCheck.popup && !this.autoCheck.popup.closed) {
         this.autoCheck.popup.close();
       }
     } catch (e) { /* 跨域視窗可能無法關閉 */ }
     this.autoCheck.popup = null;
+  },
+
+  /**
+   * 停止自動檢查
+   */
+  stopAutoCheck() {
+    this.autoCheck.active = false;
+    clearTimeout(this.autoCheck.timer);
+    clearTimeout(this.autoCheck.timeoutTimer);
+    this.closePopup();
 
     this.updateAutoCheckUI();
     this.updateProgress();
@@ -478,16 +493,22 @@ const ManualCheck = {
     // 全部完成
     if (this.autoCheck.currentIndex >= this.articles.length) {
       this.autoCheck.active = false;
-      Toast.success('自動檢查完成！可以查看報告了');
+      this.closePopup();
+
+      const checked = this.articles.filter(a => this.checkResults[a.id]).length;
+      const total = this.articles.length;
+      Toast.success(`全部跑完了！${checked}/${total} 個查詢有結果，可以查看報告`);
       this.updateAutoCheckUI();
       this.updateProgress();
       this.logDebug('自動檢查流程完成');
 
-      try {
-        if (this.autoCheck.popup && !this.autoCheck.popup.closed) {
-          this.autoCheck.popup.close();
-        }
-      } catch (e) {}
+      // 瀏覽器桌面通知（如果有權限）
+      if (Notification?.permission === 'granted') {
+        new Notification('AIO View 檢查完成', {
+          body: `${checked}/${total} 個查詢有結果`,
+          icon: '/aio-view/icons/icon-192.svg'
+        });
+      }
       return;
     }
 
@@ -534,6 +555,7 @@ const ManualCheck = {
         Toast.info(`${shortTitle} 未收到回傳，先跳過`);
         this.logDebug(`逾時未回傳：${currentArticle.query || currentArticle.title}`);
       }
+      this.closePopup();
       this.autoCheck.currentIndex++;
       this.updateProgress();
       if (this.autoCheck.currentIndex >= this.articles.length) {

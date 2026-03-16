@@ -5,7 +5,7 @@
 /* Stats Grid */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: var(--space-md);
   margin-bottom: var(--space-lg);
 }
@@ -40,6 +40,61 @@
   font-size: 14px;
   color: var(--color-text);
   margin-top: var(--space-xs);
+}
+
+/* AIO 能見度 RANK — 初音 Racing 風 */
+.stat-rank {
+  position: relative;
+  border: 1px solid rgba(57, 197, 187, 0.4);
+  background: linear-gradient(135deg, rgba(0, 20, 30, 0.9), rgba(10, 10, 30, 0.9));
+  overflow: hidden;
+}
+
+.stat-rank::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+    rgba(57, 197, 187, 0.08),
+    rgba(134, 96, 214, 0.08),
+    rgba(255, 107, 152, 0.05));
+  pointer-events: none;
+}
+
+.stat-rank .stat-value {
+  font-family: var(--font-display);
+  background: linear-gradient(135deg, #39c5bb, #8660d6, #ff6b98);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 6px rgba(57, 197, 187, 0.4));
+}
+
+.stat-rank .stat-label {
+  color: rgba(57, 197, 187, 0.8);
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* RANK 等級光暈 */
+.stat-rank.rank-great {
+  border-color: rgba(57, 197, 187, 0.6);
+  box-shadow: 0 0 16px rgba(57, 197, 187, 0.25), inset 0 0 20px rgba(57, 197, 187, 0.05);
+}
+
+.stat-rank.rank-good {
+  border-color: rgba(134, 96, 214, 0.5);
+  box-shadow: 0 0 12px rgba(134, 96, 214, 0.2);
+}
+
+.stat-rank.rank-fair {
+  border-color: rgba(255, 170, 100, 0.4);
+  box-shadow: 0 0 8px rgba(255, 170, 100, 0.15);
+}
+
+.stat-rank.rank-low {
+  border-color: rgba(100, 100, 100, 0.3);
 }
 
 /* Filter Bar */

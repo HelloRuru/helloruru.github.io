@@ -591,6 +591,13 @@ npx playwright install chromium</code>
                 </svg>
                 停止
               </button>
+              <button class="btn btn-secondary" id="auto-check-close-popup" title="關閉 Google 搜尋視窗">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+                關閉視窗
+              </button>
               <span class="auto-check-status hidden" id="auto-check-status"></span>
             </div>
 
@@ -713,6 +720,10 @@ npx playwright install chromium</code>
             <div class="stat-card">
               <div class="stat-value" id="stat-rate">0%</div>
               <div class="stat-label">引用率</div>
+            </div>
+            <div class="stat-card stat-rank">
+              <div class="stat-value" id="stat-rank">--</div>
+              <div class="stat-label">AIO 能見度</div>
             </div>
           </div>
 
