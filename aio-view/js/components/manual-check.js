@@ -26,6 +26,12 @@ const ManualCheck = {
   /** BroadcastChannel 實例 */
   channel: null,
 
+  /** 最近一次處理的訊息，用來擋掉 postMessage + BroadcastChannel 的重複回傳 */
+  lastHandledMessage: {
+    key: '',
+    at: 0
+  },
+
   /** DOM 快取 */
   els: {},
 
@@ -171,6 +177,7 @@ const ManualCheck = {
     this.checkResults = {};
     this.processStates = {};
     this.currentFilter = 'all';
+    this.lastHandledMessage = { key: '', at: 0 };
     this.stopAutoCheck();
     this.destroyChannel();
     if (this.els.cards) this.els.cards.innerHTML = '';
@@ -250,6 +257,20 @@ const ManualCheck = {
       }
     }
 
+    const messageKey = JSON.stringify({
+      query,
+      status,
+      src: Array.isArray(data.src) ? [...data.src].sort() : []
+    });
+    const now = Date.now();
+    if (
+      this.lastHandledMessage.key === messageKey &&
+      now - this.lastHandledMessage.at < 2500
+    ) {
+      return;
+    }
+    this.lastHandledMessage = { key: messageKey, at: now };
+
     // 找對應文章
     let article;
     if (this.autoCheck.active && this.autoCheck.currentIndex < this.articles.length) {
@@ -266,7 +287,7 @@ const ManualCheck = {
     }
 
     // 設定狀態
-    this.setStatus(article.id, status);
+    this.setStatus(article.id, status, { toggle: false });
 
     // 通知
     const label = status === 'cited' ? '有引用' : status === 'aio' ? '有 AIO' : '沒有';
@@ -285,7 +306,7 @@ const ManualCheck = {
           if (a.id === article.id) return;
           if (this.checkResults[a.id]) return;
           if ((a.query || '').trim().toLowerCase() === currentQuery) {
-            this.setStatus(a.id, status);
+            this.setStatus(a.id, status, { toggle: false });
             duplicateCount++;
           }
         });
@@ -647,9 +668,11 @@ const ManualCheck = {
    * @param {string} articleId - 文章 ID
    * @param {string} status - 'cited' | 'aio' | 'none'
    */
-  setStatus(articleId, status) {
-    // 如果點同一個狀態，取消選取
-    if (this.checkResults[articleId] === status) {
+  setStatus(articleId, status, options = {}) {
+    const { toggle = true } = options;
+
+    // 手動點擊同一個狀態時才取消；自動回傳不做 toggle
+    if (toggle && this.checkResults[articleId] === status) {
       delete this.checkResults[articleId];
       delete this.processStates[articleId];
     } else {
