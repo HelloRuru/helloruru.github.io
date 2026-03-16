@@ -379,9 +379,6 @@ const ManualCheck = {
         Toast.success(`${shortTitle} → ${label}`);
       }
 
-      // 收到結果後立刻關掉 Google 彈窗
-      this.closePopup();
-
       this.autoCheck.currentIndex++;
       this.updateProgress();
       if (this.autoCheck.currentIndex >= this.articles.length) {
@@ -555,7 +552,6 @@ const ManualCheck = {
         Toast.info(`${shortTitle} 未收到回傳，先跳過`);
         this.logDebug(`逾時未回傳：${currentArticle.query || currentArticle.title}`);
       }
-      this.closePopup();
       this.autoCheck.currentIndex++;
       this.updateProgress();
       if (this.autoCheck.currentIndex >= this.articles.length) {
