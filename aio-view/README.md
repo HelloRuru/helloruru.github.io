@@ -10,8 +10,9 @@ https://lab.helloruru.com/aio-view/
 
 1. **輸入 Sitemap** — 自動解析文章清單
 2. **產生搜尋語句** — 自動產生，可手動編輯
-3. **CLI 掃描** — 在本機執行，自動搜尋 Google 並偵測 AIO，支援新版 Google AI 摘要版型
-4. **結果 Dashboard** — 視覺化顯示、篩選、匯出 CSV
+3. **Chrome 擴充功能自動檢查** — 在瀏覽器內直接讀取 Google 搜尋頁並回傳結果，零成本
+4. **CLI 掃描** — 在本機執行，自動搜尋 Google 並偵測 AIO，支援新版 Google AI 摘要版型
+5. **結果 Dashboard** — 視覺化顯示、篩選、匯出 CSV
 
 ## 架構
 
@@ -57,11 +58,26 @@ aio-view/
 │   │   ├── cli-generator.js
 │   │   └── sitemap-input.js
 │   └── main.js             # 進入點
+├── chrome-extension/       # Chrome 未封裝擴充功能
+│   ├── manifest.json
+│   ├── content.js
+│   └── README.md
+├── shared/                 # 共用偵測邏輯
+│   └── aio-detector.js
 └── cli/                    # CLI 工具
     ├── package.json
     ├── scan.js             # 掃描腳本
     └── README.md           # CLI 使用說明
 ```
+
+## Chrome 擴充功能使用方式
+
+1. 先下載這個 repo，或直接下載 ZIP
+2. 開啟 Chrome 的 `chrome://extensions`
+3. 打開右上角「開發人員模式」
+4. 選「載入未封裝項目」
+5. 指向 `aio-view/chrome-extension`
+6. 回 AIO View 點「開始自動檢查」
 
 ## CLI 使用方式
 

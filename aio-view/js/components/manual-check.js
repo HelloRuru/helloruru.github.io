@@ -1,6 +1,6 @@
 /* ================================================
    AIO View — Manual Check Mode
-   手動檢查 + 自動檢查（油猴腳本 + BroadcastChannel）
+   手動檢查 + 自動檢查（Chrome 擴充功能 + BroadcastChannel）
    按一個按鈕，背景自動跑完全部文章
    ================================================ */
 
@@ -55,8 +55,6 @@ const ManualCheck = {
       count: document.getElementById('check-count'),
       viewReportBtn: document.getElementById('check-view-report'),
       filterBar: document.getElementById('check-filter-bar'),
-      // 油猴腳本
-      copyScriptBtn: document.getElementById('copy-userscript-btn'),
       // 自動檢查
       autoStartBtn: document.getElementById('auto-check-start'),
       autoStopBtn: document.getElementById('auto-check-stop'),
@@ -98,15 +96,6 @@ const ManualCheck = {
         const card = statusBtn.closest('.check-card');
         this.setStatus(card.dataset.id, statusBtn.dataset.status);
       }
-    });
-
-    // 複製油猴腳本
-    this.els.copyScriptBtn?.addEventListener('click', () => {
-      const script = this.generateUserscript();
-      Utils.copyToClipboard(script).then(ok => {
-        if (ok) Toast.success('腳本已複製！貼到 Tampermonkey 新增腳本，儲存即可');
-        else Toast.error('複製失敗');
-      });
     });
 
     // 開始自動檢查
@@ -184,7 +173,7 @@ const ManualCheck = {
   initChannel() {
     this.destroyChannel();
 
-    // postMessage 跨域監聽（油猴腳本從 Google 頁面回傳）
+    // postMessage 跨域監聽（Chrome 擴充功能從 Google 頁面回傳）
     this._onMessage = (event) => {
       if (!/^https:\/\/www\.google\./.test(event.origin)) return;
       if (event.data?.t === 'r') {
@@ -221,7 +210,7 @@ const ManualCheck = {
   },
 
   /**
-   * 處理回傳訊息（支援油猴腳本 + 舊版 bookmarklet 兩種格式）
+   * 處理回傳訊息（支援 Chrome 擴充功能 + 舊版 bookmarklet 兩種格式）
    * @param {Object} data - { t:'r', q, aio?, s?, src }
    */
   handleChannelMessage(data) {
@@ -234,7 +223,7 @@ const ManualCheck = {
       // 舊版 bookmarklet 格式：{ s: 'cited'|'aio'|'none' }
       status = data.s;
     } else {
-      // 油猴腳本格式：{ aio: boolean, src: [...] }
+      // Chrome 擴充功能格式：{ aio: boolean, src: [...] }
       if (!data.aio) {
         status = 'none';
       } else {
@@ -327,105 +316,12 @@ const ManualCheck = {
   },
 
   /* ============================================
-     油猴腳本（Userscript）
-     ============================================ */
-
-  /**
-   * 產生 Tampermonkey / Violentmonkey 腳本
-   * @returns {string} 完整腳本文字
-   */
-  generateUserscript() {
-    return `// ==UserScript==
-// @name         AIO View 自動偵測
-// @namespace    https://lab.helloruru.com
-// @version      1.0
-// @description  自動偵測 Google AI Overview，回傳結果給 AIO View
-// @match        *://www.google.com/search*
-// @match        *://www.google.com.tw/search*
-// @match        *://www.google.co.jp/search*
-// @match        *://www.google.co.uk/search*
-// @match        *://www.google.com.hk/search*
-// @match        *://www.google.com.sg/search*
-// @grant        none
-// @run-at       document-idle
-// ==/UserScript==
-
-(function() {
-  'use strict';
-
-  // 等 Google 動態內容載入（2 秒）
-  setTimeout(function() {
-    // 策略 1：data-rl（2025+ 格式）
-    var a = document.querySelector('div[data-rl]');
-
-    // 策略 2：heading 文字比對
-    if (!a) {
-      var hs = document.querySelectorAll('[role="heading"]');
-      for (var i = 0; i < hs.length; i++) {
-        var t = hs[i].textContent;
-        if (t.indexOf('AI Overview') >= 0 || t.indexOf('AI \\u7E3D\\u89BD') >= 0) {
-          a = hs[i].closest('div[jsname]') || hs[i].parentElement;
-          break;
-        }
-      }
-    }
-
-    // 策略 3：舊版 selector
-    if (!a) {
-      var S = ['[data-attrid="wa:/description"]', '.ILfuVd', '.wDYxhc[data-md]', '.kp-wholepage-osrp'];
-      for (var i = 0; i < S.length; i++) {
-        a = document.querySelector(S[i]);
-        if (a) break;
-      }
-    }
-
-    // 取搜尋語句
-    var q = (document.querySelector('textarea[name="q"],input[name="q"]') || {}).value || '';
-
-    // 收集引用來源
-    var src = [];
-    if (a) {
-      var ls = a.querySelectorAll('a[href]');
-      for (var i = 0; i < ls.length; i++) {
-        try { src.push(new URL(ls[i].href).hostname.replace(/^www\\\\./, '')); } catch(e) {}
-      }
-    }
-    var u = {};
-    src = src.filter(function(x) { return u[x] ? 0 : u[x] = 1; });
-
-    // 回傳結果給 AIO View（postMessage 跨域）
-    var msg = { t: 'r', q: q, aio: !!a, src: src };
-    try {
-      if (window.opener) {
-        window.opener.postMessage(msg, 'https://lab.helloruru.com');
-      }
-    } catch(e) {}
-    // 備援：BroadcastChannel（同域場景）
-    try {
-      var ch = new BroadcastChannel('${this.CHANNEL_NAME}');
-      ch.postMessage(msg);
-      ch.close();
-    } catch(e) {}
-
-    // 小型浮動提示（3 秒後消失）
-    var color = a ? '#00f0ff' : '#666';
-    var text = a ? 'AIO \\u2714' : 'No AIO';
-    var d = document.createElement('div');
-    d.style.cssText = 'position:fixed;bottom:16px;right:16px;z-index:99999;padding:6px 12px;border-radius:8px;font:500 12px/1 sans-serif;color:#fff;background:' + color + ';opacity:0.8;pointer-events:none;';
-    d.textContent = text;
-    document.body.appendChild(d);
-    setTimeout(function() { if (d.parentNode) d.remove(); }, 2000);
-  }, 2000);
-})();`;
-  },
-
-  /* ============================================
      自動檢查
      ============================================ */
 
   /**
    * 開始自動檢查
-   * 背景開 Google 搜尋彈窗，油猴腳本自動偵測回傳
+   * 背景開 Google 搜尋彈窗，Chrome 擴充功能自動偵測回傳
    */
   startAutoCheck() {
     if (this.articles.length === 0) return;

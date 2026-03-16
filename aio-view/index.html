@@ -547,28 +547,34 @@ node ai-generate.js --input queries.json --provider anthropic --model claude-hai
 
           <!-- Manual Check Content -->
           <div id="check-manual-content">
-            <p class="section-desc">手動檢查免安裝；要批次自動掃描，建議改用下方 CLI 模式</p>
+            <p class="section-desc">手動檢查免安裝；要在瀏覽器內自動判斷，先載入下方 Chrome 擴充功能</p>
 
-            <!-- 油猴腳本安裝區 -->
+            <!-- Chrome 擴充功能安裝區 -->
             <div class="userscript-install" id="userscript-install">
               <p class="userscript-title">
                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M12 2a4 4 0 014 4v1a1 1 0 001 1h1a4 4 0 010 8h-1a1 1 0 00-1 1v1a4 4 0 01-8 0v-1a1 1 0 00-1-1H6a4 4 0 010-8h1a1 1 0 001-1V6a4 4 0 014-4z"/>
                 </svg>
-                瀏覽器輔助腳本（選用）
+                Chrome 擴充功能（推薦）
               </p>
               <ol class="userscript-steps">
-                <li>安裝 <a href="https://www.tampermonkey.net/" target="_blank" rel="noopener">Tampermonkey</a> 瀏覽器擴充</li>
+                <li>先下載這個 repo，或從 GitHub 下載 ZIP</li>
+                <li>開啟 Chrome 的 <code>chrome://extensions</code></li>
+                <li>打開右上角「開發人員模式」</li>
                 <li>
-                  <button class="btn btn-primary btn-sm" id="copy-userscript-btn">
+                  <a class="btn btn-primary btn-sm" href="https://github.com/HelloRuru/helloruru.github.io/tree/main/aio-view/chrome-extension" target="_blank" rel="noopener">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                      <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                      <path d="M14 3h7v7"/>
+                      <path d="M10 14L21 3"/>
+                      <path d="M21 14v7h-7"/>
+                      <path d="M3 10V3h7"/>
+                      <path d="M3 3l7 7"/>
                     </svg>
-                    複製偵測腳本
-                  </button>
+                    查看 GitHub 原始檔
+                  </a>
                 </li>
-                <li>Tampermonkey → 新增腳本 → 全選貼上 → 儲存（非必須）</li>
+                <li>選擇 repo 裡的 <code>aio-view/chrome-extension</code> 資料夾並載入</li>
+                <li>完成後回 AIO View 點「開始自動檢查」</li>
               </ol>
             </div>
 
