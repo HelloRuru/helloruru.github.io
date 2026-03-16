@@ -34,6 +34,7 @@ const App = {
     AiAssist.init();
     ManualCheck.init();
     Charts.init();
+    SearchInsights.init();
     Timeline.init();
 
     // 手動檢查完成回呼
@@ -169,6 +170,7 @@ const App = {
     // 重置統計與圖表
     Stats.reset();
     Charts.reset();
+    SearchInsights.reset();
 
     // 清空輸入框
     const sitemapInput = document.getElementById('sitemap-url');
@@ -215,6 +217,7 @@ const App = {
     if (savedResults) {
       ResultsTable.render(savedResults);
       Charts.render(savedResults);
+      SearchInsights.render(savedResults);
     }
   },
 
@@ -304,6 +307,7 @@ const App = {
 
     // 渲染圖表
     Charts.render(results);
+    SearchInsights.render(results);
 
     // 更新時間軸（存入 IndexedDB + 重新整理）
     Timeline.onResultsUploaded(results);
