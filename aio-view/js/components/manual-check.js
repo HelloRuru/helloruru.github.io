@@ -521,9 +521,13 @@ const ManualCheck = {
     const url = `https://www.google.com/search?q=${encodeURIComponent(query)}&hl=zh-TW`;
     this.logDebug(`開啟 Google：${query}`);
 
-    // 同名彈窗復用（不會開一堆分頁）
+    // 復用同一個彈窗：已開就換頁，沒開才新開
     try {
-      this.autoCheck.popup = window.open(url, this.POPUP_NAME, 'width=1024,height=700');
+      if (this.autoCheck.popup && !this.autoCheck.popup.closed) {
+        this.autoCheck.popup.location.href = url;
+      } else {
+        this.autoCheck.popup = window.open(url, this.POPUP_NAME, 'width=1024,height=700');
+      }
       if (!this.autoCheck.popup) {
         Toast.error('彈出視窗被阻擋！請允許此網站的彈出視窗，然後重新點「開始自動檢查」');
         this.stopAutoCheck();
