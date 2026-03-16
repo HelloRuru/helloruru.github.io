@@ -301,9 +301,32 @@ const SearchInsights = {
   renderSummary(analysis) {
     if (!this.elements.summary) return;
 
+    const total = analysis.articles.length;
+    const parts = [];
+
+    if (analysis.validated > 0) {
+      parts.push(`${analysis.validated} 篇已驗證（至少 2 個面向有 AIO）`);
+    }
+    if (analysis.partial > 0) {
+      parts.push(`${analysis.partial} 篇部分驗證`);
+    }
+    if (analysis.pending > 0) {
+      parts.push(`${analysis.pending} 篇資料還不夠，建議補搜`);
+    }
+
+    const statusLine = parts.length > 0
+      ? `共 ${total} 篇文章：${parts.join('、')}。`
+      : `共 ${total} 篇文章，目前還沒有驗證結果。`;
+
+    const tipLine = analysis.pending > 0
+      ? '展開下方各篇可以看「還沒補驗證」的面向，補搜後再回來看結果會更完整。'
+      : (analysis.validated === total
+        ? '所有文章都已驗證到足夠面向，可以參考各篇的偏好判讀。'
+        : '部分文章的面向還沒補齊，補搜後判讀會更準。');
+
     this.elements.summary.innerHTML = `
-      <p>這裡改成逐篇判讀，不再把全部文章混成一段。每篇文章都會拆成「已驗證面向、已搜未中、還沒補驗證」三層。</p>
-      <p>如果某篇目前只搜到 1 條字，系統會直接標成資料太薄，不會硬說已經看出使用者偏好。</p>
+      <p>${Utils.escapeHtml(statusLine)}</p>
+      <p>${Utils.escapeHtml(tipLine)}</p>
     `;
   },
 

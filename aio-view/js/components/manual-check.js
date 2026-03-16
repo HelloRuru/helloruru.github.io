@@ -136,15 +136,47 @@ const ManualCheck = {
    * @param {string} domain - 網域
    */
   show(articles, domain) {
-    this.articles = articles
+    const selected = articles
       .filter(a => a.selected === true && String(a.query || '').trim())
       .map(a => ({ ...a, selected: true }));
     this.domain = domain;
 
-    // 確保每篇文章有唯一 ID（用 URL 當 ID）
-    this.articles.forEach(a => {
-      if (!a.id) a.id = a.url;
+    // 展開每篇文章的多面向變體
+    this.tasks = [];
+    this.articleGroups = new Map();
+
+    selected.forEach(a => {
+      const articleKey = a.url || a.title;
+      const variants = QueryEngine.generateVariants(a, domain);
+
+      if (!this.articleGroups.has(articleKey)) {
+        this.articleGroups.set(articleKey, {
+          articleKey,
+          title: a.title,
+          url: a.url,
+          taskIds: []
+        });
+      }
+      const group = this.articleGroups.get(articleKey);
+
+      variants.forEach(v => {
+        const taskId = `${articleKey}::${v.facetKey}::${v.query}`;
+        group.taskIds.push(taskId);
+        this.tasks.push({
+          id: taskId,
+          articleKey,
+          url: a.url,
+          title: a.title,
+          query: v.query,
+          baseQuery: v.baseQuery,
+          facetKey: v.facetKey,
+          facetLabel: v.facetLabel
+        });
+      });
     });
+
+    // this.articles 指向展開後的任務清單（自動檢查流程用）
+    this.articles = this.tasks;
 
     // 從 Storage 載入進度
     this.checkResults = Storage.get('manual_check', {});
@@ -160,7 +192,7 @@ const ManualCheck = {
     // 啟動 BroadcastChannel 監聽
     this.initChannel();
 
-    // 渲染卡片
+    // 渲染卡片（群組模式）
     this.renderCards();
     this.updateProgress();
     this.updateAutoCheckUI();
@@ -184,6 +216,8 @@ const ManualCheck = {
    */
   reset() {
     this.articles = [];
+    this.tasks = [];
+    this.articleGroups = new Map();
     this.domain = '';
     this.checkResults = {};
     this.processStates = {};
@@ -666,48 +700,74 @@ const ManualCheck = {
      ============================================ */
 
   /**
-   * 渲染所有卡片
+   * 渲染所有卡片（群組模式：同一篇文章的變體放在一起）
    */
   renderCards() {
     if (!this.els.cards) return;
 
     this.els.cards.innerHTML = '';
     const fragment = document.createDocumentFragment();
+    let groupIndex = 0;
 
-    this.articles.forEach((article, index) => {
-      const card = this.createCard(article, index);
-      fragment.appendChild(card);
+    this.articleGroups.forEach((group) => {
+      groupIndex++;
+      const groupEl = this.createGroupCard(group, groupIndex);
+      fragment.appendChild(groupEl);
     });
 
     this.els.cards.appendChild(fragment);
   },
 
   /**
-   * 建立單張檢查卡片
-   * @param {Object} article - 文章
-   * @param {number} index - 索引
-   * @returns {HTMLElement}
+   * 建立群組卡片（一篇文章 + 底下所有變體任務）
    */
-  createCard(article, index) {
-    const card = document.createElement('div');
-    card.className = 'check-card';
-    card.dataset.id = article.id;
+  createGroupCard(group, groupIndex) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'check-group';
+    wrapper.dataset.articleKey = group.articleKey;
 
-    const savedStatus = this.checkResults[article.id];
+    const tasks = this.tasks.filter(t => t.articleKey === group.articleKey);
+    const checkedCount = tasks.filter(t => this.checkResults[t.id]).length;
+    const num = String(groupIndex).padStart(2, '0');
+
+    wrapper.innerHTML = `
+      <div class="check-group-header">
+        <span class="check-card-num">${num}</span>
+        <a href="${this.escapeHtml(group.url)}" target="_blank" rel="noopener"
+           class="check-card-title">${this.escapeHtml(group.title)}</a>
+        <span class="check-group-progress">${checkedCount}/${tasks.length} 面向</span>
+      </div>
+      <div class="check-group-tasks"></div>
+    `;
+
+    const tasksContainer = wrapper.querySelector('.check-group-tasks');
+    tasks.forEach(task => {
+      const taskEl = this.createTaskCard(task);
+      tasksContainer.appendChild(taskEl);
+    });
+
+    return wrapper;
+  },
+
+  /**
+   * 建立單個變體任務卡片
+   */
+  createTaskCard(task) {
+    const card = document.createElement('div');
+    card.className = 'check-card check-card-variant';
+    card.dataset.id = task.id;
+
+    const savedStatus = this.checkResults[task.id];
     if (savedStatus) {
       card.classList.add('checked');
     }
 
-    const num = String(index + 1).padStart(2, '0');
-
     card.innerHTML = `
       <div class="check-card-header">
-        <span class="check-card-num">${num}</span>
-        <a href="${this.escapeHtml(article.url)}" target="_blank" rel="noopener"
-           class="check-card-title">${this.escapeHtml(article.title)}</a>
+        <span class="check-card-facet">${this.escapeHtml(task.facetLabel || task.facetKey)}</span>
       </div>
       <div class="check-card-query">
-        <span class="check-card-query-text">${this.escapeHtml(article.query)}</span>
+        <span class="check-card-query-text">${this.escapeHtml(task.query)}</span>
       </div>
       <div class="check-card-actions">
         <button class="btn btn-primary btn-sm check-google-btn">
@@ -811,6 +871,21 @@ const ManualCheck = {
     });
 
     card.title = processState === 'timeout' ? '這篇檢查時未收到擴充功能回傳' : '';
+
+    // 更新群組進度
+    const task = this.tasks?.find(t => t.id === articleId);
+    if (task && this.articleGroups) {
+      const group = this.articleGroups.get(task.articleKey);
+      if (group) {
+        const groupEl = this.els.cards?.querySelector(`[data-article-key="${task.articleKey}"]`);
+        const progressEl = groupEl?.querySelector('.check-group-progress');
+        if (progressEl) {
+          const groupTasks = this.tasks.filter(t => t.articleKey === task.articleKey);
+          const checkedCount = groupTasks.filter(t => this.checkResults[t.id]).length;
+          progressEl.textContent = `${checkedCount}/${groupTasks.length} 面向`;
+        }
+      }
+    }
   },
 
   /**
@@ -900,19 +975,22 @@ const ManualCheck = {
    * @returns {Object} 掃描結果
    */
   getResults() {
-    const processedArticles = this.articles.filter(a => this.processStates[a.id]);
+    const processedTasks = this.articles.filter(a => this.processStates[a.id]);
 
     return {
       scanDate: Utils.formatDate(new Date()),
       domain: this.domain,
       source: 'manual',
-      totalArticles: this.articles.length,
-      results: processedArticles.map(article => {
-        const status = this.processStates[article.id];
+      totalArticles: this.articleGroups ? this.articleGroups.size : processedTasks.length,
+      results: processedTasks.map(task => {
+        const status = this.processStates[task.id];
         return {
-          url: article.url,
-          title: article.title,
-          query: article.query,
+          url: task.url,
+          title: task.title,
+          query: task.query,
+          baseQuery: task.baseQuery || task.query,
+          articleKey: task.articleKey || task.url,
+          facetKey: task.facetKey || 'base',
           scanStatus: status,
           hasAIO: status === 'timeout' ? null : status === 'cited' || status === 'aio',
           isCited: status === 'cited',
