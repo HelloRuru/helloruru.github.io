@@ -545,21 +545,28 @@ const SearchInsights = {
         if (extendEl && suggestions.length > 0) {
           const newTopics = suggestions.filter(s => {
             const lower = s.toLowerCase();
-            // 排除跟已有文章標題高度重疊的
             return !allTitles.some(t =>
               t.includes(lower) || lower.includes(t)
             );
           }).slice(0, 5);
 
           if (newTopics.length > 0) {
-            extendEl.innerHTML = newTopics.map(s =>
-              `<span class="suggestion-chip suggestion-chip-new">${Utils.escapeHtml(s)}</span>`
-            ).join('');
+            extendEl.innerHTML = newTopics.map(s => {
+              const facet = this.matchFacet(s);
+              const analysis = this.buildExtendAnalysis(s, facet, baseQuery);
+              const tagHtml = facet
+                ? `<span class="suggest-tag" data-facet="${facet.key}">${Utils.escapeHtml(facet.label)}</span>`
+                : '';
+              return `<div class="extend-item">
+                <div class="extend-keyword">${tagHtml}<span class="suggestion-chip suggestion-chip-new">${Utils.escapeHtml(s)}</span></div>
+                <div class="extend-analysis">${Utils.escapeHtml(analysis)}</div>
+              </div>`;
+            }).join('');
           } else {
-            extendEl.innerHTML = '<span class="topic-branch-value">COVERED — 目前 Google 熱搜方向皆已有對應內容</span>';
+            extendEl.innerHTML = '<span class="status-good">COVERED — Google 熱搜方向皆已有對應內容</span>';
           }
         } else if (extendEl) {
-          extendEl.innerHTML = '<span class="topic-branch-value">NO SIGNAL — Google Autocomplete 未回傳資料</span>';
+          extendEl.innerHTML = '<span class="status-dim">NO SIGNAL — Google Autocomplete 未回傳資料</span>';
         }
       } catch {
         // 失敗就靜默跳過
@@ -570,6 +577,24 @@ const SearchInsights = {
   /**
    * 用 FACET_RULES 比對 Google 建議的標籤
    */
+  /**
+   * 根據面向類型 + 關鍵字，產生延伸寫作建議
+   */
+  buildExtendAnalysis(keyword, facet, baseQuery) {
+    const base = baseQuery || '';
+    if (!facet) {
+      return `使用者搜「${keyword}」的量夠大，但你目前沒有直接對應的內容。寫一篇專門回答這個問題，有機會搶到 AIO 引用。`;
+    }
+    const tips = {
+      recommend: `使用者想找推薦，這代表他還在選擇階段。寫一篇「${base} 推薦清單」型的內容，直接回答「哪個好」，AIO 很愛引用這類整理文。`,
+      price: `價格是決策前最後一關。使用者搜這個代表他快要掏錢了。寫一篇拆解費用、比較方案的內容，轉換率會比純推薦文高。`,
+      decision: `這是選擇障礙型搜尋——使用者不知道該選誰。寫一篇幫他做決定的內容（條件比較表、情境推薦），AIO 回答這類問題時很常引用有結論的文章。`,
+      compare: `比較型需求。使用者想看 A vs B 的差異。寫一篇客觀對比（表格 + 結論），Google 偏好有結構化比較的內容。`,
+      guide: `教學型搜尋代表使用者是新手，還在學習階段。寫一篇入門指南、步驟教學，用簡單的話解釋，AIO 會優先引用好懂的內容。`
+    };
+    return tips[facet.key] || `使用者在搜「${keyword}」，你目前沒有對應內容，值得考慮寫一篇。`;
+  },
+
   matchFacet(text) {
     for (const rule of this.FACET_RULES) {
       if (rule.regex.test(text)) return { key: rule.key, label: rule.label };

@@ -177,6 +177,31 @@
 /* 沒有 data-facet 的 fallback */
 .suggest-tag:not([data-facet]) { background: rgba(57, 197, 187, 0.2); color: #39c5bb; }
 
+/* 延伸寫作方向 — 帶分析 */
+.extend-item {
+  display: grid;
+  gap: 6px;
+  padding: 12px 16px;
+  border: 1px solid rgba(0, 255, 136, 0.12);
+  border-radius: 8px;
+  background: rgba(0, 255, 136, 0.03);
+  width: 100%;
+}
+
+.extend-keyword {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.extend-analysis {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--color-gray);
+  padding-left: 2px;
+}
+
 .suggest-loading {
   opacity: 0.5;
   font-style: italic;
