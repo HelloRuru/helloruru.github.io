@@ -20,6 +20,17 @@ const QueryEngine = {
     '駁二', '美麗島', '巨蛋', '瑞豐'
   ],
 
+  GENERIC_SEGMENTS: [
+    'article', 'articles',
+    'post', 'posts',
+    'blog', 'blogs',
+    'news',
+    'category', 'categories',
+    'tag', 'tags',
+    'search',
+    'archive', 'archives'
+  ],
+
   MAX_LENGTH: 20,
   MIN_LENGTH: 3,
 
@@ -126,20 +137,28 @@ const QueryEngine = {
         .replace(/\.\w+$/, '')
         .replace(/^\d+$/, '');
 
-      if (text.length >= this.MIN_LENGTH) {
+      if (text.length >= this.MIN_LENGTH && !this.isGenericSegment(text)) {
         return this.generate(text, domain);
       }
 
       if (/^\d+$/.test(last) && segments.length >= 2) {
         const prev = decodeURIComponent(segments[segments.length - 2])
           .replace(/[-_]/g, ' ');
-        if (prev.length >= this.MIN_LENGTH) {
+        if (prev.length >= this.MIN_LENGTH && !this.isGenericSegment(prev)) {
           return this.generate(prev, domain);
         }
       }
     } catch { /* ignore */ }
 
     return domain ? domain.replace(/\.(com|tw|org|net)$/i, '') : '';
+  },
+
+  /**
+   * 避免把 /articles/、/posts/ 這種容器路徑拿來當搜尋語句
+   */
+  isGenericSegment(text) {
+    const normalized = String(text || '').trim().toLowerCase();
+    return this.GENERIC_SEGMENTS.includes(normalized);
   },
 
   /**

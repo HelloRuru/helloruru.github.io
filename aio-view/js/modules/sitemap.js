@@ -27,6 +27,9 @@ const Sitemap = {
     /\.(xml|json|txt|pdf)$/
   ],
 
+  /** 成對出現時通常代表列表頁的複數路由字尾 */
+  PLURAL_ROUTE_SUFFIX: 's',
+
   /**
    * 從 sitemap URL 取得文章清單
    * @param {string} sitemapUrl - Sitemap URL
@@ -94,16 +97,21 @@ const Sitemap = {
     }
 
     // 解析 URL
-    const urls = doc.querySelectorAll('url');
+    const urls = Array.from(doc.querySelectorAll('url'));
     const domain = Utils.getDomain(sitemapUrl);
     const articles = [];
+    const routeHints = this.buildRouteHints(
+      urls
+        .map(urlEl => urlEl.querySelector('loc')?.textContent)
+        .filter(Boolean)
+    );
 
     urls.forEach((urlEl, index) => {
       const loc = urlEl.querySelector('loc')?.textContent;
       if (!loc) return;
 
       // 過濾非文章頁面
-      if (this.isArticleUrl(loc)) {
+      if (this.isArticleUrl(loc, routeHints)) {
         const title = this.extractTitle(loc);
         const lastmod = urlEl.querySelector('lastmod')?.textContent || '';
         articles.push({
@@ -129,10 +137,86 @@ const Sitemap = {
   /**
    * 判斷是否為文章 URL
    * @param {string} url - URL
+   * @param {{ pairedPluralSegments?: Set<string> }} [routeHints] - sitemap 推測出的路由線索
    * @returns {boolean} 是否為文章
    */
-  isArticleUrl(url) {
-    return !this.EXCLUDE_PATTERNS.some(pattern => pattern.test(url));
+  isArticleUrl(url, routeHints = {}) {
+    if (this.EXCLUDE_PATTERNS.some(pattern => pattern.test(url))) {
+      return false;
+    }
+
+    if (this.isPairedPluralRoute(url, routeHints)) {
+      return false;
+    }
+
+    return true;
+  },
+
+  /**
+   * 根據 sitemap 內的網址組合，推測哪些複數路由其實是列表頁
+   * 例如同時存在 /article/67 與 /articles/142 時，後者通常不是單篇文章。
+   * @param {string[]} urls - sitemap 內的網址清單
+   * @returns {{ pairedPluralSegments: Set<string> }}
+   */
+  buildRouteHints(urls) {
+    const numericSegments = new Set();
+
+    urls.forEach((rawUrl) => {
+      try {
+        const path = new URL(rawUrl).pathname.replace(/\/+$/, '');
+        const match = path.match(/^\/([^/]+)\/\d+$/);
+        if (match?.[1]) {
+          numericSegments.add(match[1].toLowerCase());
+        }
+      } catch {
+        // ignore invalid URL
+      }
+    });
+
+    const pairedPluralSegments = new Set(
+      Array.from(numericSegments).filter(segment =>
+        segment.endsWith(this.PLURAL_ROUTE_SUFFIX)
+        && numericSegments.has(segment.slice(0, -1))
+      )
+    );
+
+    return { pairedPluralSegments };
+  },
+
+  /**
+   * 套用 sitemap 路由線索，排除明顯不是單篇文章的頁面
+   * @param {Object[]} articles - 文章清單
+   * @returns {Object[]} 過濾後清單
+   */
+  filterArticles(articles) {
+    const routeHints = this.buildRouteHints(
+      articles
+        .map(article => article?.url)
+        .filter(Boolean)
+    );
+
+    return articles.filter(article => this.isArticleUrl(article.url, routeHints));
+  },
+
+  /**
+   * 判斷是否為成對單複數路由中的列表頁
+   * @param {string} url - 網址
+   * @param {{ pairedPluralSegments?: Set<string> }} [routeHints] - sitemap 推測出的路由線索
+   * @returns {boolean}
+   */
+  isPairedPluralRoute(url, routeHints = {}) {
+    const pairedPluralSegments = routeHints.pairedPluralSegments;
+    if (!pairedPluralSegments || pairedPluralSegments.size === 0) {
+      return false;
+    }
+
+    try {
+      const path = new URL(url).pathname.replace(/\/+$/, '');
+      const match = path.match(/^\/([^/]+)\/\d+$/);
+      return Boolean(match?.[1] && pairedPluralSegments.has(match[1].toLowerCase()));
+    } catch {
+      return false;
+    }
   },
 
   /**

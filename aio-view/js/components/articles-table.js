@@ -336,8 +336,19 @@ const ArticlesTable = {
    * @param {Object} article - 已更新的文章物件
    */
   updateArticle(article) {
-    const index = this.articles.indexOf(article);
+    const index = this.articles.findIndex(item =>
+      (article.id && item.id === article.id) || item.url === article.url
+    );
     if (index === -1) return;
+
+    const target = this.articles[index];
+    const previousTitle = target.title;
+
+    target.title = article.title;
+    target.query = article.query;
+    if (article.lastmod) {
+      target.lastmod = article.lastmod;
+    }
 
     const tr = this.elements.tbody?.querySelector(`tr[data-index="${index}"]`);
     if (!tr) return;
@@ -345,19 +356,19 @@ const ArticlesTable = {
     // 更新標題
     const titleLink = tr.querySelector('.col-title a');
     if (titleLink) {
-      titleLink.textContent = article.title;
-      titleLink.classList.remove('is-url');
+      titleLink.textContent = target.title;
+      titleLink.classList.toggle('is-url', target.title === target.url || target.title.startsWith('http'));
     }
 
     // 更新搜尋語句輸入框
     const queryInput = tr.querySelector('.col-query input[type="text"]');
-    if (queryInput) queryInput.value = article.query;
+    if (queryInput) queryInput.value = target.query;
 
     // 更新搜尋語句預覽
     const preview = tr.querySelector('.article-query-preview');
-    if (preview && article.query && !article.query.startsWith('http')) {
-      preview.textContent = `搜尋「${article.query}」`;
-    } else if (!preview && article.query && !article.query.startsWith('http')) {
+    if (preview && target.query && !target.query.startsWith('http')) {
+      preview.textContent = `搜尋「${target.query}」`;
+    } else if (!preview && target.query && !target.query.startsWith('http')) {
       // 如果之前沒有預覽（因為 query 是垃圾值），現在新增
       let meta = tr.querySelector('.article-meta');
       if (!meta) {
@@ -372,16 +383,19 @@ const ArticlesTable = {
       }
       const span = document.createElement('span');
       span.className = 'article-query-preview';
-      span.textContent = `搜尋「${article.query}」`;
+      span.textContent = `搜尋「${target.query}」`;
       meta.appendChild(span);
     }
 
     // 更新標題頻率表 + 分類頁標記
-    this.titleCounts[article.title] = (this.titleCounts[article.title] || 0) + 1;
-    if (this.titleCounts[article.title] >= 2) {
+    if (previousTitle && this.titleCounts[previousTitle]) {
+      this.titleCounts[previousTitle] = Math.max(0, this.titleCounts[previousTitle] - 1);
+    }
+    this.titleCounts[target.title] = (this.titleCounts[target.title] || 0) + 1;
+    if (this.titleCounts[target.title] >= 2) {
       // 幫所有同標題的列加上標記
       this.articles.forEach((a, i) => {
-        if (a.title !== article.title) return;
+        if (a.title !== target.title) return;
         const row = this.elements.tbody?.querySelector(`tr[data-index="${i}"]`);
         if (!row || row.querySelector('.badge-category')) return;
         let meta = row.querySelector('.article-meta');

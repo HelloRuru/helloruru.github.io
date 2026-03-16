@@ -191,15 +191,23 @@ const App = {
     // 載入文章清單
     const savedArticles = Storage.getArticles();
     if (savedArticles.length > 0) {
-      ArticlesTable.render(savedArticles);
+      const normalizedArticles = Sitemap.filterArticles(savedArticles);
+      if (normalizedArticles.length !== savedArticles.length) {
+        Storage.saveArticles(normalizedArticles);
+      }
+
+      ArticlesTable.render(normalizedArticles);
 
       // 嘗試從第一篇文章取得網域
-      if (savedArticles[0]?.url) {
-        this.domain = Utils.getDomain(savedArticles[0].url);
+      if (normalizedArticles[0]?.url) {
+        this.domain = Utils.getDomain(normalizedArticles[0].url);
       }
 
       // 更新 AI 輔助面板
-      AiAssist.update(savedArticles, this.domain);
+      AiAssist.update(normalizedArticles, this.domain);
+
+      // 重新開頁時，補抓上次還沒抓到的標題
+      this.fetchTitlesInBackground(normalizedArticles, this.domain);
     }
 
     // 載入掃描結果
