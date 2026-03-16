@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <title>AIO View Icon Generator</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f1f2;
+      --ink: #4b4048;
+      --rose: #d4a5a5;
+      --lavender: #b8a9c9;
+      --accent: #ff7a45;
+      --white: #fff9f8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at top, rgba(212, 165, 165, 0.24), transparent 42%),
+        linear-gradient(180deg, #faf6f6, #f4eff2);
+      font-family: "Segoe UI", sans-serif;
+      color: var(--ink);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, auto);
+      gap: 24px;
+      align-items: start;
+      padding: 32px;
+    }
+
+    .tile {
+      display: grid;
+      gap: 8px;
+      justify-items: center;
+    }
+
+    .canvas-wrap {
+      display: grid;
+      place-items: center;
+      width: 164px;
+      height: 164px;
+      padding: 18px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.7);
+      box-shadow: 0 18px 40px rgba(112, 86, 104, 0.12);
+    }
+
+    canvas {
+      display: block;
+    }
+
+    .label {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+  </style>
+</head>
+<body>
+  <div class="grid" id="grid"></div>
+
+  <script>
+    const sizes = [16, 32, 48, 128];
+
+    function roundedRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+
+    function drawIcon(canvas, size) {
+      const ctx = canvas.getContext('2d');
+      const s = size;
+      const scale = s / 128;
+
+      ctx.clearRect(0, 0, s, s);
+      ctx.imageSmoothingEnabled = true;
+
+      const bgGradient = ctx.createLinearGradient(0, 0, s, s);
+      bgGradient.addColorStop(0, '#D4A5A5');
+      bgGradient.addColorStop(1, '#B8A9C9');
+
+      roundedRect(ctx, 6 * scale, 6 * scale, 116 * scale, 116 * scale, 30 * scale);
+      ctx.fillStyle = bgGradient;
+      ctx.fill();
+
+      ctx.save();
+      ctx.globalAlpha = 0.18;
+      roundedRect(ctx, 14 * scale, 14 * scale, 100 * scale, 44 * scale, 20 * scale);
+      ctx.fillStyle = '#FFF9F8';
+      ctx.fill();
+      ctx.restore();
+
+      ctx.save();
+      ctx.strokeStyle = 'rgba(255,249,248,0.55)';
+      ctx.lineWidth = Math.max(1, 4 * scale);
+      roundedRect(ctx, 8 * scale, 8 * scale, 112 * scale, 112 * scale, 26 * scale);
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.save();
+      ctx.translate(0, 2 * scale);
+
+      ctx.beginPath();
+      ctx.arc(52 * scale, 52 * scale, 27 * scale, 0, Math.PI * 2);
+      ctx.fillStyle = '#FFF9F8';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(52 * scale, 52 * scale, 20 * scale, 0, Math.PI * 2);
+      ctx.strokeStyle = '#4B4048';
+      ctx.lineWidth = Math.max(1.5, 7 * scale);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(67 * scale, 67 * scale);
+      ctx.lineTo(85 * scale, 85 * scale);
+      ctx.strokeStyle = '#4B4048';
+      ctx.lineWidth = Math.max(2, 10 * scale);
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(46 * scale, 46 * scale, 7 * scale, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255,255,255,0.75)';
+      ctx.fill();
+
+      ctx.restore();
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(92 * scale, 92 * scale, 20 * scale, 0, Math.PI * 2);
+      ctx.fillStyle = '#FF7A45';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(92 * scale, 92 * scale, 12 * scale, 0, Math.PI * 2);
+      ctx.fillStyle = '#FFF9F8';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(87 * scale, 92 * scale, 2.5 * scale, 0, Math.PI * 2);
+      ctx.fillStyle = '#FF7A45';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(97 * scale, 92 * scale, 2.5 * scale, 0, Math.PI * 2);
+      ctx.fillStyle = '#FF7A45';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(92 * scale, 86 * scale);
+      ctx.lineTo(92 * scale, 98 * scale);
+      ctx.strokeStyle = '#FF7A45';
+      ctx.lineWidth = Math.max(1.5, 5 * scale);
+      ctx.lineCap = 'round';
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    const grid = document.getElementById('grid');
+    sizes.forEach((size) => {
+      const tile = document.createElement('div');
+      tile.className = 'tile';
+
+      const wrap = document.createElement('div');
+      wrap.className = 'canvas-wrap';
+
+      const canvas = document.createElement('canvas');
+      canvas.id = `icon-${size}`;
+      canvas.width = size;
+      canvas.height = size;
+
+      wrap.appendChild(canvas);
+      tile.appendChild(wrap);
+
+      const label = document.createElement('div');
+      label.className = 'label';
+      label.textContent = `${size}x${size}`;
+      tile.appendChild(label);
+
+      grid.appendChild(tile);
+      drawIcon(canvas, size);
+    });
+  </script>
+</body>
+</html>
