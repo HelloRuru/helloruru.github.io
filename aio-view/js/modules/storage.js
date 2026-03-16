@@ -94,11 +94,33 @@ const Storage = {
    * @param {Object} results - 掃描結果
    */
   saveResults(results) {
-    const success = this.set(this.KEYS.RESULTS, results);
+    // 合併新舊結果（不同批次的文章都保留）
+    const existing = this.get(this.KEYS.RESULTS, null);
+    let merged = results;
+
+    if (existing?.results?.length > 0 && results?.results?.length > 0) {
+      const seen = new Map();
+      // 舊的先放
+      existing.results.forEach(r => {
+        const key = `${r.articleKey || r.url || r.title}::${r.facetKey || ''}::${r.query || ''}`;
+        seen.set(key, r);
+      });
+      // 新的覆蓋同 key，新增不同 key
+      results.results.forEach(r => {
+        const key = `${r.articleKey || r.url || r.title}::${r.facetKey || ''}::${r.query || ''}`;
+        seen.set(key, r);
+      });
+      merged = {
+        ...results,
+        results: Array.from(seen.values())
+      };
+    }
+
+    const success = this.set(this.KEYS.RESULTS, merged);
 
     // 同時加入歷史記錄
     if (success) {
-      this.addToHistory(results);
+      this.addToHistory(merged);
     }
 
     return success;
