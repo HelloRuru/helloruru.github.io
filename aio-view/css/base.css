@@ -3,46 +3,46 @@
    Font: Orbitron (Display) + JetBrains Mono + Noto Sans TC
    ================================================ */
 
-/* CSS Variables — Cyberpunk */
+/* CSS Variables — Miku Racing Cyberpunk */
 :root {
-  /* Primary Colors */
-  --color-rose: #00f0ff;
-  --color-lavender: #ff00aa;
+  /* Primary — 初音 Racing */
+  --color-rose: #39c5bb;
+  --color-lavender: #ff6b98;
 
   /* Accent Palette */
-  --color-blush: rgba(0, 240, 255, 0.15);
-  --color-dusty-rose: #00c8d4;
-  --color-nadeshiko: #88ddff;
-  --color-sakura: rgba(0, 240, 255, 0.08);
+  --color-blush: rgba(57, 197, 187, 0.15);
+  --color-dusty-rose: #2ea8a0;
+  --color-nadeshiko: #ff6b98;
+  --color-sakura: rgba(57, 197, 187, 0.08);
 
-  /* Purple → Magenta */
-  --color-lotus: #cc44aa;
-  --color-wisteria: #cc88dd;
-  --color-bellflower: #ff00aa;
+  /* Purple → Pink */
+  --color-lotus: #8660d6;
+  --color-wisteria: #b48cff;
+  --color-bellflower: #ff6b98;
 
   /* Neutral */
   --color-sage: #00ff88;
-  --color-mist: rgba(0, 240, 255, 0.12);
-  --color-warm-gray: #3a3a4a;
-  --color-charcoal: #0c0c18;
+  --color-mist: rgba(57, 197, 187, 0.12);
+  --color-warm-gray: #2a2a3a;
+  --color-charcoal: #0a0a16;
 
   /* Text */
-  --color-ink: #e0e8f0;
-  --color-text: #c8d6e5;
-  --color-gray: #8a96a4;
-  --color-light-gray: #a0abb6;
+  --color-ink: #e8f0f0;
+  --color-text: #c0d4d8;
+  --color-gray: #7a9098;
+  --color-light-gray: #98b0b6;
 
   /* Background */
-  --bg-light: #06060c;
-  --bg-card: #0c0c18;
+  --bg-light: #060810;
+  --bg-card: #0a0e18;
 
-  /* Gradients */
-  --gradient-primary: linear-gradient(135deg, #00f0ff, #ff00aa);
-  --gradient-soft: linear-gradient(180deg, #0c0c18, #06060c);
-  --gradient-pink-purple: linear-gradient(135deg, #00f0ff, #ff00aa);
+  /* Gradients — 初音三色漸層 */
+  --gradient-primary: linear-gradient(135deg, #39c5bb, #8660d6, #ff6b98);
+  --gradient-soft: linear-gradient(180deg, #0a0e18, #060810);
+  --gradient-pink-purple: linear-gradient(135deg, #39c5bb, #8660d6, #ff6b98);
 
   /* Border */
-  --color-border: rgba(0, 240, 255, 0.12);
+  --color-border: rgba(57, 197, 187, 0.15);
 
   /* Border Radius */
   --radius-sm: 6px;
@@ -50,14 +50,14 @@
   --radius-lg: 12px;
   --radius-full: 50%;
 
-  /* Shadows — Neon Glow */
-  --shadow-soft: 0 2px 8px rgba(0, 240, 255, 0.06);
-  --shadow-medium: 0 4px 16px rgba(0, 240, 255, 0.1);
+  /* Shadows — Miku Glow */
+  --shadow-soft: 0 2px 8px rgba(57, 197, 187, 0.08);
+  --shadow-medium: 0 4px 16px rgba(57, 197, 187, 0.12);
   --shadow-deep: 0 8px 32px rgba(0, 0, 0, 0.5);
 
   /* Glow */
-  --glow-cyan: 0 0 8px rgba(0, 240, 255, 0.4), 0 0 24px rgba(0, 240, 255, 0.15);
-  --glow-magenta: 0 0 8px rgba(255, 0, 170, 0.4), 0 0 24px rgba(255, 0, 170, 0.15);
+  --glow-cyan: 0 0 8px rgba(57, 197, 187, 0.5), 0 0 24px rgba(57, 197, 187, 0.2);
+  --glow-magenta: 0 0 8px rgba(255, 107, 152, 0.5), 0 0 24px rgba(255, 107, 152, 0.2);
   --glow-green: 0 0 8px rgba(0, 255, 136, 0.4), 0 0 24px rgba(0, 255, 136, 0.15);
 
   /* Typography */
@@ -114,8 +114,8 @@ body {
     0deg,
     transparent,
     transparent 2px,
-    rgba(0, 240, 255, 0.012) 2px,
-    rgba(0, 240, 255, 0.012) 4px
+    rgba(57, 197, 187, 0.015) 2px,
+    rgba(57, 197, 187, 0.015) 4px
   );
   animation: scanShift 8s linear infinite;
 }
@@ -132,8 +132,8 @@ body {
   z-index: -1;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(0, 240, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 240, 255, 0.025) 1px, transparent 1px);
+    linear-gradient(rgba(57, 197, 187, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(57, 197, 187, 0.03) 1px, transparent 1px);
   background-size: 60px 60px;
 }
 

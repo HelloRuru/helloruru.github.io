@@ -13,8 +13,8 @@
 }
 
 .card:hover {
-  border-color: rgba(0, 240, 255, 0.2);
-  box-shadow: 0 0 16px rgba(0, 240, 255, 0.06);
+  border-color: rgba(57, 197, 187, 0.2);
+  box-shadow: 0 0 16px rgba(57, 197, 187, 0.06);
 }
 
 .card.hidden {

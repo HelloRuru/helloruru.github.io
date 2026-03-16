@@ -36,7 +36,7 @@
 
 .btn-secondary:hover {
   border-color: var(--color-rose);
-  box-shadow: 0 0 8px rgba(0, 240, 255, 0.15);
+  box-shadow: 0 0 8px rgba(57, 197, 187, 0.15);
 }
 
 .btn-ghost {

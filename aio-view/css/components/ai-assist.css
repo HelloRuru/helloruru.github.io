@@ -16,7 +16,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px;
-  background: linear-gradient(135deg, rgba(0, 240, 255, 0.06), rgba(255, 0, 170, 0.04));
+  background: linear-gradient(135deg, rgba(57, 197, 187, 0.06), rgba(255, 0, 170, 0.04));
   border: none;
   cursor: pointer;
   width: 100%;
@@ -29,7 +29,7 @@
 }
 
 .ai-assist-header:hover {
-  background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(255, 0, 170, 0.06));
+  background: linear-gradient(135deg, rgba(57, 197, 187, 0.1), rgba(255, 0, 170, 0.06));
 }
 
 .ai-assist-header .icon {
@@ -160,7 +160,7 @@
 }
 
 .prompt-text:focus {
-  outline: 3px solid rgba(0, 240, 255, 0.25);
+  outline: 3px solid rgba(57, 197, 187, 0.25);
   outline-offset: -1px;
   border-color: var(--color-rose);
 }
@@ -201,7 +201,7 @@
 }
 
 .paste-back-textarea:focus {
-  outline: 3px solid rgba(0, 240, 255, 0.25);
+  outline: 3px solid rgba(57, 197, 187, 0.25);
   outline-offset: -1px;
   border-color: var(--color-rose);
 }

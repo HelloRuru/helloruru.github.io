@@ -100,7 +100,7 @@
   box-shadow: 0 0 16px rgba(57, 197, 187, 0.25), inset 0 0 15px rgba(57, 197, 187, 0.05);
 }
 .stat-rank.rank-s .rank-letter {
-  background: linear-gradient(135deg, #39c5bb, #00f0ff);
+  background: linear-gradient(135deg, #39c5bb, #39c5bb);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -183,12 +183,12 @@
 
 .filter-btn:hover {
   background: var(--color-mist);
-  border-color: rgba(0, 240, 255, 0.2);
+  border-color: rgba(57, 197, 187, 0.2);
 }
 
 .filter-btn.active {
   background: var(--color-rose);
   color: #0c0c18;
   border-color: var(--color-rose);
-  box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+  box-shadow: 0 0 8px rgba(57, 197, 187, 0.3);
 }

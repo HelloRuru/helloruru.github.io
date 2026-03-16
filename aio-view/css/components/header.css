@@ -3,8 +3,8 @@
    ================================================ */
 
 .header {
-  background: linear-gradient(180deg, rgba(0, 240, 255, 0.08), transparent);
-  border-bottom: 1px solid rgba(0, 240, 255, 0.15);
+  background: linear-gradient(180deg, rgba(57, 197, 187, 0.08), transparent);
+  border-bottom: 1px solid rgba(57, 197, 187, 0.15);
   padding: var(--space-2xl) var(--space-md);
   text-align: center;
   position: relative;
@@ -18,7 +18,7 @@
   transform: translateX(-50%);
   width: 200px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, #00f0ff, transparent);
+  background: linear-gradient(90deg, transparent, #39c5bb, transparent);
 }
 
 .header .container {
@@ -44,13 +44,13 @@
   width: 40px;
   height: 40px;
   flex-shrink: 0;
-  filter: drop-shadow(0 0 6px rgba(0, 240, 255, 0.4));
+  filter: drop-shadow(0 0 6px rgba(57, 197, 187, 0.4));
 }
 
 .logo {
   color: #e0e8f0;
   margin: 0;
-  text-shadow: 0 0 16px rgba(0, 240, 255, 0.5), 0 0 32px rgba(0, 240, 255, 0.2);
+  text-shadow: 0 0 16px rgba(57, 197, 187, 0.5), 0 0 32px rgba(57, 197, 187, 0.2);
 }
 
 .tagline {

@@ -31,7 +31,7 @@
 }
 
 .data-table tbody tr:hover {
-  background: rgba(0, 240, 255, 0.04);
+  background: rgba(57, 197, 187, 0.04);
 }
 
 .data-table input[type="text"] {
