@@ -209,6 +209,15 @@
   cursor: pointer;
 }
 
+.btn-clear-selection {
+  padding-inline: 12px;
+}
+
+.btn-clear-selection:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 @media (max-width: 767px) {
   .article-filters {
     flex-direction: column;

@@ -184,7 +184,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
 
   <!-- Styles -->
-  <link rel="stylesheet" href="style.css?v=20260316-insights">
+  <link rel="stylesheet" href="style.css?v=20260316-selection">
 </head>
 <body>
   <!-- Cyberpunk Visual Effects -->
@@ -372,12 +372,13 @@ npx playwright install chromium</code>
               </select>
               <span class="filter-count" id="filter-count"></span>
             </div>
-            <div class="filter-row">
-              <label class="checkbox-label">
-                <input type="checkbox" id="select-all"> 全選
-              </label>
+              <div class="filter-row">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="select-all"> 全選
+                </label>
+                <button class="btn btn-ghost btn-sm btn-clear-selection" id="clear-selection-btn" type="button">清空</button>
+              </div>
             </div>
-          </div>
 
           <div class="table-wrapper">
             <table class="data-table" id="articles-table">
@@ -850,29 +851,29 @@ npx playwright install chromium</code>
   </div>
 
   <!-- Scripts: Modules (載入順序很重要) -->
-  <script src="js/modules/utils.js?v=20260316-insights"></script>
-  <script src="js/modules/toast.js?v=20260316-insights"></script>
-  <script src="js/modules/storage.js?v=20260316-insights"></script>
-  <script src="js/modules/query-engine.js?v=20260316-insights"></script>
-  <script src="js/modules/sitemap.js?v=20260316-insights"></script>
-  <script src="js/modules/db.js?v=20260316-insights"></script>
+  <script src="js/modules/utils.js?v=20260316-selection"></script>
+  <script src="js/modules/toast.js?v=20260316-selection"></script>
+  <script src="js/modules/storage.js?v=20260316-selection"></script>
+  <script src="js/modules/query-engine.js?v=20260316-selection"></script>
+  <script src="js/modules/sitemap.js?v=20260316-selection"></script>
+  <script src="js/modules/db.js?v=20260316-selection"></script>
 
   <!-- Scripts: Components -->
-  <script src="js/components/guide.js?v=20260316-insights"></script>
-  <script src="js/components/stats.js?v=20260316-insights"></script>
-  <script src="js/components/articles-table.js?v=20260316-insights"></script>
-  <script src="js/components/results-table.js?v=20260316-insights"></script>
-  <script src="js/components/file-upload.js?v=20260316-insights"></script>
-  <script src="js/components/cli-generator.js?v=20260316-insights"></script>
-  <script src="js/components/sitemap-input.js?v=20260316-insights"></script>
-  <script src="js/components/ai-assist.js?v=20260316-insights"></script>
-  <script src="js/components/manual-check.js?v=20260316-insights"></script>
-  <script src="js/components/charts.js?v=20260316-insights"></script>
-  <script src="js/components/search-insights.js?v=20260316-insights"></script>
-  <script src="js/components/timeline.js?v=20260316-insights"></script>
+  <script src="js/components/guide.js?v=20260316-selection"></script>
+  <script src="js/components/stats.js?v=20260316-selection"></script>
+  <script src="js/components/articles-table.js?v=20260316-selection"></script>
+  <script src="js/components/results-table.js?v=20260316-selection"></script>
+  <script src="js/components/file-upload.js?v=20260316-selection"></script>
+  <script src="js/components/cli-generator.js?v=20260316-selection"></script>
+  <script src="js/components/sitemap-input.js?v=20260316-selection"></script>
+  <script src="js/components/ai-assist.js?v=20260316-selection"></script>
+  <script src="js/components/manual-check.js?v=20260316-selection"></script>
+  <script src="js/components/charts.js?v=20260316-selection"></script>
+  <script src="js/components/search-insights.js?v=20260316-selection"></script>
+  <script src="js/components/timeline.js?v=20260316-selection"></script>
 
   <!-- Scripts: Main Entry -->
-  <script src="js/main.js?v=20260316-insights"></script>
+  <script src="js/main.js?v=20260316-selection"></script>
   <script>
     const startYear = 2026;
     const currentYear = new Date().getFullYear();

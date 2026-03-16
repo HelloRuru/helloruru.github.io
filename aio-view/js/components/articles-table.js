@@ -22,6 +22,7 @@ const ArticlesTable = {
     tbody: null,
     countBadge: null,
     selectAll: null,
+    clearSelection: null,
     filterYear: null,
     filterMonth: null,
     filterCount: null,
@@ -36,6 +37,7 @@ const ArticlesTable = {
     this.elements.tbody = document.getElementById('articles-body');
     this.elements.countBadge = document.getElementById('article-count');
     this.elements.selectAll = document.getElementById('select-all');
+    this.elements.clearSelection = document.getElementById('clear-selection-btn');
     this.elements.filterYear = document.getElementById('filter-year');
     this.elements.filterMonth = document.getElementById('filter-month');
     this.elements.filterCount = document.getElementById('filter-count');
@@ -51,6 +53,10 @@ const ArticlesTable = {
     // 全選（只影響可見文章）
     this.elements.selectAll?.addEventListener('change', (e) => {
       this.toggleSelectAll(e.target.checked);
+    });
+
+    this.elements.clearSelection?.addEventListener('click', () => {
+      this.clearSelection();
     });
 
     // 年份篩選
@@ -185,6 +191,8 @@ const ArticlesTable = {
         ? `顯示 ${visible} / 共 ${total} 篇`
         : `共 ${total} 篇`;
     }
+
+    this.syncSelectionControls();
   },
 
   /**
@@ -265,6 +273,7 @@ const ArticlesTable = {
     checkbox?.addEventListener('change', (e) => {
       this.articles[index].selected = e.target.checked;
       this.saveArticles();
+      this.syncSelectionControls();
     });
 
     // 編輯搜尋語句
@@ -308,6 +317,33 @@ const ArticlesTable = {
     });
 
     this.saveArticles();
+    this.syncSelectionControls();
+  },
+
+  /**
+   * 清空目前可見文章的勾選
+   */
+  clearSelection() {
+    this.toggleSelectAll(false);
+  },
+
+  /**
+   * 同步全選與清空按鈕狀態
+   */
+  syncSelectionControls() {
+    const visibleArticles = this.visibleIndices
+      .map(index => this.articles[index])
+      .filter(Boolean);
+    const selectedCount = visibleArticles.filter(article => article.selected === true).length;
+
+    if (this.elements.selectAll) {
+      this.elements.selectAll.checked = visibleArticles.length > 0 && selectedCount === visibleArticles.length;
+      this.elements.selectAll.indeterminate = selectedCount > 0 && selectedCount < visibleArticles.length;
+    }
+
+    if (this.elements.clearSelection) {
+      this.elements.clearSelection.disabled = selectedCount === 0;
+    }
   },
 
   /**
