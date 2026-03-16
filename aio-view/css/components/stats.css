@@ -42,59 +42,122 @@
   margin-top: var(--space-xs);
 }
 
-/* AIO 能見度 RANK — 初音 Racing 風 */
+/* AIO 能見度 RANK — RPG 等級制 */
 .stat-rank {
   position: relative;
-  border: 1px solid rgba(57, 197, 187, 0.4);
+  border: 1px solid rgba(100, 100, 100, 0.3);
   background: linear-gradient(135deg, rgba(0, 20, 30, 0.9), rgba(10, 10, 30, 0.9));
   overflow: hidden;
-}
-
-.stat-rank::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg,
-    rgba(57, 197, 187, 0.08),
-    rgba(134, 96, 214, 0.08),
-    rgba(255, 107, 152, 0.05));
-  pointer-events: none;
+  transition: border-color 0.4s, box-shadow 0.4s;
 }
 
 .stat-rank .stat-value {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 6px;
   font-family: var(--font-display);
-  background: linear-gradient(135deg, #39c5bb, #8660d6, #ff6b98);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  filter: drop-shadow(0 0 6px rgba(57, 197, 187, 0.4));
+}
+
+.stat-rank .rank-letter {
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.stat-rank .rank-score {
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.6;
 }
 
 .stat-rank .stat-label {
-  color: rgba(57, 197, 187, 0.8);
-  font-size: 12px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+  font-size: 11px;
+  line-height: 1.4;
+  margin-top: 6px;
 }
 
-/* RANK 等級光暈 */
-.stat-rank.rank-great {
+/* SS — 金色傳說 */
+.stat-rank.rank-ss {
+  border-color: rgba(255, 215, 0, 0.6);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3), 0 0 40px rgba(255, 215, 0, 0.1), inset 0 0 20px rgba(255, 215, 0, 0.05);
+  animation: rank-glow-ss 2s ease-in-out infinite alternate;
+}
+.stat-rank.rank-ss .rank-letter {
+  background: linear-gradient(135deg, #ffd700, #ffaa00, #fff4b0, #ffd700);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: rank-shimmer 3s ease infinite;
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.5));
+}
+.stat-rank.rank-ss .stat-label { color: #ffd700; }
+
+/* S — 初音青 */
+.stat-rank.rank-s {
   border-color: rgba(57, 197, 187, 0.6);
-  box-shadow: 0 0 16px rgba(57, 197, 187, 0.25), inset 0 0 20px rgba(57, 197, 187, 0.05);
+  box-shadow: 0 0 16px rgba(57, 197, 187, 0.25), inset 0 0 15px rgba(57, 197, 187, 0.05);
 }
+.stat-rank.rank-s .rank-letter {
+  background: linear-gradient(135deg, #39c5bb, #00f0ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 6px rgba(57, 197, 187, 0.5));
+}
+.stat-rank.rank-s .stat-label { color: #39c5bb; }
 
-.stat-rank.rank-good {
+/* A — 紫色菁英 */
+.stat-rank.rank-a {
   border-color: rgba(134, 96, 214, 0.5);
   box-shadow: 0 0 12px rgba(134, 96, 214, 0.2);
 }
+.stat-rank.rank-a .rank-letter {
+  background: linear-gradient(135deg, #8660d6, #b48cff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 4px rgba(134, 96, 214, 0.4));
+}
+.stat-rank.rank-a .stat-label { color: #b48cff; }
 
-.stat-rank.rank-fair {
+/* B — 藍色穩定 */
+.stat-rank.rank-b {
+  border-color: rgba(66, 133, 244, 0.4);
+  box-shadow: 0 0 8px rgba(66, 133, 244, 0.15);
+}
+.stat-rank.rank-b .rank-letter {
+  color: #4285f4;
+}
+.stat-rank.rank-b .stat-label { color: #6ba3f7; }
+
+/* C — 橙色待加強 */
+.stat-rank.rank-c {
   border-color: rgba(255, 170, 100, 0.4);
-  box-shadow: 0 0 8px rgba(255, 170, 100, 0.15);
+  box-shadow: 0 0 6px rgba(255, 170, 100, 0.12);
+}
+.stat-rank.rank-c .rank-letter {
+  color: #ffaa64;
+}
+.stat-rank.rank-c .stat-label { color: #ffaa64; }
+
+/* D — 灰色起步 */
+.stat-rank.rank-d .rank-letter {
+  color: #666;
+}
+.stat-rank.rank-d .stat-label { color: #888; }
+
+/* SS 呼吸光暈 */
+@keyframes rank-glow-ss {
+  from { box-shadow: 0 0 20px rgba(255, 215, 0, 0.3), 0 0 40px rgba(255, 215, 0, 0.1); }
+  to   { box-shadow: 0 0 28px rgba(255, 215, 0, 0.45), 0 0 56px rgba(255, 215, 0, 0.15); }
 }
 
-.stat-rank.rank-low {
-  border-color: rgba(100, 100, 100, 0.3);
+/* SS 流光 */
+@keyframes rank-shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 /* Filter Bar */

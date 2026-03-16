@@ -51,15 +51,27 @@ const Stats = {
     // AIO 能見度指數（0-100）：綜合 AIO 出現率 + 引用率
     const aioRate = total > 0 ? hasAIO / total : 0;
     const citeRate = total > 0 ? cited / total : 0;
-    const rank = Math.round(aioRate * 40 + citeRate * 60);
+    const score = Math.round(aioRate * 40 + citeRate * 60);
+    const grade = this.resolveGrade(score);
 
     this.update({
       total,
       aio: hasAIO,
       cited,
       rate: `${citedRate}%`,
-      rank
+      score,
+      grade
     });
+  },
+
+  /** RPG 等級判定 */
+  resolveGrade(score) {
+    if (score >= 90) return { letter: 'SS', label: '傳說級！AI 搜尋的常客', tier: 'ss' };
+    if (score >= 70) return { letter: 'S', label: '菁英！大多數搜尋都看得到你', tier: 's' };
+    if (score >= 50) return { letter: 'A', label: '優秀，已經站穩 AIO 版圖', tier: 'a' };
+    if (score >= 30) return { letter: 'B', label: '有出現，但還有成長空間', tier: 'b' };
+    if (score >= 10) return { letter: 'C', label: '剛起步，需要補更多面向', tier: 'c' };
+    return { letter: 'D', label: '尚未被 AI 搜尋收錄', tier: 'd' };
   },
 
   /**
@@ -71,17 +83,19 @@ const Stats = {
     if (this.elements.aio) this.elements.aio.textContent = data.aio;
     if (this.elements.cited) this.elements.cited.textContent = data.cited;
     if (this.elements.rate) this.elements.rate.textContent = data.rate;
-    if (this.elements.rank && data.rank != null) {
-      this.elements.rank.textContent = data.rank;
-      // 依分數變色
+    if (this.elements.rank && data.grade) {
       const card = this.elements.rank.closest('.stat-rank');
       if (card) {
-        card.classList.remove('rank-great', 'rank-good', 'rank-fair', 'rank-low');
-        if (data.rank >= 60) card.classList.add('rank-great');
-        else if (data.rank >= 40) card.classList.add('rank-good');
-        else if (data.rank >= 20) card.classList.add('rank-fair');
-        else card.classList.add('rank-low');
+        card.classList.remove('rank-ss', 'rank-s', 'rank-a', 'rank-b', 'rank-c', 'rank-d');
+        card.classList.add(`rank-${data.grade.tier}`);
       }
+      this.elements.rank.innerHTML = `
+        <span class="rank-letter">${data.grade.letter}</span>
+        <span class="rank-score">${data.score}</span>
+      `;
+      // 更新說明文字
+      const labelEl = this.elements.rank.closest('.stat-card')?.querySelector('.stat-label');
+      if (labelEl) labelEl.textContent = data.grade.label;
     }
   },
 
@@ -94,7 +108,8 @@ const Stats = {
       aio: 0,
       cited: 0,
       rate: '0%',
-      rank: '--'
+      score: 0,
+      grade: { letter: '--', label: 'AIO 能見度', tier: 'd' }
     });
   }
 };
