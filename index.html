@@ -14,7 +14,7 @@
   <meta property="og:url" content="https://lab.helloruru.com/">
   <meta property="og:title" content="Hello Ruru Lab — 數位工具與 AI 實驗基地">
   <meta property="og:description" content="Hello Ruru 的數位實踐場。收錄 AI 工具、電子書轉檔、關鍵字分析等實用工具，深入探究 SGE 演算法與繁體中文語意分析。">
-  <meta property="og:image" content="https://lab.helloruru.com/og-image.png">
+  <meta property="og:image" content="https://helloruru.com/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Hello Ruru Lab — 數位工具與 AI 實驗基地">
@@ -25,7 +25,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Hello Ruru Lab — 數位工具與 AI 實驗基地">
   <meta name="twitter:description" content="Hello Ruru 的數位實踐場。收錄 AI 工具、電子書轉檔、關鍵字分析等實用工具。">
-  <meta name="twitter:image" content="https://lab.helloruru.com/og-image.png">
+  <meta name="twitter:image" content="https://helloruru.com/og-image.png">
 
   <!-- Icons -->
   <link rel="icon" href="/favicon.ico" sizes="any">
@@ -218,13 +218,10 @@
       position: relative;
     }
 
-    .hero h1 {
+    .hero h1.hero-brand {
       font-family: var(--font-heading);
-      font-size: 40px;
-      font-weight: 700;
       line-height: 1.3;
-      color: var(--color-text);
-      margin-bottom: 12px;
+      margin-bottom: 16px;
       position: relative;
     }
 
@@ -513,7 +510,7 @@
     /* === Responsive === */
     @media (max-width: 768px) {
       .hero { padding: 60px 20px 48px; }
-      .hero h1 { font-size: 30px; }
+      .hero h1.hero-brand { font-size: 28px; }
       .container { padding: 0 20px; }
       .card-grid { grid-template-columns: 1fr; }
       .philosophy { padding: 28px 24px; }
@@ -614,9 +611,9 @@
         <ellipse cx="42" cy="70" rx="7" ry="3.5" fill="#8FA88C" opacity="0.5" transform="rotate(-30, 42, 70)"/>
       </svg>
     </a>
-    <div class="hero-brand" style="background: linear-gradient(135deg, #D4A5A5, #B8A9C9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 32px; font-weight: 700; letter-spacing: 3px;">Hello Ruru</div>
+    <h1 class="hero-brand" style="background: linear-gradient(135deg, #D4A5A5, #B8A9C9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 32px; font-weight: 700; letter-spacing: 3px;">Hello Ruru Lab</h1>
     <p class="hero-subtitle">工具，實驗，以及正在編寫的美好篇章</p>
-    <img src="/images/rabbit-watermark.png" alt="" class="hero-watermark" aria-hidden="true">
+    <img src="/images/rabbit-watermark.png" alt="" class="hero-watermark" aria-hidden="true" loading="lazy">
   </header>
 
   <main class="container">
@@ -633,8 +630,21 @@
       </p>
     </section>
 
-    <!-- 🤖 工具卡片自動載入區（由 tools-config.json + tools-loader.js 生成） -->
-    <div id="tools-container"></div>
+    <!-- 工具卡片自動載入區（由 tools-config.json + tools-loader.js 生成，JS 載入後會覆蓋下方靜態連結） -->
+    <div id="tools-container">
+      <!-- 靜態連結供搜尋引擎爬取，JS 載入後自動替換為動態卡片 -->
+      <nav aria-label="站內工具導覽">
+        <ul style="list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:12px;margin-bottom:32px;">
+          <li><a href="/aio-view/">AIO View — AI Overview 偵測</a></li>
+          <li><a href="/table-fixer/">表格修復工具</a></li>
+          <li><a href="/seo-quest/">SEO Quest 教學遊戲</a></li>
+          <li><a href="/sge-writer/">SGE 文案升級攻略站</a></li>
+          <li><a href="https://tools.helloruru.com/">Ruru 工具箱</a></li>
+          <li><a href="https://ohruru.com/">社群小編報價</a></li>
+          <li><a href="https://newday.helloruru.com/">離職導航幫手</a></li>
+        </ul>
+      </nav>
+    </div>
 
 
     <!-- External -->
