@@ -224,33 +224,50 @@
 
 .topic-tree {
   display: grid;
-  gap: 10px;
+  gap: 24px;
 }
 
+/* NERV-style topic cards */
 .topic-node {
-  border: 1px solid rgba(57, 197, 187, 0.2);
-  border-radius: var(--radius-lg);
-  background: linear-gradient(135deg, rgba(5, 15, 25, 0.8), rgba(10, 10, 30, 0.6));
+  border: 1px solid rgba(57, 197, 187, 0.15);
+  border-radius: 2px;
+  background: rgba(5, 10, 20, 0.85);
   overflow: hidden;
+  position: relative;
+}
+
+/* 左邊裝飾線 — EVA 風 */
+.topic-node::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, #39c5bb, #8660d6, transparent);
 }
 
 .topic-node[open] {
-  border-color: rgba(57, 197, 187, 0.35);
-  box-shadow: 0 0 12px rgba(57, 197, 187, 0.08);
+  border-color: rgba(57, 197, 187, 0.3);
+}
+
+.topic-node[open]::before {
+  background: linear-gradient(180deg, #39c5bb, #ff6b98, #8660d6);
 }
 
 .topic-node + .topic-node {
-  margin-top: var(--space-md);
+  margin-top: 24px;
 }
 
 .topic-node-summary {
   display: flex;
   justify-content: space-between;
-  gap: 16px;
+  gap: 20px;
   align-items: center;
-  padding: 18px 20px;
+  padding: 20px 24px 20px 28px;
   cursor: pointer;
   list-style: none;
+  border-bottom: 1px solid rgba(57, 197, 187, 0.08);
 }
 
 .topic-node-summary::-webkit-details-marker {
@@ -258,54 +275,66 @@
 }
 
 .topic-node-title {
-  color: #e0f7f6;
+  color: #e8f4f3;
   font-size: 15px;
   font-weight: 700;
+  line-height: 1.5;
 }
 
 .topic-node-meta {
   flex-shrink: 0;
-  font-size: 12px;
+  font-size: 11px;
   font-family: var(--font-mono);
   text-align: right;
-  padding: 3px 10px;
-  border-radius: 999px;
-  background: rgba(57, 197, 187, 0.1);
+  padding: 4px 14px;
+  border-radius: 2px;
+  background: rgba(57, 197, 187, 0.12);
   color: #39c5bb;
-  border: 1px solid rgba(57, 197, 187, 0.25);
+  border: 1px solid rgba(57, 197, 187, 0.3);
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .topic-node-body {
   display: grid;
-  gap: 16px;
-  padding: 4px 20px 24px;
+  gap: 0;
+  padding: 0;
 }
 
+/* 每個區塊之間有分隔線 */
 .topic-branch {
   display: grid;
-  gap: 8px;
-  padding-left: 16px;
-  border-left: 2px solid rgba(57, 197, 187, 0.25);
+  gap: 10px;
+  padding: 20px 24px 20px 28px;
+  border-bottom: 1px solid rgba(57, 197, 187, 0.06);
+}
+
+.topic-branch:last-child {
+  border-bottom: none;
 }
 
 .topic-branch-label {
   color: #39c5bb;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  letter-spacing: 1.5px;
   text-transform: uppercase;
+  opacity: 0.8;
 }
 
 .topic-branch-value {
   color: var(--color-text);
   font-size: 14px;
-  line-height: 1.8;
+  line-height: 1.9;
+  padding-left: 4px;
 }
 
 .topic-query-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
+  padding-left: 4px;
 }
 
 .topic-query-item {

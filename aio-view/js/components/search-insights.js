@@ -247,6 +247,11 @@ const SearchInsights = {
 
   sortFacets(items) {
     return [...items].sort((a, b) => {
+      // 數字大的排前面
+      const aCount = (a.cited || 0) + (a.aio || 0);
+      const bCount = (b.cited || 0) + (b.aio || 0);
+      if (bCount !== aCount) return bCount - aCount;
+      // 同分按 FACET_RULES 順序
       const aIndex = this.FACET_RULES.findIndex(rule => rule.key === a.key);
       const bIndex = this.FACET_RULES.findIndex(rule => rule.key === b.key);
       return aIndex - bIndex;
@@ -411,11 +416,11 @@ const SearchInsights = {
         </summary>
         <div class="topic-node-body">
           <div class="topic-branch">
-            <span class="topic-branch-label">// DIAGNOSIS</span>
+            <span class="topic-branch-label">// DIAGNOSIS — 這篇的 AIO 表現如何</span>
             <span class="topic-branch-value">${Utils.escapeHtml(article.summary)}</span>
           </div>
           <div class="topic-branch">
-            <span class="topic-branch-label">// TARGET ZONE</span>
+            <span class="topic-branch-label">// TARGET ZONE — 地區與核心關鍵字</span>
             <span class="topic-branch-value">${Utils.escapeHtml(
               article.locations.length > 0
                 ? `${article.locations.join('、')} / ${article.baseQuery || article.title}`
@@ -423,7 +428,7 @@ const SearchInsights = {
             )}</span>
           </div>
           <div class="topic-branch">
-            <span class="topic-branch-label">// USER INTENT — Google 搜尋建議</span>
+            <span class="topic-branch-label">// USER INTENT — 使用者真的在搜什麼（來自 Google）</span>
             <div class="topic-query-list" data-google-suggest="${Utils.escapeHtml(article.baseQuery || article.title)}">
               <span class="topic-branch-value suggest-loading">LOADING SIGNAL...</span>
             </div>
