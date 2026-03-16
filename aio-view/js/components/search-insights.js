@@ -276,11 +276,57 @@ const SearchInsights = {
   },
 
   buildArticleSuggestions(missingFacets, attemptedFacets) {
-    const source = missingFacets.length > 0 ? missingFacets : attemptedFacets;
-    return source
-      .map(facet => facet.query)
-      .filter(Boolean)
-      .slice(0, 4);
+    if (missingFacets.length > 0) {
+      return missingFacets.map(f => f.query).filter(Boolean).slice(0, 4);
+    }
+    if (attemptedFacets.length > 0) {
+      return attemptedFacets.map(f => f.query).filter(Boolean).slice(0, 4);
+    }
+    // 空陣列 → renderTree 會用 Google Suggest 補
+    return [];
+  },
+
+  /**
+   * 從 Google Autocomplete 取得延伸建議（JSONP）
+   * @param {string} query - 搜尋詞
+   * @param {string[]} exclude - 已搜過的 query，要過濾掉
+   * @returns {Promise<string[]>}
+   */
+  fetchGoogleSuggestions(query, exclude = []) {
+    return new Promise((resolve) => {
+      const q = String(query || '').trim();
+      if (!q) { resolve([]); return; }
+
+      const callbackName = '_gsc_' + Math.random().toString(36).slice(2, 8);
+      const timeout = setTimeout(() => {
+        cleanup();
+        resolve([]);
+      }, 4000);
+
+      const cleanup = () => {
+        clearTimeout(timeout);
+        delete window[callbackName];
+        script.remove();
+      };
+
+      window[callbackName] = (data) => {
+        cleanup();
+        try {
+          const raw = Array.isArray(data[1]) ? data[1] : [];
+          const excludeSet = new Set(exclude.map(s => s.toLowerCase()));
+          excludeSet.add(q.toLowerCase());
+          const filtered = raw
+            .map(s => (Array.isArray(s) ? s[0] : String(s)).trim())
+            .filter(s => s && !excludeSet.has(s.toLowerCase()))
+            .slice(0, 6);
+          resolve(filtered);
+        } catch { resolve([]); }
+      };
+
+      const script = document.createElement('script');
+      script.src = `https://clients1.google.com/complete/search?client=hp&hl=zh-TW&q=${encodeURIComponent(q)}&callback=${callbackName}`;
+      document.head.appendChild(script);
+    });
   },
 
   extractLocations(query) {
@@ -377,6 +423,12 @@ const SearchInsights = {
             )}</span>
           </div>
           <div class="topic-branch">
+            <span class="topic-branch-label">使用者在意的</span>
+            <div class="topic-query-list" data-google-suggest="${Utils.escapeHtml(article.baseQuery || article.title)}">
+              <span class="topic-branch-value suggest-loading">從 Google 搜尋建議載入中...</span>
+            </div>
+          </div>
+          <div class="topic-branch">
             <span class="topic-branch-label">已驗證面向</span>
             <div class="topic-query-list">
               ${this.renderFacetChips(article.verifiedFacets, 'facet-chip-success', '目前還沒有')}
@@ -405,17 +457,73 @@ const SearchInsights = {
           </div>
           <div class="topic-branch">
             <span class="topic-branch-label">建議補搜</span>
-            <div class="suggestion-chip-row">
+            <div class="suggestion-chip-row" data-suggest-target="${Utils.escapeHtml(article.baseQuery || article.title)}">
               ${article.suggestions.length > 0
                 ? article.suggestions.map(query => `
                     <span class="suggestion-chip">${Utils.escapeHtml(query)}</span>
                   `).join('')
-                : '<span class="topic-branch-value">目前沒有額外要補的題目</span>'}
+                : '<span class="topic-branch-value suggest-loading">載入中...</span>'}
             </div>
           </div>
         </div>
       </details>
     `).join('');
+
+    // 異步載入 Google Suggest
+    this.loadGoogleSuggestions(analysis);
+  },
+
+  /**
+   * 異步載入每篇文章的 Google 搜尋建議
+   */
+  async loadGoogleSuggestions(analysis) {
+    for (const article of analysis.articles) {
+      const baseQuery = article.baseQuery || article.title;
+      const existingQueries = [
+        ...article.verifiedFacets.flatMap(f => f.queries),
+        ...article.attemptedFacets.flatMap(f => f.queries),
+        ...article.representativeQueries
+      ];
+
+      try {
+        const suggestions = await this.fetchGoogleSuggestions(baseQuery, existingQueries);
+
+        // 填入「使用者在意的」
+        const suggestEl = this.elements.tree?.querySelector(
+          `[data-google-suggest="${Utils.escapeHtml(baseQuery)}"]`
+        );
+        if (suggestEl && suggestions.length > 0) {
+          suggestEl.innerHTML = suggestions.map(s =>
+            `<span class="suggestion-chip suggestion-chip-google">${Utils.escapeHtml(s)}</span>`
+          ).join('');
+        } else if (suggestEl) {
+          suggestEl.innerHTML = '<span class="topic-branch-value">Google 沒有回傳建議</span>';
+        }
+
+        // 如果「建議補搜」是空的，也用 Google Suggest 填入
+        const targetEl = this.elements.tree?.querySelector(
+          `[data-suggest-target="${Utils.escapeHtml(baseQuery)}"]`
+        );
+        if (targetEl && targetEl.querySelector('.suggest-loading') && suggestions.length > 0) {
+          // 從 Google 建議裡挑出還沒驗過的當作補搜建議
+          const verifiedQueries = new Set(
+            article.verifiedFacets.flatMap(f => f.queries).map(q => q.toLowerCase())
+          );
+          const toSuggest = suggestions
+            .filter(s => !verifiedQueries.has(s.toLowerCase()))
+            .slice(0, 4);
+          if (toSuggest.length > 0) {
+            targetEl.innerHTML = toSuggest.map(s =>
+              `<span class="suggestion-chip">${Utils.escapeHtml(s)}</span>`
+            ).join('');
+          } else {
+            targetEl.innerHTML = '<span class="topic-branch-value">目前驗得差不多了，Google 建議已涵蓋</span>';
+          }
+        }
+      } catch {
+        // 失敗就靜默跳過
+      }
+    }
   },
 
   renderFacetChips(items, modifierClass, emptyText) {
