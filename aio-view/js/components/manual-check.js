@@ -145,6 +145,8 @@ const ManualCheck = {
     this.renderCards();
     this.updateProgress();
     this.updateAutoCheckUI();
+    this.updateProgress();
+    this.updateProgress();
 
     // 顯示區塊
     this.els.section?.classList.remove('hidden');
@@ -296,7 +298,12 @@ const ManualCheck = {
       }
 
       this.autoCheck.currentIndex++;
-      this.scheduleNextAutoCheck();
+      this.updateProgress();
+      if (this.autoCheck.currentIndex >= this.articles.length) {
+        this.autoCheckNext();
+      } else {
+        this.scheduleNextAutoCheck();
+      }
     } else {
       // 手動模式：捲動到該卡片
       Toast.success(`${shortTitle} → ${label}`);
@@ -352,6 +359,7 @@ const ManualCheck = {
     this.autoCheck.currentIndex = startIndex;
 
     this.updateAutoCheckUI();
+    this.updateProgress();
     Toast.success('自動檢查開始！Google 搜尋會在背景視窗跑');
 
     // 第一次由使用者點擊觸發 window.open，避免被彈窗阻擋
@@ -375,6 +383,7 @@ const ManualCheck = {
     this.autoCheck.popup = null;
 
     this.updateAutoCheckUI();
+    this.updateProgress();
   },
 
   /**
@@ -394,6 +403,8 @@ const ManualCheck = {
       this.autoCheck.active = false;
       Toast.success('自動檢查完成！可以查看報告了');
       this.updateAutoCheckUI();
+      this.updateProgress();
+      this.updateProgress();
 
       try {
         if (this.autoCheck.popup && !this.autoCheck.popup.closed) {
@@ -445,7 +456,12 @@ const ManualCheck = {
         Toast.info(`${shortTitle} 未收到回傳，先跳過`);
       }
       this.autoCheck.currentIndex++;
-      this.scheduleNextAutoCheck();
+      this.updateProgress();
+      if (this.autoCheck.currentIndex >= this.articles.length) {
+        this.autoCheckNext();
+      } else {
+        this.scheduleNextAutoCheck();
+      }
     }, this.AUTO_TIMEOUT);
   },
 
@@ -459,6 +475,9 @@ const ManualCheck = {
       Math.random() * (this.AUTO_DELAY_MAX - this.AUTO_DELAY_MIN);
 
     this.updateAutoCheckUI();
+    this.updateProgress();
+    this.updateProgress();
+    this.updateProgress();
 
     this.autoCheck.timer = setTimeout(() => {
       this.autoCheckNext();
@@ -699,9 +718,9 @@ const ManualCheck = {
       this.els.count.textContent = `${displayCount}/${total}`;
     }
 
-    // 報告按鈕：至少處理 1 篇才能用
+    // 報告按鈕：至少要有 1 篇真的回傳結果，timeout 不算
     if (this.els.viewReportBtn) {
-      this.els.viewReportBtn.disabled = processed === 0;
+      this.els.viewReportBtn.disabled = checked === 0;
     }
   },
 
