@@ -36,9 +36,9 @@ const ManualCheck = {
   },
 
   /** 自動檢查時間設定（毫秒） */
-  AUTO_DELAY_MIN: 8000,
-  AUTO_DELAY_MAX: 15000,
-  AUTO_TIMEOUT: 20000,
+  AUTO_DELAY_MIN: 4000,
+  AUTO_DELAY_MAX: 8000,
+  AUTO_TIMEOUT: 12000,
 
   /** Google 彈窗名稱（同名復用同一個視窗） */
   POPUP_NAME: 'aio-auto-check',
@@ -353,7 +353,7 @@ const ManualCheck = {
 (function() {
   'use strict';
 
-  // 等 Google 動態內容載入
+  // 等 Google 動態內容載入（2 秒）
   setTimeout(function() {
     // 策略 1：data-rl（2025+ 格式）
     var a = document.querySelector('div[data-rl]');
@@ -414,8 +414,8 @@ const ManualCheck = {
     d.style.cssText = 'position:fixed;bottom:16px;right:16px;z-index:99999;padding:6px 12px;border-radius:8px;font:500 12px/1 sans-serif;color:#fff;background:' + color + ';opacity:0.8;pointer-events:none;';
     d.textContent = text;
     document.body.appendChild(d);
-    setTimeout(function() { if (d.parentNode) d.remove(); }, 3000);
-  }, 3000);
+    setTimeout(function() { if (d.parentNode) d.remove(); }, 2000);
+  }, 2000);
 })();`;
   },
 
