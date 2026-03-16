@@ -457,12 +457,18 @@ const SearchInsights = {
           </div>
           <div class="topic-branch">
             <span class="topic-branch-label">建議補搜</span>
-            <div class="suggestion-chip-row" data-suggest-target="${Utils.escapeHtml(article.baseQuery || article.title)}">
+            <div class="suggestion-chip-row">
               ${article.suggestions.length > 0
                 ? article.suggestions.map(query => `
                     <span class="suggestion-chip">${Utils.escapeHtml(query)}</span>
                   `).join('')
-                : '<span class="topic-branch-value suggest-loading">載入中...</span>'}
+                : '<span class="topic-branch-value">面向都驗完了</span>'}
+            </div>
+          </div>
+          <div class="topic-branch">
+            <span class="topic-branch-label">延伸寫作方向</span>
+            <div class="suggestion-chip-row" data-extend-target="${Utils.escapeHtml(article.baseQuery || article.title)}">
+              <span class="topic-branch-value suggest-loading">從 Google 搜尋建議載入中...</span>
             </div>
           </div>
         </div>
@@ -477,53 +483,72 @@ const SearchInsights = {
    * 異步載入每篇文章的 Google 搜尋建議
    */
   async loadGoogleSuggestions(analysis) {
+    // 收集所有文章標題（用來比對延伸方向是否已寫過）
+    const allTitles = analysis.articles.map(a =>
+      (a.title || '').toLowerCase()
+    );
+
     for (const article of analysis.articles) {
       const baseQuery = article.baseQuery || article.title;
-      const existingQueries = [
-        ...article.verifiedFacets.flatMap(f => f.queries),
-        ...article.attemptedFacets.flatMap(f => f.queries),
-        ...article.representativeQueries
-      ];
+      const escapedQuery = Utils.escapeHtml(baseQuery);
 
       try {
-        const suggestions = await this.fetchGoogleSuggestions(baseQuery, existingQueries);
+        const suggestions = await this.fetchGoogleSuggestions(baseQuery, []);
 
-        // 填入「使用者在意的」
+        // 「使用者在意的」— 顯示所有 Google 建議
         const suggestEl = this.elements.tree?.querySelector(
-          `[data-google-suggest="${Utils.escapeHtml(baseQuery)}"]`
+          `[data-google-suggest="${escapedQuery}"]`
         );
         if (suggestEl && suggestions.length > 0) {
-          suggestEl.innerHTML = suggestions.map(s =>
-            `<span class="suggestion-chip suggestion-chip-google">${Utils.escapeHtml(s)}</span>`
-          ).join('');
+          // 每個建議用 FACET_RULES 比對標籤
+          suggestEl.innerHTML = suggestions.map(s => {
+            const tag = this.matchFacetLabel(s);
+            const tagHtml = tag
+              ? `<span class="suggest-tag">${Utils.escapeHtml(tag)}</span> `
+              : '';
+            return `<span class="suggestion-chip suggestion-chip-google">${tagHtml}${Utils.escapeHtml(s)}</span>`;
+          }).join('');
         } else if (suggestEl) {
           suggestEl.innerHTML = '<span class="topic-branch-value">Google 沒有回傳建議</span>';
         }
 
-        // 如果「建議補搜」是空的，也用 Google Suggest 填入
-        const targetEl = this.elements.tree?.querySelector(
-          `[data-suggest-target="${Utils.escapeHtml(baseQuery)}"]`
+        // 「延伸寫作方向」— 過濾掉跟已有文章標題重疊的，只留新方向
+        const extendEl = this.elements.tree?.querySelector(
+          `[data-extend-target="${escapedQuery}"]`
         );
-        if (targetEl && targetEl.querySelector('.suggest-loading') && suggestions.length > 0) {
-          // 從 Google 建議裡挑出還沒驗過的當作補搜建議
-          const verifiedQueries = new Set(
-            article.verifiedFacets.flatMap(f => f.queries).map(q => q.toLowerCase())
-          );
-          const toSuggest = suggestions
-            .filter(s => !verifiedQueries.has(s.toLowerCase()))
-            .slice(0, 4);
-          if (toSuggest.length > 0) {
-            targetEl.innerHTML = toSuggest.map(s =>
-              `<span class="suggestion-chip">${Utils.escapeHtml(s)}</span>`
+        if (extendEl && suggestions.length > 0) {
+          const newTopics = suggestions.filter(s => {
+            const lower = s.toLowerCase();
+            // 排除跟已有文章標題高度重疊的
+            return !allTitles.some(t =>
+              t.includes(lower) || lower.includes(t)
+            );
+          }).slice(0, 5);
+
+          if (newTopics.length > 0) {
+            extendEl.innerHTML = newTopics.map(s =>
+              `<span class="suggestion-chip suggestion-chip-new">${Utils.escapeHtml(s)}</span>`
             ).join('');
           } else {
-            targetEl.innerHTML = '<span class="topic-branch-value">目前驗得差不多了，Google 建議已涵蓋</span>';
+            extendEl.innerHTML = '<span class="topic-branch-value">目前 Google 建議的方向你都已經有寫了</span>';
           }
+        } else if (extendEl) {
+          extendEl.innerHTML = '<span class="topic-branch-value">Google 沒有回傳建議</span>';
         }
       } catch {
         // 失敗就靜默跳過
       }
     }
+  },
+
+  /**
+   * 用 FACET_RULES 比對 Google 建議的標籤
+   */
+  matchFacetLabel(text) {
+    for (const rule of this.FACET_RULES) {
+      if (rule.regex.test(text)) return rule.label;
+    }
+    return null;
   },
 
   renderFacetChips(items, modifierClass, emptyText) {
