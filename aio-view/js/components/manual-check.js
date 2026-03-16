@@ -36,9 +36,9 @@ const ManualCheck = {
   },
 
   /** 自動檢查時間設定（毫秒） */
-  AUTO_DELAY_MIN: 4000,
-  AUTO_DELAY_MAX: 8000,
-  AUTO_TIMEOUT: 12000,
+  AUTO_DELAY_MIN: 1200,
+  AUTO_DELAY_MAX: 2200,
+  AUTO_TIMEOUT: 6000,
 
   /** Google 彈窗名稱（同名復用同一個視窗） */
   POPUP_NAME: 'aio-auto-check',
@@ -175,7 +175,10 @@ const ManualCheck = {
 
     // postMessage 跨域監聽（Chrome 擴充功能從 Google 頁面回傳）
     this._onMessage = (event) => {
-      if (!/^https:\/\/www\.google\./.test(event.origin)) return;
+      const allowedOrigin =
+        /^https:\/\/www\.google\./.test(event.origin) ||
+        /^chrome-extension:\/\//.test(event.origin);
+      if (!allowedOrigin) return;
       if (event.data?.t === 'r') {
         this.handleChannelMessage(event.data);
       }

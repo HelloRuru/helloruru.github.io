@@ -114,7 +114,7 @@ const Sitemap = {
             ? QueryEngine.generate(title, domain)
             : this.generateQuery(title, domain),
           lastmod: lastmod,
-          selected: true
+          selected: false
         });
       }
     });
