@@ -14,6 +14,9 @@ const ManualCheck = {
   /** 檢查結果 { articleId: 'cited' | 'aio' | 'none' } */
   checkResults: {},
 
+  /** 處理狀態 { articleId: 'cited' | 'aio' | 'none' | 'timeout' } */
+  processStates: {},
+
   /** 目前篩選狀態 */
   currentFilter: 'all',
 
@@ -116,7 +119,9 @@ const ManualCheck = {
    * @param {string} domain - 網域
    */
   show(articles, domain) {
-    this.articles = articles;
+    this.articles = articles
+      .filter(a => a.selected === true && String(a.query || '').trim())
+      .map(a => ({ ...a, selected: true }));
     this.domain = domain;
 
     // 確保每篇文章有唯一 ID（用 URL 當 ID）
@@ -126,6 +131,12 @@ const ManualCheck = {
 
     // 從 Storage 載入進度
     this.checkResults = Storage.get('manual_check', {});
+    this.processStates = {};
+    this.articles.forEach(a => {
+      if (this.checkResults[a.id]) {
+        this.processStates[a.id] = this.checkResults[a.id];
+      }
+    });
 
     // 啟動 BroadcastChannel 監聽
     this.initChannel();
@@ -156,6 +167,7 @@ const ManualCheck = {
     this.articles = [];
     this.domain = '';
     this.checkResults = {};
+    this.processStates = {};
     this.currentFilter = 'all';
     this.stopAutoCheck();
     this.destroyChannel();
@@ -420,6 +432,18 @@ const ManualCheck = {
     clearTimeout(this.autoCheck.timeoutTimer);
     this.autoCheck.timeoutTimer = setTimeout(() => {
       if (!this.autoCheck.active) return;
+      const currentArticle = this.articles[this.autoCheck.currentIndex];
+      if (currentArticle) {
+        this.processStates[currentArticle.id] = 'timeout';
+        this.updateCardVisual(currentArticle.id);
+        this.updateProgress();
+        this.updateAutoCheckUI();
+
+        const shortTitle = currentArticle.title.length > 15
+          ? currentArticle.title.substring(0, 15) + '...'
+          : currentArticle.title;
+        Toast.info(`${shortTitle} 未收到回傳，先跳過`);
+      }
       this.autoCheck.currentIndex++;
       this.scheduleNextAutoCheck();
     }, this.AUTO_TIMEOUT);
@@ -468,6 +492,7 @@ const ManualCheck = {
     const { active } = this.autoCheck;
     const total = this.articles.length;
     const checked = this.articles.filter(a => this.checkResults[a.id]).length;
+    const processed = this.getProcessedCount();
 
     // 按鈕狀態
     if (this.els.autoStartBtn) {
@@ -481,12 +506,12 @@ const ManualCheck = {
     if (this.els.autoStatus) {
       if (active) {
         const current = Math.min(this.autoCheck.currentIndex + 1, total);
-        this.els.autoStatus.textContent = `正在檢查 ${current}/${total}...（已完成 ${checked}）`;
+        this.els.autoStatus.textContent = `正在檢查 ${current}/${total}...（已回傳 ${checked}，已處理 ${processed}）`;
         this.els.autoStatus.classList.remove('hidden');
-      } else if (checked > 0 && checked < total) {
-        this.els.autoStatus.textContent = `已停止（${checked}/${total} 完成）`;
+      } else if (processed > 0 && processed < total) {
+        this.els.autoStatus.textContent = `已停止（已回傳 ${checked}/${total}，已處理 ${processed}/${total}）`;
         this.els.autoStatus.classList.remove('hidden');
-      } else if (checked === total && total > 0) {
+      } else if (processed === total && total > 0) {
         this.els.autoStatus.textContent = '全部完成！';
         this.els.autoStatus.classList.remove('hidden');
       } else {
@@ -607,8 +632,10 @@ const ManualCheck = {
     // 如果點同一個狀態，取消選取
     if (this.checkResults[articleId] === status) {
       delete this.checkResults[articleId];
+      delete this.processStates[articleId];
     } else {
       this.checkResults[articleId] = status;
+      this.processStates[articleId] = status;
     }
 
     // 存到 localStorage
@@ -629,14 +656,18 @@ const ManualCheck = {
     if (!card) return;
 
     const status = this.checkResults[articleId];
+    const processState = this.processStates[articleId];
 
     // 更新 checked class
     card.classList.toggle('checked', !!status);
+    card.classList.toggle('check-card-timeout', processState === 'timeout');
 
     // 更新按鈕 active 狀態
     card.querySelectorAll('.check-status-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.status === status);
     });
+
+    card.title = processState === 'timeout' ? '這篇檢查時未收到擴充功能回傳' : '';
   },
 
   /**
@@ -645,7 +676,10 @@ const ManualCheck = {
   updateProgress() {
     const total = this.articles.length;
     const checked = this.articles.filter(a => this.checkResults[a.id]).length;
-    const percent = total > 0 ? Math.round((checked / total) * 100) : 0;
+    const processed = this.getProcessedCount();
+    const inFlight = this.autoCheck.active ? 1 : 0;
+    const displayCount = Math.min(total, Math.max(processed, this.autoCheck.currentIndex + inFlight));
+    const percent = total > 0 ? Math.round((displayCount / total) * 100) : 0;
 
     // 進度條
     if (this.els.progressFill) {
@@ -655,19 +689,19 @@ const ManualCheck = {
     // 文字
     if (this.els.progressText) {
       this.els.progressText.innerHTML = `
-        <span class="progress-nums">${checked} / ${total}</span>
-        <span>已檢查 ${percent}%</span>
+        <span class="progress-nums">${displayCount} / ${total}</span>
+        <span>${this.autoCheck.active ? '處理中' : '已處理'} ${percent}%${processed !== checked ? `（已回傳 ${checked}）` : ''}</span>
       `;
     }
 
     // 標題上的 badge
     if (this.els.count) {
-      this.els.count.textContent = `${checked}/${total}`;
+      this.els.count.textContent = `${displayCount}/${total}`;
     }
 
-    // 報告按鈕：至少檢查 1 篇才能用
+    // 報告按鈕：至少處理 1 篇才能用
     if (this.els.viewReportBtn) {
-      this.els.viewReportBtn.disabled = checked === 0;
+      this.els.viewReportBtn.disabled = processed === 0;
     }
   },
 
@@ -704,8 +738,8 @@ const ManualCheck = {
   finishCheck() {
     const results = this.getResults();
 
-    if (results.results.length === 0) {
-      Toast.error('還沒有檢查任何文章');
+    if ((results.results?.length || 0) === 0) {
+      Toast.error('還沒有可顯示的檢查結果');
       return;
     }
 
@@ -723,25 +757,34 @@ const ManualCheck = {
    * @returns {Object} 掃描結果
    */
   getResults() {
-    const checkedArticles = this.articles.filter(a => this.checkResults[a.id]);
+    const processedArticles = this.articles.filter(a => this.processStates[a.id]);
 
     return {
       scanDate: Utils.formatDate(new Date()),
       domain: this.domain,
       source: 'manual',
       totalArticles: this.articles.length,
-      results: checkedArticles.map(article => {
-        const status = this.checkResults[article.id];
+      results: processedArticles.map(article => {
+        const status = this.processStates[article.id];
         return {
           url: article.url,
           title: article.title,
           query: article.query,
-          hasAIO: status === 'cited' || status === 'aio',
+          scanStatus: status,
+          hasAIO: status === 'timeout' ? null : status === 'cited' || status === 'aio',
           isCited: status === 'cited',
           aioSources: []
         };
       })
     };
+  },
+
+  /**
+   * 已處理數量（含逾時）
+   * @returns {number}
+   */
+  getProcessedCount() {
+    return this.articles.filter(a => !!this.processStates[a.id]).length;
   },
 
   /**

@@ -69,7 +69,10 @@ const ArticlesTable = {
    * @param {Array} articles - 文章清單
    */
   render(articles) {
-    this.articles = articles;
+    this.articles = articles.map(article => ({
+      ...article,
+      selected: article.selected === true
+    }));
 
     if (!this.elements.tbody) return;
 
@@ -412,7 +415,9 @@ const ArticlesTable = {
    * @returns {Array} 已選取的文章
    */
   getSelectedArticles() {
-    return this.articles.filter(a => a.selected && a.query);
+    return this.articles
+      .filter(a => a.selected === true && String(a.query || '').trim())
+      .map(a => ({ ...a, selected: true }));
   },
 
   /**

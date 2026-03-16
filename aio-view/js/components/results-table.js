@@ -78,10 +78,10 @@ const ResultsTable = {
         filtered = filtered.filter(r => r.isCited);
         break;
       case 'aio-not-cited':
-        filtered = filtered.filter(r => r.hasAIO && !r.isCited);
+        filtered = filtered.filter(r => r.hasAIO === true && !r.isCited);
         break;
       case 'no-aio':
-        filtered = filtered.filter(r => !r.hasAIO);
+        filtered = filtered.filter(r => r.hasAIO === false);
         break;
     }
 
@@ -123,11 +123,13 @@ const ResultsTable = {
   createRow(item) {
     const tr = document.createElement('tr');
 
-    const statusBadge = item.hasAIO
-      ? '<span class="status-badge yes">有 AIO</span>'
-      : '<span class="status-badge no">無</span>';
+    const statusBadge = item.scanStatus === 'timeout'
+      ? '<span class="status-badge">未回傳</span>'
+      : item.hasAIO
+        ? '<span class="status-badge yes">有 AIO</span>'
+        : '<span class="status-badge no">無</span>';
 
-    const citedBadge = item.hasAIO
+    const citedBadge = item.hasAIO === true
       ? (item.isCited
           ? '<span class="status-badge cited">是</span>'
           : '<span class="status-badge no">否</span>')
@@ -159,7 +161,7 @@ const ResultsTable = {
       r.title || '',
       r.url,
       r.query,
-      r.hasAIO ? '是' : '否',
+      r.scanStatus === 'timeout' ? '未回傳' : (r.hasAIO ? '是' : '否'),
       r.isCited ? '是' : '否',
       (r.aioSources || []).join('; ')
     ]);

@@ -29,8 +29,8 @@ const Stats = {
   render(results) {
     const items = results.results || [];
 
-    const total = items.length;
-    const hasAIO = items.filter(r => r.hasAIO).length;
+    const total = results.totalArticles || items.length;
+    const hasAIO = items.filter(r => r.hasAIO === true).length;
     const cited = items.filter(r => r.isCited).length;
     const rate = Utils.percentage(cited, total);
 

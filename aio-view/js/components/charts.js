@@ -63,8 +63,22 @@ const Charts = {
     if (!canvas) return;
 
     const cited = items.filter(r => r.isCited).length;
-    const aioNotCited = items.filter(r => r.hasAIO && !r.isCited).length;
-    const noAio = items.filter(r => !r.hasAIO).length;
+    const aioNotCited = items.filter(r => r.hasAIO === true && !r.isCited).length;
+    const noAio = items.filter(r => r.hasAIO === false).length;
+    const timeout = items.filter(r => r.scanStatus === 'timeout').length;
+    const labels = ['被引用', '有 AIO 未引用', '無 AIO'];
+    const data = [cited, aioNotCited, noAio];
+    const colors = [
+      this.colors.cyan,
+      this.colors.magenta,
+      '#3a3a4a'
+    ];
+
+    if (timeout > 0) {
+      labels.push('未回傳');
+      data.push(timeout);
+      colors.push(this.colors.amber);
+    }
 
     if (this.instances.status) {
       this.instances.status.destroy();
@@ -73,14 +87,10 @@ const Charts = {
     this.instances.status = new Chart(canvas, {
       type: 'doughnut',
       data: {
-        labels: ['\u88AB\u5F15\u7528', '\u6709 AIO \u672A\u5F15\u7528', '\u7121 AIO'],
+        labels: labels,
         datasets: [{
-          data: [cited, aioNotCited, noAio],
-          backgroundColor: [
-            this.colors.cyan,
-            this.colors.magenta,
-            '#3a3a4a'
-          ],
+          data: data,
+          backgroundColor: colors,
           borderWidth: 0,
           hoverOffset: 6
         }]
