@@ -187,22 +187,9 @@
       note,
       q: getQuery()
     };
-
-    try {
-      if (window.opener) {
-        window.opener.postMessage(payload, '*');
-      }
-    } catch {
-      // ignore
-    }
-
-    try {
-      const channel = new BroadcastChannel(CHANNEL_NAME);
-      channel.postMessage(payload);
-      channel.close();
-    } catch {
-      // ignore
-    }
+    chrome.runtime.sendMessage(payload, () => {
+      void chrome.runtime.lastError;
+    });
   }
 
   function sendResult(result, isFinalAttempt) {
@@ -221,22 +208,9 @@
     if (lastSentSignature === signature) return;
     lastSentSignature = signature;
     sendDebug('send-result', `aio=${payload.aio} src=${payload.src.length}`);
-
-    try {
-      if (window.opener) {
-        window.opener.postMessage(payload, '*');
-      }
-    } catch {
-      // ignore
-    }
-
-    try {
-      const channel = new BroadcastChannel(CHANNEL_NAME);
-      channel.postMessage(payload);
-      channel.close();
-    } catch {
-      // ignore
-    }
+    chrome.runtime.sendMessage(payload, () => {
+      void chrome.runtime.lastError;
+    });
 
     showBadge(result.hasAIO);
   }

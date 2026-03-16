@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "AIO View Detector",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "在 Google 搜尋頁自動偵測 AI Overview，回傳結果給 AIO View。",
   "homepage_url": "https://lab.helloruru.com/aio-view/",
   "icons": {
@@ -18,6 +18,12 @@
       "48": "icons/icon-48.png"
     }
   },
+  "permissions": [
+    "tabs"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "content_scripts": [
     {
       "matches": [
@@ -30,6 +36,16 @@
       ],
       "js": [
         "content.js"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://lab.helloruru.com/aio-view/*",
+        "https://helloruru.github.io/aio-view/*"
+      ],
+      "js": [
+        "bridge.js"
       ],
       "run_at": "document_idle"
     }

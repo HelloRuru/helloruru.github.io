@@ -212,7 +212,8 @@ const ManualCheck = {
     this._onMessage = (event) => {
       const allowedOrigin =
         /^https:\/\/www\.google\./.test(event.origin) ||
-        /^chrome-extension:\/\//.test(event.origin);
+        /^chrome-extension:\/\//.test(event.origin) ||
+        event.origin === window.location.origin;
       if (!allowedOrigin) return;
       if (event.data?.t === 'r') {
         this.handleChannelMessage(event.data);
