@@ -165,7 +165,7 @@ const Charts = {
       .slice(0, 10);
 
     if (sorted.length === 0) {
-      canvas.parentElement.innerHTML = '<div class="chart-empty">這批掃描結果沒有引用來源資料。<br>裝好 Chrome 擴充功能後<strong>重新跑一次自動檢查</strong>，引用來源就會自動帶入。</div>';
+      canvas.parentElement.innerHTML = '<div class="chart-empty">這批掃描結果沒有引用來源資料，裝好 Chrome 擴充功能後重新跑一次自動檢查即可帶入。</div>';
       if (listEl) listEl.innerHTML = '';
       return;
     }
