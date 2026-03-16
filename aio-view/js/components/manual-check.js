@@ -17,6 +17,9 @@ const ManualCheck = {
   /** 處理狀態 { articleId: 'cited' | 'aio' | 'none' | 'timeout' } */
   processStates: {},
 
+  /** 引用來源 { articleId: string[] } */
+  checkSources: {},
+
   /** 目前篩選狀態 */
   currentFilter: 'all',
 
@@ -228,6 +231,7 @@ const ManualCheck = {
     this.domain = '';
     this.checkResults = {};
     this.processStates = {};
+    this.checkSources = {};
     this.currentFilter = 'all';
     this.lastHandledMessage = { key: '', at: 0 };
     this.lastDebugMessage = { key: '', at: 0 };
@@ -347,8 +351,11 @@ const ManualCheck = {
       return;
     }
 
-    // 設定狀態
+    // 設定狀態 + 存引用來源
     this.setStatus(article.id, status, { toggle: false });
+    if (Array.isArray(data.src) && data.src.length > 0) {
+      this.checkSources[article.id] = data.src;
+    }
 
     // 通知
     const label = status === 'cited' ? '有引用' : status === 'aio' ? '有 AIO' : '沒有';
@@ -1012,7 +1019,7 @@ const ManualCheck = {
           scanStatus: status,
           hasAIO: status === 'timeout' ? null : status === 'cited' || status === 'aio',
           isCited: status === 'cited',
-          aioSources: []
+          aioSources: this.checkSources[task.id] || []
         };
       })
     };
