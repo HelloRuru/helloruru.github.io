@@ -144,25 +144,38 @@
 }
 
 .suggestion-chip-google {
-  border-color: rgba(66, 133, 244, 0.3);
-  background: rgba(66, 133, 244, 0.08);
-  color: #8ab4f8;
+  border-color: rgba(57, 197, 187, 0.35);
+  background: rgba(57, 197, 187, 0.08);
+  color: #e0f0ef;
+  font-size: 14px;
 }
 
 .suggestion-chip-new {
-  border-color: rgba(0, 255, 136, 0.3);
-  background: rgba(0, 255, 136, 0.08);
-  color: #00ff88;
+  border-color: rgba(0, 255, 136, 0.4);
+  background: rgba(0, 255, 136, 0.1);
+  color: #66ffaa;
+  font-size: 14px;
+  font-weight: 600;
 }
 
+/* 面向標籤 — 每種面向不同顏色 */
 .suggest-tag {
-  font-size: 10px;
-  padding: 1px 6px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
   border-radius: 4px;
-  background: rgba(66, 133, 244, 0.15);
-  color: #6ba3f7;
-  margin-right: 2px;
+  margin-right: 4px;
+  letter-spacing: 0.3px;
 }
+
+.suggest-tag[data-facet="recommend"] { background: rgba(57, 197, 187, 0.25); color: #5de8df; }
+.suggest-tag[data-facet="price"]     { background: rgba(255, 107, 152, 0.25); color: #ff8fad; }
+.suggest-tag[data-facet="decision"]  { background: rgba(134, 96, 214, 0.25); color: #b48cff; }
+.suggest-tag[data-facet="compare"]   { background: rgba(255, 170, 0, 0.25); color: #ffcc44; }
+.suggest-tag[data-facet="guide"]     { background: rgba(0, 200, 255, 0.25); color: #66ddff; }
+
+/* 沒有 data-facet 的 fallback */
+.suggest-tag:not([data-facet]) { background: rgba(57, 197, 187, 0.2); color: #39c5bb; }
 
 .suggest-loading {
   opacity: 0.5;

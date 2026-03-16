@@ -236,9 +236,9 @@ const SearchInsights = {
   },
 
   getVerdictLabel(verdict) {
-    if (verdict === 'validated') return '已驗證';
-    if (verdict === 'partial') return '部分驗證';
-    return '待補驗證';
+    if (verdict === 'validated') return 'VERIFIED';
+    if (verdict === 'partial') return 'PARTIAL';
+    return 'PENDING';
   },
 
   getFacetLabel(key) {
@@ -407,15 +407,15 @@ const SearchInsights = {
       <details class="topic-node"${index < 2 ? ' open' : ''}>
         <summary class="topic-node-summary">
           <span class="topic-node-title">${Utils.escapeHtml(article.title)}</span>
-          <span class="topic-node-meta">${Utils.escapeHtml(article.verdictLabel)} · 已驗 ${article.verifiedFacets.length}/${article.totalFacets} 面向</span>
+          <span class="topic-node-meta">${Utils.escapeHtml(article.verdictLabel)} // ${article.verifiedFacets.length}/${article.totalFacets} SCANNED</span>
         </summary>
         <div class="topic-node-body">
           <div class="topic-branch">
-            <span class="topic-branch-label">判讀</span>
+            <span class="topic-branch-label">// DIAGNOSIS</span>
             <span class="topic-branch-value">${Utils.escapeHtml(article.summary)}</span>
           </div>
           <div class="topic-branch">
-            <span class="topic-branch-label">地區 / 核心字</span>
+            <span class="topic-branch-label">// TARGET ZONE</span>
             <span class="topic-branch-value">${Utils.escapeHtml(
               article.locations.length > 0
                 ? `${article.locations.join('、')} / ${article.baseQuery || article.title}`
@@ -423,52 +423,52 @@ const SearchInsights = {
             )}</span>
           </div>
           <div class="topic-branch">
-            <span class="topic-branch-label">使用者在意的</span>
+            <span class="topic-branch-label">// USER INTENT — Google 搜尋建議</span>
             <div class="topic-query-list" data-google-suggest="${Utils.escapeHtml(article.baseQuery || article.title)}">
-              <span class="topic-branch-value suggest-loading">從 Google 搜尋建議載入中...</span>
+              <span class="topic-branch-value suggest-loading">LOADING SIGNAL...</span>
             </div>
           </div>
           <div class="topic-branch">
-            <span class="topic-branch-label">已驗證面向</span>
+            <span class="topic-branch-label">// VERIFIED — 已確認出現 AIO 的面向</span>
             <div class="topic-query-list">
-              ${this.renderFacetChips(article.verifiedFacets, 'facet-chip-success', '目前還沒有')}
+              ${this.renderFacetChips(article.verifiedFacets, 'facet-chip-success', 'NO DATA YET')}
             </div>
           </div>
           <div class="topic-branch">
-            <span class="topic-branch-label">已搜但沒命中</span>
+            <span class="topic-branch-label">// MISS — 已搜尋但未觸發 AIO</span>
             <div class="topic-query-list">
-              ${this.renderFacetChips(article.attemptedFacets, 'facet-chip-warning', '目前沒有')}
+              ${this.renderFacetChips(article.attemptedFacets, 'facet-chip-warning', 'NONE')}
             </div>
           </div>
           <div class="topic-branch">
-            <span class="topic-branch-label">還沒補驗證</span>
+            <span class="topic-branch-label">// PENDING — 尚未掃描的面向</span>
             <div class="topic-query-list">
-              ${this.renderFacetChips(article.missingFacets, 'facet-chip-muted', '已補完')}</div>
+              ${this.renderFacetChips(article.missingFacets, 'facet-chip-muted', 'ALL CLEAR')}</div>
           </div>
           <div class="topic-branch">
-            <span class="topic-branch-label">已命中查詢</span>
+            <span class="topic-branch-label">// HIT QUERIES — 命中 AIO 的搜尋語句</span>
             <div class="topic-query-list">
               ${article.representativeQueries.length > 0
                 ? article.representativeQueries.map(query => `
                     <code class="topic-query-item">${Utils.escapeHtml(query)}</code>
                   `).join('')
-                : '<span class="topic-branch-value">目前還沒有命中的代表查詢</span>'}
+                : '<span class="topic-branch-value">AWAITING SIGNAL</span>'}
             </div>
           </div>
           <div class="topic-branch">
-            <span class="topic-branch-label">建議補搜</span>
+            <span class="topic-branch-label">// RESCAN — 建議補充掃描的面向</span>
             <div class="suggestion-chip-row">
               ${article.suggestions.length > 0
                 ? article.suggestions.map(query => `
                     <span class="suggestion-chip">${Utils.escapeHtml(query)}</span>
                   `).join('')
-                : '<span class="topic-branch-value">面向都驗完了</span>'}
+                : '<span class="topic-branch-value">SCAN COMPLETE</span>'}
             </div>
           </div>
           <div class="topic-branch">
-            <span class="topic-branch-label">延伸寫作方向</span>
+            <span class="topic-branch-label">// EXPAND — 延伸寫作方向</span>
             <div class="suggestion-chip-row" data-extend-target="${Utils.escapeHtml(article.baseQuery || article.title)}">
-              <span class="topic-branch-value suggest-loading">從 Google 搜尋建議載入中...</span>
+              <span class="topic-branch-value suggest-loading">LOADING SIGNAL...</span>
             </div>
           </div>
         </div>
@@ -502,14 +502,14 @@ const SearchInsights = {
         if (suggestEl && suggestions.length > 0) {
           // 每個建議用 FACET_RULES 比對標籤
           suggestEl.innerHTML = suggestions.map(s => {
-            const tag = this.matchFacetLabel(s);
-            const tagHtml = tag
-              ? `<span class="suggest-tag">${Utils.escapeHtml(tag)}</span> `
+            const facet = this.matchFacet(s);
+            const tagHtml = facet
+              ? `<span class="suggest-tag" data-facet="${facet.key}">${Utils.escapeHtml(facet.label)}</span>`
               : '';
             return `<span class="suggestion-chip suggestion-chip-google">${tagHtml}${Utils.escapeHtml(s)}</span>`;
           }).join('');
         } else if (suggestEl) {
-          suggestEl.innerHTML = '<span class="topic-branch-value">Google 沒有回傳建議</span>';
+          suggestEl.innerHTML = '<span class="topic-branch-value">NO SIGNAL — Google Autocomplete 未回傳資料</span>';
         }
 
         // 「延伸寫作方向」— 過濾掉跟已有文章標題重疊的，只留新方向
@@ -530,10 +530,10 @@ const SearchInsights = {
               `<span class="suggestion-chip suggestion-chip-new">${Utils.escapeHtml(s)}</span>`
             ).join('');
           } else {
-            extendEl.innerHTML = '<span class="topic-branch-value">目前 Google 建議的方向你都已經有寫了</span>';
+            extendEl.innerHTML = '<span class="topic-branch-value">COVERED — 目前 Google 熱搜方向皆已有對應內容</span>';
           }
         } else if (extendEl) {
-          extendEl.innerHTML = '<span class="topic-branch-value">Google 沒有回傳建議</span>';
+          extendEl.innerHTML = '<span class="topic-branch-value">NO SIGNAL — Google Autocomplete 未回傳資料</span>';
         }
       } catch {
         // 失敗就靜默跳過
@@ -544,9 +544,9 @@ const SearchInsights = {
   /**
    * 用 FACET_RULES 比對 Google 建議的標籤
    */
-  matchFacetLabel(text) {
+  matchFacet(text) {
     for (const rule of this.FACET_RULES) {
-      if (rule.regex.test(text)) return rule.label;
+      if (rule.regex.test(text)) return { key: rule.key, label: rule.label };
     }
     return null;
   },
