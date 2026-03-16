@@ -151,8 +151,6 @@ const ManualCheck = {
     this.renderCards();
     this.updateProgress();
     this.updateAutoCheckUI();
-    this.updateProgress();
-    this.updateProgress();
 
     // 顯示區塊
     this.els.section?.classList.remove('hidden');
