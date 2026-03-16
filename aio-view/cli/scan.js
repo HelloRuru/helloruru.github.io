@@ -17,6 +17,7 @@
 const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
+const { detectAIO } = require('../shared/aio-detector');
 
 // 解析命令列參數
 function parseArgs() {
@@ -95,78 +96,6 @@ function formatTime(seconds) {
   return mins > 0 ? `${mins} 分 ${secs} 秒` : `${secs} 秒`;
 }
 
-// 偵測 AI Overview
-async function detectAIO(page, domain) {
-  try {
-    // AI Overview 的可能選擇器（Google 可能會改變）
-    const aioSelectors = [
-      '[data-attrid="wa:/description"]',
-      '.ILfuVd',
-      '[data-async-type="editableDirectAnswer"]',
-      '.wDYxhc[data-md]',
-      '[jsname="N760b"]',
-      '.kp-wholepage-osrp'
-    ];
-
-    let aioElement = null;
-
-    for (const selector of aioSelectors) {
-      try {
-        aioElement = await page.$(selector);
-        if (aioElement) break;
-      } catch {
-        continue;
-      }
-    }
-
-    if (!aioElement) {
-      return {
-        hasAIO: false,
-        isCited: false,
-        aioSources: []
-      };
-    }
-
-    // 取得 AIO 中的所有連結
-    const links = await aioElement.$$eval('a[href]', (anchors) => {
-      return anchors
-        .map(a => {
-          try {
-            const url = new URL(a.href);
-            return url.hostname.replace(/^www\./, '');
-          } catch {
-            return null;
-          }
-        })
-        .filter(Boolean);
-    });
-
-    // 去重
-    const aioSources = [...new Set(links)];
-
-    // 檢查是否包含目標網域
-    const normalizedDomain = domain.replace(/^www\./, '').toLowerCase();
-    const isCited = aioSources.some(source =>
-      source.toLowerCase().includes(normalizedDomain)
-    );
-
-    return {
-      hasAIO: true,
-      isCited,
-      aioSources
-    };
-
-  } catch (error) {
-    console.error('  偵測 AIO 時發生錯誤:', error.message);
-    return {
-      hasAIO: false,
-      isCited: false,
-      aioSources: [],
-      error: error.message
-    };
-  }
-}
-
 // 主程式
 async function main() {
   const options = parseArgs();
@@ -203,6 +132,10 @@ async function main() {
 預估時間：${formatTime(queries.length * options.delay)}
 搜尋間隔：${options.delay} 秒
 `);
+
+  if (options.headless) {
+    console.log('注意：Google 在無頭模式下可能不顯示 AI 摘要，建議預設使用有視窗模式。');
+  }
 
   // 啟動瀏覽器
   console.log('正在啟動瀏覽器...');

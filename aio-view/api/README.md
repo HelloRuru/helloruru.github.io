@@ -148,7 +148,7 @@ git pull origin main
 
 ### 掃描邏輯
 - 使用 Playwright 模擬真實瀏覽器
-- 偵測 Google AI Overview 區塊
+- 偵測 Google AI Overview 區塊（新版規則會同時比對 heading、容器結構與引用來源）
 - 提取引用來源並比對網域
 
 ---

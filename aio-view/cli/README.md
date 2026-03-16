@@ -1,6 +1,6 @@
 # AIO View CLI
 
-Google AI Overview 監測工具的命令列版本。
+Google AI Overview 監測工具的命令列版本，內建新版 Google AI 摘要偵測規則。
 
 ## 安裝
 
@@ -61,6 +61,8 @@ node scan.js --input queries.json --output results.json --domain dailyshiru.com
 
 ## 注意事項
 
+- **偵測方式**：CLI 會同時比對 `AI 摘要 / AI Overview` heading、AIO 容器結構與引用來源連結，比只吃單一 selector 更穩
+- **執行模式**：建議使用預設的有視窗模式；`--headless` 在部分查詢下可能拿不到 AI 摘要
 - **搜尋間隔**：預設 150 秒（2.5 分鐘），避免觸發 Google 反爬機制
 - **IP 風險**：如果被暫時封鎖，重啟路由器更換 IP 即可
 - **執行時間**：50 個語句約需 2 小時，建議睡前執行

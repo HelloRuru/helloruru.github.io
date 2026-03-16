@@ -613,8 +613,8 @@ body{
         <div class="step-body">
           <div class="step-title">檢查 AIO</div>
           <div class="step-desc">兩種方式檢查你的文章是否出現在 Google AI Overview：<br>
-          <strong style="color:var(--green)">手動檢查（免安裝）</strong> — 按「開始手動檢查」，系統會逐篇開啟 Google 搜尋，你在搜尋結果頁面點「有 AIO / 沒有 AIO」回報。也可以拖曳<strong style="color:var(--cyan)">書籤列按鈕</strong>到瀏覽器書籤列，之後在任何 Google 搜尋頁面一鍵回報。<br>
-          <strong style="color:var(--cyan)">CLI 自動掃描（進階）</strong> — 產生 <code>queries.json</code> 後，在電腦跑 <code>node scan.js</code>，每篇間隔 <strong style="color:var(--yellow)">2.5 分鐘</strong>，適合睡前放著跑。</div>
+          <strong style="color:var(--green)">手動檢查（免安裝）</strong> — 按「開始手動檢查」，系統會逐篇開啟 Google 搜尋，你在搜尋結果頁面點「有 AIO / 沒有 AIO」回報。<br>
+          <strong style="color:var(--cyan)">CLI 自動掃描（建議批次使用）</strong> — 產生 <code>queries.json</code> 後，在電腦跑 <code>node scan.js</code>，工具會自動比對新版 <code>AI 摘要 / AI Overview</code> heading、區塊結構與引用來源，每篇間隔 <strong style="color:var(--yellow)">2.5 分鐘</strong>，適合睡前放著跑。</div>
         </div>
       </div>
 

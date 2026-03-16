@@ -10,7 +10,7 @@ https://lab.helloruru.com/aio-view/
 
 1. **輸入 Sitemap** — 自動解析文章清單
 2. **產生搜尋語句** — 自動產生，可手動編輯
-3. **CLI 掃描** — 在本機執行，自動搜尋 Google 並偵測 AIO
+3. **CLI 掃描** — 在本機執行，自動搜尋 Google 並偵測 AIO，支援新版 Google AI 摘要版型
 4. **結果 Dashboard** — 視覺化顯示、篩選、匯出 CSV
 
 ## 架構
@@ -91,6 +91,8 @@ node scan.js --input queries.json --output results.json --domain example.com --d
 
 ### 注意事項
 
+- CLI / API 內建新版 AIO 偵測規則，會同時比對 heading、容器結構與引用來源連結
+- `--headless` 在部分查詢下可能拿不到 Google AI 摘要，實際掃描建議保留瀏覽器視窗
 - 每次搜尋間隔預設 2.5 分鐘，避免觸發 Google 反爬
 - 50 篇文章約需 2 小時
 - WSL 用戶需在 Windows PowerShell 執行
