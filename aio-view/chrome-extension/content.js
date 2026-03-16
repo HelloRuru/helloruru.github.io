@@ -180,6 +180,31 @@
     window.setTimeout(() => badge.remove(), 2200);
   }
 
+  function sendDebug(stage, note = '') {
+    const payload = {
+      t: 'dbg',
+      stage,
+      note,
+      q: getQuery()
+    };
+
+    try {
+      if (window.opener) {
+        window.opener.postMessage(payload, '*');
+      }
+    } catch {
+      // ignore
+    }
+
+    try {
+      const channel = new BroadcastChannel(CHANNEL_NAME);
+      channel.postMessage(payload);
+      channel.close();
+    } catch {
+      // ignore
+    }
+  }
+
   function sendResult(result, isFinalAttempt) {
     const query = getQuery();
     if (!query) return;
@@ -195,6 +220,7 @@
     const signature = JSON.stringify(payload);
     if (lastSentSignature === signature) return;
     lastSentSignature = signature;
+    sendDebug('send-result', `aio=${payload.aio} src=${payload.src.length}`);
 
     try {
       if (window.opener) {
@@ -217,7 +243,11 @@
 
   ATTEMPTS_MS.forEach((delay, index) => {
     window.setTimeout(() => {
-      sendResult(detectAIO(), index === ATTEMPTS_MS.length - 1);
+      const result = detectAIO();
+      sendDebug('detect', `#${index + 1} aio=${result.hasAIO} src=${result.aioSources.length}`);
+      sendResult(result, index === ATTEMPTS_MS.length - 1);
     }, delay);
   });
+
+  sendDebug('boot', location.href);
 })();

@@ -32,6 +32,16 @@ const ManualCheck = {
     at: 0
   },
 
+  /** 最近一次處理的除錯訊息 */
+  lastDebugMessage: {
+    key: '',
+    at: 0
+  },
+
+  /** 除錯訊息 */
+  debugLogs: [],
+  DEBUG_LOG_LIMIT: 12,
+
   /** DOM 快取 */
   els: {},
 
@@ -70,6 +80,7 @@ const ManualCheck = {
       autoStatus: document.getElementById('auto-check-status')
     };
 
+    this.ensureDebugPanel();
     this.bindEvents();
   },
 
@@ -143,6 +154,8 @@ const ManualCheck = {
         this.processStates[a.id] = this.checkResults[a.id];
       }
     });
+    this.debugLogs = [];
+    this.renderDebugLogs();
 
     // 啟動 BroadcastChannel 監聽
     this.initChannel();
@@ -176,9 +189,12 @@ const ManualCheck = {
     this.processStates = {};
     this.currentFilter = 'all';
     this.lastHandledMessage = { key: '', at: 0 };
+    this.lastDebugMessage = { key: '', at: 0 };
+    this.debugLogs = [];
     this.stopAutoCheck();
     this.destroyChannel();
     if (this.els.cards) this.els.cards.innerHTML = '';
+    this.renderDebugLogs();
     this.hide();
   },
 
@@ -200,6 +216,8 @@ const ManualCheck = {
       if (!allowedOrigin) return;
       if (event.data?.t === 'r') {
         this.handleChannelMessage(event.data);
+      } else if (event.data?.t === 'dbg') {
+        this.handleDebugMessage(event.data);
       }
     };
     window.addEventListener('message', this._onMessage);
@@ -210,6 +228,8 @@ const ManualCheck = {
       this.channel.onmessage = (event) => {
         if (event.data?.t === 'r') {
           this.handleChannelMessage(event.data);
+        } else if (event.data?.t === 'dbg') {
+          this.handleDebugMessage(event.data);
         }
       };
     } catch {
@@ -268,6 +288,7 @@ const ManualCheck = {
       return;
     }
     this.lastHandledMessage = { key: messageKey, at: now };
+    this.logDebug(`收到結果：${data.q} -> ${status}`);
 
     // 找對應文章
     let article;
@@ -379,6 +400,7 @@ const ManualCheck = {
 
     this.updateAutoCheckUI();
     this.updateProgress();
+    this.logDebug(`開始自動檢查，起點 ${startIndex + 1}/${this.articles.length}`);
     Toast.success('自動檢查開始！Google 搜尋會在背景視窗跑');
 
     // 第一次由使用者點擊觸發 window.open，避免被彈窗阻擋
@@ -403,6 +425,7 @@ const ManualCheck = {
 
     this.updateAutoCheckUI();
     this.updateProgress();
+    this.logDebug('自動檢查已停止');
   },
 
   /**
@@ -423,7 +446,7 @@ const ManualCheck = {
       Toast.success('自動檢查完成！可以查看報告了');
       this.updateAutoCheckUI();
       this.updateProgress();
-      this.updateProgress();
+      this.logDebug('自動檢查流程完成');
 
       try {
         if (this.autoCheck.popup && !this.autoCheck.popup.closed) {
@@ -436,6 +459,7 @@ const ManualCheck = {
     const article = this.articles[this.autoCheck.currentIndex];
     const query = article.query || article.title;
     const url = `https://www.google.com/search?q=${encodeURIComponent(query)}&hl=zh-TW`;
+    this.logDebug(`開啟 Google：${query}`);
 
     // 同名彈窗復用（不會開一堆分頁）
     try {
@@ -473,6 +497,7 @@ const ManualCheck = {
           ? currentArticle.title.substring(0, 15) + '...'
           : currentArticle.title;
         Toast.info(`${shortTitle} 未收到回傳，先跳過`);
+        this.logDebug(`逾時未回傳：${currentArticle.query || currentArticle.title}`);
       }
       this.autoCheck.currentIndex++;
       this.updateProgress();
@@ -556,6 +581,83 @@ const ManualCheck = {
         this.els.autoStatus.classList.add('hidden');
       }
     }
+  },
+
+  handleDebugMessage(data) {
+    const messageKey = JSON.stringify({
+      stage: data.stage || '',
+      q: data.q || '',
+      note: data.note || ''
+    });
+    const now = Date.now();
+    if (
+      this.lastDebugMessage.key === messageKey &&
+      now - this.lastDebugMessage.at < 2500
+    ) {
+      return;
+    }
+    this.lastDebugMessage = { key: messageKey, at: now };
+
+    const stage = data.stage || 'debug';
+    const detail = [data.q, data.note].filter(Boolean).join(' | ');
+    this.logDebug(`[EXT] ${stage}${detail ? `：${detail}` : ''}`);
+  },
+
+  ensureDebugPanel() {
+    if (document.getElementById('auto-check-debug')) {
+      this.els.debugPanel = document.getElementById('auto-check-debug');
+      return;
+    }
+
+    const panel = document.createElement('div');
+    panel.id = 'auto-check-debug';
+    panel.style.cssText = [
+      'margin-top:12px',
+      'padding:12px 14px',
+      'border:1px solid rgba(0,240,255,.18)',
+      'border-radius:12px',
+      'background:rgba(8,14,28,.72)',
+      'font:12px/1.5 "JetBrains Mono","Noto Sans TC",monospace',
+      'color:#98e7ff',
+      'white-space:pre-wrap',
+      'word-break:break-word',
+      'display:none'
+    ].join(';');
+
+    const title = document.createElement('div');
+    title.textContent = '除錯訊號';
+    title.style.cssText = 'margin-bottom:8px;color:#d7f7ff;font-weight:700;';
+
+    const body = document.createElement('div');
+    body.id = 'auto-check-debug-body';
+    body.textContent = '尚未收到訊號';
+
+    panel.appendChild(title);
+    panel.appendChild(body);
+    this.els.section?.appendChild(panel);
+    this.els.debugPanel = panel;
+  },
+
+  logDebug(message) {
+    const time = new Date().toLocaleTimeString('zh-TW', { hour12: false });
+    this.debugLogs.unshift(`${time} ${message}`);
+    this.debugLogs = this.debugLogs.slice(0, this.DEBUG_LOG_LIMIT);
+    this.renderDebugLogs();
+  },
+
+  renderDebugLogs() {
+    const panel = this.els.debugPanel || document.getElementById('auto-check-debug');
+    const body = document.getElementById('auto-check-debug-body');
+    if (!panel || !body) return;
+
+    if (this.debugLogs.length === 0) {
+      panel.style.display = 'none';
+      body.textContent = '尚未收到訊號';
+      return;
+    }
+
+    panel.style.display = 'block';
+    body.textContent = this.debugLogs.join('\n');
   },
 
   /* ============================================
