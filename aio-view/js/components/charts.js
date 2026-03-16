@@ -12,8 +12,8 @@ const Charts = {
 
   /** Cyberpunk color palette */
   colors: {
-    cyan: '#00f0ff',
-    magenta: '#ff00aa',
+    cyan: '#39c5bb',
+    magenta: '#ff6b98',
     green: '#00ff88',
     purple: '#cc88dd',
     darkCyan: '#00c8d4',
@@ -112,7 +112,7 @@ const Charts = {
           },
           tooltip: {
             backgroundColor: this.colors.surface,
-            borderColor: 'rgba(0, 240, 255, 0.2)',
+            borderColor: 'rgba(57, 197, 187, 0.2)',
             borderWidth: 1,
             cornerRadius: 8,
             padding: 10,
@@ -203,7 +203,7 @@ const Charts = {
           legend: { display: false },
           tooltip: {
             backgroundColor: this.colors.surface,
-            borderColor: 'rgba(0, 240, 255, 0.2)',
+            borderColor: 'rgba(57, 197, 187, 0.2)',
             borderWidth: 1,
             cornerRadius: 8,
             padding: 10,
@@ -220,7 +220,7 @@ const Charts = {
           x: {
             beginAtZero: true,
             ticks: { stepSize: 1, font: { size: 12 }, color: '#5a6a7a' },
-            grid: { color: 'rgba(0, 240, 255, 0.06)' }
+            grid: { color: 'rgba(57, 197, 187, 0.06)' }
           },
           y: {
             ticks: {

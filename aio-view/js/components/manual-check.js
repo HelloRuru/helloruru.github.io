@@ -399,7 +399,7 @@ const ManualCheck = {
       const card = this.els.cards?.querySelector(`[data-id="${article.id}"]`);
       if (card) {
         card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        card.style.boxShadow = '0 0 16px rgba(0, 240, 255, 0.4)';
+        card.style.boxShadow = '0 0 16px rgba(57, 197, 187, 0.4)';
         setTimeout(() => { card.style.boxShadow = ''; }, 2000);
       }
     }
@@ -521,13 +521,9 @@ const ManualCheck = {
     const url = `https://www.google.com/search?q=${encodeURIComponent(query)}&hl=zh-TW`;
     this.logDebug(`開啟 Google：${query}`);
 
-    // 復用同一個彈窗：已開就換頁，沒開才新開
+    // 復用同一個分頁（不帶 features，避免瀏覽器開新視窗）
     try {
-      if (this.autoCheck.popup && !this.autoCheck.popup.closed) {
-        this.autoCheck.popup.location.href = url;
-      } else {
-        this.autoCheck.popup = window.open(url, this.POPUP_NAME, 'width=1024,height=700');
-      }
+      this.autoCheck.popup = window.open(url, this.POPUP_NAME);
       if (!this.autoCheck.popup) {
         Toast.error('彈出視窗被阻擋！請允許此網站的彈出視窗，然後重新點「開始自動檢查」');
         this.stopAutoCheck();
@@ -678,7 +674,7 @@ const ManualCheck = {
     panel.style.cssText = [
       'margin-top:12px',
       'padding:12px 14px',
-      'border:1px solid rgba(0,240,255,.18)',
+      'border:1px solid rgba(57,197,187,.18)',
       'border-radius:12px',
       'background:rgba(8,14,28,.72)',
       'font:12px/1.5 "JetBrains Mono","Noto Sans TC",monospace',
