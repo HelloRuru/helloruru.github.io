@@ -260,35 +260,33 @@ const SearchInsights = {
 
   buildArticleSummary({ verifiedFacets, attemptedFacets, missingFacets, citedFacets, totalQueries }) {
     if (totalQueries <= 1) {
-      return '這篇目前只跑了 1 條搜尋，資料太少，還不能判斷 Google AI 對這篇文章的態度。建議多跑幾個不同問法再來看。';
+      return 'INSUFFICIENT DATA — 僅 1 筆查詢，需補充掃描';
     }
 
     if (verifiedFacets.length === 0) {
-      return `這篇已經試了 ${totalQueries} 種問法，但 Google 都沒有在 AI 回答裡提到它。可能是主題太冷門，或者問法還不夠精準。建議換幾個角度（例如加上「推薦」「比較」「價格」等詞）再搜搜看。`;
+      return `NULL RESULT — ${totalQueries} 筆查詢均未觸發 AIO，建議調整搜尋語句`;
     }
 
-    // 第一段：白話結論
-    const topFacets = verifiedFacets.slice(0, 2).map(f => f.label).join('、');
-    let conclusion = `當使用者搜「${topFacets}」相關問題時，Google AI 最常回答到這篇文章。`;
+    const lines = [];
+    const top = verifiedFacets.slice(0, 3).map(f => f.label).join(' / ');
+    lines.push(`AIO 觸發面向：${top}`);
 
     if (citedFacets.length > 0) {
-      const citedNames = citedFacets.slice(0, 2).map(f => f.label).join('、');
-      conclusion += `而且在「${citedNames}」這類搜尋中，Google 直接引用了你的內容作為來源。`;
+      const cited = citedFacets.slice(0, 3).map(f => f.label).join(' / ');
+      lines.push(`被引用面向：${cited}`);
     }
 
-    // 第二段：行動建議
-    let action = '';
     if (missingFacets.length > 0) {
-      const missingNames = missingFacets.slice(0, 2).map(f => f.label).join('、');
-      action = `目前還有「${missingNames}」等面向還沒測過，補上這些搜尋可以更完整了解你在不同問法下的曝光程度。`;
+      const missing = missingFacets.slice(0, 3).map(f => f.label).join(' / ');
+      lines.push(`未掃描：${missing}`);
     } else if (attemptedFacets.length > 0) {
-      const missNames = attemptedFacets.slice(0, 2).map(f => f.label).join('、');
-      action = `「${missNames}」這幾個面向搜了但沒有出現 AIO，代表 Google 認為這類問題還不需要 AI 回答，或你的內容還沒被納入。`;
+      const miss = attemptedFacets.slice(0, 3).map(f => f.label).join(' / ');
+      lines.push(`未命中：${miss}`);
     } else {
-      action = '所有面向都已掃描完畢，這篇文章在各種問法下的 AIO 表現已經有完整的輪廓了。';
+      lines.push('STATUS: ALL SCANNED');
     }
 
-    return conclusion + '\n' + action;
+    return lines.join('\n');
   },
 
   buildArticleSuggestions(missingFacets, attemptedFacets) {
@@ -581,7 +579,7 @@ const SearchInsights = {
 
   renderFacetChips(items, modifierClass, emptyText) {
     if (!items || items.length === 0) {
-      return `<span class="topic-branch-value">${Utils.escapeHtml(emptyText)}</span>`;
+      return emptyText;
     }
 
     return items.map((item) => `

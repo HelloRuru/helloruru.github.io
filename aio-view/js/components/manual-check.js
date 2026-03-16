@@ -58,8 +58,8 @@ const ManualCheck = {
   },
 
   /** 自動檢查時間設定（毫秒） */
-  AUTO_DELAY_MIN: 1200,
-  AUTO_DELAY_MAX: 2200,
+  AUTO_DELAY_MIN: 800,
+  AUTO_DELAY_MAX: 1500,
   AUTO_TIMEOUT: 6000,
 
   /** Google 彈窗名稱（同名復用同一個視窗） */
@@ -462,9 +462,15 @@ const ManualCheck = {
   closePopup() {
     try {
       if (this.autoCheck.popup && !this.autoCheck.popup.closed) {
-        this.autoCheck.popup.close();
+        // 先導到空白頁（解除跨域限制），再關閉
+        try { this.autoCheck.popup.location = 'about:blank'; } catch (e) {}
+        setTimeout(() => {
+          try { this.autoCheck.popup?.close(); } catch (e) {}
+          this.autoCheck.popup = null;
+        }, 200);
+        return;
       }
-    } catch (e) { /* 跨域視窗可能無法關閉 */ }
+    } catch (e) {}
     this.autoCheck.popup = null;
   },
 
