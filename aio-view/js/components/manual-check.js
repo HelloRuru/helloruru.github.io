@@ -48,11 +48,13 @@ const ManualCheck = {
   /** DOM 快取 */
   els: {},
 
+  /** Google 搜尋彈窗（獨立存，不隨自動檢查結束而清掉） */
+  popup: null,
+
   /** 自動檢查狀態 */
   autoCheck: {
     active: false,
     currentIndex: 0,
-    popup: null,
     timer: null,
     timeoutTimer: null
   },
@@ -461,17 +463,20 @@ const ManualCheck = {
    */
   closePopup() {
     try {
-      if (this.autoCheck.popup && !this.autoCheck.popup.closed) {
-        // 先導到空白頁（解除跨域限制），再關閉
-        try { this.autoCheck.popup.location = 'about:blank'; } catch (e) {}
+      if (this.popup && !this.popup.closed) {
+        try { this.popup.location = 'about:blank'; } catch (e) {}
         setTimeout(() => {
-          try { this.autoCheck.popup?.close(); } catch (e) {}
-          this.autoCheck.popup = null;
-        }, 200);
+          try {
+            if (this.popup && !this.popup.closed) {
+              this.popup.close();
+            }
+          } catch (e) {}
+          this.popup = null;
+        }, 300);
         return;
       }
     } catch (e) {}
-    this.autoCheck.popup = null;
+    this.popup = null;
   },
 
   /**
@@ -481,7 +486,6 @@ const ManualCheck = {
     this.autoCheck.active = false;
     clearTimeout(this.autoCheck.timer);
     clearTimeout(this.autoCheck.timeoutTimer);
-    this.closePopup();
 
     this.updateAutoCheckUI();
     this.updateProgress();
@@ -503,7 +507,6 @@ const ManualCheck = {
     // 全部完成
     if (this.autoCheck.currentIndex >= this.articles.length) {
       this.autoCheck.active = false;
-      this.closePopup();
 
       const checked = this.articles.filter(a => this.checkResults[a.id]).length;
       const total = this.articles.length;
@@ -529,19 +532,19 @@ const ManualCheck = {
 
     // 只開一個彈窗，之後用 location 換頁（不重開）
     try {
-      if (this.autoCheck.popup && !this.autoCheck.popup.closed) {
+      if (this.popup && !this.popup.closed) {
         // 已有彈窗，直接換網址
         try {
-          this.autoCheck.popup.location = url;
+          this.popup.location = url;
         } catch (e) {
           // 跨域 location 寫入失敗才重開
-          this.autoCheck.popup = window.open(url, this.POPUP_NAME, 'width=900,height=600,left=100,top=100');
+          this.popup = window.open(url, this.POPUP_NAME, 'width=900,height=600,left=100,top=100');
         }
       } else {
         // 第一次才開新彈窗
-        this.autoCheck.popup = window.open(url, this.POPUP_NAME, 'width=900,height=600,left=100,top=100');
+        this.popup = window.open(url, this.POPUP_NAME, 'width=900,height=600,left=100,top=100');
       }
-      if (!this.autoCheck.popup) {
+      if (!this.popup) {
         Toast.error('彈出視窗被阻擋！請允許此網站的彈出視窗，然後重新點「開始自動檢查」');
         this.stopAutoCheck();
         return;
