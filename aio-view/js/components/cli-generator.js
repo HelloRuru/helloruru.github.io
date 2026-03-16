@@ -34,6 +34,7 @@ const CliGenerator = {
   /** 暫存資料 */
   currentData: {
     articles: [],
+    queries: [],
     domain: ''
   },
 
@@ -50,11 +51,13 @@ const CliGenerator = {
       return;
     }
 
-    // 儲存資料供下載使用
-    this.currentData = { articles: selected, domain };
+    const queries = this.expandSelectedArticles(selected, domain);
 
-    const estimatedMinutes = Math.ceil(selected.length * 2.5);
-    const commands = this.buildCommands(domain, estimatedMinutes, selected.length);
+    // 儲存資料供下載使用
+    this.currentData = { articles: selected, queries, domain };
+
+    const estimatedMinutes = Math.ceil(queries.length * 2.5);
+    const commands = this.buildCommands(domain, estimatedMinutes, selected.length, queries.length);
 
     // 顯示
     if (this.elements.commands) {
@@ -74,9 +77,9 @@ const CliGenerator = {
    * @param {number} count - 文章數量
    * @returns {string} 指令
    */
-  buildCommands(domain, minutes, count) {
+  buildCommands(domain, minutes, articleCount, queryCount) {
     return `# ===== AIO View CLI 使用說明 =====
-# 監測 ${count} 篇文章，預估需要 ${minutes} 分鐘
+# 監測 ${articleCount} 篇文章，共 ${queryCount} 條變體，預估需要 ${minutes} 分鐘
 
 # 步驟 1：下載 CLI 工具（首次使用）
 git clone https://github.com/helloruru/helloruru.github.io.git
@@ -96,20 +99,14 @@ node scan.js --input queries.json --output results.json --domain ${domain}
    * 下載 queries.json
    */
   downloadQueries() {
-    const { articles } = this.currentData;
+    const { queries } = this.currentData;
 
-    if (!articles || articles.length === 0) return;
+    if (!queries || queries.length === 0) return;
 
-    const data = articles.map(a => ({
-      url: a.url,
-      title: a.title,
-      query: a.query
-    }));
-
-    const json = JSON.stringify(data, null, 2);
+    const json = JSON.stringify(queries, null, 2);
     Utils.downloadFile(json, 'queries.json', 'application/json');
 
-    Toast.success('queries.json 已下載，請放到 cli 資料夾');
+    Toast.success(`queries.json 已下載，共 ${queries.length} 條變體`);
   },
 
   /**
@@ -141,16 +138,12 @@ node scan.js --input queries.json --output results.json --domain ${domain}
       return;
     }
 
-    const data = selected.map(a => ({
-      url: a.url,
-      title: a.title,
-      query: a.query
-    }));
+    const data = this.expandSelectedArticles(selected, '');
 
     const json = JSON.stringify(data, null, 2);
     Utils.downloadFile(json, 'queries.json', 'application/json');
 
-    Toast.success('搜尋語句已匯出');
+    Toast.success(`搜尋語句已匯出，共 ${data.length} 條變體`);
   },
 
   /**
@@ -166,7 +159,12 @@ node scan.js --input queries.json --output results.json --domain ${domain}
     ).join('\n');
 
     return `我有以下 ${selected.length} 篇文章，想監測它們是否出現在 Google AI Overview 搜尋結果中。
-請為每篇文章各產生 1 條最可能觸發 AI Overview 的搜尋語句。
+請為每篇文章各產生 5 條不同面向的搜尋語句，至少涵蓋：
+- 推薦 / 評價
+- 價格 / CP 值
+- 決策 / 選擇
+- 比較 / 排名
+- 若主題適合，再補教學 / 入門
 
 規則：
 - 搜尋語句用繁體中文
@@ -192,5 +190,17 @@ ${articleList}
    */
   hide() {
     this.elements.section?.classList.add('hidden');
+  },
+
+  /**
+   * 將每篇文章展開成多個搜尋變體
+   * @param {Array} articles - 已選文章
+   * @param {string} domain - 網域
+   * @returns {Array}
+   */
+  expandSelectedArticles(articles, domain) {
+    return articles.flatMap(article =>
+      QueryEngine.generateVariants(article, domain)
+    );
   }
 };

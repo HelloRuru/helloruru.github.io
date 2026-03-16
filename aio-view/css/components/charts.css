@@ -154,6 +154,21 @@
   text-align: center;
 }
 
+.insight-chip.facet-chip-success {
+  background: rgba(0, 240, 255, 0.1);
+  border-color: rgba(0, 240, 255, 0.2);
+}
+
+.insight-chip.facet-chip-warning {
+  background: rgba(255, 170, 0, 0.08);
+  border-color: rgba(255, 170, 0, 0.18);
+}
+
+.insight-chip.facet-chip-muted {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
 .topic-tree-wrap {
   margin-top: 18px;
   padding-top: 18px;

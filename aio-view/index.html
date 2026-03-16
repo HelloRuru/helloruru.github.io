@@ -184,7 +184,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
 
   <!-- Styles -->
-  <link rel="stylesheet" href="style.css?v=20260316-selection">
+  <link rel="stylesheet" href="style.css?v=20260316-article-insights">
 </head>
 <body>
   <!-- Cyberpunk Visual Effects -->
@@ -734,15 +734,15 @@ npx playwright install chromium</code>
                 <div class="source-list" id="sources-list"></div>
               </div>
               <div class="chart-card chart-card-full hidden" id="search-insights-card">
-                <div class="chart-card-title">使用者搜尋偏好結論</div>
+                <div class="chart-card-title">單篇使用者搜尋偏好</div>
                 <div class="insight-summary" id="search-insights-summary"></div>
                 <div class="insight-chip-row" id="search-insights-chips"></div>
                 <div class="topic-tree-wrap">
-                  <div class="topic-tree-title">樹狀主題展開</div>
+                  <div class="topic-tree-title">逐篇驗證結果</div>
                   <div class="topic-tree" id="search-insights-tree"></div>
                 </div>
                 <div class="topic-tree-wrap">
-                  <div class="topic-tree-title">下一步主題建議</div>
+                  <div class="topic-tree-title">優先補搜題目</div>
                   <div class="suggestion-chip-row" id="search-insights-suggestions"></div>
                 </div>
               </div>
@@ -851,29 +851,29 @@ npx playwright install chromium</code>
   </div>
 
   <!-- Scripts: Modules (載入順序很重要) -->
-  <script src="js/modules/utils.js?v=20260316-selection"></script>
-  <script src="js/modules/toast.js?v=20260316-selection"></script>
-  <script src="js/modules/storage.js?v=20260316-selection"></script>
-  <script src="js/modules/query-engine.js?v=20260316-selection"></script>
-  <script src="js/modules/sitemap.js?v=20260316-selection"></script>
-  <script src="js/modules/db.js?v=20260316-selection"></script>
+  <script src="js/modules/utils.js?v=20260316-article-insights"></script>
+  <script src="js/modules/toast.js?v=20260316-article-insights"></script>
+  <script src="js/modules/storage.js?v=20260316-article-insights"></script>
+  <script src="js/modules/query-engine.js?v=20260316-article-insights"></script>
+  <script src="js/modules/sitemap.js?v=20260316-article-insights"></script>
+  <script src="js/modules/db.js?v=20260316-article-insights"></script>
 
   <!-- Scripts: Components -->
-  <script src="js/components/guide.js?v=20260316-selection"></script>
-  <script src="js/components/stats.js?v=20260316-selection"></script>
-  <script src="js/components/articles-table.js?v=20260316-selection"></script>
-  <script src="js/components/results-table.js?v=20260316-selection"></script>
-  <script src="js/components/file-upload.js?v=20260316-selection"></script>
-  <script src="js/components/cli-generator.js?v=20260316-selection"></script>
-  <script src="js/components/sitemap-input.js?v=20260316-selection"></script>
-  <script src="js/components/ai-assist.js?v=20260316-selection"></script>
-  <script src="js/components/manual-check.js?v=20260316-selection"></script>
-  <script src="js/components/charts.js?v=20260316-selection"></script>
-  <script src="js/components/search-insights.js?v=20260316-selection"></script>
-  <script src="js/components/timeline.js?v=20260316-selection"></script>
+  <script src="js/components/guide.js?v=20260316-article-insights"></script>
+  <script src="js/components/stats.js?v=20260316-article-insights"></script>
+  <script src="js/components/articles-table.js?v=20260316-article-insights"></script>
+  <script src="js/components/results-table.js?v=20260316-article-insights"></script>
+  <script src="js/components/file-upload.js?v=20260316-article-insights"></script>
+  <script src="js/components/cli-generator.js?v=20260316-article-insights"></script>
+  <script src="js/components/sitemap-input.js?v=20260316-article-insights"></script>
+  <script src="js/components/ai-assist.js?v=20260316-article-insights"></script>
+  <script src="js/components/manual-check.js?v=20260316-article-insights"></script>
+  <script src="js/components/charts.js?v=20260316-article-insights"></script>
+  <script src="js/components/search-insights.js?v=20260316-article-insights"></script>
+  <script src="js/components/timeline.js?v=20260316-article-insights"></script>
 
   <!-- Scripts: Main Entry -->
-  <script src="js/main.js?v=20260316-selection"></script>
+  <script src="js/main.js?v=20260316-article-insights"></script>
   <script>
     const startYear = 2026;
     const currentYear = new Date().getFullYear();

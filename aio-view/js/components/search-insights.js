@@ -1,6 +1,6 @@
 /* ================================================
    AIO View — Search Insights
-   使用者搜尋偏好 + 樹狀主題 + 自動結論
+   單篇使用者搜尋偏好 + 面向覆蓋驗證
    ================================================ */
 
 const SearchInsights = {
@@ -12,48 +12,13 @@ const SearchInsights = {
     suggestions: null
   },
 
-  INTENT_RULES: [
-    {
-      key: 'price',
-      label: '價格 / CP 值',
-      regex: /(價格|費用|價錢|便宜|平價|cp值|CP值|划算|預算|省錢)/
-    },
-    {
-      key: 'recommend',
-      label: '推薦 / 評價',
-      regex: /(推薦|評價|口碑|名單|精選|人氣|必吃|必買|高評價)/
-    },
-    {
-      key: 'compare',
-      label: '比較 / 排名',
-      regex: /(比較|排行|排名|差異|對比|vs|VS|top|TOP)/
-    },
-    {
-      key: 'decision',
-      label: '決策 / 選擇',
-      regex: /(哪家|怎麼選|如何選|值得|適合|推嗎|好嗎|找哪家)/
-    },
-    {
-      key: 'guide',
-      label: '教學 / 入門',
-      regex: /(怎麼|教學|入門|新手|課程|方法|流程|指南)/
-    },
-    {
-      key: 'brand',
-      label: '品牌 / 商品',
-      regex: /(品牌|牌子|型號|系列|門市)/
-    }
+  FACET_RULES: [
+    { key: 'recommend', label: '推薦 / 評價', regex: /(推薦|評價|口碑|高評價|人氣|名單|精選|必吃|必買)/ },
+    { key: 'price', label: '價格 / CP 值', regex: /(價格|費用|價錢|便宜|平價|cp值|CP值|划算|預算|省錢)/ },
+    { key: 'decision', label: '決策 / 選擇', regex: /(哪家好|哪家|找哪家|怎麼選|如何選|值得|適合|推嗎|好嗎)/ },
+    { key: 'compare', label: '比較 / 排名', regex: /(比較|排行|排名|差異|對比|vs|VS|top|TOP)/ },
+    { key: 'guide', label: '教學 / 入門', regex: /(入門|新手|教學|課程|方法|流程|指南|怎麼)/ }
   ],
-
-  TOPIC_FILLERS: [
-    '高評價', '精選', '推薦', '評價', '口碑', '價格', '費用', '價錢', '便宜', '平價',
-    'cp值', 'CP值', '划算', '比較', '排行', '排名', '哪家', '怎麼選', '如何選', '值得',
-    '適合', '推嗎', '好嗎', '找哪家', '指南', '整理', '分享', '攻略', '必讀', '懶人包',
-    '一次看', '名單', '店家', '老店', '必吃', '必買', '人氣', '附近', '哪裡', '在地人',
-    '探訪', '清楚', '完整', '入門', '新手', '課程', '教學', '能學', '找'
-  ],
-
-  EXTRA_LOCATION_SUFFIXES: ['區', '市', '縣'],
 
   init() {
     this.elements.card = document.getElementById('search-insights-card');
@@ -71,7 +36,7 @@ const SearchInsights = {
     }
 
     const analysis = this.analyze(items);
-    if (!analysis.focusItems.length) {
+    if (analysis.articles.length === 0) {
       this.reset();
       return;
     }
@@ -84,295 +49,338 @@ const SearchInsights = {
   },
 
   analyze(items) {
-    const focusItems = items.filter(item => item.isCited);
-    const secondaryItems = items.filter(item => item.hasAIO === true);
-    const workingItems = focusItems.length > 0
-      ? focusItems
-      : (secondaryItems.length > 0 ? secondaryItems : items);
+    const groups = new Map();
 
-    const intentCounts = {};
-    const locationCounts = {};
-    const topicMap = new Map();
+    items.forEach((item) => {
+      const key = item.articleKey || item.url || item.title || item.query;
+      if (!key) return;
 
-    workingItems.forEach((item) => {
-      const query = String(item.query || '').trim();
-      if (!query) return;
-
-      const intents = this.detectIntents(query);
-      const locations = this.extractLocations(query);
-      const topic = this.extractTopic(query, locations);
-      const topicKey = topic || query;
-
-      intents.forEach((intent) => {
-        intentCounts[intent.key] = (intentCounts[intent.key] || 0) + 1;
-      });
-
-      locations.forEach((location) => {
-        locationCounts[location] = (locationCounts[location] || 0) + 1;
-      });
-
-      if (!topicMap.has(topicKey)) {
-        topicMap.set(topicKey, {
-          name: topicKey,
-          queries: [],
-          intents: {},
-          locations: {},
-          cited: 0,
-          aio: 0
+      if (!groups.has(key)) {
+        groups.set(key, {
+          articleKey: key,
+          title: item.title || item.url || item.query,
+          url: item.url || '',
+          baseQuery: item.baseQuery || item.query || '',
+          items: []
         });
       }
 
-      const entry = topicMap.get(topicKey);
-      entry.queries.push(query);
-      entry.cited += item.isCited ? 1 : 0;
-      entry.aio += item.hasAIO === true ? 1 : 0;
-
-      intents.forEach((intent) => {
-        entry.intents[intent.label] = (entry.intents[intent.label] || 0) + 1;
-      });
-
-      locations.forEach((location) => {
-        entry.locations[location] = (entry.locations[location] || 0) + 1;
-      });
+      const entry = groups.get(key);
+      entry.items.push(item);
+      if (!entry.baseQuery && item.query) entry.baseQuery = item.query;
     });
 
-    const topIntents = this.sortCounts(intentCounts, [
-      ...this.INTENT_RULES.map(rule => ({
-        key: rule.key,
-        label: rule.label
-      })),
-      { key: 'local', label: '在地 / 附近' },
-      { key: 'generic', label: '一般需求' }
-    ]);
-    const topLocations = this.sortCounts(locationCounts);
-    const topics = Array.from(topicMap.values())
-      .map((entry) => ({
-        ...entry,
-        intentsList: this.sortCounts(entry.intents),
-        locationsList: this.sortCounts(entry.locations),
-        representativeQueries: Array.from(new Set(entry.queries)).slice(0, 3)
-      }))
+    const articles = Array.from(groups.values())
+      .map(group => this.analyzeArticle(group))
       .sort((a, b) => (
-        b.cited - a.cited
-        || b.aio - a.aio
-        || b.queries.length - a.queries.length
-        || a.name.length - b.name.length
-      ))
-      .slice(0, 8);
+        this.scoreVerdict(b.verdict) - this.scoreVerdict(a.verdict)
+        || b.citedCount - a.citedCount
+        || b.aioCount - a.aioCount
+        || b.verifiedFacets.length - a.verifiedFacets.length
+        || a.title.length - b.title.length
+      ));
+
+    const validated = articles.filter(article => article.verdict === 'validated').length;
+    const partial = articles.filter(article => article.verdict === 'partial').length;
+    const pending = articles.filter(article => article.verdict === 'pending').length;
+    const suggestions = Array.from(new Set(
+      articles.flatMap(article => article.suggestions)
+    )).slice(0, 8);
 
     return {
-      items,
-      focusItems: workingItems,
-      topIntents,
-      topLocations,
-      topics,
-      suggestions: this.buildSuggestions(topics, topLocations, topIntents)
+      articles,
+      validated,
+      partial,
+      pending,
+      suggestions
     };
   },
 
-  detectIntents(query) {
-    const intents = this.INTENT_RULES.filter(rule => rule.regex.test(query));
+  analyzeArticle(group) {
+    const baseQuery = String(group.baseQuery || group.title || '').trim();
+    const variantPlan = QueryEngine.generateVariants({
+      title: group.title,
+      url: group.url,
+      query: baseQuery
+    }, '');
+    const expectedFacets = variantPlan
+      .filter(item => item.facetKey !== 'base')
+      .map(item => ({
+        key: item.facetKey,
+        label: item.facetLabel,
+        query: item.query
+      }));
 
-    if (this.extractLocations(query).length > 0 || /(附近|哪裡)/.test(query)) {
-      intents.push({ key: 'local', label: '在地 / 附近' });
-    }
-
-    if (intents.length === 0) {
-      intents.push({ key: 'generic', label: '一般需求' });
-    }
-
-    const seen = new Set();
-    return intents.filter((intent) => {
-      if (seen.has(intent.key)) return false;
-      seen.add(intent.key);
-      return true;
-    });
-  },
-
-  extractLocations(query) {
-    const baseLocations = Array.isArray(QueryEngine?.LOCATIONS) ? QueryEngine.LOCATIONS : [];
-    const candidates = [];
-
-    baseLocations.forEach((location) => {
-      candidates.push(location);
-      this.EXTRA_LOCATION_SUFFIXES.forEach((suffix) => {
-        candidates.push(`${location}${suffix}`);
+    const facetMap = new Map();
+    expectedFacets.forEach((facet) => {
+      facetMap.set(facet.key, {
+        ...facet,
+        scanned: false,
+        aio: 0,
+        cited: 0,
+        queries: []
       });
     });
 
-    const matched = candidates
-      .filter(location => query.includes(location))
+    group.items.forEach((item) => {
+      const query = String(item.query || '').trim();
+      const facetKeys = this.resolveFacetKeys(item, baseQuery);
+
+      facetKeys.forEach((facetKey) => {
+        if (!facetMap.has(facetKey)) {
+          const label = this.getFacetLabel(facetKey);
+          facetMap.set(facetKey, {
+            key: facetKey,
+            label,
+            query,
+            scanned: false,
+            aio: 0,
+            cited: 0,
+            queries: []
+          });
+        }
+
+        const facet = facetMap.get(facetKey);
+        facet.scanned = true;
+        if (query) facet.queries.push(query);
+        if (item.hasAIO === true) facet.aio += 1;
+        if (item.isCited) facet.cited += 1;
+      });
+    });
+
+    const facets = Array.from(facetMap.values()).map((facet) => ({
+      ...facet,
+      queries: Array.from(new Set(facet.queries)).slice(0, 3)
+    }));
+
+    const verifiedFacets = this.sortFacets(facets.filter(facet => facet.aio > 0));
+    const citedFacets = this.sortFacets(facets.filter(facet => facet.cited > 0));
+    const attemptedFacets = this.sortFacets(facets.filter(facet => facet.scanned && facet.aio === 0));
+    const missingFacets = this.sortFacets(facets.filter(facet => !facet.scanned));
+
+    const aioCount = group.items.filter(item => item.hasAIO === true).length;
+    const citedCount = group.items.filter(item => item.isCited).length;
+    const verdict = this.resolveVerdict(verifiedFacets.length, group.items.length, missingFacets.length);
+    const locations = this.extractLocations(baseQuery || group.title);
+
+    return {
+      articleKey: group.articleKey,
+      title: group.title,
+      url: group.url,
+      baseQuery,
+      verdict,
+      verdictLabel: this.getVerdictLabel(verdict),
+      aioCount,
+      citedCount,
+      totalQueries: group.items.length,
+      verifiedFacets,
+      citedFacets,
+      attemptedFacets,
+      missingFacets,
+      representativeQueries: Array.from(new Set(
+        group.items
+          .filter(item => item.hasAIO === true || item.isCited)
+          .map(item => item.query)
+          .filter(Boolean)
+      )).slice(0, 3),
+      locations,
+      summary: this.buildArticleSummary({
+        title: group.title,
+        verifiedFacets,
+        attemptedFacets,
+        missingFacets,
+        citedFacets,
+        totalQueries: group.items.length
+      }),
+      suggestions: this.buildArticleSuggestions(missingFacets, attemptedFacets)
+    };
+  },
+
+  resolveFacetKeys(item, baseQuery) {
+    const keys = [];
+
+    if (item.facetKey && item.facetKey !== 'base') {
+      keys.push(item.facetKey);
+    }
+
+    this.FACET_RULES.forEach((rule) => {
+      if (rule.regex.test(item.query || '')) {
+        keys.push(rule.key);
+      }
+    });
+
+    if (keys.length === 0 && baseQuery && String(item.query || '').trim() === String(baseQuery).trim()) {
+      keys.push('recommend');
+    }
+
+    return Array.from(new Set(keys));
+  },
+
+  resolveVerdict(verifiedCount, queryCount, missingCount) {
+    if (verifiedCount >= 2) return 'validated';
+    if (verifiedCount >= 1 || queryCount >= 2 || missingCount === 0) return 'partial';
+    return 'pending';
+  },
+
+  scoreVerdict(verdict) {
+    if (verdict === 'validated') return 3;
+    if (verdict === 'partial') return 2;
+    return 1;
+  },
+
+  getVerdictLabel(verdict) {
+    if (verdict === 'validated') return '已驗證';
+    if (verdict === 'partial') return '部分驗證';
+    return '待補驗證';
+  },
+
+  getFacetLabel(key) {
+    return this.FACET_RULES.find(rule => rule.key === key)?.label || key;
+  },
+
+  sortFacets(items) {
+    return [...items].sort((a, b) => {
+      const aIndex = this.FACET_RULES.findIndex(rule => rule.key === a.key);
+      const bIndex = this.FACET_RULES.findIndex(rule => rule.key === b.key);
+      return aIndex - bIndex;
+    });
+  },
+
+  buildArticleSummary({ verifiedFacets, attemptedFacets, missingFacets, citedFacets, totalQueries }) {
+    if (totalQueries <= 1) {
+      return '目前只驗證到 1 條查詢，資料還太薄，不能直接把它當成使用者偏好。';
+    }
+
+    if (verifiedFacets.length === 0) {
+      return `這篇目前已經試過 ${totalQueries} 條查詢，但還沒有驗到穩定會出 AIO 的面向，建議先補搜缺的問法。`;
+    }
+
+    const verifiedText = verifiedFacets.slice(0, 2).map(facet => facet.label).join('、');
+    const citedText = citedFacets.length > 0
+      ? `而且實際被引用的面向偏「${citedFacets.slice(0, 2).map(facet => facet.label).join('、')}」。`
+      : '';
+    const missingText = missingFacets.length > 0
+      ? `還沒補完「${missingFacets.slice(0, 2).map(facet => facet.label).join('、')}」這些問法。`
+      : (attemptedFacets.length > 0
+          ? `已搜但沒命中的面向是「${attemptedFacets.slice(0, 2).map(facet => facet.label).join('、')}」。`
+          : '這篇的主要問法已經有基本輪廓。');
+
+    return `這篇目前驗到的偏好偏「${verifiedText}」，代表使用者會帶著這類需求詞來找。${citedText}${missingText}`.trim();
+  },
+
+  buildArticleSuggestions(missingFacets, attemptedFacets) {
+    const source = missingFacets.length > 0 ? missingFacets : attemptedFacets;
+    return source
+      .map(facet => facet.query)
+      .filter(Boolean)
+      .slice(0, 4);
+  },
+
+  extractLocations(query) {
+    const text = String(query || '');
+    const candidates = (QueryEngine?.LOCATIONS || [])
+      .filter(location => text.includes(location))
       .sort((a, b) => b.length - a.length);
 
     const unique = [];
-    matched.forEach((location) => {
-      if (unique.some(saved => saved.includes(location) || location.includes(saved))) {
-        return;
-      }
+    candidates.forEach((location) => {
+      if (unique.some(saved => saved.includes(location) || location.includes(saved))) return;
       unique.push(location);
     });
 
     return unique.slice(0, 2);
   },
 
-  extractTopic(query, locations) {
-    let topic = String(query || '');
-
-    locations.forEach((location) => {
-      topic = topic.replaceAll(location, ' ');
-    });
-
-    this.TOPIC_FILLERS.forEach((word) => {
-      topic = topic.replaceAll(word, ' ');
-    });
-
-    topic = topic
-      .replace(/[0-9０-９]+/g, ' ')
-      .replace(/[|｜\-–—,，。！？!?\s]+/g, ' ')
-      .trim();
-
-    const collapsed = topic
-      .replace(/\s+/g, '')
-      .replace(/(推薦|評價|比較|價格|便宜|平價|找|買|學)$/u, '');
-    if (collapsed.length >= 2) {
-      return collapsed;
-    }
-
-    return String(query || '').replace(/\s+/g, '').slice(0, 12);
-  },
-
-  sortCounts(counts, labelMap = null) {
-    const map = labelMap
-      ? Object.fromEntries(labelMap.map(item => [item.key, item.label]))
-      : null;
-
-    return Object.entries(counts)
-      .map(([key, count]) => ({
-        key,
-        label: map?.[key] || key,
-        count
-      }))
-      .sort((a, b) => b.count - a.count || a.label.length - b.label.length);
-  },
-
-  buildSuggestions(topics, topLocations, topIntents) {
-    const suggestions = [];
-
-    topics.slice(0, 4).forEach((topic) => {
-      const location = topic.locationsList[0]?.label || topLocations[0]?.label || '';
-      const prefix = location && !topic.name.includes(location) ? location : '';
-
-      if (topIntents.some(intent => intent.key === 'price')) {
-        suggestions.push(`${prefix}${topic.name}價格比較`);
-      }
-      if (topIntents.some(intent => intent.key === 'decision')) {
-        suggestions.push(`${prefix}${topic.name}哪家好`);
-      }
-      if (topIntents.some(intent => intent.key === 'guide')) {
-        suggestions.push(`${prefix}${topic.name}怎麼選`);
-      }
-
-      suggestions.push(`${prefix}${topic.name}推薦`);
-    });
-
-    return Array.from(new Set(suggestions))
-      .map(text => text.replace(/\s+/g, ''))
-      .filter(text => text.length >= 4)
-      .slice(0, 4);
-  },
-
   renderSummary(analysis) {
     if (!this.elements.summary) return;
 
-    const topIntentLabels = analysis.topIntents.slice(0, 2).map(item => item.label);
-    const topLocation = analysis.topLocations[0]?.label || '';
-    const topTopics = analysis.topics.slice(0, 3).map(item => item.name);
-    const pattern = this.describePattern(analysis.topIntents);
-
-    const sentence1 = topIntentLabels.length > 0
-      ? `這批上榜查詢以「${topIntentLabels.join('、')}」最明顯，代表使用者不只想找主題本身，還會帶著很明確的需求詞來搜。`
-      : '這批上榜查詢已經開始出現穩定的搜尋意圖，可以從需求詞回推使用者真正想解的問題。';
-
-    const sentence2 = topLocation
-      ? `成功結果多半落在「${topLocation} + 主題」這種在地型查法，再疊上 ${pattern} 之後，更容易進入 AIO。`
-      : `成功結果多半集中在 ${pattern} 這類查法，代表明確需求句比單純主題名更容易進入 AIO。`;
-
-    const sentence3 = topTopics.length > 0
-      ? `目前最值得延伸的主題是「${topTopics.join('」、「')}」，下一篇可以直接往這幾條再擴。`
-      : '下一步建議直接補比較、價格、推薦這類延伸題，讓查詢字更貼近真實需求。';
-
     this.elements.summary.innerHTML = `
-      <p>${Utils.escapeHtml(sentence1)}</p>
-      <p>${Utils.escapeHtml(sentence2)}</p>
-      <p>${Utils.escapeHtml(sentence3)}</p>
+      <p>這裡改成逐篇判讀，不再把全部文章混成一段。每篇文章都會拆成「已驗證面向、已搜未中、還沒補驗證」三層。</p>
+      <p>如果某篇目前只搜到 1 條字，系統會直接標成資料太薄，不會硬說已經看出使用者偏好。</p>
     `;
-  },
-
-  describePattern(topIntents) {
-    const keys = topIntents.slice(0, 3).map(item => item.key);
-
-    if (keys.includes('local') && keys.includes('recommend')) {
-      return '「地區 + 主題 + 推薦 / 評價」';
-    }
-    if (keys.includes('price') && keys.includes('recommend')) {
-      return '「主題 + 推薦 + 價格感」';
-    }
-    if (keys.includes('decision')) {
-      return '「主題 + 哪家 / 怎麼選」';
-    }
-    if (keys.includes('guide')) {
-      return '「主題 + 教學 / 入門」';
-    }
-
-    return '「主題 + 明確需求詞」';
   },
 
   renderChips(analysis) {
     if (!this.elements.chips) return;
 
-    const chips = analysis.topIntents.slice(0, 5).map((intent) => `
+    this.elements.chips.innerHTML = `
       <span class="insight-chip">
-        <span class="insight-chip-label">${Utils.escapeHtml(intent.label)}</span>
-        <span class="insight-chip-count">${intent.count}</span>
+        <span class="insight-chip-label">已驗證文章</span>
+        <span class="insight-chip-count">${analysis.validated}</span>
       </span>
-    `);
-
-    this.elements.chips.innerHTML = chips.join('');
+      <span class="insight-chip">
+        <span class="insight-chip-label">部分驗證</span>
+        <span class="insight-chip-count">${analysis.partial}</span>
+      </span>
+      <span class="insight-chip">
+        <span class="insight-chip-label">待補驗證</span>
+        <span class="insight-chip-count">${analysis.pending}</span>
+      </span>
+    `;
   },
 
   renderTree(analysis) {
     if (!this.elements.tree) return;
 
-    if (analysis.topics.length === 0) {
-      this.elements.tree.innerHTML = '<div class="chart-empty">目前還沒有足夠的主題資料</div>';
+    if (analysis.articles.length === 0) {
+      this.elements.tree.innerHTML = '<div class="chart-empty">目前還沒有足夠的單篇資料</div>';
       return;
     }
 
-    this.elements.tree.innerHTML = analysis.topics.map((topic, index) => `
+    this.elements.tree.innerHTML = analysis.articles.map((article, index) => `
       <details class="topic-node"${index < 2 ? ' open' : ''}>
         <summary class="topic-node-summary">
-          <span class="topic-node-title">${Utils.escapeHtml(topic.name)}</span>
-          <span class="topic-node-meta">上榜 ${topic.aio} 次${topic.cited > 0 ? ` / 被引用 ${topic.cited} 次` : ''}</span>
+          <span class="topic-node-title">${Utils.escapeHtml(article.title)}</span>
+          <span class="topic-node-meta">${Utils.escapeHtml(article.verdictLabel)} · 已驗 ${article.verifiedFacets.length}/${article.verifiedFacets.length + article.attemptedFacets.length + article.missingFacets.length} 面向</span>
         </summary>
         <div class="topic-node-body">
           <div class="topic-branch">
-            <span class="topic-branch-label">地區</span>
+            <span class="topic-branch-label">判讀</span>
+            <span class="topic-branch-value">${Utils.escapeHtml(article.summary)}</span>
+          </div>
+          <div class="topic-branch">
+            <span class="topic-branch-label">地區 / 核心字</span>
             <span class="topic-branch-value">${Utils.escapeHtml(
-              topic.locationsList.slice(0, 2).map(item => item.label).join('、') || '未明顯帶地區'
+              article.locations.length > 0
+                ? `${article.locations.join('、')} / ${article.baseQuery || article.title}`
+                : (article.baseQuery || article.title)
             )}</span>
           </div>
           <div class="topic-branch">
-            <span class="topic-branch-label">意圖</span>
-            <span class="topic-branch-value">${Utils.escapeHtml(
-              topic.intentsList.slice(0, 3).map(item => item.label).join('、') || '一般需求'
-            )}</span>
-          </div>
-          <div class="topic-branch">
-            <span class="topic-branch-label">代表查詢</span>
+            <span class="topic-branch-label">已驗證面向</span>
             <div class="topic-query-list">
-              ${topic.representativeQueries.map(query => `
-                <code class="topic-query-item">${Utils.escapeHtml(query)}</code>
-              `).join('')}
+              ${this.renderFacetChips(article.verifiedFacets, 'facet-chip-success', '目前還沒有')}
+            </div>
+          </div>
+          <div class="topic-branch">
+            <span class="topic-branch-label">已搜但沒命中</span>
+            <div class="topic-query-list">
+              ${this.renderFacetChips(article.attemptedFacets, 'facet-chip-warning', '目前沒有')}
+            </div>
+          </div>
+          <div class="topic-branch">
+            <span class="topic-branch-label">還沒補驗證</span>
+            <div class="topic-query-list">
+              ${this.renderFacetChips(article.missingFacets, 'facet-chip-muted', '已補完')}</div>
+          </div>
+          <div class="topic-branch">
+            <span class="topic-branch-label">已命中查詢</span>
+            <div class="topic-query-list">
+              ${article.representativeQueries.length > 0
+                ? article.representativeQueries.map(query => `
+                    <code class="topic-query-item">${Utils.escapeHtml(query)}</code>
+                  `).join('')
+                : '<span class="topic-branch-value">目前還沒有命中的代表查詢</span>'}
+            </div>
+          </div>
+          <div class="topic-branch">
+            <span class="topic-branch-label">建議補搜</span>
+            <div class="suggestion-chip-row">
+              ${article.suggestions.length > 0
+                ? article.suggestions.map(query => `
+                    <span class="suggestion-chip">${Utils.escapeHtml(query)}</span>
+                  `).join('')
+                : '<span class="topic-branch-value">目前沒有額外要補的題目</span>'}
             </div>
           </div>
         </div>
@@ -380,11 +388,24 @@ const SearchInsights = {
     `).join('');
   },
 
+  renderFacetChips(items, modifierClass, emptyText) {
+    if (!items || items.length === 0) {
+      return `<span class="topic-branch-value">${Utils.escapeHtml(emptyText)}</span>`;
+    }
+
+    return items.map((item) => `
+      <span class="insight-chip ${modifierClass}">
+        <span class="insight-chip-label">${Utils.escapeHtml(item.label)}</span>
+        <span class="insight-chip-count">${item.cited > 0 ? item.cited : item.aio}</span>
+      </span>
+    `).join('');
+  },
+
   renderSuggestions(analysis) {
     if (!this.elements.suggestions) return;
 
     if (analysis.suggestions.length === 0) {
-      this.elements.suggestions.innerHTML = '';
+      this.elements.suggestions.innerHTML = '<span class="topic-branch-value">目前沒有需要優先補搜的題目</span>';
       return;
     }
 
@@ -398,10 +419,10 @@ const SearchInsights = {
   },
 
   reset() {
-    this.elements.summary && (this.elements.summary.innerHTML = '');
-    this.elements.chips && (this.elements.chips.innerHTML = '');
-    this.elements.tree && (this.elements.tree.innerHTML = '');
-    this.elements.suggestions && (this.elements.suggestions.innerHTML = '');
+    if (this.elements.summary) this.elements.summary.innerHTML = '';
+    if (this.elements.chips) this.elements.chips.innerHTML = '';
+    if (this.elements.tree) this.elements.tree.innerHTML = '';
+    if (this.elements.suggestions) this.elements.suggestions.innerHTML = '';
     this.elements.card?.classList.add('hidden');
   }
 };

@@ -34,6 +34,14 @@ const QueryEngine = {
   MAX_LENGTH: 20,
   MIN_LENGTH: 3,
 
+  FACET_VARIANTS: [
+    { key: 'recommend', label: '推薦 / 評價' },
+    { key: 'price', label: '價格 / CP 值' },
+    { key: 'decision', label: '決策 / 選擇' },
+    { key: 'compare', label: '比較 / 排名' },
+    { key: 'guide', label: '教學 / 入門' }
+  ],
+
   /**
    * 從文章標題產生搜尋語句
    * @param {string} title - 文章標題
@@ -184,5 +192,88 @@ const QueryEngine = {
       ...article,
       query: this.generate(article.title, domain)
     }));
+  },
+
+  /**
+   * 依單篇文章展開多個搜尋變體，方便驗證不同面向
+   * @param {Object} article - 文章資料
+   * @param {string} domain - 網域
+   * @returns {Array} 搜尋變體
+   */
+  generateVariants(article, domain) {
+    const title = article?.title || '';
+    const url = article?.url || '';
+    const baseQuery = String(article?.query || this.generate(title, domain)).trim();
+    const articleKey = url || title || baseQuery;
+    const anchor = this.buildVariantAnchor(baseQuery || title);
+    const hasLocation = this.LOCATIONS.some(loc => anchor.includes(loc));
+    const variants = [];
+    const seen = new Set();
+
+    const addVariant = (key, label, query, source = 'generated') => {
+      const normalized = String(query || '').replace(/\s+/g, ' ').trim();
+      if (!normalized || normalized.length < this.MIN_LENGTH) return;
+      if (seen.has(normalized)) return;
+      seen.add(normalized);
+      variants.push({
+        articleKey,
+        url,
+        title,
+        baseQuery,
+        facetKey: key,
+        facetLabel: label,
+        query: normalized,
+        querySource: source
+      });
+    };
+
+    addVariant('base', '核心主題', baseQuery, 'base');
+    addVariant('recommend', '推薦 / 評價', this.ensureSuffix(anchor, '推薦'));
+    addVariant('price', '價格 / CP 值', this.ensureSuffix(anchor, '價格'));
+    addVariant('decision', '決策 / 選擇', this.ensureSuffix(anchor, hasLocation ? '哪家好' : '怎麼選'));
+    addVariant('compare', '比較 / 排名', this.ensureSuffix(anchor, '比較'));
+
+    if (this.shouldIncludeGuide(anchor, title)) {
+      addVariant('guide', '教學 / 入門', this.ensureSuffix(anchor, hasLocation ? '新手' : '入門'));
+    }
+
+    return variants;
+  },
+
+  /**
+   * 整理同篇文章的主題骨架，方便延伸不同問法
+   */
+  buildVariantAnchor(query) {
+    let text = String(query || '');
+
+    text = text
+      .replace(/(高評價|推薦|評價|口碑|價格|費用|價錢|便宜|平價|cp值|CP值|划算|比較|排行|排名|哪家好|哪家|怎麼選|如何選|找哪家|新手|入門|教學)/gu, ' ')
+      .replace(/[，,。.！!？?、；;（）()\[\]「」『』【】《》<>～~#@&＆]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    if (text.length >= this.MIN_LENGTH) {
+      return text;
+    }
+
+    return String(query || '').trim();
+  },
+
+  /**
+   * 補上指定尾詞，避免重複疊字
+   */
+  ensureSuffix(anchor, suffix) {
+    const text = String(anchor || '').trim();
+    if (!text) return suffix;
+    if (text.endsWith(suffix)) return text;
+    return `${text}${suffix}`;
+  },
+
+  /**
+   * 判斷這篇主題是否適合補教學 / 入門面向
+   */
+  shouldIncludeGuide(anchor, title = '') {
+    const text = `${anchor} ${title}`;
+    return /(學|教學|入門|新手|課程|方法|流程|怎麼|維修|洗冷氣|皮拉提斯|助聽器|補習班|租借|住宿|買|選|保養)/.test(text);
   }
 };

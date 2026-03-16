@@ -216,6 +216,11 @@ async function main() {
       const aioResult = await detectAIO(page, options.domain);
 
       results.push({
+        articleKey: item.articleKey || url || title,
+        baseQuery: item.baseQuery || query,
+        facetKey: item.facetKey || '',
+        facetLabel: item.facetLabel || '',
+        querySource: item.querySource || '',
         url,
         title,
         query,
@@ -239,6 +244,11 @@ async function main() {
     } catch (error) {
       console.error(`  ✕ 搜尋失敗：${error.message}`);
       results.push({
+        articleKey: item.articleKey || url || title,
+        baseQuery: item.baseQuery || query,
+        facetKey: item.facetKey || '',
+        facetLabel: item.facetLabel || '',
+        querySource: item.querySource || '',
         url,
         title,
         query,
