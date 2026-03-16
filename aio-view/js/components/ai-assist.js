@@ -250,7 +250,7 @@ ${articleList}
       const batchHint = this.totalBatches > 1
         ? `（第 ${this.currentBatch + 1}/${this.totalBatches} 批）`
         : '';
-      Toast.success(`AI 提示詞已複製${batchHint}，請貼到 ChatGPT 或 Claude`);
+      Toast.success(`AI 提示詞已複製${batchHint}，請貼到你常用的聊天工具`);
     } else {
       Toast.error('複製失敗，請手動選取');
     }

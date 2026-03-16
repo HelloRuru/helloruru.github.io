@@ -107,7 +107,7 @@ const App = {
       }
       const prompt = CliGenerator.getPromptTemplate(ArticlesTable.articles, this.domain);
       Utils.copyToClipboard(prompt).then(ok => {
-        if (ok) Toast.success('AI 提示詞已複製，請貼到 ChatGPT 或 Claude');
+        if (ok) Toast.success('AI 提示詞已複製，請貼到你常用的聊天工具');
         else Toast.error('複製失敗，請手動選取');
       });
     });

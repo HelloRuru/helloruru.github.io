@@ -412,7 +412,7 @@ npx playwright install chromium</code>
               <!-- 模式 Tabs -->
               <div class="ai-mode-tabs">
                 <button class="ai-mode-tab active" id="ai-mode-free">免費模式</button>
-                <button class="ai-mode-tab" id="ai-mode-cli">API 自動模式</button>
+                <button class="ai-mode-tab" id="ai-mode-cli">零成本批次模式</button>
               </div>
 
               <!-- 免費模式內容 -->
@@ -441,7 +441,7 @@ npx playwright install chromium</code>
                 <div class="paste-back-section">
                   <h4>貼回 AI 的回覆</h4>
                   <textarea class="paste-back-textarea" id="ai-paste-textarea"
-                    placeholder="把 ChatGPT / Claude 的回覆貼到這裡，例如：&#10;高雄左營美食推薦 | 左營 美食&#10;鳳山夜市必吃攻略 | 鳳山 夜市 推薦" rows="6"></textarea>
+                    placeholder="把整理好的語句貼到這裡，例如：&#10;高雄左營美食推薦 | 左營 美食&#10;鳳山夜市必吃攻略 | 鳳山 夜市 推薦" rows="6"></textarea>
                   <div class="prompt-actions">
                     <button class="btn btn-secondary btn-sm" id="ai-apply-paste">
                       <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -456,19 +456,17 @@ npx playwright install chromium</code>
                 <div class="completeness-bar incomplete" id="ai-completeness"></div>
               </div>
 
-              <!-- CLI API 模式內容 -->
+              <!-- 零成本批次模式內容 -->
               <div id="ai-cli-content" class="hidden">
                 <div class="cli-api-hint">
-                  <p>進階模式：用你的 API Key 自動產生搜尋語句。先匯出搜尋語句 JSON，再用 CLI 工具一鍵產生。</p>
-                  <p style="margin-top: 8px;"><strong>步驟 1：</strong>匯出 queries.json（上方「匯出搜尋語句」按鈕）</p>
-                  <p><strong>步驟 2：</strong>在 aio-view/cli 資料夾執行：</p>
-                  <code># 使用 OpenAI（GPT-4o-mini，最便宜）
-node ai-generate.js --input queries.json --provider openai --model gpt-4o-mini
-
-# 或使用 Claude（Haiku，最快）
-node ai-generate.js --input queries.json --provider anthropic --model claude-haiku-4-5-20251001</code>
-                  <p style="margin-top: 12px;"><strong>步驟 3：</strong>產生完的 queries.json 會自動更新語句欄位，直接用來掃描即可。</p>
-                  <p style="margin-top: 8px; color: var(--color-gray);">費用參考：50 篇約 NT$1-3（GPT-4o-mini）或 NT$0.5（Claude Haiku）</p>
+                  <p>進階模式：不需要 API key，直接批次整理搜尋語句。適合先匯出、用試算表或文字編輯器整理，再一次貼回來。</p>
+                  <p style="margin-top: 8px;"><strong>步驟 1：</strong>先匯出 queries.json，或直接複製上方提示詞</p>
+                  <p><strong>步驟 2：</strong>用你習慣的方式整理成「文章標題 | 搜尋語句」格式</p>
+                  <code>高雄左營美食推薦 | 左營 美食
+鳳山夜市必吃攻略 | 鳳山 夜市 推薦
+屏東消費指南 | 屏東 消費 指南</code>
+                  <p style="margin-top: 12px;"><strong>步驟 3：</strong>用「批次貼入搜尋語句」或上方貼回區塊一次套用，直接開始掃描。</p>
+                  <p style="margin-top: 8px; color: var(--color-gray);">這條流程全程零成本，不需要付費服務。</p>
                 </div>
               </div>
             </div>

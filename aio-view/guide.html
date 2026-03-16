@@ -695,8 +695,8 @@ body{
 
       <div class="feature">
         <span class="feature-badge new">CLI</span>
-        <h4>AI 語句產生器</h4>
-        <p>用 API Key 自動產生搜尋語句。支援 OpenAI、Anthropic。50 篇約 NT$1-3。</p>
+        <h4>零成本語句整理</h4>
+        <p>超過 15 篇時可先匯出語句、用熟悉的工具批次整理，再貼回 AIO View 一次套用，不需要 API key。</p>
       </div>
     </div>
 
@@ -705,14 +705,13 @@ body{
         <span class="terminal-dot"></span>
         <span class="terminal-dot"></span>
         <span class="terminal-dot"></span>
-        <span class="terminal-label">AI Generate</span>
+        <span class="terminal-label">Batch Edit</span>
       </div>
       <div class="terminal-body">
-<span class="comment"># OpenAI（GPT-4o-mini，最便宜）</span>
-<span class="cmd">node ai-generate.js</span> <span class="highlight">--input queries.json --provider openai --model gpt-4o-mini</span>
-
-<span class="comment"># Anthropic（Claude Haiku，最快）</span>
-<span class="cmd">node ai-generate.js</span> <span class="highlight">--input queries.json --provider anthropic --model claude-haiku-4-5-20251001</span>
+<span class="comment"># 批次整理成「文章標題 | 搜尋語句」</span>
+<span class="highlight">高雄左營美食推薦 | 左營 美食</span>
+<span class="highlight">鳳山夜市必吃攻略 | 鳳山 夜市 推薦</span>
+<span class="highlight">屏東消費指南 | 屏東 消費 指南</span>
       </div>
     </div>
   </section>
@@ -741,7 +740,7 @@ body{
       </div>
       <div class="tip">
         <span class="tip-icon">&gt;</span>
-        <div class="tip-text">AI 語句產生費用參考：50 篇約 <strong>NT$1-3</strong>（GPT-4o-mini）或 <strong>NT$0.5</strong>（Claude Haiku）。</div>
+        <div class="tip-text">語句整理可直接在 AIO View 手動改，或批次貼入，一樣維持 <strong>零成本</strong>。</div>
       </div>
       <div class="tip">
         <span class="tip-icon">&gt;</span>
