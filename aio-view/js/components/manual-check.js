@@ -521,15 +521,25 @@ const ManualCheck = {
     const url = `https://www.google.com/search?q=${encodeURIComponent(query)}&hl=zh-TW`;
     this.logDebug(`開啟 Google：${query}`);
 
-    // 復用同一個分頁（不帶 features，避免瀏覽器開新視窗）
+    // 只開一個彈窗，之後用 location 換頁（不重開）
     try {
-      this.autoCheck.popup = window.open(url, this.POPUP_NAME);
+      if (this.autoCheck.popup && !this.autoCheck.popup.closed) {
+        // 已有彈窗，直接換網址
+        try {
+          this.autoCheck.popup.location = url;
+        } catch (e) {
+          // 跨域 location 寫入失敗才重開
+          this.autoCheck.popup = window.open(url, this.POPUP_NAME, 'width=900,height=600,left=100,top=100');
+        }
+      } else {
+        // 第一次才開新彈窗
+        this.autoCheck.popup = window.open(url, this.POPUP_NAME, 'width=900,height=600,left=100,top=100');
+      }
       if (!this.autoCheck.popup) {
         Toast.error('彈出視窗被阻擋！請允許此網站的彈出視窗，然後重新點「開始自動檢查」');
         this.stopAutoCheck();
         return;
       }
-      // 嘗試讓 AIO View 保持前景
       try { window.focus(); } catch (e) {}
     } catch (e) {
       Toast.error('無法開啟 Google 搜尋視窗');
