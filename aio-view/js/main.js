@@ -350,30 +350,69 @@ const App = {
     `;
     container.appendChild(header);
 
-    // 複製統計卡片
-    const statsEl = document.getElementById('stats-grid');
-    if (statsEl) {
-      const statsClone = statsEl.cloneNode(true);
-      statsClone.style.marginBottom = '24px';
-      container.appendChild(statsClone);
-    }
+    // 純文字統計（不複製 DOM，避免 canvas 報錯）
+    const r = this.results?.results || [];
+    const totalCount = new Set(r.map(i => i.url || i.title)).size;
+    const aioCount = r.filter(i => i.hasAIO).length;
+    const citedCount = r.filter(i => i.isCited).length;
+    const rate = r.length > 0 ? Math.round((citedCount / r.length) * 100) : 0;
 
-    // 複製前 5 張結果卡片
-    const cards = document.querySelectorAll('.results-cards .result-card');
-    if (cards.length > 0) {
+    const statsRow = document.createElement('div');
+    statsRow.style.cssText = 'display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;';
+    const statItems = [
+      { label: '總文章', value: totalCount, color: '#c0d4d8' },
+      { label: '有 AIO', value: aioCount, color: '#ff6b98' },
+      { label: 'AI 推薦我', value: citedCount, color: '#00ff88' },
+      { label: '引用率', value: rate + '%', color: '#39c5bb' }
+    ];
+    statsRow.innerHTML = statItems.map(s =>
+      `<div style="flex:1; min-width:120px; padding:12px 16px; background:#0a0e18; border:1px solid rgba(57,197,187,0.15); border-radius:8px; text-align:center;">
+        <div style="font-family:Orbitron,monospace; font-size:22px; font-weight:700; color:${s.color};">${s.value}</div>
+        <div style="font-size:11px; color:#7a9098; margin-top:4px; letter-spacing:0.5px;">${s.label}</div>
+      </div>`
+    ).join('');
+    container.appendChild(statsRow);
+
+    // 用純 inline style 建結果卡片（避免依賴外部 CSS）
+    const grouped = ResultsTable.groupByArticle(r);
+    const sorted = ResultsTable.sortGroups(grouped);
+    const limit = Math.min(sorted.length, 5);
+
+    if (limit > 0) {
       const cardsWrap = document.createElement('div');
-      cardsWrap.style.cssText = 'display: flex; flex-direction: column; gap: 12px;';
-      const limit = Math.min(cards.length, 5);
+      cardsWrap.style.cssText = 'display: flex; flex-direction: column; gap: 10px;';
+
       for (let i = 0; i < limit; i++) {
-        const clone = cards[i].cloneNode(true);
-        clone.classList.remove('rc-collapsed');
-        cardsWrap.appendChild(clone);
+        const g = sorted[i];
+        const cited = g.queries.filter(q => q.isCited).length;
+        const aio = g.queries.filter(q => q.hasAIO === true).length;
+        const noAio = aio === 0 && cited === 0;
+        const borderColor = noAio ? 'rgba(255,60,60,0.3)' : cited > 0 ? 'rgba(57,197,187,0.3)' : 'rgba(255,107,152,0.2)';
+        const titleColor = noAio ? '#ff4444' : cited > 0 ? '#00ff88' : '#ff6b98';
+
+        const queries = g.queries.map(q => {
+          const c = q.isCited ? '#00ff88' : q.hasAIO ? '#ff6b98' : '#555';
+          const bg = q.isCited ? 'rgba(0,255,136,0.1)' : q.hasAIO ? 'rgba(255,107,152,0.08)' : 'rgba(85,85,85,0.1)';
+          return `<span style="font-size:11px; padding:2px 6px; border-radius:4px; color:${c}; background:${bg}; border:1px solid ${c}33;">${Utils.escapeHtml(q.query)}</span>`;
+        }).join(' ');
+
+        const badge = noAio
+          ? '<span style="font-size:10px; font-family:monospace; padding:2px 6px; border-radius:4px; background:rgba(255,60,60,0.15); color:#ff4444;">沒有 AI 摘要</span>'
+          : `<span style="font-size:10px; font-family:monospace; padding:2px 6px; border-radius:4px; background:rgba(57,197,187,0.12); color:#39c5bb;">${aio + cited}/${g.queries.length} AIO</span>` +
+            (cited > 0 ? ` <span style="font-size:10px; font-family:monospace; padding:2px 6px; border-radius:4px; background:rgba(0,255,136,0.12); color:#00ff88;">${cited} 引用</span>` : '');
+
+        cardsWrap.innerHTML += `
+          <div style="padding:12px 14px; border:1px solid ${borderColor}; border-radius:8px; background:#0a0e18;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin-bottom:8px;">
+              <span style="color:${titleColor}; font-size:13px; font-weight:700; flex:1;">${Utils.escapeHtml(g.title || g.url)}</span>
+              <span>${badge}</span>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:4px;">${queries}</div>
+          </div>`;
       }
-      if (cards.length > 5) {
-        const more = document.createElement('div');
-        more.style.cssText = 'text-align: center; color: #7a9098; font-size: 13px; padding: 8px;';
-        more.textContent = `...還有 ${cards.length - 5} 篇`;
-        cardsWrap.appendChild(more);
+
+      if (sorted.length > 5) {
+        cardsWrap.innerHTML += `<div style="text-align:center; color:#7a9098; font-size:12px; padding:6px;">...還有 ${sorted.length - 5} 篇</div>`;
       }
       container.appendChild(cardsWrap);
     }
@@ -385,12 +424,6 @@ const App = {
     container.appendChild(watermark);
 
     document.body.appendChild(container);
-
-    // 複製樣式表讓 clone 有正確的樣式
-    const stylesheets = document.querySelectorAll('link[rel="stylesheet"], style');
-    stylesheets.forEach(s => {
-      container.appendChild(s.cloneNode(true));
-    });
 
     try {
       const canvas = await html2canvas(container, {
