@@ -192,16 +192,46 @@
     });
   }
 
+  /** 偵測一般搜尋結果前 20 名排名（每個結果含排名和網域） */
+  function detectOrganicResults() {
+    const results = [];
+    const seen = new Set();
+
+    // Google 一般搜尋結果區塊（每個 .g 是一筆結果）
+    const entries = document.querySelectorAll('#rso .g, #rso [data-hveid] > .g');
+    let rank = 0;
+
+    entries.forEach(entry => {
+      // 找第一個非 Google 連結
+      const link = entry.querySelector('a[href]');
+      if (!link) return;
+      const host = extractHostname(link.href);
+      if (!host || isGoogleHost(host)) return;
+
+      rank++;
+      if (rank > 20) return;
+      if (seen.has(host + rank)) return;
+      seen.add(host + rank);
+
+      results.push({ rank, host });
+    });
+
+    return results;
+  }
+
   function sendResult(result, isFinalAttempt) {
     const query = getQuery();
     if (!query) return;
     if (!result.hasAIO && !isFinalAttempt) return;
 
+    const organic = detectOrganicResults();
+
     const payload = {
       t: 'r',
       q: query,
       aio: !!result.hasAIO,
-      src: result.aioSources || []
+      src: result.aioSources || [],
+      organic: organic
     };
 
     const signature = JSON.stringify(payload);

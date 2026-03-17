@@ -439,6 +439,28 @@
   border: 1px solid rgba(255, 190, 60, 0.2);
 }
 
+/* 一般搜尋排名標籤 */
+.rc-rank {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: #ffdd00;
+  background: rgba(255, 221, 0, 0.1);
+  border: 1px solid rgba(255, 221, 0, 0.2);
+  border-radius: 3px;
+  padding: 0 4px;
+  margin-left: 4px;
+  vertical-align: middle;
+  line-height: 1.5;
+}
+
+.rc-rank-out {
+  color: #555;
+  background: rgba(85, 85, 85, 0.1);
+  border-color: rgba(85, 85, 85, 0.2);
+}
+
 /* 收合狀態 */
 .rc-collapsed .rc-body,
 .rc-collapsed .rc-divider {

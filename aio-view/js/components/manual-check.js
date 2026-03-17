@@ -312,18 +312,26 @@ const ManualCheck = {
 
     // 判斷狀態（支援兩種格式）
     let status;
+    const domain = this.domain.replace(/^www\./, '').toLowerCase();
+
     if (data.s) {
       // 舊版 bookmarklet 格式：{ s: 'cited'|'aio'|'none' }
       status = data.s;
     } else {
-      // Chrome 擴充功能格式：{ aio: boolean, src: [...] }
+      // Chrome 擴充功能格式：{ aio: boolean, src: [...], organic: [...] }
       if (!data.aio) {
         status = 'none';
       } else {
-        const domain = this.domain.replace(/^www\./, '').toLowerCase();
         const cited = (data.src || []).some(s => s.includes(domain));
         status = cited ? 'cited' : 'aio';
       }
+    }
+
+    // 偵測一般搜尋排名（前 20 名）
+    let organicRank = null;
+    if (Array.isArray(data.organic)) {
+      const match = data.organic.find(r => r.host && r.host.includes(domain));
+      organicRank = match ? match.rank : -1; // -1 = 不在前 20 名
     }
 
     const messageKey = JSON.stringify({
@@ -356,10 +364,14 @@ const ManualCheck = {
       return;
     }
 
-    // 設定狀態 + 存引用來源
+    // 設定狀態 + 存引用來源 + 排名
     this.setStatus(article.id, status, { toggle: false });
     if (Array.isArray(data.src) && data.src.length > 0) {
       this.checkSources[article.id] = data.src;
+    }
+    if (organicRank !== null) {
+      if (!this.organicRanks) this.organicRanks = {};
+      this.organicRanks[article.id] = organicRank;
     }
 
     // 通知
@@ -554,7 +566,7 @@ const ManualCheck = {
 
     const article = this.articles[this.autoCheck.currentIndex];
     const query = article.query || article.title;
-    const url = `https://www.google.com/search?q=${encodeURIComponent(query)}&hl=zh-TW`;
+    const url = `https://www.google.com/search?q=${encodeURIComponent(query)}&hl=zh-TW&num=20`;
     this.logDebug(`開啟 Google：${query}`);
 
     // 只開一個彈窗，之後用 location 換頁（不重開）
@@ -907,7 +919,7 @@ const ManualCheck = {
     if (!article) return;
 
     const query = article.query || article.title;
-    const url = `https://www.google.com/search?q=${encodeURIComponent(query)}&hl=zh-TW`;
+    const url = `https://www.google.com/search?q=${encodeURIComponent(query)}&hl=zh-TW&num=20`;
     window.open(url, '_blank');
   },
 
@@ -1081,7 +1093,8 @@ const ManualCheck = {
           scanStatus: status,
           hasAIO: status === 'timeout' ? null : status === 'cited' || status === 'aio',
           isCited: status === 'cited',
-          aioSources: this.checkSources[task.id] || []
+          aioSources: this.checkSources[task.id] || [],
+          organicRank: this.organicRanks?.[task.id] ?? null
         };
       })
     };

@@ -84,7 +84,8 @@ const ResultsTable = {
         hasAIO: item.hasAIO,
         isCited: item.isCited,
         scanStatus: item.scanStatus,
-        aioSources: item.aioSources || []
+        aioSources: item.aioSources || [],
+        organicRank: item.organicRank ?? null
       });
     });
     return Array.from(map.values());
@@ -260,9 +261,17 @@ const ResultsTable = {
     };
     const c = config[type];
 
-    const chips = queries.map(q =>
-      `<span class="rc-query">${Utils.escapeHtml(q.query)}</span>`
-    ).join('');
+    const chips = queries.map(q => {
+      let rankTag = '';
+      if (q.organicRank !== null && q.organicRank !== undefined) {
+        if (q.organicRank === -1) {
+          rankTag = '<span class="rc-rank rc-rank-out">20+</span>';
+        } else {
+          rankTag = `<span class="rc-rank">#${q.organicRank}</span>`;
+        }
+      }
+      return `<span class="rc-query">${Utils.escapeHtml(q.query)}${rankTag}</span>`;
+    }).join('');
 
     return `
       <div class="rc-section ${c.cls}">
