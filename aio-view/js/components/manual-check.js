@@ -83,7 +83,10 @@ const ManualCheck = {
       autoStartBtn: document.getElementById('auto-check-start'),
       autoStopBtn: document.getElementById('auto-check-stop'),
       autoCloseBtn: document.getElementById('auto-check-close-popup'),
-      autoStatus: document.getElementById('auto-check-status')
+      autoStatus: document.getElementById('auto-check-status'),
+      autoProgress: document.getElementById('auto-check-progress'),
+      autoProgressFill: document.getElementById('auto-check-progress-fill'),
+      autoProgressText: document.getElementById('auto-check-progress-text')
     };
 
     this.ensureDebugPanel();
@@ -517,6 +520,15 @@ const ManualCheck = {
           icon: '/aio-view/icons/icon-192.svg'
         });
       }
+
+      // 自動產生報告並捲到結果區
+      setTimeout(() => {
+        this.finishCheck();
+        const resultsSection = document.getElementById('results-section');
+        if (resultsSection) {
+          resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 800);
       return;
     }
 
@@ -653,6 +665,22 @@ const ManualCheck = {
         this.els.autoStatus.classList.remove('hidden');
       } else {
         this.els.autoStatus.classList.add('hidden');
+      }
+    }
+
+    // 進度條
+    if (this.els.autoProgress) {
+      if (active || (processed > 0 && total > 0)) {
+        const pct = total > 0 ? Math.round((processed / total) * 100) : 0;
+        this.els.autoProgress.classList.remove('hidden');
+        if (this.els.autoProgressFill) {
+          this.els.autoProgressFill.style.width = pct + '%';
+        }
+        if (this.els.autoProgressText) {
+          this.els.autoProgressText.textContent = `${processed}/${total} (${pct}%)`;
+        }
+      } else {
+        this.els.autoProgress.classList.add('hidden');
       }
     }
   },

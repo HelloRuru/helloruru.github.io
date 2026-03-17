@@ -336,6 +336,42 @@
   font-weight: 500;
 }
 
+/* ========= 自動檢查進度條 ========= */
+.auto-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.auto-progress.hidden {
+  display: none;
+}
+
+.auto-progress-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(57, 197, 187, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.auto-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #39c5bb, #00ff88);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 8px rgba(57, 197, 187, 0.4);
+}
+
+.auto-progress-text {
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--color-gray);
+  white-space: nowrap;
+}
+
 /* ========= 自動檢查中的卡片高亮 ========= */
 .check-card-active {
   border-color: var(--color-rose) !important;
