@@ -158,6 +158,49 @@
   color: var(--bg-dark);
 }
 
+/* 搜尋語句狀態 chip */
+.query-chip-cited {
+  border-color: rgba(0, 255, 136, 0.3);
+  color: #00ff88;
+}
+
+.query-chip-aio {
+  border-color: rgba(255, 107, 152, 0.3);
+  color: #ff6b98;
+}
+
+.query-chip-none {
+  border-color: rgba(85, 85, 85, 0.4);
+  color: #555;
+}
+
+.query-chip-timeout {
+  border-color: rgba(255, 190, 60, 0.3);
+  color: #ffbe3c;
+}
+
+/* 沒有 AIO 的文章強調 */
+.row-no-aio {
+  background: rgba(255, 60, 60, 0.06);
+}
+
+.row-no-aio:hover {
+  background: rgba(255, 60, 60, 0.1) !important;
+}
+
+.no-aio-alert {
+  background: rgba(255, 60, 60, 0.15) !important;
+  color: #ff4444 !important;
+  border-color: rgba(255, 60, 60, 0.4) !important;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* 分組欄位 */
+.col-queries {
+  min-width: 200px;
+}
+
 /* 分類頁標記 */
 .badge-category {
   font-size: 11px;

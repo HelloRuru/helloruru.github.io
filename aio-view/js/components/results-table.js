@@ -1,6 +1,6 @@
 /* ================================================
    AIO View — Results Table Component
-   掃描結果表格
+   掃描結果表格（按文章分組）
    ================================================ */
 
 const ResultsTable = {
@@ -45,15 +45,38 @@ const ResultsTable = {
    */
   render(results) {
     this.results = results;
-
-    // 更新統計
     Stats.render(results);
-
-    // 顯示表格
     this.filter('all');
-
-    // 顯示區塊
     this.show();
+  },
+
+  /**
+   * 按文章 URL 分組
+   * @param {Array} items - 原始掃描結果
+   * @returns {Array} 分組後的文章陣列
+   */
+  groupByArticle(items) {
+    const map = new Map();
+
+    items.forEach(item => {
+      const key = item.url || item.title;
+      if (!map.has(key)) {
+        map.set(key, {
+          title: item.title,
+          url: item.url,
+          queries: []
+        });
+      }
+      map.get(key).queries.push({
+        query: item.query,
+        hasAIO: item.hasAIO,
+        isCited: item.isCited,
+        scanStatus: item.scanStatus,
+        aioSources: item.aioSources || []
+      });
+    });
+
+    return Array.from(map.values());
   },
 
   /**
@@ -63,26 +86,29 @@ const ResultsTable = {
   filter(filterType) {
     this.currentFilter = filterType;
 
-    // 更新按鈕狀態
     this.elements.filterBtns?.forEach(btn => {
       btn.classList.toggle('active', btn.dataset.filter === filterType);
     });
 
     if (!this.results?.results) return;
 
-    // 篩選資料
-    let filtered = this.results.results;
+    const grouped = this.groupByArticle(this.results.results);
 
+    let filtered;
     switch (filterType) {
       case 'cited':
-        filtered = filtered.filter(r => r.isCited);
+        filtered = grouped.filter(g => g.queries.some(q => q.isCited));
         break;
       case 'aio-not-cited':
-        filtered = filtered.filter(r => r.hasAIO === true && !r.isCited);
+        filtered = grouped.filter(g =>
+          g.queries.some(q => q.hasAIO === true) && !g.queries.some(q => q.isCited)
+        );
         break;
       case 'no-aio':
-        filtered = filtered.filter(r => r.hasAIO === false);
+        filtered = grouped.filter(g => g.queries.every(q => q.hasAIO === false));
         break;
+      default:
+        filtered = grouped;
     }
 
     this.renderTable(filtered);
@@ -90,15 +116,15 @@ const ResultsTable = {
 
   /**
    * 渲染表格內容
-   * @param {Array} items - 資料項目
+   * @param {Array} groups - 分組後的文章
    */
-  renderTable(items) {
+  renderTable(groups) {
     const { tbody } = this.elements;
     if (!tbody) return;
 
     tbody.innerHTML = '';
 
-    if (items.length === 0) {
+    if (groups.length === 0) {
       tbody.innerHTML = `
         <tr>
           <td colspan="4" class="empty-state">
@@ -109,41 +135,57 @@ const ResultsTable = {
       return;
     }
 
-    items.forEach(item => {
-      const tr = this.createRow(item);
+    groups.forEach(group => {
+      const tr = this.createGroupRow(group);
       tbody.appendChild(tr);
     });
   },
 
   /**
-   * 建立表格列
-   * @param {Object} item - 資料項目
-   * @returns {HTMLElement} tr 元素
+   * 建立分組列
+   * @param {Object} group - 文章分組
+   * @returns {HTMLElement}
    */
-  createRow(item) {
+  createGroupRow(group) {
     const tr = document.createElement('tr');
+    const total = group.queries.length;
+    const aioCount = group.queries.filter(q => q.hasAIO === true).length;
+    const citedCount = group.queries.filter(q => q.isCited).length;
+    const noAio = aioCount === 0;
 
-    const statusBadge = item.scanStatus === 'timeout'
-      ? '<span class="status-badge">未回傳</span>'
-      : item.hasAIO
-        ? '<span class="status-badge yes">有 AIO</span>'
-        : '<span class="status-badge no">無</span>';
+    // AIO 統計
+    const aioText = noAio
+      ? '<span class="status-badge no-aio-alert">無 AIO</span>'
+      : `<span class="status-badge yes">${aioCount}/${total}</span>`;
 
-    const citedBadge = item.hasAIO === true
-      ? (item.isCited
-          ? '<span class="status-badge cited">是</span>'
-          : '<span class="status-badge no">否</span>')
-      : '—';
+    // 引用統計
+    const citedText = noAio
+      ? '—'
+      : citedCount > 0
+        ? `<span class="status-badge cited">${citedCount}/${total}</span>`
+        : `<span class="status-badge no">0/${total}</span>`;
+
+    // 搜尋語句列表（每個語句標示狀態）
+    const queryChips = group.queries.map(q => {
+      let cls = 'query-chip';
+      if (q.scanStatus === 'timeout') cls += ' query-chip-timeout';
+      else if (q.isCited) cls += ' query-chip-cited';
+      else if (q.hasAIO) cls += ' query-chip-aio';
+      else cls += ' query-chip-none';
+      return `<span class="${cls}">${Utils.escapeHtml(q.query)}</span>`;
+    }).join('');
+
+    if (noAio) tr.classList.add('row-no-aio');
 
     tr.innerHTML = `
       <td class="col-title">
-        <a href="${Utils.escapeHtml(item.url)}" target="_blank" rel="noopener">
-          ${Utils.escapeHtml(item.title || item.url)}
+        <a href="${Utils.escapeHtml(group.url)}" target="_blank" rel="noopener">
+          ${Utils.escapeHtml(group.title || group.url)}
         </a>
       </td>
-      <td class="col-query">${Utils.escapeHtml(item.query)}</td>
-      <td class="col-status">${statusBadge}</td>
-      <td class="col-cited">${citedBadge}</td>
+      <td class="col-status">${aioText}</td>
+      <td class="col-cited">${citedText}</td>
+      <td class="col-queries"><div class="query-chips">${queryChips}</div></td>
     `;
 
     return tr;
@@ -170,23 +212,16 @@ const ResultsTable = {
       .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
       .join('\n');
 
-    // UTF-8 BOM for Excel
     const bom = '\uFEFF';
     const filename = `aio-view-${this.results.scanDate || 'export'}.csv`;
 
     Utils.downloadFile(bom + csv, filename, 'text/csv;charset=utf-8');
   },
 
-  /**
-   * 顯示區塊
-   */
   show() {
     this.elements.section?.classList.remove('hidden');
   },
 
-  /**
-   * 隱藏區塊
-   */
   hide() {
     this.elements.section?.classList.add('hidden');
   }
