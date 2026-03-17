@@ -104,6 +104,11 @@ const App = {
       this.exportResultImage();
     });
 
+    // 儲存這次結果
+    document.getElementById('save-result-btn')?.addEventListener('click', () => {
+      this.saveCurrentResult();
+    });
+
     // 複製 AI 提示詞
     document.getElementById('copy-prompt-btn')?.addEventListener('click', () => {
       const selected = ArticlesTable.getSelectedArticles();
@@ -319,6 +324,33 @@ const App = {
 
     // 更新時間軸（存入 IndexedDB + 重新整理）
     Timeline.onResultsUploaded(results);
+  },
+
+  /**
+   * 儲存這次結果到 IndexedDB（帶時間戳，不覆蓋）
+   */
+  async saveCurrentResult() {
+    if (!this.results?.results || this.results.results.length === 0) {
+      Toast.error('沒有結果可以儲存');
+      return;
+    }
+
+    // 加上精確時間戳讓同天的也不會覆蓋
+    const now = new Date();
+    const timestamp = now.toISOString().replace('T', ' ').substring(0, 19);
+    const saveData = {
+      ...this.results,
+      scanDate: `${this.results.scanDate || now.toISOString().split('T')[0]} ${now.toTimeString().substring(0, 5)}`
+    };
+
+    try {
+      await DB.saveFullResults(saveData);
+      Toast.success(`結果已儲存（${timestamp}）`);
+      // 重新整理時間軸
+      Timeline.renderHistory();
+    } catch (e) {
+      Toast.error('儲存失敗：' + e.message);
+    }
   },
 
   /**
