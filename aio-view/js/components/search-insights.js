@@ -811,16 +811,12 @@ const SearchInsights = {
 
     let html = '<div style="margin-top:12px; padding-top:10px; border-top:1px solid rgba(57,197,187,0.1);">';
     html += '<div class="suggestion-timestamp">產業即時熱搜（來自 Google Autocomplete）</div>';
-    html += '<div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">';
+    html += '<div style="display:flex; flex-direction:column; gap:6px; margin-top:8px;">';
 
     results.forEach(r => {
       if (r.suggestions.length === 0) return;
-      html += `<div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">`;
-      html += `<span class="suggest-tag" style="flex-shrink:0;">${Utils.escapeHtml(r.label)}</span>`;
-      r.suggestions.forEach(s => {
-        html += `<span class="suggestion-chip suggestion-chip-google">${Utils.escapeHtml(s)}</span>`;
-      });
-      html += '</div>';
+      const topics = r.suggestions.map(s => `「${Utils.escapeHtml(s)}」`).join('、');
+      html += `<div class="industry-explore-row"><span class="suggest-tag" style="flex-shrink:0;">${Utils.escapeHtml(r.label)}</span><span class="industry-explore-text">${topics}</span></div>`;
     });
 
     html += '</div></div>';

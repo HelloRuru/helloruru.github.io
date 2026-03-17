@@ -241,6 +241,18 @@
   padding-left: 2px;
 }
 
+.industry-explore-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.industry-explore-text {
+  font-size: 14px;
+  color: var(--color-text);
+  line-height: 1.6;
+}
+
 .suggestion-timestamp {
   font-size: 11px;
   font-family: var(--font-mono);
