@@ -172,9 +172,11 @@ const ResultsTable = {
 
     // 前三張展開，其餘收合
     const collapsed = index >= 3 ? ' rc-collapsed' : '';
-    const cardClass = noAio
-      ? `result-card result-card-danger${collapsed}`
-      : `result-card${collapsed}`;
+    const hasCited = cited.length > 0;
+    let typeClass = 'result-card-danger';
+    if (hasCited) typeClass = 'result-card-cited';
+    else if (!noAio) typeClass = 'result-card-aio';
+    const cardClass = `result-card ${typeClass}${collapsed}`;
 
     return `
       <div class="${cardClass}">
@@ -184,6 +186,7 @@ const ResultsTable = {
           </a>
           <div class="rc-badges">${badges.join('')}</div>
         </div>
+        <div class="rc-divider"></div>
         <div class="rc-body">${sections.join('')}</div>
       </div>
     `;

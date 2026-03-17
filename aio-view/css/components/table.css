@@ -159,34 +159,98 @@
 }
 
 /* ================================================
-   Result Cards（按文章分組）
+   Result Cards — Cyberpunk（按文章分組）
    ================================================ */
 
+/* 掃描線紋理 */
 .results-cards {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  position: relative;
 }
 
+/* 卡片基礎 */
 .result-card {
+  position: relative;
   background: var(--bg-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: 16px;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
+/* 掃描線覆蓋層 */
+.result-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(57, 197, 187, 0.015) 3px,
+    rgba(57, 197, 187, 0.015) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 被引用的卡片 — cyan 邊框發光 */
+.result-card-cited {
+  border-color: rgba(57, 197, 187, 0.35);
+  box-shadow: 0 0 12px rgba(57, 197, 187, 0.1), inset 0 0 20px rgba(57, 197, 187, 0.03);
+}
+
+.result-card-cited:hover {
+  box-shadow: 0 0 20px rgba(57, 197, 187, 0.2), inset 0 0 30px rgba(57, 197, 187, 0.05);
+}
+
+/* 有 AIO 沒引用 — magenta 微光 */
+.result-card-aio {
+  border-color: rgba(255, 107, 152, 0.25);
+  box-shadow: 0 0 8px rgba(255, 107, 152, 0.06);
+}
+
+.result-card-aio:hover {
+  box-shadow: 0 0 16px rgba(255, 107, 152, 0.12);
+}
+
+/* 沒 AIO — 紅色警告發光 */
 .result-card-danger {
-  border-color: rgba(255, 60, 60, 0.3);
+  border-color: rgba(255, 60, 60, 0.4);
   background: rgba(255, 60, 60, 0.04);
+  box-shadow: 0 0 12px rgba(255, 60, 60, 0.1), inset 0 0 20px rgba(255, 60, 60, 0.03);
+}
+
+.result-card-danger::before {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(255, 60, 60, 0.02) 3px,
+    rgba(255, 60, 60, 0.02) 4px
+  );
+}
+
+.result-card-danger:hover {
+  box-shadow: 0 0 24px rgba(255, 60, 60, 0.18), inset 0 0 30px rgba(255, 60, 60, 0.05);
 }
 
 /* 卡片標題列 */
 .rc-header {
+  position: relative;
+  z-index: 2;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 12px;
   margin-bottom: 12px;
+}
+
+.rc-collapsed .rc-header {
+  margin-bottom: 0;
 }
 
 .rc-title {
@@ -197,6 +261,12 @@
   line-height: 1.4;
   flex: 1;
   min-width: 0;
+  text-shadow: 0 0 8px rgba(57, 197, 187, 0.15);
+}
+
+.result-card-danger .rc-title {
+  color: #ff6b6b;
+  text-shadow: 0 0 8px rgba(255, 60, 60, 0.15);
 }
 
 .rc-title:hover {
@@ -235,8 +305,31 @@
   font-weight: 700;
 }
 
+/* 分隔線 — 掃描線風格 */
+.rc-divider {
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(57, 197, 187, 0.2) 20%,
+    rgba(57, 197, 187, 0.2) 80%,
+    transparent
+  );
+  margin-bottom: 10px;
+}
+
+.result-card-danger .rc-divider {
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(255, 60, 60, 0.2) 20%,
+    rgba(255, 60, 60, 0.2) 80%,
+    transparent
+  );
+}
+
 /* 語句分區 */
 .rc-body {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -258,10 +351,22 @@
   line-height: 22px;
 }
 
-.rc-section-cited .rc-section-icon { color: #00ff88; }
-.rc-section-aio .rc-section-icon { color: #ff6b98; }
+.rc-section-cited .rc-section-icon {
+  color: #00ff88;
+  text-shadow: 0 0 6px rgba(0, 255, 136, 0.4);
+}
+
+.rc-section-aio .rc-section-icon {
+  color: #ff6b98;
+  text-shadow: 0 0 6px rgba(255, 107, 152, 0.4);
+}
+
 .rc-section-none .rc-section-icon { color: #555; }
-.rc-section-timeout .rc-section-icon { color: #ffbe3c; }
+
+.rc-section-timeout .rc-section-icon {
+  color: #ffbe3c;
+  text-shadow: 0 0 6px rgba(255, 190, 60, 0.3);
+}
 
 .rc-queries {
   display: flex;
@@ -302,7 +407,8 @@
 }
 
 /* 收合狀態 */
-.rc-collapsed .rc-body {
+.rc-collapsed .rc-body,
+.rc-collapsed .rc-divider {
   display: none;
 }
 
