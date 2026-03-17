@@ -781,7 +781,6 @@ const SearchInsights = {
       this.elements.suggestions.innerHTML = `
         <div class="suggestion-timestamp">資料時間：${timestamp}</div>
         ${analysis.suggestions.map(s => `<span class="suggestion-chip">${Utils.escapeHtml(s)}</span>`).join('')}
-        <div id="industry-explore-slot"></div>
       `;
       return;
     }
@@ -808,7 +807,6 @@ const SearchInsights = {
           const tag = facet ? `<span class="suggest-tag" data-facet="${facet.key}">${Utils.escapeHtml(facet.label)}</span>` : '';
           return `<span class="suggestion-chip suggestion-chip-google">${tag}${Utils.escapeHtml(s)}</span>`;
         }).join('')}
-        <div id="industry-explore-slot"></div>
       `;
       return;
     }
@@ -835,7 +833,7 @@ const SearchInsights = {
       return { industry: ind, seed: match ? match[1] : ind.label };
     });
 
-    slot.innerHTML = '<div class="suggestion-timestamp" style="margin-top:12px;">正在查詢 Google 即時熱搜...</div>';
+    slot.innerHTML = '<div class="suggestion-timestamp">正在查詢 Google 即時熱搜...</div>';
 
     const results = [];
     for (const q of queries) {
@@ -848,8 +846,7 @@ const SearchInsights = {
       }
     }
 
-    let html = '<div style="margin-top:12px; padding-top:10px; border-top:1px solid rgba(57,197,187,0.1);">';
-    html += '<div class="suggestion-timestamp">產業即時熱搜（來自 Google Autocomplete）</div>';
+    let html = '<div class="suggestion-timestamp">來自 Google Autocomplete・每次重新整理會換</div>';
     html += '<div style="display:flex; flex-direction:column; gap:6px; margin-top:8px;">';
 
     results.forEach(r => {
@@ -860,7 +857,7 @@ const SearchInsights = {
       html += `<div class="industry-explore-row"><span class="suggest-tag" data-facet="recommend" style="flex-shrink:0;">${Utils.escapeHtml(r.label)}</span>${chips}</div>`;
     });
 
-    html += '</div></div>';
+    html += '</div>';
     slot.innerHTML = html;
   },
 
