@@ -226,19 +226,51 @@
     return results;
   }
 
+  /** 抓取 Google 搜尋結果底部的「相關搜尋」 */
+  function detectRelatedSearches() {
+    const results = [];
+    const seen = new Set();
+
+    // Google 相關搜尋區塊（底部「相關搜尋」）
+    const selectors = [
+      '#brs a',                          // 傳統相關搜尋
+      '[data-async-type="relatedSearches"] a',
+      '.k8XOCe a',                       // 新版相關搜尋
+      '.AJLUJb a',                       // 另一種格式
+      '[data-ved] .s75CSd a'             // 卡片式相關搜尋
+    ];
+
+    for (const sel of selectors) {
+      try {
+        document.querySelectorAll(sel).forEach(a => {
+          const text = (a.textContent || '').trim();
+          if (!text || text.length > 30) return;
+          const lower = text.toLowerCase();
+          if (seen.has(lower)) return;
+          seen.add(lower);
+          results.push(text);
+        });
+      } catch { /* ignore */ }
+    }
+
+    return results.slice(0, 8);
+  }
+
   function sendResult(result, isFinalAttempt) {
     const query = getQuery();
     if (!query) return;
     if (!result.hasAIO && !isFinalAttempt) return;
 
     const organic = detectOrganicResults();
+    const related = detectRelatedSearches();
 
     const payload = {
       t: 'r',
       q: query,
       aio: !!result.hasAIO,
       src: result.aioSources || [],
-      organic: organic
+      organic: organic,
+      related: related
     };
 
     const signature = JSON.stringify(payload);

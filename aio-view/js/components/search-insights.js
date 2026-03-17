@@ -361,10 +361,13 @@ const SearchInsights = {
           const raw = Array.isArray(data[1]) ? data[1] : [];
           const excludeSet = new Set(exclude.map(s => s.toLowerCase()));
           excludeSet.add(q.toLowerCase());
+          const seenLower = new Set();
           const filtered = raw
             .map(s => this.s2t((Array.isArray(s) ? s[0] : String(s)).trim()))
             .filter(s => {
               if (!s || excludeSet.has(s.toLowerCase())) return false;
+              if (seenLower.has(s.toLowerCase())) return false;
+              seenLower.add(s.toLowerCase());
               if (s.length > 20) return false;
               // 過濾含完整地址或店名的語句（路/街/巷/弄/號 + 區）
               if (/[路街巷弄號]/.test(s)) return false;
