@@ -612,11 +612,13 @@ body{
         <div class="step-num">02</div>
         <div class="step-body">
           <div class="step-title">檢查 AIO</div>
-          <div class="step-desc">勾選文章後，每篇會自動展開<strong style="color:var(--magenta)">多個搜尋面向</strong>（推薦、價格、決策、比較、教學），全面檢查不同問法是否觸發 AIO。<br><br>
-          <strong style="color:var(--green)">手動檢查（免安裝）</strong> — 按「開始手動檢查」，系統逐篇逐面向開啟 Google 搜尋，你手動回報結果。<br>
-          <strong style="color:var(--cyan)">Chrome 擴充功能自動檢查（推薦）</strong> — 載入擴充功能後，背景彈窗自動偵測 AIO 並回傳結果，搜完自動關閉視窗。<br>
-          <strong style="color:var(--cyan)">CLI 自動掃描（建議批次使用）</strong> — 產生 <code>queries.json</code> 後，跑 <code>node scan.js</code>，每篇間隔 <strong style="color:var(--yellow)">2.5 分鐘</strong>，適合睡前放著跑。<br><br>
-          三種結果狀態：<strong style="color:var(--green)">有引用</strong> = AIO 引用了你的文章、<strong style="color:var(--cyan)">有 AIO</strong> = AIO 出現但引用別人、<strong style="color:var(--text-dim)">沒有</strong> = 沒出現 AIO。</div>
+          <div class="step-desc">勾選文章後，每篇會自動展開<strong style="color:var(--magenta)">9 種搜尋面向</strong>（推薦、價格、決策、比較、教學、地點、體驗、售後、社群），全面檢查不同問法是否觸發 AIO。<br><br>
+          <strong style="color:var(--green)">手動檢查（免安裝）</strong> — 按「開始檢查」，系統逐篇開啟 Google 搜尋，你手動回報結果。<br>
+          <strong style="color:var(--cyan)">Chrome 擴充功能自動檢查（推薦）</strong> — 裝好擴充功能後，按「開始自動檢查」。背景彈窗自動偵測 AIO、收集引用來源、偵測一般搜尋排名（前 20 名），跑完自動關閉視窗。<br>
+          <strong style="color:var(--yellow)">進度條 + 自動重試</strong> — 檢查時有視覺進度條。第一輪跑完後，未回傳的會自動重試一次。<br>
+          <strong style="color:var(--cyan)">CLI 自動掃描（批次用）</strong> — 產生 <code>queries.json</code> 後，跑 <code>node scan.js</code>，每篇間隔 <strong style="color:var(--yellow)">2.5 分鐘</strong>，適合睡前放著跑。<br><br>
+          三種結果狀態：<strong style="color:var(--green)">AI 推薦我</strong> = AI 摘要引用了你的文章、<strong style="color:var(--magenta)">AI 推薦別人</strong> = AI 摘要出現但引用別人、<strong style="color:var(--text-dim)">沒有 AI 摘要</strong> = 搜尋結果沒有出現 AI 摘要。<br>
+          每個搜尋語句旁會顯示<strong style="color:var(--yellow)">一般搜尋排名</strong>（#1~#20），讓你知道文章在傳統搜尋的表現。</div>
         </div>
       </div>
 
@@ -624,9 +626,12 @@ body{
         <div class="step-num">03</div>
         <div class="step-body">
           <div class="step-title">看報告</div>
-          <div class="step-desc">報告區即時更新，包含五大指標：總文章數、有 AIO、被引用、引用率、<strong style="color:var(--cyan)">AIO 能見度指數</strong>（0-100 分）。<br>
-          每篇文章有單篇分析：已驗證面向、使用者在意的（Google 搜尋建議）、延伸寫作方向（你還沒寫的題目）。<br>
-          自動產生<strong style="color:var(--cyan)">圖表分析</strong>（AIO 分布、引用來源排行）、<strong style="color:var(--magenta)">時間軸報告</strong>（歷史趨勢、前後對比），支援 CSV 匯出。</div>
+          <div class="step-desc">掃描完自動捲到報告區。五大指標：總文章數、有 AIO、AI 推薦我、引用率、<strong style="color:var(--cyan)">AIO 能見度指數</strong>（0-100 分）。<br><br>
+          <strong style="color:var(--cyan)">卡片式結果</strong> — 每篇文章一張卡片，搜尋語句按狀態分色（綠=AI 推薦我、粉=AI 推薦別人、灰=沒有 AI 摘要），前三篇展開，其餘收合。沒 AIO 的排最前面，紅框醒目。<br>
+          <strong style="color:var(--green)">歷史比較</strong> — 自動對比上次同網域掃描。卡片上顯示 AIO&uarr;/&darr;、引用&uarr;/&darr;、NEW 標記，一眼看到哪些文章進步了。<br>
+          <strong style="color:var(--magenta)">產業智慧建議</strong> — 系統自動偵測你的文章屬於哪個產業（美業、餐飲、汽車等 12 種），延伸寫作建議會針對產業特色量身打造。建議來源是<strong>真實的 Google 搜尋推薦</strong>，不是 AI 猜的。<br><br>
+          匯出功能：<strong>CSV</strong>（原始資料）、<strong>圖片</strong>（含品牌浮水印，適合社群分享）、<strong>儲存結果</strong>（手動存到瀏覽器，下次可以比較不同次的掃描）。<br>
+          另有<strong style="color:var(--cyan)">圖表分析</strong>（AIO 分布甜甜圈、引用來源排行 + 統整分析）和<strong style="color:var(--magenta)">時間軸報告</strong>（歷史趨勢折線圖）。</div>
         </div>
       </div>
     </div>
