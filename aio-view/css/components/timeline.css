@@ -34,7 +34,8 @@
 
 .trend-chart-wrap canvas {
   width: 100% !important;
-  max-height: 260px;
+  height: 280px !important;
+  max-height: none;
 }
 
 /* History List */
