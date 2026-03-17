@@ -48,6 +48,13 @@
   font-size: 14px;
   font-weight: 500;
   color: var(--color-text);
+  margin-bottom: 4px;
+}
+
+.chart-card-desc {
+  font-size: 12px;
+  color: var(--color-gray);
+  line-height: 1.6;
   margin-bottom: 12px;
 }
 
@@ -103,6 +110,17 @@
   color: var(--color-rose);
   font-weight: 700;
   font-size: 14px;
+}
+
+.source-summary {
+  margin-top: 12px;
+  padding: 10px 14px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--color-text);
+  background: var(--cyan-04);
+  border-left: 3px solid var(--color-cyan);
+  border-radius: 4px;
 }
 
 /* Empty State */

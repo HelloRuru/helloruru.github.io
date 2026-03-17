@@ -66,7 +66,7 @@ const Charts = {
     const aioNotCited = items.filter(r => r.hasAIO === true && !r.isCited).length;
     const noAio = items.filter(r => r.hasAIO === false).length;
     const timeout = items.filter(r => r.scanStatus === 'timeout').length;
-    const labels = ['被引用', '有 AIO 未引用', '無 AIO'];
+    const labels = ['AI 推薦我', 'AI 推薦別人', '沒有 AI 摘要'];
     const data = [cited, aioNotCited, noAio];
     const colors = [
       this.colors.cyan,
@@ -245,6 +245,25 @@ const Charts = {
           <span class="source-count">${count}</span>
         </div>`
       ).join('');
+
+      // 統整分析
+      const total = data.reduce((a, b) => a + b, 0);
+      const top1 = sorted[0];
+      const top1pct = total ? Math.round((top1[1] / total) * 100) : 0;
+      const googleCount = sorted.filter(([d]) => d.includes('google.')).reduce((a, [, c]) => a + c, 0);
+      const googlePct = total ? Math.round((googleCount / total) * 100) : 0;
+      const nonGoogle = sorted.filter(([d]) => !d.includes('google.'));
+
+      let summary = `AI 摘要共引用了 ${sorted.length} 個不同來源，合計 ${total} 次。`;
+      if (googlePct > 30) {
+        summary += ` Google 自家內容占 ${googlePct}%。`;
+      }
+      if (nonGoogle.length > 0) {
+        const topNonGoogle = nonGoogle[0];
+        summary += ` 非 Google 來源中，${topNonGoogle[0]} 被引用最多（${topNonGoogle[1]} 次）。`;
+      }
+
+      listEl.innerHTML += `<div class="source-summary">${summary}</div>`;
     }
   },
 
