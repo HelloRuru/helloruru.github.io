@@ -44,7 +44,7 @@
   align-items: center;
   text-align: center;
   padding: var(--space-md) var(--space-sm);
-  border: 1px solid rgba(57, 197, 187, 0.08);
+  border: 1px solid var(--cyan-08);
   border-radius: var(--radius-md);
   background: rgba(57, 197, 187, 0.02);
   transition: all 0.3s ease;
@@ -54,7 +54,7 @@
 .flow-step:hover {
   border-color: rgba(57, 197, 187, 0.25);
   background: rgba(57, 197, 187, 0.05);
-  box-shadow: 0 0 16px rgba(57, 197, 187, 0.08);
+  box-shadow: 0 0 16px var(--cyan-08);
   transform: translateY(-2px);
 }
 
@@ -223,7 +223,7 @@
   font-size: 12px;
   font-weight: 500;
   border-radius: var(--radius-full);
-  box-shadow: 0 0 6px rgba(57, 197, 187, 0.3);
+  box-shadow: 0 0 6px var(--cyan-30);
 }
 
 .guide-steps li > strong {
@@ -253,7 +253,7 @@
   display: block;
   padding: var(--space-sm) var(--space-md);
   margin: var(--space-xs) 0;
-  background: #0a0a14;
+  background: var(--bg-code);
   color: #c8d6e5;
   font-family: var(--font-mono);
   font-size: 12px;
@@ -267,7 +267,7 @@
 
 .guide-steps code:not(.guide-code) {
   padding: 2px 6px;
-  background: rgba(57, 197, 187, 0.08);
+  background: var(--cyan-08);
   color: #39c5bb;
   font-family: var(--font-mono);
   font-size: 12px;
@@ -275,17 +275,17 @@
 }
 
 .guide-section a {
-  color: var(--color-bellflower);
+  color: var(--color-magenta);
   text-decoration: underline;
 }
 
 .guide-section a:hover {
   color: var(--color-rose);
-  text-shadow: 0 0 6px rgba(57, 197, 187, 0.3);
+  text-shadow: 0 0 6px var(--cyan-30);
 }
 
 /* ---- Mobile: 2 columns ---- */
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .step-flow {
     grid-template-columns: 1fr;
     gap: var(--space-sm);

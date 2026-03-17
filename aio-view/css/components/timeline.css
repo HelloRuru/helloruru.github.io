@@ -158,8 +158,8 @@
 }
 
 .compare-card.kept {
-  background: rgba(57, 197, 187, 0.06);
-  border: 1px solid rgba(57, 197, 187, 0.2);
+  background: var(--cyan-06);
+  border: 1px solid var(--cyan-20);
 }
 
 .compare-value {

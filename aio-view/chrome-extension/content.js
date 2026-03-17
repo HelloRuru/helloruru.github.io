@@ -196,24 +196,31 @@
   function detectOrganicResults() {
     const results = [];
     const seen = new Set();
-
-    // Google 一般搜尋結果區塊（每個 .g 是一筆結果）
-    const entries = document.querySelectorAll('#rso .g, #rso [data-hveid] > .g');
     let rank = 0;
 
-    entries.forEach(entry => {
-      // 找第一個非 Google 連結
-      const link = entry.querySelector('a[href]');
+    // 策略：找所有搜尋結果標題（h3），往上找連結
+    const searchArea = document.querySelector('#rso') || document.querySelector('#search');
+    if (!searchArea) return results;
+
+    const headings = searchArea.querySelectorAll('h3');
+
+    headings.forEach(h3 => {
+      if (rank >= 20) return;
+
+      // h3 本身或父層是連結
+      const link = h3.closest('a[href]') || h3.parentElement?.querySelector('a[href]');
       if (!link) return;
+
       const host = extractHostname(link.href);
       if (!host || isGoogleHost(host)) return;
 
-      rank++;
-      if (rank > 20) return;
-      if (seen.has(host + rank)) return;
-      seen.add(host + rank);
+      // 避免同一個連結重複計算
+      const key = host + '|' + link.href;
+      if (seen.has(key)) return;
+      seen.add(key);
 
-      results.push({ rank, host });
+      rank++;
+      results.push({ rank, host, url: link.href });
     });
 
     return results;

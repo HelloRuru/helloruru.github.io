@@ -69,7 +69,7 @@
 .check-progress {
   position: relative;
   height: 6px;
-  background: rgba(57, 197, 187, 0.08);
+  background: var(--cyan-08);
   border-radius: 3px;
   margin-bottom: var(--space-md);
   overflow: hidden;
@@ -115,7 +115,7 @@
 }
 
 .check-card:hover {
-  border-color: rgba(57, 197, 187, 0.2);
+  border-color: var(--cyan-20);
 }
 
 /* 已檢查的卡片：稍微透明 */
@@ -212,7 +212,7 @@
 }
 
 .check-status-btn:hover {
-  border-color: rgba(57, 197, 187, 0.3);
+  border-color: var(--cyan-30);
   color: var(--color-text);
 }
 
@@ -234,7 +234,7 @@
   border-color: var(--color-rose);
   color: var(--color-rose);
   background: rgba(57, 197, 187, 0.1);
-  box-shadow: 0 0 8px rgba(57, 197, 187, 0.2);
+  box-shadow: 0 0 8px var(--cyan-20);
 }
 
 /* 沒有 AIO — 暗灰 */
@@ -254,8 +254,8 @@
 
 /* ========= 油猴腳本安裝區 ========= */
 .userscript-install {
-  background: rgba(57, 197, 187, 0.04);
-  border: 1px dashed rgba(57, 197, 187, 0.2);
+  background: var(--cyan-04);
+  border: 1px dashed var(--cyan-20);
   border-radius: var(--radius-md);
   padding: var(--space-md);
   margin-bottom: var(--space-lg);
@@ -307,7 +307,7 @@
   font-size: 11px;
   font-family: var(--font-mono);
   color: var(--color-rose);
-  border: 1px solid rgba(57, 197, 187, 0.3);
+  border: 1px solid var(--cyan-30);
   border-radius: 50%;
 }
 
@@ -375,7 +375,7 @@
 /* ========= 自動檢查中的卡片高亮 ========= */
 .check-card-active {
   border-color: var(--color-rose) !important;
-  box-shadow: 0 0 12px rgba(57, 197, 187, 0.3);
+  box-shadow: 0 0 12px var(--cyan-30);
 }
 
 .check-card-active .check-card-num {
@@ -435,14 +435,14 @@
 }
 
 .check-filter-btn:hover {
-  border-color: rgba(57, 197, 187, 0.3);
+  border-color: var(--cyan-30);
   color: var(--color-text);
 }
 
 .check-filter-btn.active {
   border-color: var(--color-rose);
   color: var(--color-rose);
-  background: rgba(57, 197, 187, 0.08);
+  background: var(--cyan-08);
 }
 
 /* ========= 群組卡片 ========= */
@@ -472,7 +472,7 @@
   font-family: var(--font-mono);
   color: var(--color-rose);
   padding: 2px 8px;
-  border: 1px solid rgba(57, 197, 187, 0.2);
+  border: 1px solid var(--cyan-20);
   border-radius: var(--radius-sm);
 }
 
@@ -506,9 +506,9 @@
   font-family: var(--font-mono);
   color: var(--color-nadeshiko);
   padding: 1px 8px;
-  border: 1px solid rgba(57, 197, 187, 0.15);
+  border: 1px solid var(--cyan-15);
   border-radius: var(--radius-sm);
-  background: rgba(57, 197, 187, 0.04);
+  background: var(--cyan-04);
 }
 
 /* ========= 響應式 ========= */

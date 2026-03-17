@@ -31,7 +31,7 @@
 }
 
 .data-table tbody tr:hover {
-  background: rgba(57, 197, 187, 0.04);
+  background: var(--cyan-04);
 }
 
 .data-table input[type="text"] {
@@ -204,7 +204,7 @@
 }
 
 .result-card-cited:hover {
-  box-shadow: 0 0 20px rgba(57, 197, 187, 0.2), inset 0 0 30px rgba(57, 197, 187, 0.05);
+  box-shadow: 0 0 20px var(--cyan-20), inset 0 0 30px rgba(57, 197, 187, 0.05);
 }
 
 /* 有 AIO 沒引用 — magenta 微光 */
@@ -261,7 +261,7 @@
   line-height: 1.4;
   flex: 1;
   min-width: 0;
-  text-shadow: 0 0 8px rgba(57, 197, 187, 0.15);
+  text-shadow: 0 0 8px var(--cyan-15);
 }
 
 /* 標題跳色：依卡片狀態 */
@@ -329,7 +329,7 @@
 }
 
 .rc-badge-new {
-  background: rgba(57, 197, 187, 0.15);
+  background: var(--cyan-15);
   color: #39c5bb;
 }
 
@@ -343,8 +343,8 @@
   height: 1px;
   background: linear-gradient(90deg,
     transparent,
-    rgba(57, 197, 187, 0.2) 20%,
-    rgba(57, 197, 187, 0.2) 80%,
+    var(--cyan-20) 20%,
+    var(--cyan-20) 80%,
     transparent
   );
   margin-bottom: 10px;
@@ -546,7 +546,7 @@
   cursor: not-allowed;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .article-filters {
     flex-direction: column;
     align-items: flex-start;
