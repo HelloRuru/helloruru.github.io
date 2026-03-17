@@ -184,7 +184,7 @@ const ResultsTable = {
     // 狀態摘要
     const badges = [];
     if (noAio) {
-      badges.push('<span class="rc-badge rc-badge-danger">無 AIO</span>');
+      badges.push('<span class="rc-badge rc-badge-danger">沒有 AI 摘要</span>');
     } else {
       badges.push(`<span class="rc-badge rc-badge-aio">${aioCount}/${total} AIO</span>`);
       if (cited.length > 0) {
@@ -253,9 +253,9 @@ const ResultsTable = {
 
   renderQuerySection(type, queries) {
     const config = {
-      cited:   { icon: '&#10003;', label: '被引用', cls: 'rc-section-cited' },
-      aio:     { icon: '&#9675;',  label: '有 AIO',  cls: 'rc-section-aio' },
-      none:    { icon: '&#10007;', label: '沒 AIO',  cls: 'rc-section-none' },
+      cited:   { icon: '&#10003;', label: 'AI 推薦我', cls: 'rc-section-cited' },
+      aio:     { icon: '&#9675;',  label: 'AI 推薦別人', cls: 'rc-section-aio' },
+      none:    { icon: '&#10007;', label: '沒有 AI 摘要', cls: 'rc-section-none' },
       timeout: { icon: '?',        label: '未回傳',  cls: 'rc-section-timeout' }
     };
     const c = config[type];
