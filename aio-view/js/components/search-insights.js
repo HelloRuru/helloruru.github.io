@@ -736,10 +736,25 @@ const SearchInsights = {
     const now = new Date();
     const timestamp = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 
+    // 產業探索推薦（永遠顯示在底部）
+    const industries = this.INDUSTRY_RULES;
+    const shuffled = [...industries].sort(() => Math.random() - 0.5).slice(0, 3);
+    const facetSuffixes = ['推薦', '價格', '比較', '入門', '哪家好', '教學'];
+    let industryHtml = '<div style="margin-top:12px; padding-top:10px; border-top:1px solid rgba(57,197,187,0.1);">';
+    industryHtml += '<div class="suggestion-timestamp">產業探索建議（隨機推薦）</div>';
+    shuffled.forEach(ind => {
+      const suffixes = [...facetSuffixes].sort(() => Math.random() - 0.5).slice(0, 2);
+      suffixes.forEach(suf => {
+        industryHtml += `<span class="suggestion-chip suggestion-chip-new">${Utils.escapeHtml(ind.label + ' ' + suf)}</span> `;
+      });
+    });
+    industryHtml += '</div>';
+
     if (analysis.suggestions.length > 0) {
       this.elements.suggestions.innerHTML = `
         <div class="suggestion-timestamp">資料時間：${timestamp}</div>
         ${analysis.suggestions.map(s => `<span class="suggestion-chip">${Utils.escapeHtml(s)}</span>`).join('')}
+        ${industryHtml}
       `;
       return;
     }
