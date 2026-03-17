@@ -255,8 +255,8 @@
 
 .rc-title {
   color: var(--color-cyan);
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 15px;
+  font-weight: 700;
   text-decoration: none;
   line-height: 1.4;
   flex: 1;
@@ -264,9 +264,20 @@
   text-shadow: 0 0 8px rgba(57, 197, 187, 0.15);
 }
 
+/* 標題跳色：依卡片狀態 */
+.result-card-cited .rc-title {
+  color: #00ff88;
+  text-shadow: 0 0 8px rgba(0, 255, 136, 0.2);
+}
+
+.result-card-aio .rc-title {
+  color: #ff6b98;
+  text-shadow: 0 0 8px rgba(255, 107, 152, 0.2);
+}
+
 .result-card-danger .rc-title {
-  color: #ff6b6b;
-  text-shadow: 0 0 8px rgba(255, 60, 60, 0.15);
+  color: #ff4444;
+  text-shadow: 0 0 8px rgba(255, 60, 60, 0.2);
 }
 
 .rc-title:hover {

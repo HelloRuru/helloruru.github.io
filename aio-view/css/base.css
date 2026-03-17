@@ -63,8 +63,8 @@
   /* Typography */
   --font-display: 'Orbitron', 'JetBrains Mono', sans-serif;
   --font-heading: 'Orbitron', 'JetBrains Mono', sans-serif;
-  --font-body: 'Noto Sans TC', 'JetBrains Mono', sans-serif;
-  --font-small: 'JetBrains Mono', 'Noto Sans TC', sans-serif;
+  --font-body: 'IBM Plex Sans TC', 'Noto Sans TC', sans-serif;
+  --font-small: 'JetBrains Mono', 'IBM Plex Sans TC', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
   /* Spacing */
