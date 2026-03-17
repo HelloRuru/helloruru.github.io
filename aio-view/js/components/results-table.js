@@ -26,11 +26,49 @@ const ResultsTable = {
     });
   },
 
-  render(results) {
+  /** 上次掃描的文章狀態 Map { url: { hasAIO, isCited } } */
+  previousState: null,
+
+  async render(results) {
     this.results = results;
     Stats.render(results);
+
+    // 載入上次歷史做比較
+    await this.loadPreviousState(results.domain);
+
     this.filter('all');
     this.show();
+  },
+
+  /** 從 IndexedDB 載入上次同網域的掃描結果 */
+  async loadPreviousState(domain) {
+    this.previousState = null;
+    try {
+      const summaries = await DB.getHistorySummaries();
+      // 找同網域最近一筆（排除今天的）
+      const today = new Date().toISOString().split('T')[0];
+      const prev = summaries
+        .filter(s => s.domain === domain && s.date !== today)
+        .pop();
+      if (!prev) return;
+
+      const record = await DB.getFullRecord(prev.id);
+      if (!record?.results) return;
+
+      const stateMap = new Map();
+      record.results.forEach(r => {
+        const key = r.url || r.title;
+        if (!stateMap.has(key)) {
+          stateMap.set(key, { hasAIO: false, isCited: false });
+        }
+        const s = stateMap.get(key);
+        if (r.hasAIO) s.hasAIO = true;
+        if (r.isCited) s.isCited = true;
+      });
+      this.previousState = stateMap;
+    } catch {
+      // 沒歷史就不比
+    }
   },
 
   /** 按文章 URL 分組 */
@@ -151,6 +189,27 @@ const ResultsTable = {
       badges.push(`<span class="rc-badge rc-badge-aio">${aioCount}/${total} AIO</span>`);
       if (cited.length > 0) {
         badges.push(`<span class="rc-badge rc-badge-cited">${cited.length} 引用</span>`);
+      }
+    }
+
+    // vs 上次比較
+    if (this.previousState) {
+      const prev = this.previousState.get(group.url);
+      if (!prev) {
+        badges.push('<span class="rc-badge rc-badge-new">NEW</span>');
+      } else {
+        const nowHasAIO = aioCount > 0;
+        const nowCited = cited.length > 0;
+        if (!prev.hasAIO && nowHasAIO) {
+          badges.push('<span class="rc-badge rc-badge-up">AIO &#8593;</span>');
+        } else if (prev.hasAIO && !nowHasAIO) {
+          badges.push('<span class="rc-badge rc-badge-down">AIO &#8595;</span>');
+        }
+        if (!prev.isCited && nowCited) {
+          badges.push('<span class="rc-badge rc-badge-up">引用 &#8593;</span>');
+        } else if (prev.isCited && !nowCited) {
+          badges.push('<span class="rc-badge rc-badge-down">引用 &#8595;</span>');
+        }
       }
     }
 

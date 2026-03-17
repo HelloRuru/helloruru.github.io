@@ -316,6 +316,28 @@
   font-weight: 700;
 }
 
+/* 歷史比較標記 */
+.rc-badge-up {
+  background: rgba(0, 255, 136, 0.15);
+  color: #00ff88;
+  animation: badge-glow-green 1.5s ease-in-out 3;
+}
+
+.rc-badge-down {
+  background: rgba(255, 60, 60, 0.15);
+  color: #ff4444;
+}
+
+.rc-badge-new {
+  background: rgba(57, 197, 187, 0.15);
+  color: #39c5bb;
+}
+
+@keyframes badge-glow-green {
+  0%, 100% { box-shadow: none; }
+  50% { box-shadow: 0 0 8px rgba(0, 255, 136, 0.4); }
+}
+
 /* 分隔線 — 掃描線風格 */
 .rc-divider {
   height: 1px;
