@@ -373,6 +373,11 @@ const ManualCheck = {
       if (!this.organicRanks) this.organicRanks = {};
       this.organicRanks[article.id] = organicRank;
     }
+    // 存 Google 相關搜尋
+    if (Array.isArray(data.related) && data.related.length > 0) {
+      if (!this.relatedSearches) this.relatedSearches = {};
+      this.relatedSearches[article.id] = data.related;
+    }
 
     // 通知
     const label = status === 'cited' ? '有引用' : status === 'aio' ? '有 AIO' : '沒有';
@@ -1114,7 +1119,8 @@ const ManualCheck = {
           hasAIO: status === 'timeout' ? null : status === 'cited' || status === 'aio',
           isCited: status === 'cited',
           aioSources: this.checkSources[task.id] || [],
-          organicRank: this.organicRanks?.[task.id] ?? null
+          organicRank: this.organicRanks?.[task.id] ?? null,
+          relatedSearches: this.relatedSearches?.[task.id] || []
         };
       })
     };

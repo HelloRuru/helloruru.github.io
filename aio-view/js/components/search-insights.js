@@ -50,6 +50,7 @@ const SearchInsights = {
 
   render(results) {
     const items = results?.results || [];
+    this._lastItems = items; // 給 renderSuggestions 用
     if (items.length === 0) {
       this.reset();
       return;
@@ -732,14 +733,56 @@ const SearchInsights = {
   renderSuggestions(analysis) {
     if (!this.elements.suggestions) return;
 
-    if (analysis.suggestions.length === 0) {
-      this.elements.suggestions.innerHTML = '<span class="topic-branch-value">目前沒有需要優先補搜的題目</span>';
+    const now = new Date();
+    const timestamp = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+    if (analysis.suggestions.length > 0) {
+      this.elements.suggestions.innerHTML = `
+        <div class="suggestion-timestamp">資料時間：${timestamp}</div>
+        ${analysis.suggestions.map(s => `<span class="suggestion-chip">${Utils.escapeHtml(s)}</span>`).join('')}
+      `;
       return;
     }
 
-    this.elements.suggestions.innerHTML = analysis.suggestions.map((suggestion) => `
-      <span class="suggestion-chip">${Utils.escapeHtml(suggestion)}</span>
-    `).join('');
+    // 沒有補搜題目時，收集掃描中的 Google 相關搜尋
+    const allRelated = [];
+    const seen = new Set();
+    (this._lastItems || []).forEach(item => {
+      (item.relatedSearches || []).forEach(r => {
+        const lower = r.toLowerCase();
+        if (!seen.has(lower) && r.length <= 20) {
+          seen.add(lower);
+          allRelated.push(r);
+        }
+      });
+    });
+
+    if (allRelated.length > 0) {
+      const sample = allRelated.sort(() => Math.random() - 0.5).slice(0, 6);
+      this.elements.suggestions.innerHTML = `
+        <div class="suggestion-timestamp">資料時間：${timestamp}｜來源：Google 搜尋相關推薦</div>
+        ${sample.map(s => {
+          const facet = this.matchFacet(s);
+          const tag = facet ? `<span class="suggest-tag" data-facet="${facet.key}">${Utils.escapeHtml(facet.label)}</span>` : '';
+          return `<span class="suggestion-chip suggestion-chip-google">${tag}${Utils.escapeHtml(s)}</span>`;
+        }).join('')}
+      `;
+      return;
+    }
+
+    // 連相關搜尋都沒有，隨機推薦 3 個產業各 2 個題目
+    const industries = this.INDUSTRY_RULES;
+    const shuffled = [...industries].sort(() => Math.random() - 0.5).slice(0, 3);
+    const facetSuffixes = ['推薦', '價格', '比較', '入門', '哪家好', '教學'];
+
+    let html = `<div class="suggestion-timestamp">資料時間：${timestamp}｜以下為隨機產業探索建議</div>`;
+    shuffled.forEach(ind => {
+      const suffixes = [...facetSuffixes].sort(() => Math.random() - 0.5).slice(0, 2);
+      suffixes.forEach(suf => {
+        html += `<span class="suggestion-chip suggestion-chip-new">${Utils.escapeHtml(ind.label + ' ' + suf)}</span>`;
+      });
+    });
+    this.elements.suggestions.innerHTML = html;
   },
 
   show() {

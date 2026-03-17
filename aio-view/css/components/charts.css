@@ -237,6 +237,14 @@
   padding-left: 2px;
 }
 
+.suggestion-timestamp {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--color-gray);
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
 .suggest-loading {
   opacity: 0.5;
   font-style: italic;
