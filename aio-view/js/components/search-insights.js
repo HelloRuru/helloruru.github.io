@@ -625,6 +625,44 @@ const SearchInsights = {
   /**
    * 根據面向類型 + 關鍵字，產生延伸寫作建議
    */
+  /** 寬鬆版 Google Autocomplete（產業探索用，只過濾長度） */
+  fetchGoogleSuggestionsRaw(query) {
+    return new Promise((resolve) => {
+      const q = String(query || '').trim();
+      if (!q) { resolve([]); return; }
+
+      const callbackName = '_gsr_' + Math.random().toString(36).slice(2, 8);
+      const timeout = setTimeout(() => { cleanup(); resolve([]); }, 4000);
+
+      const cleanup = () => {
+        clearTimeout(timeout);
+        delete window[callbackName];
+        script.remove();
+      };
+
+      window[callbackName] = (data) => {
+        cleanup();
+        try {
+          const raw = Array.isArray(data[1]) ? data[1] : [];
+          const seen = new Set([q.toLowerCase()]);
+          const filtered = raw
+            .map(s => this.s2t((Array.isArray(s) ? s[0] : String(s)).trim()))
+            .filter(s => {
+              if (!s || s.length > 30 || seen.has(s.toLowerCase())) return false;
+              seen.add(s.toLowerCase());
+              return true;
+            })
+            .slice(0, 6);
+          resolve(filtered);
+        } catch { resolve([]); }
+      };
+
+      const script = document.createElement('script');
+      script.src = `https://clients1.google.com/complete/search?client=hp&hl=zh-TW&gl=tw&q=${encodeURIComponent(q)}&callback=${callbackName}`;
+      document.head.appendChild(script);
+    });
+  },
+
   /** 偵測文章所屬產業 */
   detectIndustry(text) {
     for (const rule of this.INDUSTRY_RULES) {
@@ -802,7 +840,8 @@ const SearchInsights = {
     const results = [];
     for (const q of queries) {
       try {
-        const suggestions = await this.fetchGoogleSuggestions(q.seed, []);
+        // 用寬鬆版抓（不過濾地址和英文比例），確保拿到足夠結果
+        const suggestions = await this.fetchGoogleSuggestionsRaw(q.seed);
         results.push({ label: q.industry.label, suggestions: suggestions.slice(0, 2) });
       } catch {
         results.push({ label: q.industry.label, suggestions: [] });
