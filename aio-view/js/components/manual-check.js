@@ -538,11 +538,11 @@ const ManualCheck = {
           this.popup.location = url;
         } catch (e) {
           // 跨域 location 寫入失敗才重開
-          this.popup = window.open(url, this.POPUP_NAME, 'width=900,height=600,left=100,top=100');
+          this.popup = window.open(url, this.POPUP_NAME, 'width=420,height=320,left=0,top=0');
         }
       } else {
         // 第一次才開新彈窗
-        this.popup = window.open(url, this.POPUP_NAME, 'width=900,height=600,left=100,top=100');
+        this.popup = window.open(url, this.POPUP_NAME, 'width=420,height=320,left=0,top=0');
       }
       if (!this.popup) {
         Toast.error('彈出視窗被阻擋！請允許此網站的彈出視窗，然後重新點「開始自動檢查」');
