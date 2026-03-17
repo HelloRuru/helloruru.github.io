@@ -641,7 +641,35 @@ body{
       <div class="section-title">FIRST-TIME SETUP</div>
     </div>
 
-    <p style="color:var(--text-dim);margin-bottom:16px;font-size:14px"><strong style="color:var(--green)">手動檢查模式不需要安裝任何東西</strong>，直接在瀏覽器操作即可。<br>想在瀏覽器裡自動回傳結果，先載入 <code>aio-view/chrome-extension</code>；CLI 掃描則是另一條本機自動化路線。</p>
+    <p style="color:var(--text-dim);margin-bottom:16px;font-size:14px"><strong style="color:var(--green)">手動檢查模式不需要安裝任何東西</strong>，直接在瀏覽器操作即可。<br>想自動檢查，裝 Chrome 擴充功能最方便；CLI 則適合大量批次掃描。</p>
+
+    <h3 style="color:var(--cyan);font-family:var(--display);font-size:14px;letter-spacing:1px;margin:24px 0 12px;">// CHROME 擴充功能安裝（推薦）</h3>
+
+    <div class="steps" style="margin-bottom:24px">
+      <div class="step">
+        <div class="step-num" style="font-size:14px">A1</div>
+        <div class="step-body">
+          <div class="step-title">下載擴充功能</div>
+          <div class="step-desc">到 <a href="https://github.com/HelloRuru/helloruru.github.io" style="color:var(--cyan)">GitHub Repo</a> 下載 ZIP，解壓後找到 <code>aio-view/chrome-extension</code> 資料夾。</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="font-size:14px">A2</div>
+        <div class="step-body">
+          <div class="step-title">載入到 Chrome</div>
+          <div class="step-desc">打開 <code>chrome://extensions/</code> → 右上角開啟「開發人員模式」→ 按「載入未封裝項目」→ 選擇 <code>chrome-extension</code> 資料夾。<br>看到 <strong style="color:var(--cyan)">AIO View Detector</strong> 出現就完成了。</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="font-size:14px">A3</div>
+        <div class="step-body">
+          <div class="step-title">重新整理 AIO View</div>
+          <div class="step-desc">回到 AIO View 頁面按 F5 重新整理。Debug 區域出現 <code>[EXT] bridge-ready</code> 就代表擴充功能已連線。</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="color:var(--magenta);font-family:var(--display);font-size:14px;letter-spacing:1px;margin:24px 0 12px;">// CLI 掃描安裝（批次用）</h3>
 
     <div class="terminal">
       <div class="terminal-bar">
@@ -662,6 +690,51 @@ body{
 
 <span class="comment"># 完成！可以開始掃描了</span>
 <span class="cmd">node scan.js</span> <span class="highlight">--input queries.json --output results.json --domain 你的網域.com</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: 名詞說明 -->
+  <section class="section reveal">
+    <div class="section-header">
+      <div class="section-icon" style="border-color:var(--yellow);box-shadow:0 0 8px rgba(255,221,0,.3);background:rgba(255,221,0,.04)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--yellow)" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+      </div>
+      <div class="section-title" style="color:var(--yellow);text-shadow:0 0 12px rgba(255,221,0,.3)">GLOSSARY</div>
+    </div>
+
+    <div class="tips">
+      <div class="tip">
+        <span class="tip-icon" style="color:var(--cyan)">AI Overview</span>
+        <div class="tip-text">Google 搜尋結果頂部的 AI 生成摘要（前稱 SGE）。Google AI 會自動閱讀多篇文章，整理出一段摘要回答使用者。</div>
+      </div>
+      <div class="tip">
+        <span class="tip-icon" style="color:var(--green)">被引用</span>
+        <div class="tip-text">你的文章網址出現在 AI Overview 的引用來源裡。代表 Google AI 認為你的內容具有參考價值，是最好的結果。</div>
+      </div>
+      <div class="tip">
+        <span class="tip-icon" style="color:var(--magenta)">有 AIO 未引用</span>
+        <div class="tip-text">搜尋結果有出現 AI Overview，但引用的是別人的文章。代表有機會——你的內容夠好就能搶到引用位。</div>
+      </div>
+      <div class="tip">
+        <span class="tip-icon" style="color:var(--text-dim)">無 AIO</span>
+        <div class="tip-text">搜尋結果沒有出現 AI Overview。可能是 Google 認為這個搜尋不需要 AI 摘要，或是還沒覆蓋到這個主題。</div>
+      </div>
+      <div class="tip">
+        <span class="tip-icon" style="color:var(--cyan)">搜尋面向</span>
+        <div class="tip-text">同一篇文章用不同關鍵字組合搜尋（推薦、價格、比較、教學等），全面檢查各種問法的 AIO 表現。</div>
+      </div>
+      <div class="tip">
+        <span class="tip-icon" style="color:var(--cyan)">AIO 能見度</span>
+        <div class="tip-text">0-100 分的綜合指標。結合 AIO 出現率（40%）和引用率（60%）。60 分以上代表你的內容在 AI 搜尋裡很有存在感。</div>
+      </div>
+      <div class="tip">
+        <span class="tip-icon" style="color:var(--green)">引用來源</span>
+        <div class="tip-text">AI Overview 下方列出的參考網站。掃描會自動收集所有引用來源，幫你看到競爭對手是誰。</div>
+      </div>
+      <div class="tip">
+        <span class="tip-icon" style="color:var(--magenta)">延伸寫作方向</span>
+        <div class="tip-text">根據 Google 搜尋建議和你現有文章的缺口，自動推薦你還沒寫但有搜尋量的題目。系統會依產業給出具體建議。</div>
       </div>
     </div>
   </section>
@@ -714,6 +787,46 @@ body{
       </div>
     </div>
 
+    <div class="section-title" style="color:var(--magenta);text-shadow:0 0 12px rgba(255,0,170,.3);margin:32px 0 16px;font-family:var(--display);font-size:14px;letter-spacing:1px">// v2.1 UPDATE</div>
+
+    <div class="features">
+      <div class="feature">
+        <span class="feature-badge new">CARDS</span>
+        <h4>卡片式結果</h4>
+        <p>結果按文章分組，搜尋語句依狀態分色（綠=被引用、粉=有AIO、灰=沒AIO）。前三篇展開，其餘收合，點標題切換。</p>
+      </div>
+
+      <div class="feature">
+        <span class="feature-badge new">RETRY</span>
+        <h4>逾時自動重試</h4>
+        <p>第一輪掃完後，自動收集未回傳的語句重跑一次，不用手動重來。</p>
+      </div>
+
+      <div class="feature">
+        <span class="feature-badge new">COMPARE</span>
+        <h4>歷史比較</h4>
+        <p>自動對比上次同網域的掃描結果。卡片上顯示 AIO&uarr;/&darr;、引用&uarr;/&darr;、NEW 標記，一眼看到進步。</p>
+      </div>
+
+      <div class="feature">
+        <span class="feature-badge new">IMAGE</span>
+        <h4>匯出結果圖片</h4>
+        <p>一鍵產生深色背景的結果截圖，含統計數字 + 卡片 + 品牌浮水印，直接分享到社群。</p>
+      </div>
+
+      <div class="feature">
+        <span class="feature-badge ai">INDUSTRY</span>
+        <h4>12 大產業建議</h4>
+        <p>系統自動偵測文章所屬產業（美業、餐飲、汽車、冷氣、醫療等），延伸寫作建議會根據產業特色量身打造。</p>
+      </div>
+
+      <div class="feature">
+        <span class="feature-badge chart">PROGRESS</span>
+        <h4>視覺進度條</h4>
+        <p>自動檢查時顯示 cyan 漸層進度條 + 百分比，掃完自動捲到結果區。</p>
+      </div>
+    </div>
+
     <div class="terminal" style="margin-top:16px">
       <div class="terminal-bar">
         <span class="terminal-dot"></span>
@@ -758,7 +871,15 @@ body{
       </div>
       <div class="tip">
         <span class="tip-icon">&gt;</span>
-        <div class="tip-text">掃描時<strong>不要另開 Chrome 視窗</strong>，讓 Playwright 用獨立瀏覽器跑就好。</div>
+        <div class="tip-text">CLI 掃描時<strong>不要另開 Chrome 視窗</strong>，讓 Playwright 用獨立瀏覽器跑就好。</div>
+      </div>
+      <div class="tip">
+        <span class="tip-icon">&gt;</span>
+        <div class="tip-text">擴充功能自動檢查時，Google 彈窗會在背景跑，<strong>掃完會自動關閉</strong>。未回傳的會自動重試一次。</div>
+      </div>
+      <div class="tip">
+        <span class="tip-icon">&gt;</span>
+        <div class="tip-text">每次掃描結果自動存到 IndexedDB，下次掃同網域時會<strong>自動比較上次</strong>，顯示升降標記。</div>
       </div>
     </div>
   </section>
