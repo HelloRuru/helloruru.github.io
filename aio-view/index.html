@@ -182,6 +182,7 @@
 
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
 
   <!-- Styles -->
   <link rel="stylesheet" href="style.css?v=20260316-article-insights">
@@ -809,6 +810,14 @@ npx playwright install chromium</code>
                 <line x1="16" y1="17" x2="8" y2="17"/>
               </svg>
               匯出 CSV
+            </button>
+            <button class="btn btn-secondary" id="export-image-btn">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+              匯出圖片
             </button>
           </div>
         </section>
