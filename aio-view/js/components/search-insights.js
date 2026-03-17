@@ -625,6 +625,26 @@ const SearchInsights = {
   /**
    * 根據面向類型 + 關鍵字，產生延伸寫作建議
    */
+  /** 把搜尋關鍵字轉成問句 */
+  toQuestion(keyword) {
+    const k = String(keyword || '').trim();
+    // 已經是問句就不加
+    if (/[？?]$/.test(k)) return k;
+    if (/嗎$|呢$/.test(k)) return k + '？';
+    // 已有動詞/疑問詞結尾
+    if (/怎麼|如何|哪裡|哪家|多少/.test(k)) return k + '？';
+    // 推薦/評價類
+    if (/推薦|評價|口碑/.test(k)) return k + '怎麼挑？';
+    // 價格/費用類
+    if (/價格|費用|價錢|行情/.test(k)) return k + '多少？';
+    // 比較類
+    if (/比較|差異|vs/.test(k)) return k + '哪個好？';
+    // 教學/入門類
+    if (/教學|入門|新手/.test(k)) return k + '怎麼開始？';
+    // 通用：加「怎麼選？」
+    return k + '怎麼選？';
+  },
+
   /** 寬鬆版 Google Autocomplete（產業探索用，只過濾長度） */
   fetchGoogleSuggestionsRaw(query) {
     return new Promise((resolve) => {
@@ -854,7 +874,7 @@ const SearchInsights = {
 
     results.forEach(r => {
       if (r.suggestions.length === 0) return;
-      const topics = r.suggestions.map(s => `「${Utils.escapeHtml(s)}」`).join('、');
+      const topics = r.suggestions.map(s => `「${Utils.escapeHtml(this.toQuestion(s))}」`).join('、');
       html += `<div class="industry-explore-row"><span class="suggest-tag" style="flex-shrink:0;">${Utils.escapeHtml(r.label)}</span><span class="industry-explore-text">${topics}</span></div>`;
     });
 
