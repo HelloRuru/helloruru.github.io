@@ -31,9 +31,13 @@
   window.addEventListener('message', (event) => {
     if (event.origin !== location.origin) return;
     if (event.data?.t === 'close-popup') {
-      chrome.runtime.sendMessage(event.data, () => {
-        void chrome.runtime.lastError;
-      });
+      try {
+        chrome.runtime.sendMessage(event.data, () => {
+          void chrome.runtime.lastError;
+        });
+      } catch {
+        // service worker 未啟動時會報錯，靜默忽略
+      }
     }
   });
 
