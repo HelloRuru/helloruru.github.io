@@ -862,7 +862,7 @@ const SearchInsights = {
       try {
         // 用寬鬆版抓（不過濾地址和英文比例），確保拿到足夠結果
         const suggestions = await this.fetchGoogleSuggestionsRaw(q.seed);
-        results.push({ label: q.industry.label, suggestions: suggestions.slice(0, 2) });
+        results.push({ label: q.industry.label, suggestions: suggestions.slice(0, 3) });
       } catch {
         results.push({ label: q.industry.label, suggestions: [] });
       }
@@ -874,18 +874,7 @@ const SearchInsights = {
 
     results.forEach(r => {
       if (r.suggestions.length === 0) return;
-      const topics = r.suggestions.map(s => {
-        let q = s;
-        if (!/[？?]$/.test(q)) {
-          if (/推薦|評價|口碑/.test(q)) q += '怎麼挑？';
-          else if (/價格|費用|價錢|行情/.test(q)) q += '多少？';
-          else if (/比較|差異/.test(q)) q += '哪個好？';
-          else if (/教學|入門|新手/.test(q)) q += '怎麼開始？';
-          else if (/怎麼|如何|哪裡|哪家|多少/.test(q)) q += '？';
-          else q += '怎麼選？';
-        }
-        return `「${Utils.escapeHtml(q)}」`;
-      }).join('、');
+      const topics = r.suggestions.map(s => `「${Utils.escapeHtml(s)}」`).join('、');
       html += `<div class="industry-explore-row"><span class="suggest-tag" style="flex-shrink:0;">${Utils.escapeHtml(r.label)}</span><span class="industry-explore-text">${topics}</span></div>`;
     });
 
