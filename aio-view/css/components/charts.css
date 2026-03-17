@@ -219,14 +219,17 @@
 .status-good {
   color: #00ff88;
   font-family: var(--font-mono);
-  font-weight: 600;
-  letter-spacing: 1px;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 2px;
 }
 
 .status-dim {
   color: #555;
   font-family: var(--font-mono);
-  letter-spacing: 1px;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 2px;
 }
 
 .insight-chip-count {

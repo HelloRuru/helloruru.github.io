@@ -488,7 +488,7 @@ const SearchInsights = {
                 ? article.suggestions.map(query => `
                     <span class="suggestion-chip">${Utils.escapeHtml(query)}</span>
                   `).join('')
-                : '<span class="topic-branch-value">SCAN COMPLETE</span>'}
+                : '<span class="status-good">SCAN COMPLETE</span>'}
             </div>
           </div>
           <div class="topic-branch">
