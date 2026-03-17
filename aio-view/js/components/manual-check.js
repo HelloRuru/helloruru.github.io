@@ -462,19 +462,9 @@ const ManualCheck = {
    * 關閉 Google 搜尋彈窗
    */
   closePopup() {
+    // 透過擴充功能強制關閉 Google 搜尋分頁
     try {
-      if (this.popup && !this.popup.closed) {
-        try { this.popup.location = 'about:blank'; } catch (e) {}
-        setTimeout(() => {
-          try {
-            if (this.popup && !this.popup.closed) {
-              this.popup.close();
-            }
-          } catch (e) {}
-          this.popup = null;
-        }, 300);
-        return;
-      }
+      window.postMessage({ t: 'close-popup' }, location.origin);
     } catch (e) {}
     this.popup = null;
   },
@@ -507,10 +497,20 @@ const ManualCheck = {
     // 全部完成
     if (this.autoCheck.currentIndex >= this.articles.length) {
       this.autoCheck.active = false;
+      clearTimeout(this.autoCheck.timer);
+      clearTimeout(this.autoCheck.timeoutTimer);
+
+      // 關閉 Google 搜尋彈窗
+      try {
+        if (this.popup && !this.popup.closed) {
+          this.popup.close();
+        }
+      } catch (e) { /* 跨域視窗可能無法關閉 */ }
+      this.popup = null;
 
       const checked = this.articles.filter(a => this.checkResults[a.id]).length;
       const total = this.articles.length;
-      Toast.success(`全部跑完了！${checked}/${total} 個查詢有結果，可以查看報告`);
+      Toast.success(`自動檢查完成！${checked}/${total} 個查詢有結果，可以查看報告`);
       this.updateAutoCheckUI();
       this.updateProgress();
       this.logDebug('自動檢查流程完成');

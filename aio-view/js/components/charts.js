@@ -98,6 +98,7 @@ const Charts = {
       options: {
         responsive: true,
         maintainAspectRatio: true,
+        aspectRatio: 1,
         cutout: '55%',
         plugins: {
           legend: {

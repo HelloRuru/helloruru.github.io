@@ -27,6 +27,16 @@
     return false;
   });
 
+  // 反向：頁面 → 擴充功能（用於關閉 Google 分頁）
+  window.addEventListener('message', (event) => {
+    if (event.origin !== location.origin) return;
+    if (event.data?.t === 'close-popup') {
+      chrome.runtime.sendMessage(event.data, () => {
+        void chrome.runtime.lastError;
+      });
+    }
+  });
+
   forwardToPage({
     t: 'dbg',
     stage: 'bridge-ready',
