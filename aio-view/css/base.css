@@ -5,69 +5,92 @@
 
 /* CSS Variables — Miku Racing Cyberpunk */
 :root {
-  /* Primary — 初音 Racing */
-  --color-rose: #39c5bb;
-  --color-lavender: #ff6b98;
+  /* ===== 品牌色 ===== */
+  --color-cyan: #39c5bb;          /* 主色（初音 cyan） */
+  --color-magenta: #ff6b98;       /* 次色（magenta pink） */
+  --color-purple: #8660d6;        /* 紫色強調 */
+  --color-green: #00ff88;         /* 成功 / 被引用 */
+  --color-yellow: #ffdd00;        /* 警告 / 排名 */
+  --color-red: #ff4444;           /* 危險 / 無 AIO */
+  --color-amber: #ffbe3c;         /* 未回傳 */
 
-  /* Accent Palette */
-  --color-blush: rgba(57, 197, 187, 0.15);
+  /* 舊名相容（逐步淘汰） */
+  --color-rose: var(--color-cyan);
+  --color-lavender: var(--color-magenta);
+  --color-nadeshiko: var(--color-magenta);
+  --color-sage: var(--color-green);
+  --color-lotus: var(--color-purple);
   --color-dusty-rose: #2ea8a0;
-  --color-nadeshiko: #ff6b98;
-  --color-sakura: rgba(57, 197, 187, 0.08);
-
-  /* Purple → Pink */
-  --color-lotus: #8660d6;
   --color-wisteria: #b48cff;
-  --color-bellflower: #ff6b98;
 
-  /* Neutral */
-  --color-sage: #00ff88;
-  --color-mist: rgba(57, 197, 187, 0.12);
-  --color-warm-gray: #2a2a3a;
-  --color-charcoal: #0a0a16;
+  /* ===== Cyan 透明度系列 ===== */
+  --cyan-04: rgba(57, 197, 187, 0.04);
+  --cyan-06: rgba(57, 197, 187, 0.06);
+  --cyan-08: rgba(57, 197, 187, 0.08);
+  --cyan-12: rgba(57, 197, 187, 0.12);
+  --cyan-15: rgba(57, 197, 187, 0.15);
+  --cyan-20: rgba(57, 197, 187, 0.20);
+  --cyan-30: rgba(57, 197, 187, 0.30);
 
-  /* Text */
-  --color-ink: #e8f0f0;
-  --color-text: #c0d4d8;
-  --color-gray: #7a9098;
-  --color-light-gray: #98b0b6;
+  /* ===== Magenta 透明度系列 ===== */
+  --magenta-08: rgba(255, 107, 152, 0.08);
+  --magenta-15: rgba(255, 107, 152, 0.15);
+  --magenta-20: rgba(255, 107, 152, 0.20);
 
-  /* Background */
-  --bg-light: #060810;
-  --bg-card: #0a0e18;
+  /* ===== Green 透明度系列 ===== */
+  --green-10: rgba(0, 255, 136, 0.10);
+  --green-12: rgba(0, 255, 136, 0.12);
+  --green-20: rgba(0, 255, 136, 0.20);
 
-  /* Gradients — 初音三色漸層 */
-  --gradient-primary: linear-gradient(135deg, #39c5bb, #8660d6, #ff6b98);
-  --gradient-soft: linear-gradient(180deg, #0a0e18, #060810);
-  --gradient-pink-purple: linear-gradient(135deg, #39c5bb, #8660d6, #ff6b98);
+  /* ===== 文字色階 ===== */
+  --color-ink: #e8f0f0;           /* 標題 */
+  --color-text: #c0d4d8;          /* 內文 */
+  --color-text-code: #c8d6e5;     /* 程式碼內文 */
+  --color-gray: #7a9098;          /* 說明 */
+  --color-light-gray: #98b0b6;    /* 次要說明 */
 
-  /* Border */
-  --color-border: rgba(57, 197, 187, 0.15);
+  /* ===== 背景 ===== */
+  --bg-dark: #06060c;             /* 頁面背景 */
+  --bg-light: #060810;            /* 淺背景 */
+  --bg-card: #0a0e18;             /* 卡片 */
+  --bg-code: #0a0a14;             /* 程式碼區塊 */
+  --color-warm-gray: #2a2a3a;     /* 表面 */
+  --color-charcoal: #0a0a16;      /* 深色底 */
 
-  /* Border Radius */
+  /* ===== 邊框 ===== */
+  --color-border: var(--cyan-15);
+  --color-mist: var(--cyan-12);
+  --color-blush: var(--cyan-15);
+  --color-sakura: var(--cyan-08);
+
+  /* ===== 漸層 ===== */
+  --gradient-primary: linear-gradient(135deg, var(--color-cyan), var(--color-purple), var(--color-magenta));
+  --gradient-soft: linear-gradient(180deg, var(--bg-card), var(--bg-light));
+
+  /* ===== 圓角 ===== */
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-full: 50%;
 
-  /* Shadows — Miku Glow */
-  --shadow-soft: 0 2px 8px rgba(57, 197, 187, 0.08);
-  --shadow-medium: 0 4px 16px rgba(57, 197, 187, 0.12);
+  /* ===== 陰影 ===== */
+  --shadow-soft: 0 2px 8px var(--cyan-08);
+  --shadow-medium: 0 4px 16px var(--cyan-12);
   --shadow-deep: 0 8px 32px rgba(0, 0, 0, 0.5);
 
-  /* Glow */
+  /* ===== 發光 ===== */
   --glow-cyan: 0 0 8px rgba(57, 197, 187, 0.5), 0 0 24px rgba(57, 197, 187, 0.2);
   --glow-magenta: 0 0 8px rgba(255, 107, 152, 0.5), 0 0 24px rgba(255, 107, 152, 0.2);
   --glow-green: 0 0 8px rgba(0, 255, 136, 0.4), 0 0 24px rgba(0, 255, 136, 0.15);
 
-  /* Typography */
+  /* ===== 字體 ===== */
   --font-display: 'Orbitron', 'JetBrains Mono', sans-serif;
   --font-heading: 'Orbitron', 'JetBrains Mono', sans-serif;
   --font-body: 'IBM Plex Sans TC', 'Noto Sans TC', sans-serif;
   --font-small: 'JetBrains Mono', 'IBM Plex Sans TC', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
-  /* Spacing */
+  /* ===== 間距 ===== */
   --space-xs: 4px;
   --space-sm: 8px;
   --space-md: 16px;

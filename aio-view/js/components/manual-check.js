@@ -451,13 +451,27 @@ const ManualCheck = {
    * 開始自動檢查
    * 背景開 Google 搜尋彈窗，Chrome 擴充功能自動偵測回傳
    */
-  startAutoCheck() {
+  startAutoCheck(forceRestart = false) {
     if (this.articles.length === 0) return;
+
+    // 強制重新檢查：清除所有結果
+    if (forceRestart) {
+      this.checkResults = {};
+      this.processStates = {};
+      this.organicRanks = {};
+      this.checkSources = {};
+      Storage.set('manual_check', {});
+      this.articles.forEach(a => this.updateCardVisual(a.id));
+      this.updateProgress();
+      Toast.info('已清除結果，重新開始檢查');
+      this.logDebug('重新檢查：已清除所有結果');
+    }
 
     // 找第一個未檢查的
     const startIndex = this.articles.findIndex(a => !this.checkResults[a.id]);
     if (startIndex === -1) {
-      Toast.info('所有文章都已檢查完畢');
+      // 全部都檢查過了，改成重新檢查
+      this.startAutoCheck(true);
       return;
     }
 
@@ -675,9 +689,15 @@ const ManualCheck = {
     const checked = this.articles.filter(a => this.checkResults[a.id]).length;
     const processed = this.getProcessedCount();
 
-    // 按鈕狀態
+    // 按鈕狀態 + 文字切換
+    const allDone = !active && processed === total && total > 0;
     if (this.els.autoStartBtn) {
       this.els.autoStartBtn.classList.toggle('hidden', active);
+      // 完成後按鈕改成「重新檢查」
+      const label = this.els.autoStartBtn.querySelector('.auto-start-label');
+      if (label) {
+        label.textContent = allDone ? '重新檢查' : '開始自動檢查';
+      }
     }
     if (this.els.autoStopBtn) {
       this.els.autoStopBtn.classList.toggle('hidden', !active);
