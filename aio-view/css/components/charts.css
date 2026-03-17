@@ -62,6 +62,14 @@
   max-height: 280px;
 }
 
+/* 甜甜圈圖鎖定正方形 */
+#chart-status {
+  width: 240px !important;
+  height: 240px !important;
+  max-height: none;
+  margin: 0 auto;
+}
+
 /* Source List */
 .source-list {
   margin-top: 12px;
@@ -413,6 +421,11 @@
 
   .chart-canvas-wrap canvas {
     max-height: 220px;
+  }
+
+  #chart-status {
+    width: 200px !important;
+    height: 200px !important;
   }
 
   .topic-node-summary {
