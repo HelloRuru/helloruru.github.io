@@ -727,6 +727,31 @@ npx playwright install chromium</code>
             </div>
           </div>
 
+          <!-- Filter -->
+          <div class="filter-bar">
+            <button class="filter-btn active" data-filter="all">全部</button>
+            <button class="filter-btn" data-filter="cited">被引用</button>
+            <button class="filter-btn" data-filter="aio-not-cited">有 AIO 未引用</button>
+            <button class="filter-btn" data-filter="no-aio">無 AIO</button>
+          </div>
+
+          <!-- Results Table -->
+          <div class="table-wrapper">
+            <table class="data-table" id="results-table">
+              <thead>
+                <tr>
+                  <th class="col-title">文章</th>
+                  <th class="col-status">AIO</th>
+                  <th class="col-cited">引用</th>
+                  <th class="col-queries">搜尋語句</th>
+                </tr>
+              </thead>
+              <tbody id="results-body">
+                <!-- Dynamic content -->
+              </tbody>
+            </table>
+          </div>
+
           <!-- Charts -->
           <div class="charts-section hidden" id="charts-section">
             <h3>
@@ -765,31 +790,6 @@ npx playwright install chromium</code>
                 </div>
               </div>
             </div>
-          </div>
-
-          <!-- Filter -->
-          <div class="filter-bar">
-            <button class="filter-btn active" data-filter="all">全部</button>
-            <button class="filter-btn" data-filter="cited">被引用</button>
-            <button class="filter-btn" data-filter="aio-not-cited">有 AIO 未引用</button>
-            <button class="filter-btn" data-filter="no-aio">無 AIO</button>
-          </div>
-
-          <!-- Results Table -->
-          <div class="table-wrapper">
-            <table class="data-table" id="results-table">
-              <thead>
-                <tr>
-                  <th class="col-title">文章</th>
-                  <th class="col-status">AIO</th>
-                  <th class="col-cited">引用</th>
-                  <th class="col-queries">搜尋語句</th>
-                </tr>
-              </thead>
-              <tbody id="results-body">
-                <!-- Dynamic content -->
-              </tbody>
-            </table>
           </div>
 
           <!-- Export -->
