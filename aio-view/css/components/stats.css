@@ -16,7 +16,7 @@
   padding: 20px 16px;
   text-align: center;
   border-radius: 16px;
-  border: 1px solid rgba(57, 197, 187, 0.15);
+  border: 1px solid var(--cyan-15);
   background: rgba(16, 20, 32, 0.6);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -24,14 +24,14 @@
 }
 
 .stat-card:hover {
-  border-color: rgba(57, 197, 187, 0.3);
+  border-color: var(--cyan-30);
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 /* 被引用 — 漸層高亮 */
 .stat-card.stat-highlight {
-  background: linear-gradient(135deg, rgba(57, 197, 187, 0.2), rgba(134, 96, 214, 0.2), rgba(255, 107, 152, 0.2));
+  background: linear-gradient(135deg, var(--cyan-20), rgba(134, 96, 214, 0.2), rgba(255, 107, 152, 0.2));
   border-color: rgba(57, 197, 187, 0.35);
   box-shadow: 0 0 20px rgba(57, 197, 187, 0.1), inset 0 0 30px rgba(57, 197, 187, 0.03);
 }
@@ -41,7 +41,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0 0 4px rgba(57, 197, 187, 0.3));
+  filter: drop-shadow(0 0 4px var(--cyan-30));
 }
 
 .stat-card.stat-highlight .stat-label {
@@ -69,7 +69,7 @@
 .stat-rank {
   position: relative;
   grid-column: span 2;
-  border: 1px solid rgba(57, 197, 187, 0.2);
+  border: 1px solid var(--cyan-20);
   background: rgba(10, 14, 24, 0.7);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -142,7 +142,7 @@
 /* S — 初音青 */
 .stat-rank.rank-s {
   border-color: rgba(57, 197, 187, 0.5);
-  box-shadow: 0 0 20px rgba(57, 197, 187, 0.2), inset 0 0 20px rgba(57, 197, 187, 0.03);
+  box-shadow: 0 0 20px var(--cyan-20), inset 0 0 20px rgba(57, 197, 187, 0.03);
 }
 .stat-rank.rank-s .rank-letter {
   background: linear-gradient(135deg, #39c5bb, #5de8df);
@@ -222,15 +222,15 @@
 }
 
 .filter-btn:hover {
-  background: rgba(57, 197, 187, 0.08);
+  background: var(--cyan-08);
   border-color: rgba(57, 197, 187, 0.25);
 }
 
 .filter-btn.active {
-  background: rgba(57, 197, 187, 0.15);
+  background: var(--cyan-15);
   color: #39c5bb;
   border-color: rgba(57, 197, 187, 0.5);
-  box-shadow: 0 0 8px rgba(57, 197, 187, 0.2);
+  box-shadow: 0 0 8px var(--cyan-20);
 }
 
 /* ========= 響應式 ========= */

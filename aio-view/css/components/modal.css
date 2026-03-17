@@ -80,7 +80,7 @@
 .textarea-input:focus {
   outline: none;
   border-color: var(--color-rose);
-  box-shadow: 0 0 0 3px rgba(57, 197, 187, 0.2);
+  box-shadow: 0 0 0 3px var(--cyan-20);
 }
 .textarea-input::placeholder {
   color: var(--color-light-gray);

@@ -23,7 +23,7 @@
 .input-group input:focus {
   outline: none;
   border-color: var(--color-rose);
-  box-shadow: 0 0 0 3px rgba(57, 197, 187, 0.2);
+  box-shadow: 0 0 0 3px var(--cyan-20);
 }
 
 .input-group input::placeholder {
@@ -53,7 +53,7 @@
 .upload-zone.dragover {
   border-color: var(--color-rose);
   background: rgba(57, 197, 187, 0.05);
-  box-shadow: 0 0 20px rgba(57, 197, 187, 0.08);
+  box-shadow: 0 0 20px var(--cyan-08);
 }
 
 .upload-icon {
@@ -97,5 +97,5 @@
 .select-input:focus {
   outline: none;
   border-color: var(--color-rose);
-  box-shadow: 0 0 0 3px rgba(57, 197, 187, 0.2);
+  box-shadow: 0 0 0 3px var(--cyan-20);
 }

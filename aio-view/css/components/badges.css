@@ -14,7 +14,7 @@
   font-size: 14px;
   font-weight: 500;
   border-radius: var(--radius-full);
-  box-shadow: 0 0 8px rgba(57, 197, 187, 0.3);
+  box-shadow: 0 0 8px var(--cyan-30);
 }
 
 /* Count Badge */
@@ -55,6 +55,6 @@
 }
 
 .status-badge.cited {
-  background: rgba(57, 197, 187, 0.12);
+  background: var(--cyan-12);
   color: #39c5bb;
 }
