@@ -85,24 +85,28 @@ const Timeline = {
           {
             label: '\u88AB\u5F15\u7528\u7BC7\u6578',
             data: citedData,
-            borderColor: '#D4A5A5',
-            backgroundColor: 'rgba(212, 165, 165, 0.1)',
+            borderColor: '#39c5bb',
+            backgroundColor: 'rgba(57, 197, 187, 0.1)',
             fill: true,
             tension: 0.3,
-            pointRadius: 4,
-            pointHoverRadius: 6,
+            pointRadius: 6,
+            pointHoverRadius: 9,
+            pointBackgroundColor: '#39c5bb',
+            pointBorderColor: '#39c5bb',
             borderWidth: 2,
             yAxisID: 'y'
           },
           {
             label: '\u5F15\u7528\u7387 (%)',
             data: rateData,
-            borderColor: '#B8A9C9',
+            borderColor: '#ff6b98',
             backgroundColor: 'transparent',
             borderDash: [5, 5],
             tension: 0.3,
-            pointRadius: 4,
-            pointHoverRadius: 6,
+            pointRadius: 6,
+            pointHoverRadius: 9,
+            pointBackgroundColor: '#ff6b98',
+            pointBorderColor: '#ff6b98',
             borderWidth: 2,
             yAxisID: 'y1'
           }
@@ -121,19 +125,25 @@ const Timeline = {
             labels: {
               padding: 16,
               usePointStyle: true,
-              font: { size: 13, weight: 500 }
+              pointStyleWidth: 10,
+              font: { size: 13, weight: 500 },
+              color: '#c0d4d8'
             }
           },
           tooltip: {
-            backgroundColor: '#333',
+            backgroundColor: '#0a0e18',
+            borderColor: 'rgba(57, 197, 187, 0.2)',
+            borderWidth: 1,
             cornerRadius: 8,
-            padding: 10
+            padding: 10,
+            titleColor: '#e8f0f0',
+            bodyColor: '#c0d4d8'
           }
         },
         scales: {
           x: {
-            ticks: { font: { size: 12 } },
-            grid: { color: 'rgba(0,0,0,0.04)' }
+            ticks: { font: { size: 12 }, color: '#7a9098' },
+            grid: { color: 'rgba(57, 197, 187, 0.06)' }
           },
           y: {
             type: 'linear',
@@ -143,9 +153,10 @@ const Timeline = {
             ticks: {
               stepSize: 1,
               font: { size: 12 },
+              color: '#7a9098',
               callback: (v) => `${v} \u7BC7`
             },
-            grid: { color: 'rgba(0,0,0,0.04)' }
+            grid: { color: 'rgba(57, 197, 187, 0.06)' }
           },
           y1: {
             type: 'linear',
@@ -155,6 +166,7 @@ const Timeline = {
             max: 100,
             ticks: {
               font: { size: 12 },
+              color: '#7a9098',
               callback: (v) => `${v}%`
             },
             grid: { drawOnChartArea: false }
