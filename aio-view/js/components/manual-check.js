@@ -451,6 +451,7 @@ const ManualCheck = {
 
     this.autoCheck.active = true;
     this.autoCheck.currentIndex = startIndex;
+    this.autoCheck.retried = false;
 
     this.updateAutoCheckUI();
     this.updateProgress();
@@ -499,7 +500,26 @@ const ManualCheck = {
 
     // 全部完成
     if (this.autoCheck.currentIndex >= this.articles.length) {
+      // 檢查有沒有未回傳的，第一輪結束後自動重試一次
+      const timeoutIds = this.articles
+        .filter(a => this.processStates[a.id] === 'timeout' && !this.checkResults[a.id])
+        .map(a => a.id);
+
+      if (timeoutIds.length > 0 && !this.autoCheck.retried) {
+        this.autoCheck.retried = true;
+        this.logDebug(`${timeoutIds.length} 篇未回傳，自動重試中...`);
+        Toast.info(`${timeoutIds.length} 篇未回傳，自動重試一次`);
+
+        // 清除 timeout 狀態，重設 index 讓它重跑
+        timeoutIds.forEach(id => { delete this.processStates[id]; });
+        this.autoCheck.currentIndex = 0;
+        this.updateAutoCheckUI();
+        this.scheduleNextAutoCheck();
+        return;
+      }
+
       this.autoCheck.active = false;
+      this.autoCheck.retried = false;
       clearTimeout(this.autoCheck.timer);
       clearTimeout(this.autoCheck.timeoutTimer);
 
