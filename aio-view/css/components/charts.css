@@ -118,9 +118,11 @@
   font-size: 13px;
   line-height: 1.7;
   color: var(--color-text);
-  background: var(--cyan-04);
-  border-left: 3px solid var(--color-cyan);
-  border-radius: 4px;
+  background: rgba(57, 197, 187, 0.04);
+  border: 1px solid var(--cyan-15);
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 /* Empty State */
@@ -194,26 +196,31 @@
   letter-spacing: 0.3px;
 }
 
-.suggest-tag[data-facet="recommend"] { background: rgba(57, 197, 187, 0.25); color: #5de8df; }
-.suggest-tag[data-facet="price"]     { background: rgba(255, 107, 152, 0.25); color: #ff8fad; }
-.suggest-tag[data-facet="decision"]  { background: rgba(134, 96, 214, 0.25); color: #b48cff; }
-.suggest-tag[data-facet="compare"]   { background: rgba(255, 170, 0, 0.25); color: #ffcc44; }
-.suggest-tag[data-facet="guide"]     { background: rgba(0, 200, 255, 0.25); color: #66ddff; }
+.suggest-tag[data-facet="recommend"]  { background: rgba(57, 197, 187, 0.25); color: #5de8df; }
+.suggest-tag[data-facet="price"]      { background: rgba(255, 107, 152, 0.25); color: #ff8fad; }
+.suggest-tag[data-facet="decision"]   { background: rgba(134, 96, 214, 0.25); color: #b48cff; }
+.suggest-tag[data-facet="compare"]    { background: rgba(255, 170, 0, 0.25); color: #ffcc44; }
+.suggest-tag[data-facet="guide"]      { background: rgba(0, 200, 255, 0.25); color: #66ddff; }
+.suggest-tag[data-facet="location"]   { background: rgba(0, 255, 136, 0.20); color: #66ffaa; }
+.suggest-tag[data-facet="experience"] { background: rgba(255, 200, 100, 0.25); color: #ffd066; }
+.suggest-tag[data-facet="aftercare"]  { background: rgba(180, 140, 255, 0.25); color: #c8aaff; }
+.suggest-tag[data-facet="community"]  { background: rgba(100, 200, 255, 0.25); color: #88ccff; }
 
 /* 沒有 data-facet 的 fallback */
 .suggest-tag:not([data-facet]) { background: var(--cyan-20); color: #39c5bb; }
 
-/* 延伸寫作方向 — 帶分析 */
+/* 延伸寫作方向 — 毛玻璃框 */
 .extend-item {
   display: grid;
   gap: 8px;
   padding: 14px 18px;
-  border: 1px solid rgba(0, 255, 136, 0.2);
-  border-left: 3px solid #00ff88;
+  border: 1px solid rgba(0, 255, 136, 0.15);
   border-radius: 8px;
-  background: rgba(0, 255, 136, 0.04);
+  background: rgba(0, 255, 136, 0.03);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   width: 100%;
-  box-shadow: 0 0 8px rgba(0, 255, 136, 0.05);
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.04), inset 0 0 20px rgba(0, 255, 136, 0.02);
 }
 
 .extend-keyword {

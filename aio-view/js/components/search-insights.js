@@ -306,7 +306,7 @@ const SearchInsights = {
       lines.push('STATUS: ALL SCANNED');
     }
 
-    return lines.join('\n');
+    return lines.join('<br>');
   },
 
   buildArticleSuggestions(missingFacets, attemptedFacets) {
@@ -467,7 +467,7 @@ const SearchInsights = {
         <div class="topic-node-body">
           <div class="topic-branch">
             <span class="topic-branch-label">// DIAGNOSIS — 這篇的 AIO 表現如何</span>
-            <span class="topic-branch-value">${Utils.escapeHtml(article.summary).replace(/\n/g, '<br>')}</span>
+            <span class="topic-branch-value">${article.summary}</span>
           </div>
           <div class="topic-branch">
             <span class="topic-branch-label">// TARGET ZONE — 地區與核心關鍵字</span>
