@@ -343,7 +343,16 @@ const SearchInsights = {
           excludeSet.add(q.toLowerCase());
           const filtered = raw
             .map(s => this.s2t((Array.isArray(s) ? s[0] : String(s)).trim()))
-            .filter(s => s && !excludeSet.has(s.toLowerCase()) && s.length <= 25)
+            .filter(s => {
+              if (!s || excludeSet.has(s.toLowerCase())) return false;
+              if (s.length > 20) return false;
+              // 過濾含完整地址或店名的語句（路/街/巷/弄/號 + 區）
+              if (/[路街巷弄號]/.test(s)) return false;
+              // 過濾含太多英文（可能是店名堆疊）
+              const engRatio = (s.match(/[a-zA-Z]/g) || []).length / s.length;
+              if (engRatio > 0.4) return false;
+              return true;
+            })
             .slice(0, 6);
           resolve(filtered);
         } catch { resolve([]); }
