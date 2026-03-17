@@ -500,13 +500,8 @@ const ManualCheck = {
       clearTimeout(this.autoCheck.timer);
       clearTimeout(this.autoCheck.timeoutTimer);
 
-      // 關閉 Google 搜尋彈窗
-      try {
-        if (this.popup && !this.popup.closed) {
-          this.popup.close();
-        }
-      } catch (e) { /* 跨域視窗可能無法關閉 */ }
-      this.popup = null;
+      // 關閉 Google 搜尋彈窗（透過擴充功能）
+      this.closePopup();
 
       const checked = this.articles.filter(a => this.checkResults[a.id]).length;
       const total = this.articles.length;
