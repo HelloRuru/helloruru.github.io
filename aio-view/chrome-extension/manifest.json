@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "AIO View Detector",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "在 Google 搜尋頁自動偵測 AI Overview，回傳結果給 AIO View。",
   "homepage_url": "https://lab.helloruru.com/aio-view/",
   "icons": {
