@@ -736,25 +736,14 @@ const SearchInsights = {
     const now = new Date();
     const timestamp = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 
-    // 產業探索推薦（永遠顯示在底部）
-    const industries = this.INDUSTRY_RULES;
-    const shuffled = [...industries].sort(() => Math.random() - 0.5).slice(0, 3);
-    const facetSuffixes = ['推薦', '價格', '比較', '入門', '哪家好', '教學'];
-    let industryHtml = '<div style="margin-top:12px; padding-top:10px; border-top:1px solid rgba(57,197,187,0.1);">';
-    industryHtml += '<div class="suggestion-timestamp">產業探索建議（隨機推薦）</div>';
-    shuffled.forEach(ind => {
-      const suffixes = [...facetSuffixes].sort(() => Math.random() - 0.5).slice(0, 2);
-      suffixes.forEach(suf => {
-        industryHtml += `<span class="suggestion-chip suggestion-chip-new">${Utils.escapeHtml(ind.label + ' ' + suf)}</span> `;
-      });
-    });
-    industryHtml += '</div>';
+    // 產業探索推薦（查 Google 即時熱搜）
+    this.loadIndustryExplore();
 
     if (analysis.suggestions.length > 0) {
       this.elements.suggestions.innerHTML = `
         <div class="suggestion-timestamp">資料時間：${timestamp}</div>
         ${analysis.suggestions.map(s => `<span class="suggestion-chip">${Utils.escapeHtml(s)}</span>`).join('')}
-        ${industryHtml}
+        <div id="industry-explore-slot"></div>
       `;
       return;
     }
@@ -781,23 +770,61 @@ const SearchInsights = {
           const tag = facet ? `<span class="suggest-tag" data-facet="${facet.key}">${Utils.escapeHtml(facet.label)}</span>` : '';
           return `<span class="suggestion-chip suggestion-chip-google">${tag}${Utils.escapeHtml(s)}</span>`;
         }).join('')}
+        <div id="industry-explore-slot"></div>
       `;
       return;
     }
 
-    // 連相關搜尋都沒有，隨機推薦 3 個產業各 2 個題目
-    const industries = this.INDUSTRY_RULES;
-    const shuffled = [...industries].sort(() => Math.random() - 0.5).slice(0, 3);
-    const facetSuffixes = ['推薦', '價格', '比較', '入門', '哪家好', '教學'];
+    // 連相關搜尋都沒有，直接顯示產業探索
+    this.elements.suggestions.innerHTML = `
+      <div class="suggestion-timestamp">資料時間：${timestamp}</div>
+      <div id="industry-explore-slot"></div>
+    `;
+  },
 
-    let html = `<div class="suggestion-timestamp">資料時間：${timestamp}｜以下為隨機產業探索建議</div>`;
-    shuffled.forEach(ind => {
-      const suffixes = [...facetSuffixes].sort(() => Math.random() - 0.5).slice(0, 2);
-      suffixes.forEach(suf => {
-        html += `<span class="suggestion-chip suggestion-chip-new">${Utils.escapeHtml(ind.label + ' ' + suf)}</span>`;
-      });
+  /** 查 Google 即時熱搜，隨機 3 個產業各顯示真實搜尋建議 */
+  async loadIndustryExplore() {
+    // 等 DOM 渲染完
+    await new Promise(r => setTimeout(r, 100));
+
+    const slot = document.getElementById('industry-explore-slot');
+    if (!slot) return;
+
+    const industries = [...this.INDUSTRY_RULES].sort(() => Math.random() - 0.5).slice(0, 3);
+    const queries = industries.map(ind => {
+      // 用產業 regex 的第一個關鍵字作為搜尋種子
+      const match = ind.regex.source.match(/\(([^|)]+)/);
+      return { industry: ind, seed: match ? match[1] : ind.label };
     });
-    this.elements.suggestions.innerHTML = html;
+
+    slot.innerHTML = '<div class="suggestion-timestamp" style="margin-top:12px;">正在查詢 Google 即時熱搜...</div>';
+
+    const results = [];
+    for (const q of queries) {
+      try {
+        const suggestions = await this.fetchGoogleSuggestions(q.seed, []);
+        results.push({ label: q.industry.label, suggestions: suggestions.slice(0, 2) });
+      } catch {
+        results.push({ label: q.industry.label, suggestions: [] });
+      }
+    }
+
+    let html = '<div style="margin-top:12px; padding-top:10px; border-top:1px solid rgba(57,197,187,0.1);">';
+    html += '<div class="suggestion-timestamp">產業即時熱搜（來自 Google Autocomplete）</div>';
+    html += '<div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">';
+
+    results.forEach(r => {
+      if (r.suggestions.length === 0) return;
+      html += `<div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">`;
+      html += `<span class="suggest-tag" style="flex-shrink:0;">${Utils.escapeHtml(r.label)}</span>`;
+      r.suggestions.forEach(s => {
+        html += `<span class="suggestion-chip suggestion-chip-google">${Utils.escapeHtml(s)}</span>`;
+      });
+      html += '</div>';
+    });
+
+    html += '</div></div>';
+    slot.innerHTML = html;
   },
 
   show() {
