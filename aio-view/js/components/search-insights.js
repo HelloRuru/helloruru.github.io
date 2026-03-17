@@ -187,7 +187,7 @@ const SearchInsights = {
         group.items
           .filter(item => item.hasAIO === true || item.isCited)
           .map(item => item.query)
-          .filter(Boolean)
+          .filter(q => q && q.length <= 25)
       )).slice(0, 3),
       locations,
       summary: this.buildArticleSummary({
@@ -343,7 +343,7 @@ const SearchInsights = {
           excludeSet.add(q.toLowerCase());
           const filtered = raw
             .map(s => this.s2t((Array.isArray(s) ? s[0] : String(s)).trim()))
-            .filter(s => s && !excludeSet.has(s.toLowerCase()))
+            .filter(s => s && !excludeSet.has(s.toLowerCase()) && s.length <= 25)
             .slice(0, 6);
           resolve(filtered);
         } catch { resolve([]); }
