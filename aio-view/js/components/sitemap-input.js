@@ -16,13 +16,16 @@ const SitemapInput = {
 
   /** 回呼函數 */
   onParsed: null,
+  onBeforeFetch: null,
 
   /**
    * 初始化
    * @param {Function} callback - 解析成功後的回呼
+   * @param {{ onBeforeFetch?: Function }} hooks - 其他事件回呼
    */
-  init(callback) {
+  init(callback, hooks = {}) {
     this.onParsed = callback;
+    this.onBeforeFetch = typeof hooks.onBeforeFetch === 'function' ? hooks.onBeforeFetch : null;
 
     this.elements.input = document.getElementById('sitemap-url');
     this.elements.button = document.getElementById('fetch-btn');
@@ -73,9 +76,7 @@ const SitemapInput = {
       return;
     }
 
-    // 開始載入
-    this.setLoading(true);
-    this.setStatus('正在解析...');
+    this.prepareFetch('正在解析...');
 
     try {
       const result = await Sitemap.fetch(url);
@@ -127,6 +128,28 @@ const SitemapInput = {
       this.elements.button.disabled = loading;
       this.elements.button.classList.toggle('loading', loading);
     }
+
+    if (this.elements.pickerBtn) {
+      this.elements.pickerBtn.disabled = loading;
+    }
+  },
+
+  /**
+   * 準備開始抓取
+   * @param {string} message - 狀態訊息
+   * @param {boolean} hidePicker - 是否先收起子 sitemap 選擇器
+   */
+  prepareFetch(message, hidePicker = true) {
+    if (hidePicker) {
+      this.elements.picker?.classList.add('hidden');
+    }
+
+    if (this.onBeforeFetch) {
+      this.onBeforeFetch();
+    }
+
+    this.setLoading(true);
+    this.setStatus(message);
   },
 
   /**
@@ -157,8 +180,7 @@ const SitemapInput = {
     const sitemap = this._indexSitemaps?.[idx];
     if (!sitemap) return;
 
-    this.setLoading(true);
-    this.setStatus(`正在載入 ${sitemap.url.split('/').pop()}...`);
+    this.prepareFetch(`正在載入 ${sitemap.url.split('/').pop()}...`, false);
 
     try {
       const result = await Sitemap.fetch(sitemap.url);

@@ -16,6 +16,12 @@ const ArticlesTable = {
   /** 搜尋語句快速修飾詞 */
   QUERY_CHIPS: ['推薦', '評價', '口碑', '店家', '價格', '哪裡'],
 
+  /** 語句存檔延遲 */
+  SAVE_DEBOUNCE_MS: 400,
+
+  /** 延後存檔計時器 */
+  saveTimer: null,
+
   /** DOM 元素 */
   elements: {
     section: null,
@@ -69,6 +75,20 @@ const ArticlesTable = {
       this.applyFilter();
     });
 
+    this.elements.tbody?.addEventListener('input', (e) => {
+      const row = e.target.closest('tr[data-index]');
+      if (!row) return;
+
+      const index = Number(row.dataset.index);
+      if (!Number.isInteger(index) || !this.articles[index]) return;
+
+      if (e.target.matches('.query-input')) {
+        this.articles[index].query = e.target.value;
+        this.scheduleSave();
+        this.syncQueryChipState(row, e.target.value);
+      }
+    });
+
     this.elements.tbody?.addEventListener('change', (e) => {
       const row = e.target.closest('tr[data-index]');
       if (!row) return;
@@ -85,7 +105,8 @@ const ArticlesTable = {
 
       if (e.target.matches('.query-input')) {
         this.articles[index].query = e.target.value;
-        this.saveArticles();
+        this.flushPendingSave();
+        this.syncQueryChipState(row, e.target.value);
       }
     });
 
@@ -111,8 +132,14 @@ const ArticlesTable = {
       }
 
       article.query = input.value;
-      this.saveArticles();
+      this.flushPendingSave();
       this.syncQueryChipState(row, input.value);
+    });
+
+    window.addEventListener('pagehide', () => {
+      if (this.saveTimer) {
+        this.flushPendingSave();
+      }
     });
   },
 
@@ -472,6 +499,32 @@ const ArticlesTable = {
   },
 
   /**
+   * 排程延後存檔
+   */
+  scheduleSave() {
+    if (this.saveTimer) {
+      clearTimeout(this.saveTimer);
+    }
+
+    this.saveTimer = setTimeout(() => {
+      this.saveTimer = null;
+      this.saveArticles();
+    }, this.SAVE_DEBOUNCE_MS);
+  },
+
+  /**
+   * 立即送出延後中的存檔
+   */
+  flushPendingSave() {
+    if (this.saveTimer) {
+      clearTimeout(this.saveTimer);
+      this.saveTimer = null;
+    }
+
+    this.saveArticles();
+  },
+
+  /**
    * 儲存文章
    */
   saveArticles() {
@@ -493,6 +546,55 @@ const ArticlesTable = {
    */
   show() {
     this.elements.section?.classList.remove('hidden');
+  },
+
+  /**
+   * 清空目前畫面資料
+   */
+  clear() {
+    if (this.saveTimer) {
+      clearTimeout(this.saveTimer);
+      this.saveTimer = null;
+    }
+
+    this.articles = [];
+    this.visibleIndices = [];
+    this.titleCounts = {};
+
+    if (this.elements.tbody) {
+      this.elements.tbody.innerHTML = '';
+    }
+
+    if (this.elements.countBadge) {
+      this.elements.countBadge.textContent = '0';
+    }
+
+    if (this.elements.filterCount) {
+      this.elements.filterCount.textContent = '';
+    }
+
+    if (this.elements.filterYear) {
+      this.elements.filterYear.innerHTML = '<option value="">全部年份</option>';
+    }
+
+    if (this.elements.filterMonth) {
+      this.elements.filterMonth.innerHTML = '<option value="">全部月份</option>';
+    }
+
+    if (this.elements.filters) {
+      this.elements.filters.classList.add('hidden');
+    }
+
+    if (this.elements.selectAll) {
+      this.elements.selectAll.checked = false;
+      this.elements.selectAll.indeterminate = false;
+    }
+
+    if (this.elements.clearSelection) {
+      this.elements.clearSelection.disabled = true;
+    }
+
+    this.hide();
   },
 
   /**

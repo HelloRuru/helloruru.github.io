@@ -11,6 +11,12 @@ const Sitemap = {
     { url: 'https://api.allorigins.win/raw?url=', type: 'raw' },
   ],
 
+  /** 抓 sitemap 逾時 */
+  FETCH_TIMEOUT_MS: 10000,
+
+  /** 抓頁面標題逾時 */
+  TITLE_FETCH_TIMEOUT_MS: 8000,
+
   /** 排除的 URL 模式 */
   EXCLUDE_PATTERNS: [
     /\/$/,              // 首頁
@@ -42,23 +48,13 @@ const Sitemap = {
     // 嘗試多個 CORS proxy
     for (const proxy of this.PROXIES) {
       try {
-        const proxyUrl = proxy.url + encodeURIComponent(sitemapUrl);
-        const response = await fetch(proxyUrl);
+        xml = await this.fetchProxyContent(sitemapUrl, proxy, this.FETCH_TIMEOUT_MS);
 
-        if (response.ok) {
-          if (proxy.type === 'json') {
-            const data = await response.json();
-            xml = data[proxy.key];
-          } else {
-            xml = await response.text();
-          }
-
-          // 驗證是否為有效 XML
-          if (xml && (xml.includes('<?xml') || xml.includes('<urlset') || xml.includes('<sitemapindex'))) {
-            break;
-          }
-          xml = null;
+        // 驗證是否為有效 XML
+        if (xml && (xml.includes('<?xml') || xml.includes('<urlset') || xml.includes('<sitemapindex'))) {
+          break;
         }
+        xml = null;
       } catch (e) {
         lastError = e;
         console.warn(`Proxy ${proxy.url} failed:`, e.message);
@@ -67,10 +63,48 @@ const Sitemap = {
     }
 
     if (!xml) {
+      if (lastError?.message?.includes('逾時')) {
+        throw new Error('取得 sitemap 逾時，請稍後再試或換另一個 sitemap');
+      }
       throw new Error('無法取得 sitemap，請檢查網址是否正確，或稍後再試');
     }
 
     return this.parse(xml, sitemapUrl);
+  },
+
+  /**
+   * 透過 proxy 抓取內容，逾時自動中止
+   * @param {string} targetUrl - 目標網址
+   * @param {{ url: string, type: string, key?: string }} proxy - proxy 設定
+   * @param {number} timeoutMs - 逾時毫秒
+   * @returns {Promise<string>}
+   */
+  async fetchProxyContent(targetUrl, proxy, timeoutMs) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+    try {
+      const proxyUrl = proxy.url + encodeURIComponent(targetUrl);
+      const response = await fetch(proxyUrl, { signal: controller.signal });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      if (proxy.type === 'json') {
+        const data = await response.json();
+        return data?.[proxy.key] || '';
+      }
+
+      return await response.text();
+    } catch (error) {
+      if (error?.name === 'AbortError') {
+        throw new Error(`連線逾時（${Math.round(timeoutMs / 1000)} 秒）`);
+      }
+      throw error;
+    } finally {
+      clearTimeout(timer);
+    }
   },
 
   /**
@@ -272,6 +306,33 @@ const Sitemap = {
   },
 
   /**
+   * 統一產生搜尋語句
+   * @param {string} title - 標題
+   * @param {string} domain - 網域
+   * @returns {string}
+   */
+  buildQuery(title, domain) {
+    return typeof QueryEngine !== 'undefined'
+      ? QueryEngine.generate(title, domain)
+      : this.generateQuery(title, domain);
+  },
+
+  /**
+   * 背景抓標題後，是否要覆蓋現有語句
+   * @param {Object} article - 文章
+   * @param {string} previousTitle - 舊標題
+   * @param {string} domain - 網域
+   * @returns {boolean}
+   */
+  shouldRefreshQuery(article, previousTitle, domain) {
+    const currentQuery = String(article.query || '').trim();
+    if (!currentQuery) return true;
+
+    const previousAutoQuery = String(this.buildQuery(previousTitle, domain) || '').trim();
+    return currentQuery === previousAutoQuery;
+  },
+
+  /**
    * 從頁面抓取實際標題
    * @param {string} url - 頁面 URL
    * @returns {Promise<string|null>} 標題
@@ -279,17 +340,7 @@ const Sitemap = {
   async fetchPageTitle(url) {
     for (const proxy of this.PROXIES) {
       try {
-        const proxyUrl = proxy.url + encodeURIComponent(url);
-        const response = await fetch(proxyUrl);
-        if (!response.ok) continue;
-
-        let html;
-        if (proxy.type === 'json') {
-          const data = await response.json();
-          html = data[proxy.key];
-        } else {
-          html = await response.text();
-        }
+        const html = await this.fetchProxyContent(url, proxy, this.TITLE_FETCH_TIMEOUT_MS);
 
         if (!html || html.length < 50) continue;
 
@@ -342,12 +393,14 @@ const Sitemap = {
     for (let i = 0; i < needFetch.length; i += batchSize) {
       const batch = needFetch.slice(i, i + batchSize);
       const promises = batch.map(async (article) => {
+        const previousTitle = article.title;
         const title = await this.fetchPageTitle(article.url);
-        if (title && title !== article.title) {
+        if (title && title !== previousTitle) {
+          const shouldRefreshQuery = this.shouldRefreshQuery(article, previousTitle, domain);
           article.title = title;
-          article.query = typeof QueryEngine !== 'undefined'
-            ? QueryEngine.generate(title, domain)
-            : this.generateQuery(title, domain);
+          if (shouldRefreshQuery) {
+            article.query = this.buildQuery(title, domain);
+          }
           fetched++;
           if (onUpdate) onUpdate(article, fetched, needFetch.length);
         }

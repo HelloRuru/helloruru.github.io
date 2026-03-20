@@ -13,6 +13,9 @@ const App = {
   /** 外部資源載入 Promise */
   externalLoads: {},
 
+  /** 背景抓標題工作版本 */
+  titleFetchToken: 0,
+
   /**
    * 初始化應用程式
    */
@@ -54,6 +57,10 @@ const App = {
     // 初始化輸入元件（帶回呼）
     SitemapInput.init((result) => {
       this.handleSitemapParsed(result);
+    }, {
+      onBeforeFetch: () => {
+        this.handleSitemapFetchStarted();
+      }
     });
 
     FileUpload.init((results) => {
@@ -177,6 +184,8 @@ const App = {
    * 重置頁面到初始狀態
    */
   reset() {
+    this.titleFetchToken += 1;
+
     // 清除儲存的資料
     Storage.clearWorkingData();
 
@@ -299,6 +308,23 @@ const App = {
   },
 
   /**
+   * 開始抓取新 sitemap 前，先收起舊畫面與取消背景工作
+   */
+  handleSitemapFetchStarted() {
+    this.titleFetchToken += 1;
+    this.results = null;
+
+    ArticlesTable.clear();
+    ResultsTable.hide();
+    CliGenerator.hide();
+    ManualCheck.reset();
+    Stats.reset();
+    Charts.reset();
+    SearchInsights.reset();
+    AiAssist.update([], this.domain);
+  },
+
+  /**
    * 切換 check-section 的 tab（手動檢查 / CLI 進階）
    * @param {string} mode - 'manual' or 'cli'
    */
@@ -329,11 +355,15 @@ const App = {
     const needCount = articles.filter(a => Sitemap.needsTitleFetch(a)).length;
     if (needCount === 0) return;
 
+    const fetchToken = ++this.titleFetchToken;
     Toast.info(`正在抓取 ${needCount} 篇文章標題...`);
 
     const result = await Sitemap.fetchTitlesForArticles(articles, domain, (article) => {
+      if (fetchToken !== this.titleFetchToken) return;
       ArticlesTable.updateArticle(article);
     });
+
+    if (fetchToken !== this.titleFetchToken) return;
 
     const fetched = result.fetched;
     if (fetched > 0) {
