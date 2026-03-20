@@ -134,12 +134,18 @@ const ManualCheck = {
 
     // 停止自動檢查
     this.els.autoStopBtn?.addEventListener('click', () => {
-      this.stopAutoCheck();
-      Toast.info('自動檢查已停止');
+      this.stopAutoCheck({ closePopup: true });
+      Toast.info('自動檢查已停止，並關閉 Google 搜尋視窗');
     });
 
     // 手動關閉 Google 搜尋視窗
     this.els.autoCloseBtn?.addEventListener('click', () => {
+      if (this.autoCheck.active) {
+        this.stopAutoCheck({ closePopup: true });
+        Toast.info('已停止自動檢查，並關閉 Google 搜尋視窗');
+        return;
+      }
+
       this.closePopup();
       Toast.info('已關閉 Google 搜尋視窗');
     });
@@ -241,7 +247,7 @@ const ManualCheck = {
     this.lastHandledMessage = { key: '', at: 0 };
     this.lastDebugMessage = { key: '', at: 0 };
     this.debugLogs = [];
-    this.stopAutoCheck();
+    this.stopAutoCheck({ closePopup: true });
     this.destroyChannel();
     if (this.els.cards) this.els.cards.innerHTML = '';
     this.renderDebugLogs();
@@ -501,16 +507,31 @@ const ManualCheck = {
     try {
       window.postMessage({ t: 'close-popup' }, location.origin);
     } catch (e) {}
+
+    if (this.popup && !this.popup.closed) {
+      try {
+        this.popup.close();
+      } catch (e) {}
+    }
+
     this.popup = null;
   },
 
   /**
    * 停止自動檢查
    */
-  stopAutoCheck() {
+  stopAutoCheck(options = {}) {
+    const { closePopup = false } = options;
+
     this.autoCheck.active = false;
     clearTimeout(this.autoCheck.timer);
     clearTimeout(this.autoCheck.timeoutTimer);
+    this.autoCheck.timer = null;
+    this.autoCheck.timeoutTimer = null;
+
+    if (closePopup) {
+      this.closePopup();
+    }
 
     this.updateAutoCheckUI();
     this.updateProgress();
@@ -1086,7 +1107,7 @@ const ManualCheck = {
     }
 
     // 停止自動檢查（如果還在跑）
-    this.stopAutoCheck();
+    this.stopAutoCheck({ closePopup: true });
 
     // 觸發 onComplete 回呼（由 main.js 設定）
     if (typeof this.onComplete === 'function') {
