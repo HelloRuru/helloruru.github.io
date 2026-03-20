@@ -2,7 +2,7 @@
    AIO View — Service Worker (PWA 離線快取)
    ================================================ */
 
-const CACHE_NAME = 'aio-view-v2.1';
+const CACHE_NAME = 'aio-view-v2.2';
 const ASSETS = [
   '/aio-view/',
   '/aio-view/index.html',
