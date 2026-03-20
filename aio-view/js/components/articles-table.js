@@ -68,6 +68,52 @@ const ArticlesTable = {
     this.elements.filterMonth?.addEventListener('change', () => {
       this.applyFilter();
     });
+
+    this.elements.tbody?.addEventListener('change', (e) => {
+      const row = e.target.closest('tr[data-index]');
+      if (!row) return;
+
+      const index = Number(row.dataset.index);
+      if (!Number.isInteger(index) || !this.articles[index]) return;
+
+      if (e.target.matches('.article-select')) {
+        this.articles[index].selected = e.target.checked;
+        this.saveArticles();
+        this.syncSelectionControls();
+        return;
+      }
+
+      if (e.target.matches('.query-input')) {
+        this.articles[index].query = e.target.value;
+        this.saveArticles();
+      }
+    });
+
+    this.elements.tbody?.addEventListener('click', (e) => {
+      const chip = e.target.closest('.query-chip');
+      if (!chip) return;
+
+      const row = chip.closest('tr[data-index]');
+      if (!row) return;
+
+      const index = Number(row.dataset.index);
+      const article = this.articles[index];
+      const input = row.querySelector('.query-input');
+      if (!Number.isInteger(index) || !article || !input) return;
+
+      const word = chip.dataset.chip;
+      const current = input.value.trim();
+
+      if (current.includes(word)) {
+        input.value = current.replace(word, '').replace(/\s+/g, ' ').trim();
+      } else {
+        input.value = `${current}${word}`;
+      }
+
+      article.query = input.value;
+      this.saveArticles();
+      this.syncQueryChipState(row, input.value);
+    });
   },
 
   /**
@@ -159,6 +205,7 @@ const ArticlesTable = {
 
     tbody.innerHTML = '';
     this.visibleIndices = [];
+    const fragment = document.createDocumentFragment();
 
     this.articles.forEach((article, index) => {
       let show = true;
@@ -179,9 +226,11 @@ const ArticlesTable = {
       if (show) {
         this.visibleIndices.push(index);
         const tr = this.createRow(article, index);
-        tbody.appendChild(tr);
+        fragment.appendChild(tr);
       }
     });
+
+    tbody.appendChild(fragment);
 
     // 更新計數
     if (this.elements.filterCount) {
@@ -237,12 +286,12 @@ const ArticlesTable = {
 
     // 快速修飾方塊
     const chips = this.QUERY_CHIPS.map(c =>
-      `<button class="query-chip" data-chip="${c}">${c}</button>`
+      `<button class="query-chip${article.query?.includes(c) ? ' active' : ''}" data-chip="${c}" type="button">${c}</button>`
     ).join('');
 
     tr.innerHTML = `
       <td class="col-check">
-        <input type="checkbox" ${article.selected ? 'checked' : ''}>
+        <input class="article-select" type="checkbox" ${article.selected ? 'checked' : ''}>
       </td>
       <td class="col-title">
         <a href="${Utils.escapeHtml(article.url)}" target="_blank" rel="noopener"${titleClass}>
@@ -251,54 +300,23 @@ const ArticlesTable = {
         ${meta}
       </td>
       <td class="col-query">
-        <input type="text" value="${Utils.escapeHtml(article.query)}" placeholder="輸入搜尋語句">
+        <input class="query-input" type="text" value="${Utils.escapeHtml(article.query)}" placeholder="輸入搜尋語句">
         <div class="query-chips">${chips}</div>
       </td>
     `;
-
-    // 綁定事件
-    this.bindRowEvents(tr, index);
 
     return tr;
   },
 
   /**
-   * 綁定列事件
+   * 同步語句晶片狀態
    * @param {HTMLElement} tr - 列元素
-   * @param {number} index - 索引
+   * @param {string} query - 搜尋語句
    */
-  bindRowEvents(tr, index) {
-    // 勾選
-    const checkbox = tr.querySelector('input[type="checkbox"]');
-    checkbox?.addEventListener('change', (e) => {
-      this.articles[index].selected = e.target.checked;
-      this.saveArticles();
-      this.syncSelectionControls();
-    });
-
-    // 編輯搜尋語句
-    const input = tr.querySelector('input[type="text"]');
-    input?.addEventListener('change', (e) => {
-      this.articles[index].query = e.target.value;
-      this.saveArticles();
-    });
-
-    // 快速修飾方塊
+  syncQueryChipState(tr, query) {
+    const normalizedQuery = String(query || '');
     tr.querySelectorAll('.query-chip').forEach(chip => {
-      chip.addEventListener('click', () => {
-        const word = chip.dataset.chip;
-        const current = input.value.trim();
-        // 如果語句裡已有這個詞，就移除；否則附加
-        if (current.includes(word)) {
-          input.value = current.replace(word, '').replace(/\s+/g, ' ').trim();
-          chip.classList.remove('active');
-        } else {
-          input.value = current + word;
-          chip.classList.add('active');
-        }
-        this.articles[index].query = input.value;
-        this.saveArticles();
-      });
+      chip.classList.toggle('active', normalizedQuery.includes(chip.dataset.chip));
     });
   },
 

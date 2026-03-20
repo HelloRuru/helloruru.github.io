@@ -26,6 +26,30 @@ const Storage = {
   },
 
   /**
+   * 正規化掃描結果格式
+   * @param {Object|null} results - 掃描結果
+   * @param {string} fallbackDomain - 備用網域
+   * @returns {Object|null}
+   */
+  normalizeResults(results, fallbackDomain = '') {
+    if (!results || typeof results !== 'object') return null;
+
+    const domain = String(results.domain || fallbackDomain || '').trim();
+    const items = Array.isArray(results.results)
+      ? results.results.filter(Boolean).map(item => ({
+        ...item,
+        domain: String(item.domain || domain || '').trim()
+      }))
+      : [];
+
+    return {
+      ...results,
+      domain,
+      results: items
+    };
+  },
+
+  /**
    * 儲存資料
    * @param {string} key - 鍵值
    * @param {any} data - 資料
@@ -94,11 +118,15 @@ const Storage = {
    * @param {Object} results - 掃描結果
    */
   saveResults(results) {
-    // 合併新舊結果（不同批次的文章都保留）
-    const existing = this.get(this.KEYS.RESULTS, null);
-    let merged = results;
+    const normalized = this.normalizeResults(results);
+    if (!normalized) return false;
 
-    if (existing?.results?.length > 0 && results?.results?.length > 0) {
+    // 合併新舊結果（只限同網域）
+    const existing = this.getResults();
+    const sameDomain = !existing?.domain || !normalized.domain || existing.domain === normalized.domain;
+    let merged = normalized;
+
+    if (sameDomain && existing?.results?.length > 0 && normalized.results?.length > 0) {
       const seen = new Map();
       // 舊的先放
       existing.results.forEach(r => {
@@ -106,12 +134,12 @@ const Storage = {
         seen.set(key, r);
       });
       // 新的覆蓋同 key，新增不同 key
-      results.results.forEach(r => {
+      normalized.results.forEach(r => {
         const key = `${r.articleKey || r.url || r.title}::${r.facetKey || ''}::${r.query || ''}`;
         seen.set(key, r);
       });
       merged = {
-        ...results,
+        ...normalized,
         results: Array.from(seen.values())
       };
     }
@@ -130,8 +158,14 @@ const Storage = {
    * 讀取掃描結果
    * @returns {Object|null} 掃描結果
    */
-  getResults() {
-    return this.get(this.KEYS.RESULTS, null);
+  getResults(domain = '') {
+    const stored = this.get(this.KEYS.RESULTS, null);
+    const normalized = this.normalizeResults(stored, domain);
+    if (!normalized) return null;
+    if (domain && normalized.domain && normalized.domain !== domain) {
+      return null;
+    }
+    return normalized;
   },
 
   /* ============================================
@@ -210,6 +244,19 @@ const Storage = {
    */
   clearAll() {
     Object.values(this.KEYS).forEach(key => {
+      this.remove(key);
+    });
+  },
+
+  /**
+   * 清除目前操作中的工作資料
+   */
+  clearWorkingData() {
+    [
+      this.KEYS.ARTICLES,
+      this.KEYS.RESULTS,
+      this.KEYS.MANUAL_CHECK
+    ].forEach(key => {
       this.remove(key);
     });
   }

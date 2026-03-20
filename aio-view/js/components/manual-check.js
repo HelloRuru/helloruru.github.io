@@ -60,9 +60,9 @@ const ManualCheck = {
   },
 
   /** 自動檢查時間設定（毫秒） */
-  AUTO_DELAY_MIN: 800,
-  AUTO_DELAY_MAX: 1500,
-  AUTO_TIMEOUT: 6000,
+  AUTO_DELAY_MIN: 9000,
+  AUTO_DELAY_MAX: 14000,
+  AUTO_TIMEOUT: 20000,
 
   /** Google 彈窗名稱（同名復用同一個視窗） */
   POPUP_NAME: 'aio-auto-check',

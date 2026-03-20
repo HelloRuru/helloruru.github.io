@@ -180,14 +180,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+TC:wght@400;500;700&family=Orbitron:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
-
   <!-- Styles -->
   <link rel="stylesheet" href="style.css?v=20260317-v2.1">
 </head>
-<body>
+<body id="top">
   <!-- Cyberpunk Visual Effects -->
   <div class="scanlines"></div>
   <div class="grid-bg"></div>
@@ -196,7 +192,7 @@
     <!-- Header -->
     <header class="header">
       <div class="container">
-        <a href="#" class="logo-link" id="logo-link" title="回到首頁">
+        <a href="#top" class="logo-link" id="logo-link" title="捲動到頁面頂端">
           <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
             <defs>
               <linearGradient id="logo-bg" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -211,6 +207,7 @@
           <h1 class="logo glitch" data-text="AIO View">AIO View</h1>
         </a>
         <p class="tagline">監測你的文章是否出現在 Google AI Overview</p>
+        <button class="btn btn-danger btn-sm header-reset-btn" id="reset-data-btn" type="button">清空目前資料</button>
       </div>
     </header>
 

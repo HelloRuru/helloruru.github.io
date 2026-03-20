@@ -59,3 +59,7 @@
   font-family: var(--font-small);
   letter-spacing: 1px;
 }
+
+.header-reset-btn {
+  margin-top: var(--space-md);
+}

@@ -7,10 +7,16 @@ const App = {
   /** 目前網域 */
   domain: '',
 
+  /** 目前結果 */
+  results: null,
+
+  /** 外部資源載入 Promise */
+  externalLoads: {},
+
   /**
    * 初始化應用程式
    */
-  init() {
+  async init() {
     // 初始化所有模組
     this.initModules();
 
@@ -18,7 +24,10 @@ const App = {
     this.bindEvents();
 
     // 載入已儲存的資料
-    this.loadSavedData();
+    await this.loadSavedData();
+
+    // 需要時才載入重型外部工具
+    this.initDeferredAssetObservers();
   },
 
   /**
@@ -59,7 +68,11 @@ const App = {
     // Logo 點擊 — 回到初始狀態
     document.getElementById('logo-link')?.addEventListener('click', (e) => {
       e.preventDefault();
-      this.reset();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    document.getElementById('reset-data-btn')?.addEventListener('click', () => {
+      this.confirmReset();
     });
 
     // 開始手動檢查
@@ -165,10 +178,11 @@ const App = {
    */
   reset() {
     // 清除儲存的資料
-    Storage.clearAll();
+    Storage.clearWorkingData();
 
     // 重置變數
     this.domain = '';
+    this.results = null;
     ArticlesTable.articles = [];
 
     // 隱藏所有區塊
@@ -197,9 +211,34 @@ const App = {
   },
 
   /**
+   * 是否已有可清除的工作資料
+   * @returns {boolean}
+   */
+  hasWorkingData() {
+    return Storage.getArticles().length > 0
+      || !!Storage.getResults()
+      || !!Storage.get(Storage.KEYS.MANUAL_CHECK, null);
+  },
+
+  /**
+   * 需要確認後才清空資料
+   */
+  confirmReset() {
+    if (!this.hasWorkingData()) {
+      Toast.info('目前沒有可清空的資料');
+      return;
+    }
+
+    const confirmed = window.confirm('要清空目前網站的文章、檢查進度與本機結果嗎？');
+    if (!confirmed) return;
+
+    this.reset();
+  },
+
+  /**
    * 載入已儲存的資料
    */
-  loadSavedData() {
+  async loadSavedData() {
     // 載入文章清單
     const savedArticles = Storage.getArticles();
     if (savedArticles.length > 0) {
@@ -223,11 +262,12 @@ const App = {
     }
 
     // 載入掃描結果
-    const savedResults = Storage.getResults();
+    const savedResults = Storage.getResults(this.domain);
     if (savedResults) {
-      ResultsTable.render(savedResults);
-      Charts.render(savedResults);
-      SearchInsights.render(savedResults);
+      if (!this.domain && savedResults.domain) {
+        this.domain = savedResults.domain;
+      }
+      await this.renderResultViews(savedResults);
     }
   },
 
@@ -236,7 +276,14 @@ const App = {
    * @param {Object} result - 解析結果
    */
   handleSitemapParsed(result) {
+    const domainChanged = Boolean(this.domain && result.domain && this.domain !== result.domain);
+
     this.domain = result.domain;
+
+    if (domainChanged) {
+      this.clearCurrentResults();
+      Toast.info(`已切換到 ${result.domain}，前一個網站的掃描結果已收起`);
+    }
 
     // 儲存文章
     Storage.saveArticles(result.articles);
@@ -308,22 +355,125 @@ const App = {
    * 處理結果上傳
    * @param {Object} results - 掃描結果
    */
-  handleResultsUploaded(results) {
+  async handleResultsUploaded(results) {
+    const normalized = Storage.normalizeResults(results, this.domain);
+    if (!normalized) return;
+
+    this.domain = normalized.domain || this.domain;
+
     // 記住結果供匯出用
-    this.results = results;
+    this.results = normalized;
 
     // 儲存結果
-    Storage.saveResults(results);
+    Storage.saveResults(normalized);
 
     // 顯示結果
-    ResultsTable.render(results);
-
-    // 渲染圖表
-    Charts.render(results);
-    SearchInsights.render(results);
+    await this.renderResultViews(normalized);
 
     // 更新時間軸（存入 IndexedDB + 重新整理）
-    Timeline.onResultsUploaded(results);
+    await Timeline.onResultsUploaded(normalized);
+  },
+
+  /**
+   * 清掉目前畫面上的結果區塊
+   */
+  clearCurrentResults() {
+    this.results = null;
+    Storage.remove(Storage.KEYS.RESULTS);
+    Storage.remove(Storage.KEYS.MANUAL_CHECK);
+    ResultsTable.hide();
+    Charts.reset();
+    SearchInsights.reset();
+    ManualCheck.reset();
+  },
+
+  /**
+   * 渲染結果相關視圖
+   * @param {Object} results - 掃描結果
+   */
+  async renderResultViews(results) {
+    const normalized = Storage.normalizeResults(results, this.domain);
+    if (!normalized?.results?.length) return;
+
+    this.results = normalized;
+    this.domain = normalized.domain || this.domain;
+
+    await ResultsTable.render(normalized);
+    SearchInsights.render(normalized);
+    await this.ensureChartRuntime();
+    Charts.render(normalized);
+    Timeline.renderTrendChart();
+  },
+
+  /**
+   * 初始化延後載入觀察器
+   */
+  initDeferredAssetObservers() {
+    if (!('IntersectionObserver' in window)) return;
+
+    const targets = ['timeline-section'];
+    const observer = new IntersectionObserver((entries) => {
+      if (!entries.some(entry => entry.isIntersecting && !entry.target.classList.contains('hidden'))) return;
+      observer.disconnect();
+      this.ensureChartRuntime().catch(() => {});
+    }, { rootMargin: '240px 0px' });
+
+    targets.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+  },
+
+  /**
+   * 載入外部 script，一次只載一次
+   * @param {string} key - 快取鍵
+   * @param {string} src - script URL
+   * @param {string} globalName - 載入後存在的全域變數
+   * @returns {Promise<void>}
+   */
+  loadExternalScript(key, src, globalName) {
+    if (globalName && typeof window[globalName] !== 'undefined') {
+      return Promise.resolve();
+    }
+
+    if (this.externalLoads[key]) {
+      return this.externalLoads[key];
+    }
+
+    this.externalLoads[key] = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.async = true;
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error(`載入失敗：${src}`));
+      document.head.appendChild(script);
+    });
+
+    return this.externalLoads[key];
+  },
+
+  /**
+   * 確保圖表引擎已載入
+   */
+  async ensureChartRuntime() {
+    await this.loadExternalScript(
+      'chartjs',
+      'https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js',
+      'Chart'
+    );
+    Charts.init();
+    Timeline.renderTrendChart();
+  },
+
+  /**
+   * 確保截圖工具已載入
+   */
+  async ensureCaptureRuntime() {
+    await this.loadExternalScript(
+      'html2canvas',
+      'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
+      'html2canvas'
+    );
   },
 
   /**
@@ -357,10 +507,7 @@ const App = {
    * 匯出結果圖片 — 截取統計 + 卡片區域，加品牌浮水印
    */
   async exportResultImage() {
-    if (typeof html2canvas === 'undefined') {
-      Toast.error('截圖工具載入中，請稍後再試');
-      return;
-    }
+    await this.ensureCaptureRuntime();
 
     Toast.info('正在產生圖片...');
 
