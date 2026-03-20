@@ -71,7 +71,8 @@
           "url": "https://tools.helloruru.com/bg-remove",
           "icon": "wand",
           "iconColor": "lavender",
-          "external": true
+          "external": true,
+          "badge": { "text": "開發中", "type": "dev" }
         },
         {
           "id": "post-writer",
@@ -89,7 +90,8 @@
           "url": "https://tools.helloruru.com/pdf-editor/",
           "icon": "pen",
           "iconColor": "rose",
-          "external": true
+          "external": true,
+          "badge": { "text": "開發中", "type": "dev" }
         },
         {
           "id": "hihi",
@@ -107,7 +109,8 @@
           "url": "https://tools.helloruru.com/card-maker/",
           "icon": "layout",
           "iconColor": "rose",
-          "external": true
+          "external": true,
+          "badge": { "text": "開發中", "type": "dev" }
         },
         {
           "id": "find-color",
@@ -125,7 +128,8 @@
           "url": "https://tools.helloruru.com/lyric-player/",
           "icon": "music",
           "iconColor": "lavender",
-          "external": true
+          "external": true,
+          "badge": { "text": "開發中", "type": "dev" }
         },
         {
           "id": "spotify-goods",
@@ -152,7 +156,8 @@
           "url": "https://tools.helloruru.com/cosmetics-for-you/",
           "icon": "palette",
           "iconColor": "sakura",
-          "external": true
+          "external": true,
+          "badge": { "text": "開發中", "type": "dev" }
         },
         {
           "id": "spell",
@@ -178,6 +183,43 @@
           "description": "讀墨 1500 日挑戰 LINE 群專用，自動產生串接推薦文案",
           "url": "https://tools.helloruru.com/readmoo-ap/",
           "icon": "book",
+          "iconColor": "sage",
+          "external": true
+        },
+        {
+          "id": "library-search",
+          "title": "圖書館新書探測器",
+          "description": "追蹤全台 23 間 HyRead 公共圖書館新書上架與熱門排行，搜尋免費借閱",
+          "url": "https://tools.helloruru.com/library-search/",
+          "icon": "library",
+          "iconColor": "sage",
+          "external": true,
+          "badge": { "text": "New", "type": "new" }
+        },
+        {
+          "id": "labor-report",
+          "title": "勞務報酬單產生器",
+          "description": "輸入基本資料，自動計算扣繳稅額，產生 115 年度勞務報酬單 PDF",
+          "url": "https://tools.helloruru.com/labor-report/",
+          "icon": "file-text",
+          "iconColor": "rose",
+          "external": true
+        },
+        {
+          "id": "ebook-deals",
+          "title": "電子書每日特價",
+          "description": "自動追蹤讀墨電子書每日特價，不錯過任何好書折扣",
+          "url": "https://tools.helloruru.com/ebook-deals/",
+          "icon": "tag",
+          "iconColor": "blush",
+          "external": true
+        },
+        {
+          "id": "tankdrum-music",
+          "title": "空靈鼓簡譜集",
+          "description": "空靈鼓數字簡譜瀏覽與播放工具",
+          "url": "https://tools.helloruru.com/tankdrum-music/",
+          "icon": "music",
           "iconColor": "sage",
           "external": true
         }
