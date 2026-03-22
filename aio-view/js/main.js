@@ -555,7 +555,7 @@ const App = {
     header.style.cssText = 'margin-bottom: 24px; text-align: center;';
     header.innerHTML = `
       <div style="font-family: Orbitron, monospace; font-size: 24px; font-weight: 700; color: #39c5bb; letter-spacing: 2px; text-shadow: 0 0 12px rgba(57,197,187,0.3);">AIO VIEW</div>
-      <div style="font-size: 13px; color: #7a9098; margin-top: 4px;">${this.results?.domain || ''} | ${this.results?.scanDate || new Date().toISOString().split('T')[0]}</div>
+      <div style="font-size: 13px; color: #7a9098; margin-top: 4px;">${Utils.escapeHtml(this.results?.domain || '')} | ${Utils.escapeHtml(this.results?.scanDate || new Date().toISOString().split('T')[0])}</div>
     `;
     container.appendChild(header);
 

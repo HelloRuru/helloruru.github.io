@@ -678,8 +678,6 @@ const ManualCheck = {
 
     this.updateAutoCheckUI();
     this.updateProgress();
-    this.updateProgress();
-    this.updateProgress();
 
     this.autoCheck.timer = setTimeout(() => {
       this.autoCheckNext();
