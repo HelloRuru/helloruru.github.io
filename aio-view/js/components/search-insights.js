@@ -584,27 +584,17 @@ const SearchInsights = {
           }).slice(0, 5);
 
           if (newTopics.length > 0) {
-            // 按面向分組，同面向只分析一次
-            const groups = new Map();
-            newTopics.forEach(s => {
+            // 每個關鍵字獨立產分析，避免同 facet 共用描述導致文不對題
+            extendEl.innerHTML = newTopics.map(s => {
               const facet = this.matchFacet(s);
-              const key = facet?.key || '_other';
-              if (!groups.has(key)) {
-                groups.set(key, { facet, keywords: [], analysis: this.buildExtendAnalysis(s, facet, baseQuery) });
-              }
-              groups.get(key).keywords.push(s);
-            });
-
-            extendEl.innerHTML = Array.from(groups.values()).map(g => {
-              const tagHtml = g.facet
-                ? `<span class="suggest-tag" data-facet="${g.facet.key}">${Utils.escapeHtml(g.facet.label)}</span>`
+              const analysis = this.buildExtendAnalysis(s, facet, baseQuery);
+              const tagHtml = facet
+                ? `<span class="suggest-tag" data-facet="${facet.key}">${Utils.escapeHtml(facet.label)}</span>`
                 : '';
-              const chips = g.keywords.map(k =>
-                `<span class="suggestion-chip suggestion-chip-new">${Utils.escapeHtml(k)}</span>`
-              ).join('');
+              const chip = `<span class="suggestion-chip suggestion-chip-new">${Utils.escapeHtml(s)}</span>`;
               return `<div class="extend-item">
-                <div class="extend-keyword">${tagHtml}${chips}</div>
-                <div class="extend-analysis">${Utils.escapeHtml(g.analysis)}</div>
+                <div class="extend-keyword">${tagHtml}${chip}</div>
+                <div class="extend-analysis">${Utils.escapeHtml(analysis)}</div>
               </div>`;
             }).join('');
           } else {
