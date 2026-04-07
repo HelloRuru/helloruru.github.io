@@ -53,7 +53,7 @@ const Landing = {
       route: '/visibility',
       icon: 'eye',
       title: 'AI 能見度',
-      desc: 'Google、Perplexity、Bing Copilot 跨平台引用偵測（需擴充功能）',
+      desc: 'Google AIO、Bing Copilot 跨平台引用偵測（需擴充功能）',
       phase: 1,
       category: 'scan'
     },
