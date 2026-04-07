@@ -73,6 +73,33 @@ const Sitemap = {
   },
 
   /**
+   * 取得文章清單（自動處理 sitemap index → 子 sitemap）
+   * @param {string} sitemapUrl - Sitemap URL
+   * @returns {Promise<Array>} 文章清單
+   */
+  async fetchArticles(sitemapUrl) {
+    const result = await this.fetch(sitemapUrl);
+
+    if (result.type === 'index' && result.sitemaps?.length > 0) {
+      // 逐個子 sitemap 收集文章
+      const allArticles = [];
+      for (const sub of result.sitemaps) {
+        try {
+          const subResult = await this.fetch(sub.url);
+          if (subResult.articles?.length > 0) {
+            allArticles.push(...subResult.articles);
+          }
+        } catch {
+          // 某個子 sitemap 失敗就跳過
+        }
+      }
+      return allArticles;
+    }
+
+    return result.articles || [];
+  },
+
+  /**
    * 用所有 proxy 嘗試抓取內容（簡化版，給外部模組用）
    * @param {string} targetUrl - 目標網址
    * @returns {Promise<string|null>}

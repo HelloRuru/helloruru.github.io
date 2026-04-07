@@ -35,8 +35,8 @@ const CitabilityAnalyzer = {
 
     let articles = [];
     try {
-      const result = await Sitemap.fetch(sitemapUrl);
-      articles = (result?.articles || []).slice(0, PageCrawler.MAX_PAGES);
+      articles = await Sitemap.fetchArticles(sitemapUrl);
+      articles = articles.slice(0, PageCrawler.MAX_PAGES);
     } catch {
       Landing.updateProgress('citability', 'error', '無法解析 Sitemap');
       return;
