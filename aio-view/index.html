@@ -357,26 +357,35 @@
             </a>
           </div>
 
-          <!-- 可收合：環境安裝 -->
+          <!-- 可收合：擴充功能安裝 -->
           <div class="setup-content" id="guide-content">
             <div class="guide-section">
-              <h3>環境安裝（只需一次）</h3>
+              <h3>安裝擴充功能（只需一次，免費）</h3>
               <ol class="guide-steps">
                 <li>
-                  <strong>裝 Node.js</strong>
-                  <p>到 <a href="https://nodejs.org/" target="_blank" rel="noopener">nodejs.org</a> 下載 LTS 版，一直按下一步。</p>
+                  <strong>下載 ZIP</strong>
+                  <p>
+                    <a class="btn btn-primary btn-sm" href="aeo-consultant-detector-v2.zip" download>
+                      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                      </svg>
+                      下載擴充功能 ZIP（25KB）
+                    </a>
+                  </p>
                 </li>
                 <li>
-                  <strong>裝 Git</strong>
-                  <p>到 <a href="https://git-scm.com/download/win" target="_blank" rel="noopener">git-scm.com</a> 下載，一直按下一步。</p>
+                  <strong>解壓縮</strong>
+                  <p>對 ZIP 按右鍵 →「解壓縮全部」</p>
                 </li>
                 <li>
-                  <strong>下載工具</strong>
-                  <p>打開 <strong>PowerShell</strong>，貼上：</p>
-                  <code class="guide-code">git clone https://github.com/helloruru/helloruru.github.io.git</code>
-                  <code class="guide-code">cd helloruru.github.io/aio-view/cli
-npm install
-npx playwright install chromium</code>
+                  <strong>載入 Chrome</strong>
+                  <p>網址列輸入 <code>chrome://extensions</code> → 打開右上角「開發人員模式」→ 點左上角「載入未封裝項目」→ 選剛才解壓的資料夾</p>
+                </li>
+                <li>
+                  <strong>完成</strong>
+                  <p>看到「AEO Consultant Detector 2.0.0」就裝好了。不需要裝 Node.js 或 Git。</p>
                 </li>
               </ol>
             </div>
