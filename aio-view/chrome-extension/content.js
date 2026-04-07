@@ -266,6 +266,7 @@
 
     const payload = {
       t: 'r',
+      platform: 'google-aio',
       q: query,
       aio: !!result.hasAIO,
       src: result.aioSources || [],

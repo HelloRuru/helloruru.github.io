@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "AIO View Detector",
-  "version": "1.2.0",
-  "description": "在 Google 搜尋頁自動偵測 AI Overview，回傳結果給 AIO View。",
+  "name": "AEO Consultant Detector",
+  "version": "2.0.0",
+  "description": "偵測 Google AI Overview、Perplexity、Bing Copilot 的 AI 回答引用來源，回傳結果給 AEO Consultant。",
   "homepage_url": "https://lab.helloruru.com/aio-view/",
   "icons": {
     "16": "icons/icon-16.png",
@@ -11,7 +11,7 @@
     "128": "icons/icon-128.png"
   },
   "action": {
-    "default_title": "AIO View Detector",
+    "default_title": "AEO Consultant Detector",
     "default_icon": {
       "16": "icons/icon-16.png",
       "32": "icons/icon-32.png",
@@ -36,6 +36,25 @@
       ],
       "js": [
         "content.js"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "*://www.perplexity.ai/*"
+      ],
+      "js": [
+        "content-perplexity.js"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "*://www.bing.com/search*",
+        "*://copilot.microsoft.com/*"
+      ],
+      "js": [
+        "content-bing.js"
       ],
       "run_at": "document_idle"
     },

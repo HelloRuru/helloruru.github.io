@@ -3,13 +3,16 @@ const TARGET_URLS = [
   'https://helloruru.github.io/aio-view/*'
 ];
 
-const GOOGLE_SEARCH_URLS = [
+const SEARCH_URLS = [
   '*://www.google.com/search*',
   '*://www.google.com.tw/search*',
   '*://www.google.co.jp/search*',
   '*://www.google.co.uk/search*',
   '*://www.google.com.hk/search*',
-  '*://www.google.com.sg/search*'
+  '*://www.google.com.sg/search*',
+  '*://www.perplexity.ai/*',
+  '*://www.bing.com/search*',
+  '*://copilot.microsoft.com/*'
 ];
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -17,7 +20,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   // 關閉 Google 搜尋分頁（直接查詢，不靠記憶）
   if (message.t === 'close-popup') {
-    chrome.tabs.query({ url: GOOGLE_SEARCH_URLS }, (tabs) => {
+    chrome.tabs.query({ url: SEARCH_URLS }, (tabs) => {
       tabs.forEach(tab => {
         chrome.tabs.remove(tab.id, () => void chrome.runtime.lastError);
       });

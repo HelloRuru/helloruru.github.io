@@ -2,7 +2,7 @@
    AIO View — Service Worker (PWA 離線快取)
    ================================================ */
 
-const CACHE_NAME = 'aeo-consultant-v3.2';
+const CACHE_NAME = 'aeo-consultant-v4.0';
 const ASSETS = [
   '/aio-view/',
   '/aio-view/index.html',
@@ -66,6 +66,10 @@ const ASSETS = [
   '/aio-view/js/components/schema-checker.js',
   '/aio-view/js/components/citability-analyzer.js',
   '/aio-view/js/components/recommendations.js',
+  '/aio-view/js/components/visibility-scanner.js',
+  '/aio-view/js/components/competitor-compare.js',
+  '/aio-view/css/components/visibility.css',
+  '/aio-view/css/components/competitor.css',
   '/aio-view/js/main.js',
   '/aio-view/icons/favicon.svg',
   '/aio-view/icons/icon-192.svg',

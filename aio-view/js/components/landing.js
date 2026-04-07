@@ -53,8 +53,8 @@ const Landing = {
       route: '/visibility',
       icon: 'eye',
       title: 'AI 能見度',
-      desc: 'Google、Perplexity、Bing Copilot 跨平台引用偵測',
-      phase: 2,
+      desc: 'Google、Perplexity、Bing Copilot 跨平台引用偵測（需擴充功能）',
+      phase: 1,
       category: 'scan'
     },
     {
@@ -62,8 +62,8 @@ const Landing = {
       route: '/competitors',
       icon: 'users',
       title: '競品比較',
-      desc: '同關鍵字下，你的站 vs 競品在 AI 搜尋的能見度',
-      phase: 2,
+      desc: '同關鍵字下，你的站 vs 競品在 AI 搜尋的能見度（需擴充功能）',
+      phase: 1,
       category: 'scan'
     }
   ],

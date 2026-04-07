@@ -678,6 +678,8 @@ const App = {
     SchemaChecker.init();
     CitabilityAnalyzer.init();
     Recommendations.init();
+    VisibilityScanner.init();
+    CompetitorCompare.init();
 
     // 註冊路由
     this.registerRoutes();
@@ -723,14 +725,16 @@ const App = {
       show: () => TechnicalChecker.show()
     });
 
-    // AI 能見度（Phase 2 預留）
+    // AI 能見度
     Router.register('/visibility', {
-      panelId: 'panel-visibility'
+      panelId: 'panel-visibility',
+      show: () => VisibilityScanner.show()
     });
 
-    // 競品比較（Phase 2 預留）
+    // 競品比較
     Router.register('/competitors', {
-      panelId: 'panel-competitors'
+      panelId: 'panel-competitors',
+      show: () => CompetitorCompare.show()
     });
 
     // 優化建議（Phase 1）

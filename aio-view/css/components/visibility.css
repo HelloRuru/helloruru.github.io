@@ -1,0 +1,87 @@
+/* ================================================
+   AEO Consultant — Visibility Scanner
+   AI 能見度
+   ================================================ */
+
+.vis-grid {
+  border: 1px solid var(--cyan-12);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.vis-header {
+  display: flex;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--cyan-12);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-gray);
+  letter-spacing: 0.5px;
+}
+
+.vis-row {
+  display: flex;
+  border-bottom: 1px solid var(--cyan-04);
+}
+
+.vis-row:last-child { border-bottom: none; }
+
+.vis-col-url {
+  flex: 2;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vis-col-platform {
+  flex: 1;
+  padding: 10px 8px;
+  text-align: center;
+  font-size: 11px;
+}
+
+.vis-cell {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.vis-cell--cited {
+  background: rgba(0, 255, 136, 0.12);
+  color: var(--color-green);
+  font-weight: 700;
+}
+
+.vis-cell--aio {
+  background: rgba(255, 107, 152, 0.1);
+  color: var(--color-magenta);
+}
+
+.vis-cell--none {
+  color: var(--color-gray);
+  opacity: 0.6;
+}
+
+.vis-cell--pending {
+  color: var(--color-gray);
+  opacity: 0.3;
+}
+
+.vis-cell--timeout {
+  color: var(--color-yellow);
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .vis-header, .vis-row {
+    font-size: 11px;
+  }
+
+  .vis-col-url { flex: 1.5; }
+  .vis-col-platform { flex: 1; padding: 10px 4px; }
+}

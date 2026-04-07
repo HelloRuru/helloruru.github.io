@@ -1,0 +1,106 @@
+/* ================================================
+   AEO Consultant — Competitor Compare
+   競品比較
+   ================================================ */
+
+.comp-inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.comp-input-group label {
+  display: block;
+  font-size: 12px;
+  color: var(--color-gray);
+  margin-bottom: 4px;
+}
+
+.comp-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--bg-dark);
+  border: 1px solid var(--cyan-12);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-size: 14px;
+  font-family: var(--font-mono);
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.comp-input:focus {
+  border-color: var(--color-cyan);
+}
+
+.comp-input::placeholder {
+  color: var(--color-gray);
+  opacity: 0.5;
+}
+
+/* 統計卡片 */
+.comp-stats {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: var(--space-md);
+}
+
+.comp-stat-card {
+  flex: 1;
+  min-width: 180px;
+  padding: 16px;
+  background: var(--bg-dark);
+  border: 1px solid var(--cyan-12);
+  border-radius: var(--radius-md);
+}
+
+.comp-stat-card--own {
+  border-color: var(--color-cyan);
+  background: var(--cyan-04);
+}
+
+.comp-stat-domain {
+  font-size: 13px;
+  font-family: var(--font-mono);
+  color: var(--color-ink);
+  margin-bottom: 8px;
+  word-break: break-all;
+}
+
+.comp-stat-num {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 8px;
+}
+
+.comp-stat-card--own .comp-stat-num {
+  color: var(--color-cyan);
+}
+
+.comp-stat-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(122, 144, 152, 0.15);
+  margin-bottom: 6px;
+  overflow: hidden;
+}
+
+.comp-stat-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.comp-stat-pct {
+  font-size: 12px;
+  color: var(--color-gray);
+}
+
+@media (max-width: 768px) {
+  .comp-inputs { grid-template-columns: 1fr; }
+  .comp-stats { flex-direction: column; }
+}

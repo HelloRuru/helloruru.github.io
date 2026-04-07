@@ -135,13 +135,15 @@
 }
 
 .feature-card--phase2 {
-  opacity: 0.5;
-  pointer-events: none;
+  opacity: 0.7;
+  border-style: dashed;
+  background: linear-gradient(135deg, var(--bg-card), rgba(134, 96, 214, 0.04));
 }
 
 .feature-card--phase2:hover {
-  transform: none;
-  box-shadow: none;
+  opacity: 0.85;
+  border-color: var(--color-purple);
+  box-shadow: 0 0 12px rgba(134, 96, 214, 0.15);
 }
 
 .feature-card-icon {
