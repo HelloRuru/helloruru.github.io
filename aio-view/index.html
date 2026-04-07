@@ -617,23 +617,42 @@ npx playwright install chromium</code>
                 Chrome 擴充功能（推薦）
               </p>
               <ol class="userscript-steps">
-                <li>先下載這個 repo，或從 GitHub 下載 ZIP</li>
-                <li>開啟 Chrome 的 <code>chrome://extensions</code></li>
-                <li>打開右上角「開發人員模式」</li>
                 <li>
-                  <a class="btn btn-primary btn-sm" href="https://github.com/HelloRuru/helloruru.github.io/tree/main/aio-view/chrome-extension" target="_blank" rel="noopener">
-                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M14 3h7v7"/>
-                      <path d="M10 14L21 3"/>
-                      <path d="M21 14v7h-7"/>
-                      <path d="M3 10V3h7"/>
-                      <path d="M3 3l7 7"/>
-                    </svg>
-                    查看 GitHub 原始檔
-                  </a>
+                  <strong>下載擴充功能</strong>
+                  <p>到 GitHub 下載整個 repo 的 ZIP，或用 git clone：</p>
+                  <code class="guide-code">git clone https://github.com/HelloRuru/helloruru.github.io.git</code>
+                  <p style="margin-top:6px;">
+                    <a class="btn btn-primary btn-sm" href="https://github.com/HelloRuru/helloruru.github.io/archive/refs/heads/main.zip" rel="noopener">
+                      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                      </svg>
+                      下載 ZIP
+                    </a>
+                  </p>
                 </li>
-                <li>選擇 repo 裡的 <code>aio-view/chrome-extension</code> 資料夾並載入</li>
-                <li>完成後回 AIO View 點「開始自動檢查」</li>
+                <li>
+                  <strong>開啟 Chrome 擴充功能頁面</strong>
+                  <p>在網址列輸入 <code>chrome://extensions</code> 按 Enter</p>
+                </li>
+                <li>
+                  <strong>打開「開發人員模式」</strong>
+                  <p>右上角的開關，打開它</p>
+                </li>
+                <li>
+                  <strong>載入未封裝項目</strong>
+                  <p>點左上角「載入未封裝項目」按鈕，選擇解壓後的 <code>helloruru.github.io-main/aio-view/chrome-extension</code> 資料夾</p>
+                  <p style="font-size:12px;color:var(--color-gray);">如果是 git clone 的，路徑是 <code>helloruru.github.io/aio-view/chrome-extension</code></p>
+                </li>
+                <li>
+                  <strong>確認安裝成功</strong>
+                  <p>擴充功能列表應該出現「<strong>AEO Consultant Detector</strong>」版本 <strong>2.0.0</strong></p>
+                </li>
+                <li>
+                  <strong>回來開始掃描</strong>
+                  <p>回到這個頁面，點「開始自動檢查」，擴充功能會自動偵測 Google AI Overview</p>
+                </li>
               </ol>
             </div>
 
