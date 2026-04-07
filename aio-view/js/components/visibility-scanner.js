@@ -204,8 +204,8 @@ const VisibilityScanner = {
             掃描原理：用你的瀏覽器實際搜尋，擴充功能偵測 AI 回答裡有沒有引用你的網站。<br>
             完全免費，不需要任何 API key。
           </p>
-          <a href="https://github.com/HelloRuru/helloruru.github.io/tree/main/aio-view/chrome-extension" target="_blank"
-            class="btn btn-primary btn-sm" style="margin-top:12px;display:inline-block;">下載擴充功能</a>
+          <a href="aeo-consultant-detector-v2.zip" download
+            class="btn btn-primary btn-sm" style="margin-top:12px;display:inline-block;">下載擴充功能 ZIP（25KB）</a>
         </div>
       </div>`;
       return;
