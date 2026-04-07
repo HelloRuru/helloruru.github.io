@@ -1,0 +1,310 @@
+/* ================================================
+   AEO Consultant — Technical Checker
+   ================================================ */
+
+.tech-report {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* 總分卡片 */
+.tech-score-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-xl);
+  background: var(--bg-card);
+  border: 1px solid var(--cyan-12);
+  border-radius: var(--radius-lg);
+}
+
+.tech-score {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  min-width: 80px;
+  text-align: center;
+}
+
+.tech-score.good { color: var(--color-green); text-shadow: 0 0 12px rgba(0, 255, 136, 0.3); }
+.tech-score.warn { color: var(--color-yellow); text-shadow: 0 0 12px rgba(255, 221, 0, 0.3); }
+.tech-score.bad { color: var(--color-red); text-shadow: 0 0 12px rgba(255, 68, 68, 0.3); }
+
+.tech-score-label {
+  font-size: 14px;
+  color: var(--color-gray);
+}
+
+.tech-score-grade {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-left: auto;
+}
+
+/* 區塊 */
+.tech-section {
+  padding: var(--space-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--cyan-12);
+  border-radius: var(--radius-lg);
+}
+
+.tech-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-ink);
+  margin: 0 0 var(--space-md);
+  flex-wrap: wrap;
+}
+
+.tech-section h3 .icon {
+  width: 18px;
+  height: 18px;
+  color: var(--color-cyan);
+}
+
+.tech-section--good {
+  border-color: rgba(0, 255, 136, 0.2);
+}
+
+.tech-section--good h3 {
+  color: var(--color-green);
+}
+
+.tech-detail {
+  font-size: 13px;
+  font-family: var(--font-mono);
+  color: var(--color-gray);
+  margin: 0;
+}
+
+/* 徽章 */
+.tech-badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+}
+
+.tech-badge--ok {
+  background: rgba(0, 255, 136, 0.12);
+  color: var(--color-green);
+}
+
+.tech-badge--warn {
+  background: rgba(255, 221, 0, 0.12);
+  color: var(--color-yellow);
+}
+
+.tech-badge--blocked {
+  background: rgba(255, 68, 68, 0.12);
+  color: var(--color-red);
+}
+
+.tech-badge--partial {
+  background: rgba(255, 190, 60, 0.12);
+  color: var(--color-amber);
+}
+
+.tech-summary {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+}
+
+/* Bot 卡片網格 */
+.bot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 10px;
+}
+
+.bot-card {
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--cyan-12);
+  background: var(--bg-dark);
+}
+
+.bot-card--ok { border-left: 3px solid var(--color-green); }
+.bot-card--partial { border-left: 3px solid var(--color-amber); }
+.bot-card--blocked { border-left: 3px solid var(--color-red); }
+
+.bot-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.bot-status-icon {
+  font-size: 14px;
+}
+
+.bot-card--ok .bot-status-icon { color: var(--color-green); }
+.bot-card--partial .bot-status-icon { color: var(--color-amber); }
+.bot-card--blocked .bot-status-icon { color: var(--color-red); }
+
+.bot-name {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.bot-critical {
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: rgba(255, 107, 152, 0.15);
+  color: var(--color-magenta);
+  letter-spacing: 0.5px;
+}
+
+.bot-platform {
+  font-size: 12px;
+  color: var(--color-cyan);
+  margin-bottom: 4px;
+}
+
+.bot-reason {
+  font-size: 12px;
+  color: var(--color-text);
+  margin-bottom: 4px;
+}
+
+.bot-desc {
+  font-size: 11px;
+  color: var(--color-gray);
+}
+
+/* 修正建議 */
+.tech-fix {
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--cyan-12);
+  margin-bottom: 10px;
+  background: var(--bg-dark);
+}
+
+.tech-fix--critical { border-left: 3px solid var(--color-red); }
+.tech-fix--high { border-left: 3px solid var(--color-yellow); }
+.tech-fix--medium { border-left: 3px solid var(--color-cyan); }
+
+.tech-fix-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.tech-fix-priority {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.tech-fix--critical .tech-fix-priority {
+  background: rgba(255, 68, 68, 0.15);
+  color: var(--color-red);
+}
+
+.tech-fix--high .tech-fix-priority {
+  background: rgba(255, 221, 0, 0.15);
+  color: var(--color-yellow);
+}
+
+.tech-fix--medium .tech-fix-priority {
+  background: rgba(57, 197, 187, 0.12);
+  color: var(--color-cyan);
+}
+
+.tech-fix-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.tech-fix-desc {
+  font-size: 13px;
+  color: var(--color-text);
+  margin: 0 0 8px;
+  line-height: 1.6;
+}
+
+.tech-fix-action {
+  font-size: 13px;
+  color: var(--color-cyan);
+  margin: 0 0 8px;
+  font-weight: 500;
+}
+
+.tech-fix-code {
+  position: relative;
+  background: var(--bg-code);
+  border: 1px solid var(--cyan-12);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+}
+
+.tech-fix-code pre {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-green);
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin: 0;
+  padding-right: 60px;
+}
+
+.tech-copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 11px;
+}
+
+/* Placeholder */
+.panel-placeholder {
+  text-align: center;
+  padding: var(--space-3xl) var(--space-xl);
+}
+
+.panel-placeholder h2 {
+  font-family: var(--font-display);
+  font-size: 24px;
+  color: var(--color-cyan);
+  letter-spacing: 2px;
+  margin: 0 0 8px;
+}
+
+.panel-placeholder p {
+  font-size: 14px;
+  color: var(--color-gray);
+  margin: 4px 0;
+}
+
+/* 響應式 */
+@media (max-width: 768px) {
+  .tech-score-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .tech-score-grade {
+    margin-left: 0;
+  }
+
+  .bot-grid {
+    grid-template-columns: 1fr;
+  }
+}

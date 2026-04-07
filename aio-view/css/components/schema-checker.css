@@ -1,0 +1,203 @@
+/* ================================================
+   AEO Consultant — Schema Checker
+   結構化資料健檢
+   ================================================ */
+
+.schema-page-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.schema-page-card {
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--cyan-12);
+  background: var(--bg-dark);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.schema-page-card:hover { border-color: var(--color-cyan); }
+.schema-page-card--ok    { border-left: 3px solid var(--color-green); }
+.schema-page-card--warn  { border-left: 3px solid var(--color-yellow); }
+.schema-page-card--error { border-left: 3px solid var(--color-red); }
+.schema-page-card--none  { border-left: 3px solid var(--color-gray); opacity: 0.8; }
+
+.schema-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.schema-page-url {
+  font-size: 13px;
+  color: var(--color-ink);
+  font-weight: 500;
+  word-break: break-all;
+  flex: 1;
+}
+
+.schema-page-types {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.schema-type-chip {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  background: var(--cyan-04);
+  color: var(--color-cyan);
+}
+
+.schema-type-chip--deprecated {
+  background: rgba(255, 221, 0, 0.1);
+  color: var(--color-yellow);
+  text-decoration: line-through;
+}
+
+.schema-type-chip--error {
+  background: rgba(255, 68, 68, 0.1);
+  color: var(--color-red);
+}
+
+/* 展開詳細 */
+.schema-detail { display: none; margin-top: 10px; }
+.schema-page-card.expanded .schema-detail { display: block; }
+
+.schema-prop-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.schema-prop {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.schema-prop-icon { width: 14px; text-align: center; }
+.schema-prop--ok .schema-prop-icon   { color: var(--color-green); }
+.schema-prop--miss .schema-prop-icon { color: var(--color-yellow); }
+.schema-prop--req .schema-prop-icon  { color: var(--color-red); }
+
+.schema-prop-name { font-family: var(--font-mono); color: var(--color-text); }
+.schema-prop-tag {
+  font-size: 9px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  color: var(--color-gray);
+  background: rgba(122, 144, 152, 0.1);
+}
+
+.schema-errors, .schema-warnings {
+  margin: 8px 0;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.schema-errors {
+  background: rgba(255, 68, 68, 0.06);
+  border: 1px solid rgba(255, 68, 68, 0.15);
+  color: var(--color-red);
+}
+
+.schema-warnings {
+  background: rgba(255, 221, 0, 0.06);
+  border: 1px solid rgba(255, 221, 0, 0.15);
+  color: var(--color-yellow);
+}
+
+.schema-suggestion {
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--cyan-12);
+  background: var(--cyan-04);
+  margin-bottom: 8px;
+}
+
+.schema-suggestion-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-cyan);
+  margin-bottom: 4px;
+}
+
+.schema-suggestion-reason {
+  font-size: 12px;
+  color: var(--color-text);
+  line-height: 1.6;
+}
+
+/* 修正碼區塊（共用） */
+.schema-fix-code {
+  position: relative;
+  background: var(--bg-code);
+  border: 1px solid var(--cyan-12);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  margin-top: 8px;
+}
+
+.schema-fix-code pre {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-green);
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin: 0;
+  padding-right: 60px;
+}
+
+.schema-copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 11px;
+}
+
+/* 統計摘要列 */
+.schema-stats-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-md);
+}
+
+.schema-stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-text);
+  padding: 8px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--cyan-12);
+  border-radius: var(--radius-md);
+}
+
+.schema-stat-num {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.schema-stat-num.good { color: var(--color-green); }
+.schema-stat-num.warn { color: var(--color-yellow); }
+.schema-stat-num.bad  { color: var(--color-red); }
+.schema-stat-num.muted { color: var(--color-gray); }
+
+@media (max-width: 768px) {
+  .schema-page-header { flex-direction: column; align-items: flex-start; }
+  .schema-stats-row { flex-direction: column; }
+}

@@ -2,7 +2,7 @@
    AIO View — Service Worker (PWA 離線快取)
    ================================================ */
 
-const CACHE_NAME = 'aio-view-v2.2';
+const CACHE_NAME = 'aeo-consultant-v3.0';
 const ASSETS = [
   '/aio-view/',
   '/aio-view/index.html',
@@ -30,12 +30,24 @@ const ASSETS = [
   '/aio-view/css/components/charts.css',
   '/aio-view/css/components/timeline.css',
   '/aio-view/css/components/manual-check.css',
+  '/aio-view/css/components/nav.css',
+  '/aio-view/css/components/landing.css',
+  '/aio-view/css/components/technical.css',
+  '/aio-view/css/components/schema-checker.css',
+  '/aio-view/css/components/citability.css',
+  '/aio-view/css/components/recommendations.css',
   '/aio-view/js/modules/utils.js',
   '/aio-view/js/modules/toast.js',
   '/aio-view/js/modules/storage.js',
   '/aio-view/js/modules/query-engine.js',
   '/aio-view/js/modules/sitemap.js',
   '/aio-view/js/modules/db.js',
+  '/aio-view/js/modules/router.js',
+  '/aio-view/js/modules/ai-crawlers.js',
+  '/aio-view/js/modules/site-db.js',
+  '/aio-view/js/modules/page-crawler.js',
+  '/aio-view/js/modules/schema-rules.js',
+  '/aio-view/js/modules/citability-rules.js',
   '/aio-view/js/components/guide.js',
   '/aio-view/js/components/stats.js',
   '/aio-view/js/components/articles-table.js',
@@ -48,6 +60,12 @@ const ASSETS = [
   '/aio-view/js/components/charts.js',
   '/aio-view/js/components/search-insights.js',
   '/aio-view/js/components/timeline.js',
+  '/aio-view/js/components/nav.js',
+  '/aio-view/js/components/landing.js',
+  '/aio-view/js/components/technical-checker.js',
+  '/aio-view/js/components/schema-checker.js',
+  '/aio-view/js/components/citability-analyzer.js',
+  '/aio-view/js/components/recommendations.js',
   '/aio-view/js/main.js',
   '/aio-view/icons/favicon.svg',
   '/aio-view/icons/icon-192.svg',

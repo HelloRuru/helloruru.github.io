@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <script src="/js/ga.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5">
-  <title>AIO View — Google AI Overview 監測工具｜免費檢測文章是否被 AI 摘要引用</title>
-  <meta name="description" content="免費 AI Overview 監測工具，輸入 Sitemap 自動產生搜尋語句，一鍵掃描你的文章是否出現在 Google AI Overview 摘要中。支援篩選分析、CSV 匯出，掌握網站在 AI 搜尋時代的曝光表現。">
-  <meta name="keywords" content="AI Overview,Google AI Overview,AIO監測,SEO工具,AI摘要,Google搜尋,網站曝光,AI Overview監測,SGE,Search Generative Experience,SEO分析,免費SEO工具">
+  <title>AEO Consultant — AI 搜尋最佳化顧問｜免費全站 AEO 健檢工具</title>
+  <meta name="description" content="免費 AEO 健檢工具，貼上網址自動分析結構化資料、AI 可引用度、技術面設定，給出具體優化步驟。讓你的網站更容易被 Google AI Overview、Perplexity、ChatGPT 引用。">
+  <meta name="keywords" content="AEO,Answer Engine Optimization,AI Overview,AI搜尋最佳化,結構化資料,Schema Markup,SEO工具,AI摘要,Google搜尋,Perplexity,ChatGPT Search,免費SEO工具,AI可引用度">
   <link rel="canonical" href="https://lab.helloruru.com/aio-view/">
 
   <!-- Favicon & Icons -->
@@ -21,7 +21,7 @@
   <meta name="theme-color" content="#06060c">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="AIO View">
+  <meta name="apple-mobile-web-app-title" content="AEO Consultant">
 
   <!-- Microsoft Tile -->
   <meta name="msapplication-TileColor" content="#06060c">
@@ -190,10 +190,10 @@
   <div class="grid-bg"></div>
 
   <div class="app">
-    <!-- Header -->
-    <header class="header">
+    <!-- Platform Header + Navigation -->
+    <header class="platform-header" id="platform-header">
       <div class="container">
-        <a href="#top" class="logo-link" id="logo-link" title="捲動到頁面頂端">
+        <a href="#/" class="logo-link">
           <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
             <defs>
               <linearGradient id="logo-bg" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -205,16 +205,72 @@
             <line x1="17" y1="17" x2="24" y2="24" stroke="url(#logo-bg)" stroke-width="2.5" stroke-linecap="round"/>
             <path d="M22 8 L25 11 L29 6" fill="none" stroke="url(#logo-bg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <h1 class="logo glitch" data-text="AIO View">AIO View</h1>
+          <div>
+            <h1 class="logo" data-text="AEO Consultant">AEO Consultant</h1>
+          </div>
         </a>
-        <p class="tagline">監測你的文章是否出現在 Google AI Overview</p>
-        <button class="btn btn-danger btn-sm header-reset-btn" id="reset-data-btn" type="button">清空目前資料</button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="選單" aria-expanded="false">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+        <nav class="main-nav" id="nav-menu">
+          <a href="#/" class="nav-link active" data-route="/">總覽</a>
+          <a href="#/aio-view" class="nav-link" data-route="/aio-view">AIO 監測</a>
+          <a href="#/schema" class="nav-link" data-route="/schema">結構化資料</a>
+          <a href="#/citability" class="nav-link" data-route="/citability">AI 可引用度</a>
+          <a href="#/technical" class="nav-link" data-route="/technical">技術面</a>
+          <a href="#/visibility" class="nav-link nav-link--phase2" data-route="/visibility">AI 能見度</a>
+          <a href="#/competitors" class="nav-link nav-link--phase2" data-route="/competitors">競品比較</a>
+          <a href="#/report" class="nav-link" data-route="/report">優化建議</a>
+        </nav>
       </div>
     </header>
 
     <!-- Main Content -->
     <main class="main">
       <div class="container">
+
+        <!-- ========== Landing Panel (首頁) ========== -->
+        <div id="panel-landing" class="feature-panel">
+          <div class="landing-hero">
+            <h2 data-text="AEO CONSULTANT">AEO CONSULTANT</h2>
+            <p class="landing-subtitle">
+              貼上你的網址，免費做一次完整的 AI 搜尋最佳化健檢<br>
+              結構化資料 / AI 可引用度 / 技術面設定 / 具體優化步驟
+            </p>
+          </div>
+
+          <div class="landing-input-group">
+            <input type="url" id="landing-url" placeholder="example.com" autocomplete="url">
+            <button class="btn btn-primary" id="landing-analyze-btn">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              開始分析
+            </button>
+          </div>
+
+          <div class="landing-progress hidden" id="landing-progress"></div>
+
+          <div class="landing-features" id="landing-features">
+            <!-- 由 Landing.renderFeatureCards() 動態產生 -->
+          </div>
+
+          <a href="#/report" class="landing-report-link hidden" id="landing-report-link">
+            查看完整優化建議 →
+          </a>
+        </div>
+
+        <!-- ========== AIO View Panel (原始功能，完整保留) ========== -->
+        <div id="panel-aio-view" class="feature-panel hidden">
+
+          <!-- AIO View 子標頭 -->
+          <div class="aio-view-subheader">
+            <h2 class="logo glitch" data-text="AIO View" style="font-family:var(--font-display);font-size:24px;color:var(--color-cyan);letter-spacing:2px;text-shadow:var(--glow-cyan);margin:0;">AIO View</h2>
+            <p style="font-size:13px;color:var(--color-gray);margin:4px 0 0;">監測你的文章是否出現在 Google AI Overview</p>
+            <button class="btn btn-danger btn-sm" id="reset-data-btn" type="button" style="margin-top:8px;">清空目前資料</button>
+          </div>
 
         <!-- Guide: 操作流程 -->
         <section class="card guide-card" id="guide-section">
@@ -864,6 +920,62 @@ npx playwright install chromium</code>
           </div>
         </section>
 
+        </div><!-- /panel-aio-view -->
+
+        <!-- ========== Schema Panel (結構化資料健檢) ========== -->
+        <div id="panel-schema" class="feature-panel hidden">
+          <div class="panel-placeholder">
+            <h2>結構化資料健檢</h2>
+            <p>掃描全站的 Schema Markup，找出缺漏和錯誤</p>
+            <p class="hint">請先在首頁輸入網址開始分析</p>
+          </div>
+        </div>
+
+        <!-- ========== Citability Panel (AI 可引用度) ========== -->
+        <div id="panel-citability" class="feature-panel hidden">
+          <div class="panel-placeholder">
+            <h2>AI 可引用度分析</h2>
+            <p>分析頁面內容結構是否容易被 AI 引擎擷取引用</p>
+            <p class="hint">請先在首頁輸入網址開始分析</p>
+          </div>
+        </div>
+
+        <!-- ========== Technical Panel (技術面檢查) ========== -->
+        <div id="panel-technical" class="feature-panel hidden">
+          <div class="panel-placeholder">
+            <h2>技術面檢查</h2>
+            <p>robots.txt、Sitemap 完整度、AI 爬蟲封鎖偵測</p>
+            <p class="hint">請先在首頁輸入網址開始分析</p>
+          </div>
+        </div>
+
+        <!-- ========== Visibility Panel (AI 能見度，Phase 2) ========== -->
+        <div id="panel-visibility" class="feature-panel hidden">
+          <div class="panel-placeholder">
+            <h2>AI 搜尋引擎能見度</h2>
+            <p>Google AIO / Perplexity / Bing Copilot 跨平台引用偵測</p>
+            <p class="hint" style="color:var(--color-purple);">Phase 2 — 即將推出</p>
+          </div>
+        </div>
+
+        <!-- ========== Competitors Panel (競品比較，Phase 2) ========== -->
+        <div id="panel-competitors" class="feature-panel hidden">
+          <div class="panel-placeholder">
+            <h2>競品比較</h2>
+            <p>同關鍵字下，你的站 vs 競品在 AI 搜尋的能見度</p>
+            <p class="hint" style="color:var(--color-purple);">Phase 2 — 即將推出</p>
+          </div>
+        </div>
+
+        <!-- ========== Report Panel (優化建議) ========== -->
+        <div id="panel-report" class="feature-panel hidden">
+          <div class="panel-placeholder">
+            <h2>優化建議</h2>
+            <p>根據所有分析結果，給出具體行動清單</p>
+            <p class="hint">請先在首頁輸入網址開始分析</p>
+          </div>
+        </div>
+
       </div>
     </main>
 
@@ -896,34 +1008,48 @@ npx playwright install chromium</code>
     </footer>
   </div>
 
-  <!-- Scripts: Modules (載入順序很重要) -->
-  <script src="js/modules/utils.js?v=20260320-v2.2"></script>
-  <script src="js/modules/toast.js?v=20260320-v2.2"></script>
-  <script src="js/modules/storage.js?v=20260320-v2.2"></script>
-  <script src="js/modules/query-engine.js?v=20260320-v2.2"></script>
-  <script src="js/modules/sitemap.js?v=20260320-v2.2"></script>
-  <script src="js/modules/db.js?v=20260320-v2.2"></script>
+  <!-- Scripts: Shared Modules (載入順序很重要) -->
+  <script src="js/modules/utils.js?v=20260407-v3.0"></script>
+  <script src="js/modules/toast.js?v=20260407-v3.0"></script>
+  <script src="js/modules/storage.js?v=20260407-v3.0"></script>
+  <script src="js/modules/query-engine.js?v=20260407-v3.0"></script>
+  <script src="js/modules/sitemap.js?v=20260407-v3.0"></script>
+  <script src="js/modules/db.js?v=20260407-v3.0"></script>
+  <script src="js/modules/router.js?v=20260407-v3.0"></script>
+  <script src="js/modules/ai-crawlers.js?v=20260407-v3.0"></script>
+  <script src="js/modules/site-db.js?v=20260407-v3.0"></script>
+  <script src="js/modules/page-crawler.js?v=20260407-v3.0"></script>
 
-  <!-- Scripts: Components -->
-  <script src="js/components/guide.js?v=20260320-v2.2"></script>
-  <script src="js/components/stats.js?v=20260320-v2.2"></script>
-  <script src="js/components/articles-table.js?v=20260320-v2.2"></script>
-  <script src="js/components/results-table.js?v=20260320-v2.2"></script>
-  <script src="js/components/file-upload.js?v=20260320-v2.2"></script>
-  <script src="js/components/cli-generator.js?v=20260320-v2.2"></script>
-  <script src="js/components/sitemap-input.js?v=20260320-v2.2"></script>
-  <script src="js/components/ai-assist.js?v=20260320-v2.2"></script>
-  <script src="js/components/manual-check.js?v=20260320-v2.2"></script>
-  <script src="js/components/charts.js?v=20260320-v2.2"></script>
-  <script src="js/components/search-insights.js?v=20260320-v2.2"></script>
-  <script src="js/components/timeline.js?v=20260320-v2.2"></script>
+  <!-- Scripts: AIO View Components (原始功能) -->
+  <script src="js/components/guide.js?v=20260407-v3.0"></script>
+  <script src="js/components/stats.js?v=20260407-v3.0"></script>
+  <script src="js/components/articles-table.js?v=20260407-v3.0"></script>
+  <script src="js/components/results-table.js?v=20260407-v3.0"></script>
+  <script src="js/components/file-upload.js?v=20260407-v3.0"></script>
+  <script src="js/components/cli-generator.js?v=20260407-v3.0"></script>
+  <script src="js/components/sitemap-input.js?v=20260407-v3.0"></script>
+  <script src="js/components/ai-assist.js?v=20260407-v3.0"></script>
+  <script src="js/components/manual-check.js?v=20260407-v3.0"></script>
+  <script src="js/components/charts.js?v=20260407-v3.0"></script>
+  <script src="js/components/search-insights.js?v=20260407-v3.0"></script>
+  <script src="js/components/timeline.js?v=20260407-v3.0"></script>
+
+  <!-- Scripts: AEO Platform Components (新功能) -->
+  <script src="js/components/nav.js?v=20260407-v3.0"></script>
+  <script src="js/components/landing.js?v=20260407-v3.0"></script>
+  <script src="js/modules/schema-rules.js?v=20260407-v3.0"></script>
+  <script src="js/modules/citability-rules.js?v=20260407-v3.0"></script>
+  <script src="js/components/technical-checker.js?v=20260407-v3.0"></script>
+  <script src="js/components/schema-checker.js?v=20260407-v3.0"></script>
+  <script src="js/components/citability-analyzer.js?v=20260407-v3.0"></script>
+  <script src="js/components/recommendations.js?v=20260407-v3.0"></script>
 
   <!-- Scripts: Main Entry -->
-  <script src="js/main.js?v=20260320-v2.2"></script>
+  <script src="js/main.js?v=20260407-v3.0"></script>
   <script>
     // PWA Service Worker
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/aio-view/sw.js?v=20260320-v2.2').catch(() => {});
+      navigator.serviceWorker.register('/aio-view/sw.js?v=20260407-v3.0').catch(() => {});
     }
     const startYear = 2026;
     const currentYear = new Date().getFullYear();

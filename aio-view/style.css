@@ -1,6 +1,6 @@
 /* ================================================
-   AIO View — Modular CSS Structure
-   Design System v1.9
+   AEO Consultant — Modular CSS Structure
+   Design System v3.0 (based on AIO View v1.9)
    ================================================ */
 
 /* 基礎層 */
@@ -28,6 +28,14 @@
 @import url('./css/components/charts.css');       /* 圖表分析 */
 @import url('./css/components/timeline.css');     /* 時間軸報告 */
 @import url('./css/components/manual-check.css'); /* 手動檢查模式 */
+
+/* AEO 平台元件 */
+@import url('./css/components/nav.css');           /* 平台導覽列 */
+@import url('./css/components/landing.css');        /* 首頁 */
+@import url('./css/components/technical.css');      /* 技術面檢查 */
+@import url('./css/components/schema-checker.css'); /* 結構化資料健檢 */
+@import url('./css/components/citability.css');     /* AI 可引用度 */
+@import url('./css/components/recommendations.css'); /* 優化建議 */
 
 /* 響應式 */
 @import url('./css/responsive.css');     /* 所有 @media queries */

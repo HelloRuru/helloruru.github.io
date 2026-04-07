@@ -1,0 +1,253 @@
+/* ================================================
+   AEO Consultant — Landing Page
+   ================================================ */
+
+/* 首頁 Hero 區塊 */
+.landing-hero {
+  text-align: center;
+  padding: var(--space-3xl) 0 var(--space-xl);
+}
+
+.landing-hero h2 {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-cyan);
+  letter-spacing: 3px;
+  text-shadow: var(--glow-cyan);
+  margin: 0 0 8px;
+}
+
+.landing-hero .landing-subtitle {
+  font-size: 15px;
+  color: var(--color-gray);
+  margin: 0 0 var(--space-xl);
+  line-height: 1.6;
+}
+
+/* URL 輸入區 */
+.landing-input-group {
+  display: flex;
+  gap: 8px;
+  max-width: 640px;
+  margin: 0 auto var(--space-lg);
+}
+
+.landing-input-group input {
+  flex: 1;
+  padding: 14px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--cyan-12);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-size: 16px;
+  font-family: var(--font-mono);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.landing-input-group input::placeholder {
+  color: var(--color-gray);
+  opacity: 0.6;
+}
+
+.landing-input-group input:focus {
+  border-color: var(--color-cyan);
+  box-shadow: 0 0 0 2px var(--cyan-04);
+}
+
+.landing-input-group .btn {
+  flex-shrink: 0;
+  padding: 14px 28px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* 進度區塊 */
+.landing-progress {
+  max-width: 640px;
+  margin: 0 auto var(--space-xl);
+  text-align: left;
+}
+
+.landing-progress .progress-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.landing-progress .progress-icon {
+  width: 20px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.landing-progress .progress-icon.done {
+  color: var(--color-green);
+}
+
+.landing-progress .progress-icon.warn {
+  color: var(--color-yellow);
+}
+
+.landing-progress .progress-icon.error {
+  color: var(--color-red);
+}
+
+.landing-progress .progress-icon.spinning {
+  color: var(--color-cyan);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 功能卡片網格 */
+.landing-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: var(--space-xl);
+}
+
+.feature-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--cyan-12);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.feature-card:hover {
+  border-color: var(--color-cyan);
+  box-shadow: var(--glow-cyan);
+  transform: translateY(-2px);
+}
+
+.feature-card--phase2 {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.feature-card--phase2:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.feature-card-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: var(--cyan-04);
+}
+
+.feature-card-icon svg {
+  width: 22px;
+  height: 22px;
+  color: var(--color-cyan);
+}
+
+.feature-card-body h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-ink);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.feature-card-body p {
+  font-size: 13px;
+  color: var(--color-gray);
+  margin: 4px 0 0;
+  line-height: 1.5;
+}
+
+.feature-phase {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(134, 96, 214, 0.15);
+  color: var(--color-purple);
+  font-family: var(--font-mono);
+  letter-spacing: 0.5px;
+}
+
+/* 功能卡片分數 */
+.feature-card-score {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.feature-card-score.good {
+  color: var(--color-green);
+}
+
+.feature-card-score.warn {
+  color: var(--color-yellow);
+}
+
+.feature-card-score.bad {
+  color: var(--color-red);
+}
+
+/* 優化建議入口 */
+.landing-report-link {
+  display: block;
+  text-align: center;
+  margin-top: var(--space-lg);
+  padding: 16px;
+  background: linear-gradient(135deg, var(--cyan-04), rgba(134, 96, 214, 0.04));
+  border: 1px solid var(--cyan-12);
+  border-radius: var(--radius-lg);
+  color: var(--color-cyan);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.landing-report-link:hover {
+  background: var(--cyan-12);
+}
+
+/* 響應式 */
+@media (max-width: 768px) {
+  .landing-hero h2 {
+    font-size: 24px;
+    letter-spacing: 2px;
+  }
+
+  .landing-input-group {
+    flex-direction: column;
+  }
+
+  .landing-features {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1023px) {
+  .landing-features {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

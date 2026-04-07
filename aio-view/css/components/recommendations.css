@@ -1,0 +1,71 @@
+/* ================================================
+   AEO Consultant — Recommendations
+   優化建議
+   ================================================ */
+
+.rec-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--cyan-12);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-lg);
+}
+
+.rec-progress-bar {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(122, 144, 152, 0.15);
+  overflow: hidden;
+}
+
+.rec-progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--color-green);
+  transition: width 0.4s ease;
+}
+
+.rec-progress-text {
+  font-size: 13px;
+  font-family: var(--font-mono);
+  color: var(--color-text);
+  flex-shrink: 0;
+}
+
+.rec-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.rec-checkbox {
+  margin-top: 2px;
+  accent-color: var(--color-cyan);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.rec-item.done .tech-fix-title {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.rec-item.done .tech-fix-desc {
+  opacity: 0.5;
+}
+
+.rec-category-header {
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  color: var(--color-gray);
+  padding: var(--space-md) 0 var(--space-sm);
+  border-bottom: 1px solid var(--cyan-04);
+  margin-bottom: var(--space-sm);
+}

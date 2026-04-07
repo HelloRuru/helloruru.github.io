@@ -1,0 +1,136 @@
+/* ================================================
+   AEO Consultant — Navigation
+   ================================================ */
+
+.platform-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(6, 6, 12, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--cyan-12);
+  padding: 0 var(--space-lg);
+}
+
+.platform-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.platform-header .logo-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.platform-header .logo {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-cyan);
+  letter-spacing: 2px;
+  text-shadow: var(--glow-cyan);
+  margin: 0;
+}
+
+.platform-header .logo-sub {
+  font-size: 11px;
+  color: var(--color-gray);
+  letter-spacing: 0.5px;
+}
+
+/* 導覽連結 */
+.main-nav {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.main-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.main-nav .nav-link {
+  font-size: 12px;
+  color: var(--color-gray);
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  font-family: var(--font-body);
+}
+
+.main-nav .nav-link:hover {
+  color: var(--color-text);
+  background: var(--cyan-04);
+}
+
+.main-nav .nav-link.active {
+  color: var(--color-cyan);
+  background: var(--cyan-12);
+}
+
+.main-nav .nav-link--phase2 {
+  opacity: 0.5;
+}
+
+.main-nav .nav-link--phase2::after {
+  content: 'P2';
+  font-size: 9px;
+  margin-left: 4px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: rgba(134, 96, 214, 0.2);
+  color: var(--color-purple);
+  vertical-align: super;
+}
+
+/* 手機版漢堡選單 */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--cyan-12);
+  border-radius: var(--radius-sm);
+  color: var(--color-cyan);
+  padding: 6px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .nav-toggle {
+    display: block;
+  }
+
+  .main-nav {
+    display: none;
+    position: absolute;
+    top: 56px;
+    left: 0;
+    right: 0;
+    background: rgba(6, 6, 12, 0.98);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--cyan-12);
+    flex-direction: column;
+    padding: var(--space-md);
+    gap: 2px;
+  }
+
+  .main-nav.open {
+    display: flex;
+  }
+
+  .main-nav .nav-link {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+}

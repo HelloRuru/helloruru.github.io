@@ -1,9 +1,9 @@
 /* ================================================
-   AIO View — Main Entry
-   應用程式進入點
+   AIO View — AIO View Module
+   原始 AIO View 功能（保留完整功能）
    ================================================ */
 
-const App = {
+const AioViewApp = {
   /** 目前網域 */
   domain: '',
 
@@ -654,6 +654,90 @@ const App = {
     } finally {
       container.remove();
     }
+  }
+};
+
+/* ================================================
+   AEO Consultant — App Shell
+   平台進入點，管理路由和各功能模組
+   ================================================ */
+
+const App = {
+  /**
+   * 初始化平台
+   */
+  async init() {
+    // 初始化導覽列
+    Nav.init();
+
+    // 初始化首頁
+    Landing.init();
+
+    // 初始化功能模組
+    TechnicalChecker.init();
+    SchemaChecker.init();
+    CitabilityAnalyzer.init();
+    Recommendations.init();
+
+    // 註冊路由
+    this.registerRoutes();
+
+    // 啟動路由器
+    Router.init();
+  },
+
+  /**
+   * 註冊所有路由
+   */
+  registerRoutes() {
+    // 首頁
+    Router.register('/', {
+      panelId: 'panel-landing',
+      show: () => Landing.show(),
+      hide: () => Landing.hide()
+    });
+
+    // AIO View（原始功能，延遲初始化）
+    Router.register('/aio-view', {
+      panelId: 'panel-aio-view',
+      init: () => AioViewApp.init(),
+      show: () => {},
+      hide: () => {}
+    });
+
+    // 結構化資料健檢（Phase 1）
+    Router.register('/schema', {
+      panelId: 'panel-schema',
+      show: () => SchemaChecker.show()
+    });
+
+    // AI 可引用度分析（Phase 1）
+    Router.register('/citability', {
+      panelId: 'panel-citability',
+      show: () => CitabilityAnalyzer.show()
+    });
+
+    // 技術面檢查（Phase 1）
+    Router.register('/technical', {
+      panelId: 'panel-technical',
+      show: () => TechnicalChecker.show()
+    });
+
+    // AI 能見度（Phase 2 預留）
+    Router.register('/visibility', {
+      panelId: 'panel-visibility'
+    });
+
+    // 競品比較（Phase 2 預留）
+    Router.register('/competitors', {
+      panelId: 'panel-competitors'
+    });
+
+    // 優化建議（Phase 1）
+    Router.register('/report', {
+      panelId: 'panel-report',
+      show: () => Recommendations.show()
+    });
   }
 };
 
