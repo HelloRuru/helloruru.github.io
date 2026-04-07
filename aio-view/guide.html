@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <script src="/js/ga.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AIO View // 操作手冊 — SYSTEM MANUAL</title>
+<title>AEO Consultant // 操作手冊 — SYSTEM MANUAL</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+TC:wght@400;500;700&family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -549,8 +549,8 @@ body{
 <!-- Boot Screen -->
 <div id="boot-screen">
   <pre class="boot-text" id="boot-text"></pre>
-  <div class="boot-logo" id="boot-logo">AIO VIEW</div>
-  <div class="boot-status" id="boot-status">// SYSTEM MANUAL LOADED — TRANSMISSION COMPLETE</div>
+  <div class="boot-logo" id="boot-logo">AEO CONSULTANT</div>
+  <div class="boot-status" id="boot-status">// SYSTEM MANUAL v4.0 — TRANSMISSION COMPLETE</div>
 </div>
 
 <!-- Overlays -->
@@ -575,7 +575,7 @@ body{
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         RETURN
       </a>
-      <span class="topbar-tag">v2.0</span>
+      <span class="topbar-tag">v4.0</span>
     </div>
     <div class="topbar-right">
       <span class="pulse-dot"></span>&ensp;SYS_MANUAL // <span id="datetime"></span>
@@ -585,8 +585,8 @@ body{
   <!-- Hero -->
   <header class="hero reveal">
     <div class="hero-label">// CLASSIFIED DOCUMENT</div>
-    <h1><span class="glitch" data-text="AIO VIEW 操作手冊">AIO VIEW 操作手冊</span></h1>
-    <p class="hero-sub">監測你的文章是否出現在 Google AI Overview 搜尋摘要。<br>從 Sitemap 解析到報告分析，一站完成。</p>
+    <h1><span class="glitch" data-text="AEO CONSULTANT 操作手冊">AEO CONSULTANT 操作手冊</span></h1>
+    <p class="hero-sub">免費全站 AI 搜尋最佳化健檢。貼網址就能跑完結構化資料、AI 可引用度、技術面檢查，<br>給出具體優化步驟。讓你的網站更容易被 AI 搜尋引擎引用。</p>
     <div class="hero-line"></div>
   </header>
 
@@ -603,36 +603,42 @@ body{
       <div class="step">
         <div class="step-num">01</div>
         <div class="step-body">
-          <div class="step-title">貼 Sitemap + 選文章</div>
-          <div class="step-desc">輸入你網站的 <code>sitemap.xml</code> 網址，按「解析」。系統自動擷取所有文章，並用<strong style="color:var(--green)">規則引擎</strong>自動產生搜尋語句（不需 API）。<br>
-          用年份、月份篩選，勾選你想監測的項目。語句也可以手動編輯。</div>
+          <div class="step-title">貼網址，自動開始</div>
+          <div class="step-desc">在首頁輸入你的網站網址（不用找 sitemap），按「開始分析」。系統自動找 Sitemap、解析文章清單、產生搜尋語句。<br>找不到 Sitemap 也沒關係，會自動爬首頁連結產生頁面清單。</div>
         </div>
       </div>
 
       <div class="step">
         <div class="step-num">02</div>
         <div class="step-body">
-          <div class="step-title">檢查 AIO</div>
-          <div class="step-desc">勾選文章後，每篇會自動展開<strong style="color:var(--magenta)">9 種搜尋面向</strong>（推薦、價格、決策、比較、教學、地點、體驗、售後、社群），全面檢查不同問法是否觸發 AIO。<br><br>
-          <strong style="color:var(--green)">手動檢查（免安裝）</strong> — 按「開始檢查」，系統逐篇開啟 Google 搜尋，你手動回報結果。<br>
-          <strong style="color:var(--cyan)">Chrome 擴充功能自動檢查（推薦）</strong> — 裝好擴充功能後，按「開始自動檢查」。背景彈窗自動偵測 AIO、收集引用來源、偵測一般搜尋排名（前 20 名），跑完自動關閉視窗。<br>
-          <strong style="color:var(--yellow)">進度條 + 自動重試</strong> — 檢查時有視覺進度條。第一輪跑完後，未回傳的會自動重試一次。<br>
-          <strong style="color:var(--cyan)">CLI 自動掃描（批次用）</strong> — 產生 <code>queries.json</code> 後，跑 <code>node scan.js</code>，每篇間隔 <strong style="color:var(--yellow)">2.5 分鐘</strong>，適合睡前放著跑。<br><br>
-          三種結果狀態：<strong style="color:var(--green)">AI 推薦我</strong> = AI 摘要引用了你的文章、<strong style="color:var(--magenta)">AI 推薦別人</strong> = AI 摘要出現但引用別人、<strong style="color:var(--text-dim)">沒有 AI 摘要</strong> = 搜尋結果沒有出現 AI 摘要。<br>
-          每個搜尋語句旁會顯示<strong style="color:var(--yellow)">一般搜尋排名</strong>（#1~#20），讓你知道文章在傳統搜尋的表現。</div>
+          <div class="step-title">四項健檢自動跑完</div>
+          <div class="step-desc">
+          <strong style="color:var(--cyan)">結構化資料健檢</strong> — 掃描全站的 Schema Markup（JSON-LD），找出哪些頁面有、哪些缺、哪些格式錯。缺的頁面直接給你現成的 JSON-LD 模板，一鍵複製貼上就好。<br><br>
+          <strong style="color:var(--green)">AI 可引用度分析</strong> — 每頁打 0-100 分。檢查：第一段有沒有定義句、標題層級清不清楚、有沒有條列重點、有沒有 FAQ、有沒有作者署名和日期。每個扣分項目都告訴你怎麼改。<br><br>
+          <strong style="color:var(--magenta)">技術面檢查</strong> — robots.txt 有沒有擋 AI 爬蟲（GPTBot、PerplexityBot、ClaudeBot 等 10 個 bot），Sitemap 完不完整。被封鎖的 bot 直接給修正碼，一鍵複製。<br><br>
+          <strong style="color:var(--yellow)">優化建議</strong> — 整合以上所有結果，按優先順序排好。P1 阻斷級（robots.txt 擋 AI）→ P2 高影響（缺 Schema）→ P3 中影響（可引用度低）→ P4 打磨級。可打勾追蹤進度。</div>
         </div>
       </div>
 
       <div class="step">
         <div class="step-num">03</div>
         <div class="step-body">
-          <div class="step-title">看報告</div>
-          <div class="step-desc">掃描完自動捲到報告區。五大指標：總文章數、有 AIO、AI 推薦我、引用率、<strong style="color:var(--cyan)">AIO 能見度指數</strong>（0-100 分）。<br><br>
-          <strong style="color:var(--cyan)">卡片式結果</strong> — 每篇文章一張卡片，搜尋語句按狀態分色（綠=AI 推薦我、粉=AI 推薦別人、灰=沒有 AI 摘要），前三篇展開，其餘收合。沒 AIO 的排最前面，紅框醒目。<br>
-          <strong style="color:var(--green)">歷史比較</strong> — 自動對比上次同網域掃描。卡片上顯示 AIO&uarr;/&darr;、引用&uarr;/&darr;、NEW 標記，一眼看到哪些文章進步了。<br>
-          <strong style="color:var(--magenta)">產業智慧建議</strong> — 系統自動偵測你的文章屬於哪個產業（美業、餐飲、汽車等 12 種），延伸寫作建議會針對產業特色量身打造。建議來源是<strong>真實的 Google 搜尋推薦</strong>，不是 AI 猜的。<br><br>
-          匯出功能：<strong>CSV</strong>（原始資料）、<strong>圖片</strong>（含品牌浮水印，適合社群分享）、<strong>儲存結果</strong>（手動存到瀏覽器，下次可以比較不同次的掃描）。<br>
-          另有<strong style="color:var(--cyan)">圖表分析</strong>（AIO 分布甜甜圈、引用來源排行 + 統整分析）和<strong style="color:var(--magenta)">時間軸報告</strong>（歷史趨勢折線圖）。</div>
+          <div class="step-title">AI 能見度掃描（需擴充功能）</div>
+          <div class="step-desc">安裝 Chrome 擴充功能後，可以實際搜尋 <strong style="color:var(--cyan)">Google AI Overview</strong> 和 <strong style="color:var(--magenta)">Bing Copilot</strong>，看你的每篇文章有沒有被 AI 引用。<br><br>
+          還可以做<strong style="color:var(--green)">競品比較</strong> — 輸入你和競品的網址，同關鍵字搜尋，比誰被 AI 引用更多。<br><br>
+          擴充功能免費、裝一次就好。掃描時用你自己的瀏覽器搜尋，不需要 API key。</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-body">
+          <div class="step-title">匯出報告</div>
+          <div class="step-desc">
+          <strong style="color:var(--cyan)">Markdown 報告</strong> — 一鍵下載或複製，直接貼給 Claude / ChatGPT，請 AI 根據你的網站狀況給具體修改建議。<br>
+          <strong style="color:var(--green)">CSV 匯出</strong> — AIO 監測的原始資料。<br>
+          <strong style="color:var(--magenta)">結果圖片</strong> — 含品牌浮水印，適合社群分享。<br>
+          所有結果自動存在瀏覽器裡，下次可以比較不同次的掃描。</div>
         </div>
       </div>
     </div>
@@ -647,55 +653,87 @@ body{
       <div class="section-title">FIRST-TIME SETUP</div>
     </div>
 
-    <p style="color:var(--text-dim);margin-bottom:16px;font-size:14px"><strong style="color:var(--green)">手動檢查模式不需要安裝任何東西</strong>，直接在瀏覽器操作即可。<br>想自動檢查，裝 Chrome 擴充功能最方便；CLI 則適合大量批次掃描。</p>
+    <p style="color:var(--text-dim);margin-bottom:16px;font-size:14px"><strong style="color:var(--green)">結構化資料、AI 可引用度、技術面、優化建議</strong>四個功能不需要安裝任何東西，貼網址就能用。<br>想做 AI 能見度掃描和競品比較，才需要裝 Chrome 擴充功能（免費，只裝一次）。</p>
 
-    <h3 style="color:var(--cyan);font-family:var(--display);font-size:14px;letter-spacing:1px;margin:24px 0 12px;">// CHROME 擴充功能安裝（推薦）</h3>
+    <h3 style="color:var(--cyan);font-family:var(--display);font-size:14px;letter-spacing:1px;margin:24px 0 12px;">// CHROME 擴充功能安裝（免費）</h3>
 
     <div class="steps" style="margin-bottom:24px">
       <div class="step">
-        <div class="step-num" style="font-size:14px">A1</div>
+        <div class="step-num" style="font-size:14px">01</div>
         <div class="step-body">
-          <div class="step-title">下載擴充功能</div>
-          <div class="step-desc">到 <a href="https://github.com/HelloRuru/helloruru.github.io" style="color:var(--cyan)">GitHub Repo</a> 下載 ZIP，解壓後找到 <code>aio-view/chrome-extension</code> 資料夾。</div>
+          <div class="step-title">下載 ZIP</div>
+          <div class="step-desc">點 <a href="aeo-consultant-detector-v2.zip" download style="color:var(--cyan);font-weight:700">下載擴充功能 ZIP（25KB）</a>，存到任何地方。</div>
         </div>
       </div>
       <div class="step">
-        <div class="step-num" style="font-size:14px">A2</div>
+        <div class="step-num" style="font-size:14px">02</div>
         <div class="step-body">
-          <div class="step-title">載入到 Chrome</div>
-          <div class="step-desc">打開 <code>chrome://extensions/</code> → 右上角開啟「開發人員模式」→ 按「載入未封裝項目」→ 選擇 <code>chrome-extension</code> 資料夾。<br>看到 <strong style="color:var(--cyan)">AIO View Detector</strong> 出現就完成了。</div>
+          <div class="step-title">解壓縮</div>
+          <div class="step-desc">對 ZIP 按右鍵 → 「解壓縮全部」。記住解壓後的資料夾位置。</div>
         </div>
       </div>
       <div class="step">
-        <div class="step-num" style="font-size:14px">A3</div>
+        <div class="step-num" style="font-size:14px">03</div>
         <div class="step-body">
-          <div class="step-title">重新整理 AIO View</div>
-          <div class="step-desc">回到 AIO View 頁面按 F5 重新整理。Debug 區域出現 <code>[EXT] bridge-ready</code> 就代表擴充功能已連線。</div>
+          <div class="step-title">載入 Chrome</div>
+          <div class="step-desc">網址列輸入 <code>chrome://extensions</code> → 打開右上角「開發人員模式」→ 點左上角「載入未封裝項目」→ 選剛才解壓的資料夾。</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="font-size:14px">04</div>
+        <div class="step-body">
+          <div class="step-title">完成</div>
+          <div class="step-desc">看到「<strong style="color:var(--cyan)">AEO Consultant Detector 2.0.0</strong>」就裝好了。不需要裝 Node.js、Git 或任何開發工具。</div>
         </div>
       </div>
     </div>
+  </section>
 
-    <h3 style="color:var(--magenta);font-family:var(--display);font-size:14px;letter-spacing:1px;margin:24px 0 12px;">// CLI 掃描安裝（批次用）</h3>
-
-    <div class="terminal">
-      <div class="terminal-bar">
-        <span class="terminal-dot"></span>
-        <span class="terminal-dot"></span>
-        <span class="terminal-dot"></span>
-        <span class="terminal-label">PowerShell</span>
+  <!-- Section: 六大功能 -->
+  <section class="section reveal">
+    <div class="section-header">
+      <div class="section-icon" style="border-color:var(--magenta);box-shadow:var(--glow-magenta);background:rgba(255,0,170,.04)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--magenta)" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
       </div>
-      <div class="terminal-body">
-<span class="comment"># 1. 裝 Node.js — 到 nodejs.org 下載 LTS 版，一直按下一步</span>
-<span class="comment"># 2. 裝 Git — 到 git-scm.com/download/win 下載，一直按下一步</span>
-<span class="comment"># 3. 下載工具 + 安裝依賴</span>
+      <div class="section-title" style="color:var(--magenta);text-shadow:0 0 12px rgba(255,0,170,.3)">SIX MODULES</div>
+      <span class="section-tag">v4.0</span>
+    </div>
 
-<span class="cmd">git clone</span> https://github.com/helloruru/helloruru.github.io.git
-<span class="cmd">cd</span> helloruru.github.io/aio-view/cli
-<span class="cmd">npm install</span>
-<span class="cmd">npx playwright install</span> chromium
+    <div class="features">
+      <div class="feature">
+        <span class="feature-badge new">SCHEMA</span>
+        <h4>結構化資料健檢</h4>
+        <p>掃描全站 JSON-LD，找出缺少、格式錯誤、已棄用的 Schema。缺的頁面直接給現成 JSON-LD 模板，一鍵複製貼上。支援 17 種 Google 類型驗證。</p>
+      </div>
 
-<span class="comment"># 完成！可以開始掃描了</span>
-<span class="cmd">node scan.js</span> <span class="highlight">--input queries.json --output results.json --domain 你的網域.com</span>
+      <div class="feature">
+        <span class="feature-badge ai">CITABILITY</span>
+        <h4>AI 可引用度分析</h4>
+        <p>每頁 0-100 分，10 項評分：定義句、標題層級、條列重點、FAQ、比較表格、自足答案段、作者署名、日期、Meta Description、字數。每個扣分項目都有白話文修正提示。</p>
+      </div>
+
+      <div class="feature">
+        <span class="feature-badge chart">TECHNICAL</span>
+        <h4>技術面檢查</h4>
+        <p>robots.txt 有沒有擋 AI 爬蟲（GPTBot、PerplexityBot、ClaudeBot 等 10 個 bot）。被封鎖的直接給修正碼，一鍵複製。同時檢查 Sitemap 完整度。</p>
+      </div>
+
+      <div class="feature">
+        <span class="feature-badge new">REPORT</span>
+        <h4>優化建議</h4>
+        <p>整合所有分析結果，按優先順序排好。P1 阻斷級 → P2 高影響 → P3 中影響 → P4 打磨級。每項都有具體修正步驟，可打勾追蹤進度。支援 Markdown 匯出（貼給 AI 讀）。</p>
+      </div>
+
+      <div class="feature">
+        <span class="feature-badge time">VISIBILITY</span>
+        <h4>AI 能見度掃描</h4>
+        <p>用你的瀏覽器實際搜尋 Google AI Overview 和 Bing Copilot，看每篇文章有沒有被 AI 引用。需要 Chrome 擴充功能（免費）。</p>
+      </div>
+
+      <div class="feature">
+        <span class="feature-badge chart">COMPARE</span>
+        <h4>競品比較</h4>
+        <p>同關鍵字搜尋，比較你和競品誰更常被 AI 引用。需要擴充功能。輸入你和對手的網址，工具自動比對。</p>
       </div>
     </div>
   </section>
@@ -711,140 +749,32 @@ body{
 
     <div class="tips">
       <div class="tip">
+        <span class="tip-icon" style="color:var(--cyan)">AEO</span>
+        <div class="tip-text">Answer Engine Optimization — AI 搜尋最佳化。讓你的網站內容更容易被 AI 搜尋引擎（Google AI Overview、Perplexity、Bing Copilot、ChatGPT）擷取和引用。</div>
+      </div>
+      <div class="tip">
         <span class="tip-icon" style="color:var(--cyan)">AI Overview</span>
         <div class="tip-text">Google 搜尋結果頂部的 AI 生成摘要（前稱 SGE）。Google AI 會自動閱讀多篇文章，整理出一段摘要回答使用者。</div>
       </div>
       <div class="tip">
+        <span class="tip-icon" style="color:var(--cyan)">Schema / JSON-LD</span>
+        <div class="tip-text">結構化資料標記。放在網頁 HTML 裡，告訴搜尋引擎「這篇是文章 / 這是 FAQ / 這是商家資訊」。AI 搜尋引擎特別依賴這個來理解頁面內容。</div>
+      </div>
+      <div class="tip">
+        <span class="tip-icon" style="color:var(--green)">AI 可引用度</span>
+        <div class="tip-text">頁面內容結構是否容易被 AI 擷取引用。有清楚的定義句、條列重點、FAQ 格式、比較表格的頁面，AI 更容易引用。</div>
+      </div>
+      <div class="tip">
+        <span class="tip-icon" style="color:var(--magenta)">AI 爬蟲</span>
+        <div class="tip-text">AI 搜尋引擎用來讀取你網站內容的程式。GPTBot（ChatGPT）、PerplexityBot、ClaudeBot、Google-Extended（Gemini）等。如果 robots.txt 擋了它們，AI 就讀不到你的內容。</div>
+      </div>
+      <div class="tip">
         <span class="tip-icon" style="color:var(--green)">被引用</span>
-        <div class="tip-text">你的文章網址出現在 AI Overview 的引用來源裡。代表 Google AI 認為你的內容具有參考價值，是最好的結果。</div>
+        <div class="tip-text">AI 回答裡推薦了你的網站。代表 AI 認為你的內容具有參考價值。</div>
       </div>
       <div class="tip">
-        <span class="tip-icon" style="color:var(--magenta)">有 AIO 未引用</span>
-        <div class="tip-text">搜尋結果有出現 AI Overview，但引用的是別人的文章。代表有機會——你的內容夠好就能搶到引用位。</div>
-      </div>
-      <div class="tip">
-        <span class="tip-icon" style="color:var(--text-dim)">無 AIO</span>
-        <div class="tip-text">搜尋結果沒有出現 AI Overview。可能是 Google 認為這個搜尋不需要 AI 摘要，或是還沒覆蓋到這個主題。</div>
-      </div>
-      <div class="tip">
-        <span class="tip-icon" style="color:var(--cyan)">搜尋面向</span>
-        <div class="tip-text">同一篇文章用不同關鍵字組合搜尋（推薦、價格、比較、教學等），全面檢查各種問法的 AIO 表現。</div>
-      </div>
-      <div class="tip">
-        <span class="tip-icon" style="color:var(--cyan)">AIO 能見度</span>
-        <div class="tip-text">0-100 分的綜合指標。結合 AIO 出現率（40%）和引用率（60%）。60 分以上代表你的內容在 AI 搜尋裡很有存在感。</div>
-      </div>
-      <div class="tip">
-        <span class="tip-icon" style="color:var(--green)">引用來源</span>
-        <div class="tip-text">AI Overview 下方列出的參考網站。掃描會自動收集所有引用來源，幫你看到競爭對手是誰。</div>
-      </div>
-      <div class="tip">
-        <span class="tip-icon" style="color:var(--magenta)">延伸寫作方向</span>
-        <div class="tip-text">來自<strong>真實的 Google 搜尋推薦</strong>（Autocomplete + 搜尋結果底部的「相關搜尋」），不是 AI 猜的。系統會比對你現有文章的缺口，找出有搜尋量但你還沒寫的題目，再依產業給出具體建議。</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section: New Features -->
-  <section class="section reveal">
-    <div class="section-header">
-      <div class="section-icon" style="border-color:var(--magenta);box-shadow:var(--glow-magenta);background:rgba(255,0,170,.04)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="var(--magenta)" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-      </div>
-      <div class="section-title" style="color:var(--magenta);text-shadow:0 0 12px rgba(255,0,170,.3)">NEW FEATURES</div>
-      <span class="section-tag">v2.0</span>
-    </div>
-
-    <div class="features">
-      <div class="feature">
-        <span class="feature-badge ai">AI ASSIST</span>
-        <h4>AI 輔助面板</h4>
-        <p>超過 15 篇自動分批。複製提示詞給 AI → 把回覆貼回來 → 系統用模糊比對自動配對標題和語句。</p>
-      </div>
-
-      <div class="feature">
-        <span class="feature-badge new">INSIGHTS</span>
-        <h4>單篇面向分析</h4>
-        <p>每篇文章自動展開多個搜尋面向驗證，顯示已驗/未驗進度。整合 Google 搜尋建議，找出使用者在意的方向和你還沒寫的延伸題目。</p>
-      </div>
-
-      <div class="feature">
-        <span class="feature-badge new">RANK</span>
-        <h4>AIO 能見度指數</h4>
-        <p>0-100 分綜合指標，結合 AIO 出現率（40%）和引用率（60%）。60 分以上代表你的內容在 AI 搜尋結果裡很有存在感。</p>
-      </div>
-
-      <div class="feature">
-        <span class="feature-badge chart">CHARTS</span>
-        <h4>圖表分析</h4>
-        <p>AIO 狀態甜甜圈圖（被引用 / 有 AIO 未引用 / 無 AIO），加上引用來源 Top 10 柱狀圖。</p>
-      </div>
-
-      <div class="feature">
-        <span class="feature-badge time">TIMELINE</span>
-        <h4>時間軸報告</h4>
-        <p>趨勢折線圖追蹤引用率變化。歷史記錄卡片、兩次掃描對比（新增/失去/持續引用）。</p>
-      </div>
-
-      <div class="feature">
-        <span class="feature-badge new">CLI</span>
-        <h4>零成本語句整理</h4>
-        <p>超過 15 篇時可先匯出語句、用熟悉的工具批次整理，再貼回 AIO View 一次套用，不需要 API key。</p>
-      </div>
-    </div>
-
-    <div class="section-title" style="color:var(--magenta);text-shadow:0 0 12px rgba(255,0,170,.3);margin:32px 0 16px;font-family:var(--display);font-size:14px;letter-spacing:1px">// v2.1 UPDATE</div>
-
-    <div class="features">
-      <div class="feature">
-        <span class="feature-badge new">CARDS</span>
-        <h4>卡片式結果</h4>
-        <p>結果按文章分組，搜尋語句依狀態分色（綠=被引用、粉=有AIO、灰=沒AIO）。前三篇展開，其餘收合，點標題切換。</p>
-      </div>
-
-      <div class="feature">
-        <span class="feature-badge new">RETRY</span>
-        <h4>逾時自動重試</h4>
-        <p>第一輪掃完後，自動收集未回傳的語句重跑一次，不用手動重來。</p>
-      </div>
-
-      <div class="feature">
-        <span class="feature-badge new">COMPARE</span>
-        <h4>歷史比較</h4>
-        <p>自動對比上次同網域的掃描結果。卡片上顯示 AIO&uarr;/&darr;、引用&uarr;/&darr;、NEW 標記，一眼看到進步。</p>
-      </div>
-
-      <div class="feature">
-        <span class="feature-badge new">IMAGE</span>
-        <h4>匯出結果圖片</h4>
-        <p>一鍵產生深色背景的結果截圖，含統計數字 + 卡片 + 品牌浮水印，直接分享到社群。</p>
-      </div>
-
-      <div class="feature">
-        <span class="feature-badge ai">INDUSTRY</span>
-        <h4>12 大產業建議</h4>
-        <p>系統自動偵測文章所屬產業（美業、餐飲、汽車、冷氣、醫療等），延伸寫作建議會根據產業特色量身打造。</p>
-      </div>
-
-      <div class="feature">
-        <span class="feature-badge chart">PROGRESS</span>
-        <h4>視覺進度條</h4>
-        <p>自動檢查時顯示 cyan 漸層進度條 + 百分比，掃完自動捲到結果區。</p>
-      </div>
-    </div>
-
-    <div class="terminal" style="margin-top:16px">
-      <div class="terminal-bar">
-        <span class="terminal-dot"></span>
-        <span class="terminal-dot"></span>
-        <span class="terminal-dot"></span>
-        <span class="terminal-label">Batch Edit</span>
-      </div>
-      <div class="terminal-body">
-<span class="comment"># 批次整理成「文章標題 | 搜尋語句」</span>
-<span class="highlight">高雄左營美食推薦 | 左營 美食</span>
-<span class="highlight">鳳山夜市必吃攻略 | 鳳山 夜市 推薦</span>
-<span class="highlight">屏東消費指南 | 屏東 消費 指南</span>
+        <span class="tip-icon" style="color:var(--magenta)">有 AI 回答</span>
+        <div class="tip-text">搜尋結果有 AI 回答，但引用的是別人的網站。代表有機會——改善內容就能搶到引用位。</div>
       </div>
     </div>
   </section>
@@ -861,31 +791,31 @@ body{
     <div class="tips">
       <div class="tip">
         <span class="tip-icon">&gt;</span>
-        <div class="tip-text">每篇間隔 <strong>2.5 分鐘</strong>，50 篇約 <strong>2 小時</strong>。適合睡前放著跑，起床就有報告。</div>
+        <div class="tip-text">四項基本健檢（結構化資料、可引用度、技術面、優化建議）<strong>完全免費、不需安裝</strong>，貼網址就能用。</div>
       </div>
       <div class="tip">
         <span class="tip-icon">&gt;</span>
-        <div class="tip-text">中途可以關掉，下次會<strong>接著上次的進度</strong>繼續，不會遺失已完成的結果。</div>
+        <div class="tip-text">AI 能見度掃描和競品比較需要 Chrome 擴充功能，但<strong>也是免費的</strong>，不需要 API key。</div>
       </div>
       <div class="tip">
         <span class="tip-icon">&gt;</span>
-        <div class="tip-text">歷史記錄存在瀏覽器 <strong>IndexedDB</strong>，關閉分頁、重開瀏覽器都不會消失。</div>
+        <div class="tip-text">找不到 Sitemap 也沒關係。系統會自動爬取首頁的連結，產生一份頁面清單。還可以下載自動產生的 <strong>sitemap.xml</strong>。</div>
       </div>
       <div class="tip">
         <span class="tip-icon">&gt;</span>
-        <div class="tip-text">語句整理可直接在 AIO View 手動改，或批次貼入，一樣維持 <strong>零成本</strong>。</div>
+        <div class="tip-text">所有結果存在瀏覽器的 <strong>IndexedDB</strong>，關分頁、重開瀏覽器都不會消失。</div>
       </div>
       <div class="tip">
         <span class="tip-icon">&gt;</span>
-        <div class="tip-text">CLI 掃描時<strong>不要另開 Chrome 視窗</strong>，讓 Playwright 用獨立瀏覽器跑就好。</div>
+        <div class="tip-text">優化建議可以<strong>下載 Markdown</strong>，直接貼給 Claude 或 ChatGPT，請 AI 根據你的狀況給具體修改建議。</div>
       </div>
       <div class="tip">
         <span class="tip-icon">&gt;</span>
-        <div class="tip-text">擴充功能自動檢查時，Google 彈窗會在背景跑，<strong>掃完會自動關閉</strong>。未回傳的會自動重試一次。</div>
+        <div class="tip-text">每個扣分項目都有<strong>一鍵複製</strong>的修正碼。Schema 缺的給模板、robots.txt 被擋的給 Allow 規則。</div>
       </div>
       <div class="tip">
         <span class="tip-icon">&gt;</span>
-        <div class="tip-text">每次掃描結果自動存到 IndexedDB，下次掃同網域時會<strong>自動比較上次</strong>，顯示升降標記。</div>
+        <div class="tip-text">AIO 監測功能（原 AIO View）仍然保留在「AIO 監測」分頁，包含面向分析、圖表、時間軸等。</div>
       </div>
     </div>
   </section>
@@ -894,7 +824,7 @@ body{
   <div class="cta-wrap reveal">
     <a href="./" class="cta">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-      LAUNCH AIO VIEW
+      LAUNCH AEO CONSULTANT
     </a>
   </div>
 
@@ -911,12 +841,12 @@ body{
 <script>
 /* ========= BOOT SEQUENCE ========= */
 const bootLines = [
-  '> INITIALIZING AIO_VIEW SYSTEM...',
-  '> LOADING MODULES: [sitemap] [charts] [timeline] [ai-assist]',
+  '> INITIALIZING AEO_CONSULTANT SYSTEM...',
+  '> LOADING MODULES: [schema] [citability] [technical] [visibility]',
   '> CONNECTING TO DATABASE... OK',
-  '> CHART.JS ENGINE READY',
+  '> CORS PROXY: ONLINE',
   '> INDEXEDDB STORAGE: ONLINE',
-  '> SCANNING PROTOCOLS: LOADED',
+  '> CHROME EXTENSION BRIDGE: STANDBY',
   '',
   '> ALL SYSTEMS OPERATIONAL',
 ];
