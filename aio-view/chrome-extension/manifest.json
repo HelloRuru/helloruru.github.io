@@ -41,7 +41,8 @@
     },
     {
       "matches": [
-        "*://www.perplexity.ai/*"
+        "*://www.perplexity.ai/*",
+        "*://perplexity.ai/*"
       ],
       "js": [
         "content-perplexity.js"
@@ -51,6 +52,7 @@
     {
       "matches": [
         "*://www.bing.com/search*",
+        "*://bing.com/search*",
         "*://copilot.microsoft.com/*"
       ],
       "js": [

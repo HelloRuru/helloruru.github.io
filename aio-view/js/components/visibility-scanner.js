@@ -22,7 +22,7 @@ const VisibilityScanner = {
 
   PLATFORM_URLS: {
     'google-aio': (q) => `https://www.google.com/search?q=${encodeURIComponent(q)}`,
-    'perplexity': (q) => `https://www.perplexity.ai/search?q=${encodeURIComponent(q)}`,
+    'perplexity': (q) => `https://www.perplexity.ai/search/new?q=${encodeURIComponent(q)}`,
     'bing-copilot': (q) => `https://www.bing.com/search?q=${encodeURIComponent(q)}`
   },
 
