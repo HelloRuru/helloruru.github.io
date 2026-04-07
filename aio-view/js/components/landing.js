@@ -93,6 +93,54 @@ const Landing = {
         if (e.key === 'Enter') this.startAnalysis();
       });
     }
+
+    const resetBtn = document.getElementById('landing-reset-btn');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => this.resetAll());
+    }
+  },
+
+  /**
+   * 清除所有分析結果，重新開始
+   */
+  resetAll() {
+    if (!confirm('要清除所有分析結果嗎？')) return;
+
+    // 清 localStorage
+    localStorage.removeItem('aeo_consultant_active_domain');
+    localStorage.removeItem('aeo_consultant_feature_status');
+    localStorage.removeItem('aeo_consultant_rec_progress');
+
+    // 清各模組狀態
+    this.domain = '';
+    this.featureStatus = {};
+    TechnicalChecker.results = null;
+    SchemaChecker.results = null;
+    CitabilityAnalyzer.results = null;
+    Recommendations.items = [];
+    VisibilityScanner.results = {};
+    VisibilityScanner.articles = [];
+
+    // 清 UI
+    const input = document.getElementById('landing-url');
+    if (input) input.value = '';
+
+    const progress = document.getElementById('landing-progress');
+    if (progress) { progress.innerHTML = ''; progress.classList.add('hidden'); }
+
+    const reportLink = document.getElementById('landing-report-link');
+    if (reportLink) reportLink.classList.add('hidden');
+
+    // 重新渲染功能卡片（清掉分數）
+    this.renderFeatureCards();
+
+    // 各面板回到預設
+    ['panel-schema', 'panel-citability', 'panel-technical', 'panel-report', 'panel-visibility', 'panel-competitors'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = '';
+    });
+
+    Toast.success('已清除所有分析結果');
   },
 
   /**
