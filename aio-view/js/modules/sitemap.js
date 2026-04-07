@@ -73,6 +73,23 @@ const Sitemap = {
   },
 
   /**
+   * 用所有 proxy 嘗試抓取內容（簡化版，給外部模組用）
+   * @param {string} targetUrl - 目標網址
+   * @returns {Promise<string|null>}
+   */
+  async fetchAny(targetUrl) {
+    for (const proxy of this.PROXIES) {
+      try {
+        const content = await this.fetchProxyContent(targetUrl, proxy, this.FETCH_TIMEOUT_MS);
+        if (content) return content;
+      } catch {
+        continue;
+      }
+    }
+    return null;
+  },
+
+  /**
    * 透過 proxy 抓取內容，逾時自動中止
    * @param {string} targetUrl - 目標網址
    * @param {{ url: string, type: string, key?: string }} proxy - proxy 設定

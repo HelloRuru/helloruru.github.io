@@ -218,7 +218,7 @@ const Landing = {
         visited.add(pageUrl);
 
         try {
-          const html = await Sitemap.fetchProxyContent(pageUrl);
+          const html = await Sitemap.fetchAny(pageUrl);
           if (!html) continue;
 
           found.push(pageUrl);
@@ -363,7 +363,7 @@ const Landing = {
 
     for (const url of candidates) {
       try {
-        const response = await Sitemap.fetchProxyContent(url);
+        const response = await Sitemap.fetchAny(url);
         if (response && response.includes('<urlset') || response.includes('<sitemapindex')) {
           return url;
         }
@@ -375,7 +375,7 @@ const Landing = {
     // 最後嘗試從 robots.txt 找
     try {
       const robotsUrl = origin + '/robots.txt';
-      const robotsText = await Sitemap.fetchProxyContent(robotsUrl);
+      const robotsText = await Sitemap.fetchAny(robotsUrl);
       if (robotsText) {
         const match = robotsText.match(/Sitemap:\s*(https?:\/\/\S+)/i);
         if (match) return match[1];

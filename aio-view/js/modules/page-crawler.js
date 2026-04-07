@@ -106,7 +106,7 @@ const PageCrawler = {
 
     // 透過 CORS proxy 抓取
     try {
-      const html = await Sitemap.fetchProxyContent(url);
+      const html = await Sitemap.fetchAny(url);
       if (html) {
         // 存入快取
         try {

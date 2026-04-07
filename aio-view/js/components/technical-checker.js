@@ -55,7 +55,7 @@ const TechnicalChecker = {
     // 1. 抓 robots.txt
     try {
       const robotsUrl = origin + '/robots.txt';
-      const robotsText = await Sitemap.fetchProxyContent(robotsUrl);
+      const robotsText = await Sitemap.fetchAny(robotsUrl);
 
       if (robotsText && !robotsText.includes('<html') && !robotsText.includes('<!DOCTYPE')) {
         results.robotsTxt = {
