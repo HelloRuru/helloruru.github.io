@@ -130,7 +130,10 @@ const Landing = {
 
     if (sitemapUrl) {
       Toast.success(`找到 Sitemap：${sitemapUrl}`);
-      this.updateProgress('sitemap', 'done', `找到 Sitemap，正在解析...`);
+      this.updateProgress('sitemap', 'done', `找到 Sitemap`);
+
+      // 自動餵給 AIO View 的 Sitemap 輸入框
+      this._feedSitemapToAioView(sitemapUrl);
 
       // 觸發 sitemap 解析（由各功能模組監聽）
       const event = new CustomEvent('aeo:sitemap-found', {
@@ -138,13 +141,202 @@ const Landing = {
       });
       document.dispatchEvent(event);
     } else {
-      this.updateProgress('sitemap', 'warn', '找不到 Sitemap，部分功能仍可使用');
-      // 即使沒 sitemap，技術面檢查仍然可以跑
-      const event = new CustomEvent('aeo:url-entered', {
+      // 沒有 sitemap → 自動爬連結產生
+      this.updateProgress('sitemap', 'warn', '找不到 Sitemap，正在自動爬取頁面連結...');
+      const generated = await this.generateSitemapFromCrawl(url);
+
+      if (generated && generated.urls.length > 0) {
+        Toast.success(`從網站爬到 ${generated.urls.length} 個頁面，已自動產生 Sitemap`);
+        this.updateProgress('sitemap', 'done', `自動產生 Sitemap（${generated.urls.length} 頁）`);
+
+        // 顯示複製/下載 sitemap 按鈕
+        this._showSitemapActions(generated.sitemapXml);
+
+        // 餵給 AIO View
+        this._feedArticlesToAioView(generated.articles);
+
+        // 觸發事件讓其他功能模組用
+        const event = new CustomEvent('aeo:sitemap-generated', {
+          detail: { domain: this.domain, articles: generated.articles, sourceUrl: url }
+        });
+        document.dispatchEvent(event);
+      } else {
+        this.updateProgress('sitemap', 'error', '無法爬取頁面連結');
+      }
+
+      // 技術面檢查不需要 sitemap
+      const techEvent = new CustomEvent('aeo:url-entered', {
         detail: { domain: this.domain, sourceUrl: url }
       });
-      document.dispatchEvent(event);
+      document.dispatchEvent(techEvent);
     }
+  },
+
+  /**
+   * 自動餵 sitemap URL 給 AIO View
+   */
+  _feedSitemapToAioView(sitemapUrl) {
+    const input = document.getElementById('sitemap-url');
+    if (input) {
+      input.value = sitemapUrl;
+    }
+  },
+
+  /**
+   * 自動餵文章清單給 AIO View
+   */
+  _feedArticlesToAioView(articles) {
+    if (typeof AioViewApp !== 'undefined' && AioViewApp.handleSitemapParsed) {
+      AioViewApp.handleSitemapParsed({
+        domain: this.domain,
+        articles: articles
+      });
+    }
+  },
+
+  /**
+   * 爬首頁連結產生 sitemap
+   * @param {string} baseUrl - 首頁 URL
+   * @returns {Object|null} { urls, articles }
+   */
+  async generateSitemapFromCrawl(baseUrl) {
+    const origin = new URL(baseUrl).origin;
+    const visited = new Set();
+    const found = [];
+    const queue = [baseUrl];
+    const MAX_PAGES = 50; // 限制爬取數量
+    const MAX_DEPTH = 2;  // 最多爬 2 層
+
+    // BFS 爬取
+    let depth = 0;
+    while (queue.length > 0 && found.length < MAX_PAGES && depth <= MAX_DEPTH) {
+      const batch = queue.splice(0, queue.length);
+      const nextQueue = [];
+
+      for (const pageUrl of batch) {
+        if (visited.has(pageUrl) || found.length >= MAX_PAGES) continue;
+        visited.add(pageUrl);
+
+        try {
+          const html = await Sitemap.fetchProxyContent(pageUrl);
+          if (!html) continue;
+
+          found.push(pageUrl);
+
+          // 提取內部連結
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          doc.querySelectorAll('a[href]').forEach(a => {
+            try {
+              const href = new URL(a.href, pageUrl).href;
+              // 只要同 origin、不是錨點、不是檔案
+              if (href.startsWith(origin) &&
+                  !href.includes('#') &&
+                  !visited.has(href) &&
+                  !/\.(jpg|png|gif|svg|pdf|zip|css|js)(\?|$)/i.test(href)) {
+                nextQueue.push(href);
+              }
+            } catch { /* 忽略無效 URL */ }
+          });
+
+          this.updateProgress('sitemap', 'running',
+            `爬取中... 已找到 ${found.length} 個頁面`);
+
+        } catch { /* 繼續下一個 */ }
+      }
+
+      queue.push(...nextQueue);
+      depth++;
+    }
+
+    if (found.length === 0) return null;
+
+    // 過濾成文章格式（跟 Sitemap.filterArticles 類似的邏輯）
+    const articles = found
+      .filter(url => {
+        const path = new URL(url).pathname;
+        // 排除首頁、分類頁、分頁等
+        return path !== '/' &&
+          !/\/(page|category|tag|author|privacy|terms|contact|about)\b/i.test(path) &&
+          !/\.(xml|json|txt)$/i.test(path);
+      })
+      .map(url => ({
+        url,
+        title: '',
+        query: '',
+        selected: true
+      }));
+
+    // 產生 sitemap.xml 內容
+    const sitemapXml = this._buildSitemapXml(found);
+
+    return { urls: found, articles, sitemapXml };
+  },
+
+  /**
+   * 產生 sitemap.xml 字串
+   * @param {Array<string>} urls
+   * @returns {string}
+   */
+  _buildSitemapXml(urls) {
+    const today = new Date().toISOString().split('T')[0];
+    const entries = urls.map(url =>
+      `  <url>\n    <loc>${url}</loc>\n    <lastmod>${today}</lastmod>\n  </url>`
+    ).join('\n');
+
+    return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries}\n</urlset>`;
+  },
+
+  /**
+   * 顯示 sitemap 複製/下載按鈕
+   * @param {string} xml - sitemap.xml 內容
+   */
+  _showSitemapActions(xml) {
+    const el = document.getElementById('landing-progress');
+    if (!el) return;
+
+    // 儲存供後續使用
+    this._generatedSitemapXml = xml;
+
+    const div = document.createElement('div');
+    div.className = 'landing-sitemap-actions';
+    div.innerHTML = `
+      <p style="font-size:13px;color:var(--color-cyan);margin:0 0 8px;">你的網站沒有 sitemap.xml，我們幫你產生了一份：</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" id="copy-sitemap-btn">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+          </svg>
+          複製 sitemap.xml
+        </button>
+        <button class="btn btn-secondary btn-sm" id="download-sitemap-btn">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          下載 sitemap.xml
+        </button>
+      </div>
+    `;
+    el.appendChild(div);
+
+    document.getElementById('copy-sitemap-btn')?.addEventListener('click', () => {
+      Utils.copyToClipboard(xml).then(ok => {
+        if (ok) Toast.success('sitemap.xml 已複製，貼到你的網站根目錄');
+      });
+    });
+
+    document.getElementById('download-sitemap-btn')?.addEventListener('click', () => {
+      const blob = new Blob([xml], { type: 'application/xml' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'sitemap.xml';
+      a.click();
+      URL.revokeObjectURL(a.href);
+      Toast.success('sitemap.xml 已下載');
+    });
   },
 
   /**

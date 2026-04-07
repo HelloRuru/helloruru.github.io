@@ -208,8 +208,45 @@ const Recommendations = {
         </div>
 
         ${listHtml}
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:var(--space-lg);padding-top:var(--space-lg);border-top:1px solid var(--cyan-04);">
+          <button class="btn btn-primary btn-sm" id="download-md-btn">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            下載 Markdown 報告
+          </button>
+          <button class="btn btn-secondary btn-sm" id="copy-md-btn">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+            </svg>
+            複製 Markdown（貼給 AI）
+          </button>
+        </div>
       </div>
     `;
+
+    // 綁定下載/複製
+    document.getElementById('download-md-btn')?.addEventListener('click', () => {
+      const md = this._generateMarkdown();
+      const blob = new Blob([md], { type: 'text/markdown' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `aeo-report-${this.domain}-${new Date().toISOString().split('T')[0]}.md`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+      Toast.success('Markdown 報告已下載');
+    });
+
+    document.getElementById('copy-md-btn')?.addEventListener('click', () => {
+      const md = this._generateMarkdown();
+      Utils.copyToClipboard(md).then(ok => {
+        if (ok) Toast.success('Markdown 已複製，可以直接貼給 AI');
+      });
+    });
 
     // 綁定 checkbox
     panel.querySelectorAll('.rec-checkbox').forEach(cb => {
@@ -258,6 +295,108 @@ const Recommendations = {
         </div>
       </div>
     `;
+  },
+
+  /**
+   * 產生 Markdown 報告（可貼給 AI 或下載）
+   */
+  _generateMarkdown() {
+    const date = new Date().toISOString().split('T')[0];
+    const lines = [];
+
+    lines.push(`# AEO 健檢報告：${this.domain}`);
+    lines.push(`> 產生日期：${date} | 由 AEO Consultant (lab.helloruru.com/aio-view/) 自動分析`);
+    lines.push('');
+
+    // 總覽
+    lines.push('## 總覽');
+    lines.push('');
+
+    if (TechnicalChecker.results) {
+      lines.push(`- **技術面分數**：${TechnicalChecker.results.score}/100`);
+    }
+    if (SchemaChecker.results) {
+      lines.push(`- **結構化資料分數**：${SchemaChecker.results.score}/100（${SchemaChecker.results.summary.hasSchema} 頁有 Schema、${SchemaChecker.results.summary.noSchema} 頁缺少）`);
+    }
+    if (CitabilityAnalyzer.results) {
+      lines.push(`- **AI 可引用度**：${CitabilityAnalyzer.results.siteScore}/100（${CitabilityAnalyzer.results.pages.filter(p => !p.failed).length} 頁平均）`);
+    }
+    lines.push(`- **優化建議**：${this.items.length} 項（已完成 ${this.items.filter(i => i.done).length} 項）`);
+    lines.push('');
+
+    // 優化建議
+    lines.push('## 優化建議（按優先順序）');
+    lines.push('');
+
+    const grouped = {};
+    for (const item of this.items) {
+      const key = item.priority;
+      if (!grouped[key]) grouped[key] = [];
+      grouped[key].push(item);
+    }
+
+    for (const [priority, items] of Object.entries(grouped)) {
+      const label = this.PRIORITY_LABELS[priority] || `P${priority}`;
+      lines.push(`### ${label}`);
+      lines.push('');
+
+      for (const item of items) {
+        const checkbox = item.done ? '[x]' : '[ ]';
+        lines.push(`${checkbox} **${item.title}**`);
+        lines.push(`  - ${item.desc}`);
+        if (item.action) lines.push(`  - 修正方式：${item.action}`);
+        if (item.code) {
+          lines.push('  ```');
+          lines.push('  ' + item.code.split('\n').join('\n  '));
+          lines.push('  ```');
+        }
+        if (item.affectedUrls?.length > 0) {
+          lines.push(`  - 影響頁面：${item.affectedUrls.join(', ')}`);
+        }
+        lines.push('');
+      }
+    }
+
+    // 技術面細節
+    if (TechnicalChecker.results?.botAccess?.length > 0) {
+      lines.push('## AI 爬蟲存取狀態');
+      lines.push('');
+      lines.push('| 爬蟲 | 平台 | 狀態 |');
+      lines.push('|------|------|------|');
+      for (const bot of TechnicalChecker.results.botAccess) {
+        const status = bot.blocked ? '封鎖' : bot.partial ? '部分' : '允許';
+        lines.push(`| ${bot.name} | ${bot.platform} | ${status} |`);
+      }
+      lines.push('');
+    }
+
+    // 可引用度最常扣分項
+    if (CitabilityAnalyzer.results) {
+      const failCounts = {};
+      for (const page of CitabilityAnalyzer.results.pages.filter(p => !p.failed)) {
+        for (const check of page.checks) {
+          if (!check.passed) failCounts[check.id] = (failCounts[check.id] || 0) + 1;
+        }
+      }
+      const topFails = Object.entries(failCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
+
+      if (topFails.length > 0) {
+        lines.push('## AI 可引用度：最常扣分的項目');
+        lines.push('');
+        for (const [id, count] of topFails) {
+          const rule = CitabilityRules.CHECKS.find(c => c.id === id);
+          if (rule) {
+            lines.push(`- **${rule.label}**（${count} 頁扣分）：${rule.hint}`);
+          }
+        }
+        lines.push('');
+      }
+    }
+
+    lines.push('---');
+    lines.push(`*報告由 AEO Consultant 自動產生。把這份報告貼給 AI（Claude / ChatGPT），請它根據你的網站狀況給出具體修改建議。*`);
+
+    return lines.join('\n');
   },
 
   _saveProgress() {

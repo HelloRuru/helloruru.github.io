@@ -11,6 +11,22 @@ const CitabilityAnalyzer = {
     document.addEventListener('aeo:sitemap-found', (e) => {
       this.runCheck(e.detail.domain, e.detail.sitemapUrl);
     });
+    document.addEventListener('aeo:sitemap-generated', (e) => {
+      this.runCheckWithArticles(e.detail.domain, e.detail.articles);
+    });
+  },
+
+  async runCheckWithArticles(domain, articles) {
+    this.domain = domain;
+    Landing.addProgress('citability', '正在分析 AI 可引用度...');
+
+    const limited = (articles || []).slice(0, PageCrawler.MAX_PAGES);
+    if (limited.length === 0) {
+      Landing.updateProgress('citability', 'warn', '沒有頁面可分析');
+      return;
+    }
+
+    await this._runAnalysis(domain, limited.map(a => a.url));
   },
 
   async runCheck(domain, sitemapUrl) {
@@ -31,8 +47,11 @@ const CitabilityAnalyzer = {
       return;
     }
 
-    const urls = articles.map(a => a.url);
-    // 頁面 HTML 已被 SchemaChecker 快取在 IndexedDB，PageCrawler 會自動取快取
+    await this._runAnalysis(domain, articles.map(a => a.url));
+  },
+
+  async _runAnalysis(domain, urls) {
+    this.domain = domain;
     const crawlResult = await PageCrawler.crawlPages(urls, domain, {
       onProgress: (p) => {
         Landing.updateProgress('citability', 'running',

@@ -11,13 +11,32 @@ const SchemaChecker = {
     document.addEventListener('aeo:sitemap-found', (e) => {
       this.runCheck(e.detail.domain, e.detail.sitemapUrl);
     });
+    document.addEventListener('aeo:sitemap-generated', (e) => {
+      this.runCheckWithArticles(e.detail.domain, e.detail.articles);
+    });
+  },
+
+  /**
+   * 用已有的文章清單跑檢查（不需要 sitemap URL）
+   */
+  async runCheckWithArticles(domain, articles) {
+    this.domain = domain;
+    Landing.addProgress('schema', '正在掃描結構化資料...');
+
+    const limited = (articles || []).slice(0, PageCrawler.MAX_PAGES);
+    if (limited.length === 0) {
+      Landing.updateProgress('schema', 'warn', '沒有頁面可分析');
+      return;
+    }
+
+    // 直接用文章 URL 跑爬取 + 分析（跟 runCheck 後半段一樣）
+    this._runAnalysis(domain, limited.map(a => a.url));
   },
 
   async runCheck(domain, sitemapUrl) {
     this.domain = domain;
     Landing.addProgress('schema', '正在掃描結構化資料...');
 
-    // 1. 解析 sitemap 拿到頁面清單
     let articles = [];
     try {
       const result = await Sitemap.fetch(sitemapUrl);
@@ -32,8 +51,11 @@ const SchemaChecker = {
       return;
     }
 
-    // 2. 爬取頁面 HTML
-    const urls = articles.map(a => a.url);
+    await this._runAnalysis(domain, articles.map(a => a.url));
+  },
+
+  async _runAnalysis(domain, urls) {
+    this.domain = domain;
     const crawlResult = await PageCrawler.crawlPages(urls, domain, {
       onProgress: (p) => {
         Landing.updateProgress('schema', 'running',
