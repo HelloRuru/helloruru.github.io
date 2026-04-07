@@ -19,7 +19,7 @@ const Sitemap = {
 
   /** 排除的 URL 模式 */
   EXCLUDE_PATTERNS: [
-    /\/$/,              // 首頁
+    /^https?:\/\/[^/]+\/$/,  // 首頁（只排除根路徑 /）
     /\/page\/\d+/,      // 分頁
     /\/category\//,
     /\/tag\//,
