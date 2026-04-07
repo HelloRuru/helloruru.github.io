@@ -221,12 +221,17 @@ const PageCrawler = {
     const metaDesc = doc.querySelector('meta[name="description"]')?.getAttribute('content') || '';
     const ogTitle = doc.querySelector('meta[property="og:title"]')?.getAttribute('content') || '';
 
-    // 作者
+    // 從 JSON-LD 補抓（很多網站只在 JSON-LD 裡放 author / date）
+    const jsonLdData = this._extractJsonLdFields(html);
+
+    // 作者（meta > JSON-LD > class）
     const author = doc.querySelector('meta[name="author"]')?.getAttribute('content') ||
+                   jsonLdData.author ||
                    doc.querySelector('[class*="author"]')?.textContent?.trim() || '';
 
-    // 日期
+    // 日期（meta > JSON-LD > time tag）
     const datePublished = doc.querySelector('meta[property="article:published_time"]')?.getAttribute('content') ||
+                          jsonLdData.datePublished ||
                           doc.querySelector('time')?.getAttribute('datetime') || '';
 
     // 字數估計
@@ -264,6 +269,36 @@ const PageCrawler = {
    */
   isRunning() {
     return this._running;
+  },
+
+  /**
+   * 從 HTML 的 JSON-LD 提取 author / datePublished 等欄位
+   * @param {string} html
+   * @returns {Object} { author, datePublished }
+   */
+  _extractJsonLdFields(html) {
+    const result = { author: '', datePublished: '' };
+    const regex = /<script[^>]*type\s*=\s*["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi;
+    let match;
+
+    while ((match = regex.exec(html)) !== null) {
+      try {
+        const obj = JSON.parse(match[1].trim());
+        // author
+        if (!result.author) {
+          const a = obj.author;
+          if (typeof a === 'string') result.author = a;
+          else if (a?.name) result.author = a.name;
+          else if (Array.isArray(a) && a[0]?.name) result.author = a[0].name;
+        }
+        // datePublished
+        if (!result.datePublished && obj.datePublished) {
+          result.datePublished = obj.datePublished;
+        }
+      } catch { /* ignore parse errors */ }
+    }
+
+    return result;
   },
 
   /**
