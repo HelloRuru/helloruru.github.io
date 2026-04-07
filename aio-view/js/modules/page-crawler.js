@@ -19,6 +19,10 @@ const PageCrawler = {
   /** 取消旗標 */
   _cancelToken: 0,
 
+  /** 共用爬取 Promise（防止同時多次爬取同一批 URL） */
+  _crawlPromise: null,
+  _crawlDomain: '',
+
   /**
    * 批次抓取頁面 HTML
    * @param {Array<string>} urls - 要抓取的 URL 清單
@@ -27,6 +31,25 @@ const PageCrawler = {
    * @returns {Promise<Object>} { fetched, cached, failed, pages }
    */
   async crawlPages(urls, domain, options = {}) {
+    // 同一個 domain 的爬取只跑一次，後續呼叫共用結果
+    if (this._crawlPromise && this._crawlDomain === domain) {
+      return this._crawlPromise;
+    }
+
+    this._crawlDomain = domain;
+    this._crawlPromise = this._doCrawl(urls, domain, options);
+
+    try {
+      const result = await this._crawlPromise;
+      return result;
+    } finally {
+      // 完成後清除，下次可以重新爬
+      this._crawlPromise = null;
+      this._crawlDomain = '';
+    }
+  },
+
+  async _doCrawl(urls, domain, options = {}) {
     const { onProgress, onPageDone } = options;
     const token = ++this._cancelToken;
     this._running = true;

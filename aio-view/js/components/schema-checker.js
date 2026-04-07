@@ -137,6 +137,11 @@ const SchemaChecker = {
     const grade = this._scoreToGrade(score);
     Landing.updateFeatureScore('schema', grade.text, grade.class);
     Landing.updateProgress('schema', 'done', `結構化資料掃描完成：${grade.text}`);
+
+    // 通知其他模組：頁面已爬取完畢，可以用快取
+    document.dispatchEvent(new CustomEvent('aeo:pages-crawled', {
+      detail: { domain, urls }
+    }));
   },
 
   _calculateScore(pages) {

@@ -8,50 +8,21 @@ const CitabilityAnalyzer = {
   domain: '',
 
   init() {
-    document.addEventListener('aeo:sitemap-found', (e) => {
-      this.runCheck(e.detail.domain, e.detail.sitemapUrl);
+    // 等 SchemaChecker 爬完頁面後才跑（共用快取，不重複爬）
+    document.addEventListener('aeo:pages-crawled', (e) => {
+      this._runAnalysis(e.detail.domain, e.detail.urls);
     });
     document.addEventListener('aeo:sitemap-generated', (e) => {
-      this.runCheckWithArticles(e.detail.domain, e.detail.articles);
+      // 自動產生 sitemap 時，SchemaChecker 也會跑，等它的 pages-crawled 事件
+      // 但如果 SchemaChecker 沒跑（例如沒有 sitemap-found），自己跑
+      this._generatedArticles = e.detail.articles;
     });
-  },
-
-  async runCheckWithArticles(domain, articles) {
-    this.domain = domain;
-    Landing.addProgress('citability', '正在分析 AI 可引用度...');
-
-    const limited = (articles || []).slice(0, PageCrawler.MAX_PAGES);
-    if (limited.length === 0) {
-      Landing.updateProgress('citability', 'warn', '沒有頁面可分析');
-      return;
-    }
-
-    await this._runAnalysis(domain, limited.map(a => a.url));
-  },
-
-  async runCheck(domain, sitemapUrl) {
-    this.domain = domain;
-    Landing.addProgress('citability', '正在分析 AI 可引用度...');
-
-    let articles = [];
-    try {
-      articles = await Sitemap.fetchArticles(sitemapUrl);
-      articles = articles.slice(0, PageCrawler.MAX_PAGES);
-    } catch {
-      Landing.updateProgress('citability', 'error', '無法解析 Sitemap');
-      return;
-    }
-
-    if (articles.length === 0) {
-      Landing.updateProgress('citability', 'warn', 'Sitemap 裡沒有文章頁面');
-      return;
-    }
-
-    await this._runAnalysis(domain, articles.map(a => a.url));
   },
 
   async _runAnalysis(domain, urls) {
     this.domain = domain;
+    Landing.addProgress('citability', '正在分析 AI 可引用度...');
+
     const crawlResult = await PageCrawler.crawlPages(urls, domain, {
       onProgress: (p) => {
         Landing.updateProgress('citability', 'running',
