@@ -56,12 +56,27 @@ const SchemaChecker = {
 
   async _runAnalysis(domain, urls) {
     this.domain = domain;
-    const crawlResult = await PageCrawler.crawlPages(urls, domain, {
+
+    if (!urls || urls.length === 0) {
+      Landing.updateProgress('schema', 'warn', 'Sitemap 裡沒有文章頁面');
+      return;
+    }
+
+    let crawlResult = await PageCrawler.crawlPages(urls, domain, {
       onProgress: (p) => {
         Landing.updateProgress('schema', 'running',
           `結構化資料掃描中... ${p.done}/${p.total} 頁`);
       }
     });
+
+    // 如果全部失敗，等 2 秒重試一次（可能是 CORS proxy 併發限制）
+    const successCount = crawlResult.pages.filter(p => p.ok).length;
+    if (successCount === 0 && urls.length > 0) {
+      Landing.updateProgress('schema', 'running', '重試中...');
+      await new Promise(r => setTimeout(r, 2000));
+      PageCrawler._crawlPromise = null; // 清掉共用鎖
+      crawlResult = await PageCrawler.crawlPages(urls, domain, {});
+    }
 
     // 3. 分析每頁的 Schema
     const pageResults = [];
