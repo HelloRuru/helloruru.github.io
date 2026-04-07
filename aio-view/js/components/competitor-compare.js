@@ -52,7 +52,13 @@ const CompetitorCompare = {
       <div class="tech-report">
         <div style="margin-bottom:var(--space-lg);">
           <h2 style="font-family:var(--font-display);font-size:24px;color:var(--color-cyan);letter-spacing:2px;margin:0 0 8px;">競品比較</h2>
-          <p style="font-size:13px;color:var(--color-gray);">輸入你的網站和競品網址，比較同關鍵字下誰更常被 AI 引用</p>
+          <div style="padding:14px 18px;background:var(--cyan-04);border:1px solid var(--cyan-12);border-radius:var(--radius-md);margin:12px 0;font-size:13px;color:var(--color-text);line-height:1.7;">
+            <strong style="color:var(--color-cyan);">這是什麼？</strong>
+            同一個關鍵字搜尋時，AI 推薦的是你還是競品？<br>
+            輸入你和競品的網址，工具會用 Google AI Overview 逐一搜尋你的文章關鍵字，<br>
+            比對 AI 回答裡引用了誰。如果競品被引用但你沒有，就知道該從哪裡改善。<br>
+            <span style="font-size:12px;color:var(--color-gray);">需要安裝 Chrome 擴充功能 v2.0（免費）。先在首頁分析你的網站取得文章清單。</span>
+          </div>
         </div>
 
         <div class="comp-inputs">

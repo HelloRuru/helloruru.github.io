@@ -187,8 +187,25 @@ const VisibilityScanner = {
     if (this.articles.length === 0) {
       panel.innerHTML = `<div class="panel-placeholder">
         <h2>AI 搜尋引擎能見度</h2>
-        <p>需要先在首頁輸入網址 + 安裝 Chrome 擴充功能 v2.0</p>
-        <p class="hint">擴充功能下載：<a href="https://github.com/HelloRuru/helloruru.github.io/tree/main/aio-view/chrome-extension" target="_blank" style="color:var(--color-cyan);">GitHub</a></p>
+        <p style="max-width:600px;margin:0 auto 16px;line-height:1.7;color:var(--color-text);font-size:14px;">
+          當消費者用 AI 搜尋你的關鍵字時，哪些 AI 引擎會推薦你的網站？<br>
+          這個功能會實際搜尋 Google AI Overview、Perplexity、Bing Copilot 三大 AI 搜尋引擎，<br>
+          檢查你的每篇文章有沒有被引用。
+        </p>
+        <div style="max-width:500px;margin:0 auto;text-align:left;padding:16px 20px;background:var(--bg-card);border:1px solid var(--cyan-12);border-radius:var(--radius-lg);">
+          <p style="font-size:13px;color:var(--color-cyan);font-weight:700;margin:0 0 8px;">使用前需要：</p>
+          <ol style="font-size:13px;color:var(--color-text);line-height:1.8;margin:0;padding-left:20px;">
+            <li>先在首頁輸入網址完成基本分析</li>
+            <li>安裝 Chrome 擴充功能 v2.0（免費）</li>
+            <li>回到這個頁面，點「開始掃描」</li>
+          </ol>
+          <p style="font-size:12px;color:var(--color-gray);margin:12px 0 0;">
+            掃描原理：用你的瀏覽器實際搜尋，擴充功能偵測 AI 回答裡有沒有引用你的網站。<br>
+            完全免費，不需要任何 API key。
+          </p>
+          <a href="https://github.com/HelloRuru/helloruru.github.io/tree/main/aio-view/chrome-extension" target="_blank"
+            class="btn btn-primary btn-sm" style="margin-top:12px;display:inline-block;">下載擴充功能</a>
+        </div>
       </div>`;
       return;
     }
@@ -203,6 +220,15 @@ const VisibilityScanner = {
 
     panel.innerHTML = `
       <div class="tech-report">
+        <!-- 說明區 -->
+        <div style="padding:14px 18px;background:var(--cyan-04);border:1px solid var(--cyan-12);border-radius:var(--radius-md);margin-bottom:var(--space-md);font-size:13px;color:var(--color-text);line-height:1.7;">
+          <strong style="color:var(--color-cyan);">這是什麼？</strong>
+          用你的瀏覽器實際搜尋三大 AI 搜尋引擎，看你的文章有沒有被引用。<br>
+          <span style="color:var(--color-green);">引用</span> = AI 回答裡推薦了你的網站，
+          <span style="color:var(--color-magenta);">有 AI 回答</span> = AI 有回答但引用的是別人，
+          <span style="color:var(--color-gray);">無</span> = 該搜尋沒有 AI 回答。
+        </div>
+
         <div class="tech-score-card">
           <div class="tech-score ${citedCount > 0 ? 'good' : 'warn'}">${citedCount}</div>
           <div>
