@@ -510,11 +510,21 @@ const ManualCheck = {
 
     if (this.popup && !this.popup.closed) {
       try {
-        this.popup.close();
+        // 先導到 about:blank（繞過跨域限制），再關閉
+        this.popup.location = 'about:blank';
       } catch (e) {}
+      // 延遲關閉，讓 about:blank 載入完成
+      setTimeout(() => {
+        try {
+          if (this.popup && !this.popup.closed) {
+            this.popup.close();
+          }
+        } catch (e) {}
+        this.popup = null;
+      }, 300);
+    } else {
+      this.popup = null;
     }
-
-    this.popup = null;
   },
 
   /**
