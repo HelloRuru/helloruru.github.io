@@ -78,19 +78,19 @@ const VisibilityScanner = {
 
   _scanNext() {
     if (!this.scanning) return;
-    if (this.currentIndex >= this.articles.length) {
-      // 所有文章的目前平台都掃完，換下一個平台
-      this.currentPlatform++;
-      this.currentIndex = 0;
 
-      if (this.currentPlatform >= this.activePlatforms.length) {
-        // 全部完成
-        this.scanning = false;
-        this.closePopup();
-        Toast.success('AI 能見度掃描完成！');
-        this.render();
-        return;
-      }
+    // 掃描順序：每篇文章掃完所有平台，再換下一篇
+    if (this.currentPlatform >= this.activePlatforms.length) {
+      this.currentPlatform = 0;
+      this.currentIndex++;
+    }
+
+    if (this.currentIndex >= this.articles.length) {
+      this.scanning = false;
+      this.closePopup();
+      Toast.success('AI 能見度掃描完成！');
+      this.render();
+      return;
     }
 
     const article = this.articles[this.currentIndex];
@@ -98,7 +98,7 @@ const VisibilityScanner = {
     const query = article.query || article.title || '';
 
     if (!query) {
-      this.currentIndex++;
+      this.currentPlatform++;
       this._scanNext();
       return;
     }
@@ -106,18 +106,19 @@ const VisibilityScanner = {
     const url = this.PLATFORM_URLS[platform](query);
     this._openSearch(url);
 
-    // 等待結果（逾時 8 秒）
+    // Perplexity 和 Bing 需要更長的等待時間
+    const timeout = platform === 'google-aio' ? 8000 : 14000;
+
     this._waitTimer = setTimeout(() => {
-      // 沒收到結果，標記為 timeout
       const key = article.url;
       if (!this.results[key]) this.results[key] = {};
       if (!this.results[key][platform]) {
         this.results[key][platform] = { query, aio: false, src: [], timeout: true };
       }
-      this.currentIndex++;
+      this.currentPlatform++;
       this.render();
       this._scanNext();
-    }, 8000);
+    }, timeout);
   },
 
   _handleResult(data) {
@@ -143,10 +144,10 @@ const VisibilityScanner = {
       organic: data.organic || []
     };
 
-    this.currentIndex++;
+    this.currentPlatform++;
     this.render();
 
-    // 間隔 1.5 秒再掃下一個
+    // 間隔 1.5 秒再掃下一個平台/文章
     setTimeout(() => this._scanNext(), 1500);
   },
 

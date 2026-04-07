@@ -1,5 +1,5 @@
 (() => {
-  const ATTEMPTS_MS = [1000, 2500, 5000];
+  const ATTEMPTS_MS = [1500, 4000, 7000, 10000];
   let lastSentSignature = '';
 
   function getQuery() {
