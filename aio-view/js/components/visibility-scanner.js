@@ -8,7 +8,7 @@ const VisibilityScanner = {
   articles: [],
   results: {},     // { [articleUrl]: { google: {}, perplexity: {}, bing: {} } }
   platforms: ['google-aio', 'perplexity', 'bing-copilot'],
-  activePlatforms: ['google-aio', 'perplexity', 'bing-copilot'],
+  activePlatforms: ['google-aio', 'bing-copilot'],
   popup: null,
   scanning: false,
   currentIndex: 0,
@@ -190,7 +190,8 @@ const VisibilityScanner = {
         <p style="max-width:600px;margin:0 auto 16px;line-height:1.7;color:var(--color-text);font-size:14px;">
           當消費者用 AI 搜尋你的關鍵字時，哪些 AI 引擎會推薦你的網站？<br>
           這個功能會實際搜尋 Google AI Overview、Perplexity、Bing Copilot 三大 AI 搜尋引擎，<br>
-          檢查你的每篇文章有沒有被引用。
+          檢查你的每篇文章有沒有被引用。<br>
+          目前支援 Google AI Overview 和 Bing Copilot。Perplexity 因為是 SPA 架構，偵測不穩定，暫時停用。
         </p>
         <div style="max-width:500px;margin:0 auto;text-align:left;padding:16px 20px;background:var(--bg-card);border:1px solid var(--cyan-12);border-radius:var(--radius-lg);">
           <p style="font-size:13px;color:var(--color-cyan);font-weight:700;margin:0 0 8px;">使用前需要：</p>
@@ -223,7 +224,7 @@ const VisibilityScanner = {
         <!-- 說明區 -->
         <div style="padding:14px 18px;background:var(--cyan-04);border:1px solid var(--cyan-12);border-radius:var(--radius-md);margin-bottom:var(--space-md);font-size:13px;color:var(--color-text);line-height:1.7;">
           <strong style="color:var(--color-cyan);">這是什麼？</strong>
-          用你的瀏覽器實際搜尋三大 AI 搜尋引擎，看你的文章有沒有被引用。<br>
+          用你的瀏覽器實際搜尋 AI 搜尋引擎，看你的文章有沒有被引用。<br>
           <span style="color:var(--color-green);">引用</span> = AI 回答裡推薦了你的網站，
           <span style="color:var(--color-magenta);">有 AI 回答</span> = AI 有回答但引用的是別人，
           <span style="color:var(--color-gray);">無</span> = 該搜尋沒有 AI 回答。
