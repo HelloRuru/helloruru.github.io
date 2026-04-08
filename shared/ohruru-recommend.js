@@ -24,10 +24,33 @@ class OhruruRecommend extends HTMLElement {
 
   connectedCallback() {
     this.render();
+    this._watchTheme();
+  }
+
+  disconnectedCallback() {
+    if (this._observer) this._observer.disconnect();
   }
 
   attributeChangedCallback() {
     this.render();
+  }
+
+  _watchTheme() {
+    // 監聽 html.dark 的 class 變化，即時切換色彩
+    this._observer = new MutationObserver(() => this._applyTheme());
+    this._observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    this._applyTheme();
+  }
+
+  _applyTheme() {
+    const isDark = document.documentElement.classList.contains('dark');
+    const card = this.shadowRoot.querySelector('.card');
+    if (!card) return;
+    if (isDark) {
+      card.classList.add('dark');
+    } else {
+      card.classList.remove('dark');
+    }
   }
 
   render() {
@@ -75,24 +98,28 @@ class OhruruRecommend extends HTMLElement {
 
         :host {
           display: block;
+          width: 100%;
           max-width: 640px;
           margin: 48px auto 0;
           padding: 0 20px;
+          box-sizing: border-box;
           font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
         }
 
         .card {
-          background: #1E181B;
-          border: 1px solid rgba(212, 165, 165, 0.2);
+          background: #FFFFFF;
+          border: 1px solid rgba(212, 165, 165, 0.25);
           border-radius: 16px;
           padding: 28px 28px 24px;
           position: relative;
           overflow: hidden;
-          transition: border-color 0.3s ease;
+          box-shadow: 0 2px 12px rgba(212, 165, 165, 0.08);
+          transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         .card:hover {
-          border-color: rgba(212, 165, 165, 0.4);
+          border-color: rgba(212, 165, 165, 0.45);
+          box-shadow: 0 4px 20px rgba(212, 165, 165, 0.12);
         }
 
         .card::before {
@@ -129,7 +156,7 @@ class OhruruRecommend extends HTMLElement {
         .title {
           font-size: 18px;
           font-weight: 700;
-          color: #EDE8E9;
+          color: #333333;
           margin: 0 0 10px;
           line-height: 1.4;
         }
@@ -137,7 +164,7 @@ class OhruruRecommend extends HTMLElement {
         .desc {
           font-size: 14px;
           font-weight: 500;
-          color: #9E9496;
+          color: #888888;
           line-height: 1.7;
           margin: 0 0 16px;
         }
@@ -168,41 +195,17 @@ class OhruruRecommend extends HTMLElement {
           stroke-linejoin: round;
         }
 
-        /* Light mode */
-        @media (prefers-color-scheme: light) {
-          .card {
-            background: #FFFFFF;
-            border-color: rgba(212, 165, 165, 0.25);
-            box-shadow: 0 2px 12px rgba(212, 165, 165, 0.08);
-          }
-          .card:hover {
-            border-color: rgba(212, 165, 165, 0.45);
-            box-shadow: 0 4px 20px rgba(212, 165, 165, 0.12);
-          }
-          .title { color: #333333; }
-          .desc { color: #888888; }
-        }
-
-        /* 支援 html.dark 手動切換 */
-        :host-context(html.dark) .card {
+        /* 深色模式 — 透過 JS 加 .dark class */
+        .card.dark {
           background: #1E181B;
           border-color: rgba(212, 165, 165, 0.2);
           box-shadow: none;
         }
-        :host-context(html.dark) .title { color: #EDE8E9; }
-        :host-context(html.dark) .desc { color: #9E9496; }
-
-        :host-context(html:not(.dark)) .card {
-          background: #FFFFFF;
-          border-color: rgba(212, 165, 165, 0.25);
-          box-shadow: 0 2px 12px rgba(212, 165, 165, 0.08);
+        .card.dark:hover {
+          border-color: rgba(212, 165, 165, 0.4);
         }
-        :host-context(html:not(.dark)) .card:hover {
-          border-color: rgba(212, 165, 165, 0.45);
-          box-shadow: 0 4px 20px rgba(212, 165, 165, 0.12);
-        }
-        :host-context(html:not(.dark)) .title { color: #333333; }
-        :host-context(html:not(.dark)) .desc { color: #888888; }
+        .card.dark .title { color: #EDE8E9; }
+        .card.dark .desc { color: #9E9496; }
       </style>
 
       <div class="card">
@@ -215,6 +218,8 @@ class OhruruRecommend extends HTMLElement {
         </a>
       </div>
     `;
+
+    this._applyTheme();
   }
 }
 
