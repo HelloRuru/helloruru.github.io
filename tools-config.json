@@ -266,8 +266,8 @@
       "tools": [
         {
           "id": "kaoru-blog",
-          "title": "Kaoru Tsai ｜ Hello Ruru",
-          "description": "個人部落格，記錄想法與日常",
+          "title": "HelloRuru Blog",
+          "description": "社群經營、AI 搜尋內容架構、電子書閱讀筆記",
           "url": "https://blog.helloruru.com",
           "icon": "pen",
           "iconColor": "lavender",
