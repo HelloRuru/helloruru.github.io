@@ -97,12 +97,12 @@ class OhruruRecommend extends HTMLElement {
         }
 
         :host {
-          display: block;
-          width: 100%;
-          max-width: 640px;
-          margin: 48px auto 0;
-          padding: 0 20px;
-          box-sizing: border-box;
+          display: block !important;
+          width: 100% !important;
+          max-width: 640px !important;
+          margin: 48px auto 0 !important;
+          padding: 0 20px !important;
+          box-sizing: border-box !important;
           font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
         }
 
