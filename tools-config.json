@@ -261,17 +261,17 @@
     },
     {
       "id": "blog",
-      "label": "kaorutsai.com — 部落格",
-      "url": "https://kaorutsai.com/",
+      "label": "blog.helloruru.com — 部落格",
+      "url": "https://blog.helloruru.com/",
       "tools": [
         {
           "id": "kaoru-blog",
           "title": "Kaoru Tsai ｜ Hello Ruru",
           "description": "個人部落格，記錄想法與日常",
-          "url": "https://kaorutsai.com",
+          "url": "https://blog.helloruru.com",
           "icon": "pen",
           "iconColor": "lavender",
-          "badge": { "text": "WordPress", "type": "neutral" },
+          "badge": { "text": "Astro", "type": "neutral" },
           "fullWidth": true,
           "external": true
         }
