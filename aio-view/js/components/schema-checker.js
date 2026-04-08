@@ -98,7 +98,12 @@ const SchemaChecker = {
 
       const pageErrors = validations.flatMap(v => v.errors || []);
       const pageWarnings = validations.flatMap(v => v.warnings || []);
-      const types = validations.map(v => v.type).filter(Boolean);
+      const types = validations.flatMap(v => {
+        if (v.type === '@graph' && v.subResults) {
+          return v.subResults.map(r => r.type).filter(Boolean);
+        }
+        return v.type ? [v.type] : [];
+      });
 
       let status = 'ok';
       if (jsonLdList.length === 0) {

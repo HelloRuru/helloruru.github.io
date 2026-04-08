@@ -145,6 +145,16 @@ const SchemaRules = {
       return result;
     }
 
+    // @graph 處理（必須在 @type 檢查之前，因為 @graph 外層沒有 @type）
+    if (schema['@graph']) {
+      result.type = '@graph';
+      result.subResults = schema['@graph'].map(item => this.validate(item));
+      result.errors = result.subResults.flatMap(r => r.errors || []);
+      result.warnings = result.subResults.flatMap(r => r.warnings || []);
+      result.valid = result.subResults.every(r => r.valid);
+      return result;
+    }
+
     // 取得類型
     const type = this._resolveType(schema);
     result.type = type;
@@ -152,15 +162,6 @@ const SchemaRules = {
     if (!type) {
       result.valid = false;
       result.errors.push('缺少 @type 屬性');
-      return result;
-    }
-
-    // @graph 處理
-    if (schema['@graph']) {
-      // @graph 裡面是多個 schema，分別驗證
-      result.type = '@graph';
-      result.subResults = schema['@graph'].map(item => this.validate(item));
-      result.valid = result.subResults.every(r => r.valid);
       return result;
     }
 
