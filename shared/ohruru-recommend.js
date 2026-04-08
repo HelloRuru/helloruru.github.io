@@ -107,18 +107,18 @@ class OhruruRecommend extends HTMLElement {
         }
 
         .card {
-          background: #FFFFFF;
-          border: 1px solid rgba(212, 165, 165, 0.15);
+          background: linear-gradient(135deg, rgba(245,208,197,0.15), rgba(196,183,215,0.15));
+          border: 1px solid rgba(212, 165, 165, 0.25);
           border-radius: 24px;
           padding: 28px 28px 24px;
           position: relative;
-          box-shadow: 0 2px 8px rgba(212, 165, 165, 0.06);
+          box-shadow: 0 2px 8px rgba(212, 165, 165, 0.08);
           transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
         }
 
         .card:hover {
-          border-color: rgba(212, 165, 165, 0.35);
-          box-shadow: 0 4px 16px rgba(212, 165, 165, 0.10);
+          border-color: rgba(212, 165, 165, 0.45);
+          box-shadow: 0 4px 16px rgba(212, 165, 165, 0.14);
           transform: translateY(-2px);
         }
 
@@ -186,12 +186,12 @@ class OhruruRecommend extends HTMLElement {
 
         /* 深色模式 — 透過 JS 加 .dark class */
         .card.dark {
-          background: #282224;
-          border-color: rgba(212, 165, 165, 0.15);
+          background: linear-gradient(135deg, rgba(212,165,165,0.08), rgba(184,169,201,0.08));
+          border-color: rgba(212, 165, 165, 0.18);
           box-shadow: none;
         }
         .card.dark:hover {
-          border-color: rgba(212, 165, 165, 0.3);
+          border-color: rgba(212, 165, 165, 0.35);
           box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
         }
         .card.dark .title { color: #EDE8E9; }
