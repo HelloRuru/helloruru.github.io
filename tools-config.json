@@ -56,9 +56,9 @@
           "external": true
         },
         {
-          "id": "epub-converter",
-          "title": "EPUB 簡轉繁",
-          "description": "簡體電子書批次轉繁體，保留格式與封面",
+          "id": "epub-editor",
+          "title": "EPUB 編輯器",
+          "description": "簡轉繁、直排橫排、字型字級、封面替換，一鍵調整現有電子書",
           "url": "https://tools.helloruru.com/epub-convert",
           "icon": "pen",
           "iconColor": "lavender",
