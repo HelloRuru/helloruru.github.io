@@ -7,8 +7,8 @@
       "tools": [
         {
           "id": "aio-view",
-          "title": "AIO View",
-          "description": "監測文章是否出現在 Google AI Overview",
+          "title": "AEO Consultant",
+          "description": "全站 AEO 健檢 + AI Overview 監測（原 AIO View）",
           "url": "/aio-view/",
           "icon": "search-check",
           "iconColor": "rose",
