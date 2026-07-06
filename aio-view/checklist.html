@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <script src="/js/ga.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 搜尋檢查清單 — 網站被 AI 引用前的 12 項檢查｜AEO Consultant</title>
+  <meta name="description" content="網站想被 ChatGPT、Perplexity、Google AI Overview 引用，先過這 12 項檢查：robots.txt 放行 AI 爬蟲、llms.txt、JSON-LD 結構化資料、內容結構與作者權威信號。附每一項的修法。">
+  <meta name="author" content="Kaoru Tsai">
+  <link rel="canonical" href="https://lab.helloruru.com/aio-view/checklist.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://lab.helloruru.com/aio-view/checklist.html">
+  <meta property="og:title" content="AI 搜尋檢查清單 — 網站被 AI 引用前的 12 項檢查">
+  <meta property="og:description" content="robots.txt、llms.txt、JSON-LD、內容結構、權威信號 — 12 項逐條檢查，附修法。">
+  <meta property="og:image" content="https://lab.helloruru.com/aio-view/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="AI 搜尋檢查清單 — AEO Consultant">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:site_name" content="Hello Ruru Lab">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AI 搜尋檢查清單 — 網站被 AI 引用前的 12 項檢查">
+  <meta name="twitter:description" content="robots.txt、llms.txt、JSON-LD、內容結構、權威信號 — 12 項逐條檢查，附修法。">
+  <meta name="twitter:image" content="https://lab.helloruru.com/aio-view/og-image.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <meta name="theme-color" content="#D4A5A5">
+
+  <!-- JSON-LD: TechArticle -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "AI 搜尋檢查清單 — 網站被 AI 引用前的 12 項檢查",
+    "description": "網站想被 ChatGPT、Perplexity、Google AI Overview 引用，先過這 12 項檢查，涵蓋技術基礎、內容結構與權威信號。",
+    "url": "https://lab.helloruru.com/aio-view/checklist.html",
+    "inLanguage": "zh-TW",
+    "datePublished": "2026-07-06",
+    "dateModified": "2026-07-06",
+    "author": {
+      "@type": "Person",
+      "name": "Kaoru Tsai",
+      "url": "https://lab.helloruru.com/about/"
+    }
+  }
+  </script>
+
+  <!-- JSON-LD: FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "什麼是 AEO？和 SEO 差在哪？",
+        "acceptedAnswer": { "@type": "Answer", "text": "AEO（Answer Engine Optimization）是讓網站內容成為 AI 回答引擎（ChatGPT、Perplexity、Google AI Overview）引用來源的最佳化方法。SEO 追求搜尋排名，AEO 追求被 AI 引用，兩者的最佳化重點不同。" }
+      },
+      {
+        "@type": "Question",
+        "name": "什麼是 llms.txt？",
+        "acceptedAnswer": { "@type": "Answer", "text": "llms.txt 是放在網站根目錄的純文字檔案，用固定格式向 AI 爬蟲介紹網站定位與重要頁面，類似給 AI 看的網站地圖。規範見 llmstxt.org。" }
+      },
+      {
+        "@type": "Question",
+        "name": "為什麼重要內容不能只靠 JavaScript 呈現？",
+        "acceptedAnswer": { "@type": "Answer", "text": "多數 AI 爬蟲不執行 JavaScript。如果內容要等 JS 跑完才出現，AI 看到的就是一片空白。重要內容必須直接寫在 HTML 裡，或提供靜態版本。" }
+      }
+    ]
+  }
+  </script>
+
+  <!-- JSON-LD: BreadcrumbList -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Hello Ruru Lab", "item": "https://lab.helloruru.com/" },
+      { "@type": "ListItem", "position": 2, "name": "AEO Consultant", "item": "https://lab.helloruru.com/aio-view/" },
+      { "@type": "ListItem", "position": 3, "name": "AI 搜尋檢查清單", "item": "https://lab.helloruru.com/aio-view/checklist.html" }
+    ]
+  }
+  </script>
+
+  <style>
+    @font-face {
+      font-family: 'GenSenRounded';
+      src: url('https://lab.helloruru.com/fonts/GenSenRounded-Regular.woff2') format('woff2');
+      font-weight: 400; font-display: swap;
+    }
+    @font-face {
+      font-family: 'GenSenRounded';
+      src: url('https://lab.helloruru.com/fonts/GenSenRounded-Medium.woff2') format('woff2');
+      font-weight: 500; font-display: swap;
+    }
+    @font-face {
+      font-family: 'GenSenRounded';
+      src: url('https://lab.helloruru.com/fonts/GenSenRounded-Bold.woff2') format('woff2');
+      font-weight: 700; font-display: swap;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+      font-weight: 500;
+      background: #FFFCFA;
+      color: #4A4A4A;
+      line-height: 1.8;
+      font-size: 16px;
+    }
+    .container { max-width: 720px; margin: 0 auto; padding: 32px 20px 0; }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: #C9929A; text-decoration: none; font-size: 14px;
+      margin-bottom: 24px;
+    }
+    .back-link:hover { color: #D4A5A5; }
+    h1 { font-size: 30px; font-weight: 700; color: #333333; line-height: 1.3; margin-bottom: 8px; }
+    .subtitle { color: #888888; font-size: 15px; margin-bottom: 32px; }
+    h2 {
+      font-size: 22px; font-weight: 500; color: #333333;
+      line-height: 1.3; margin: 40px 0 16px;
+      padding-left: 12px; border-left: 4px solid #D4A5A5; border-radius: 2px;
+    }
+    p { margin-bottom: 14px; }
+    ul, ol { margin: 0 0 14px 24px; }
+    li { margin-bottom: 6px; }
+    a { color: #8F77B5; }
+    .check-item {
+      background: #FFFFFF; border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(212,165,165,0.08);
+      padding: 18px 20px; margin-bottom: 12px;
+    }
+    .check-item h3 { font-size: 16px; font-weight: 500; color: #333333; margin: 0 0 6px; }
+    .check-item h3 .num {
+      display: inline-block; min-width: 26px; height: 26px;
+      background: linear-gradient(135deg, #D4A5A5, #B8A9C9);
+      color: #FFFFFF; border-radius: 8px; text-align: center;
+      line-height: 26px; font-size: 14px; margin-right: 8px;
+    }
+    .check-item p { margin: 0 0 4px; font-size: 15px; }
+    .check-item .fix { font-size: 14px; color: #888888; }
+    .check-item .fix strong { color: #A8B5A0; font-weight: 500; }
+    .cta {
+      display: inline-block; margin: 8px 0 16px;
+      background: linear-gradient(135deg, #D4A5A5, #B8A9C9);
+      color: #FFFFFF; text-decoration: none;
+      padding: 12px 28px; border-radius: 24px; font-weight: 500;
+      box-shadow: 0 4px 16px rgba(212,165,165,0.10);
+    }
+    .faq-item {
+      background: #FFFFFF; border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(212,165,165,0.08);
+      padding: 18px 20px; margin-bottom: 12px;
+    }
+    .faq-item h3 { margin: 0 0 6px; font-size: 16px; font-weight: 500; color: #333333; }
+    .faq-item p { margin: 0; font-size: 15px; }
+    .footer {
+      text-align: center; padding: 32px 0; margin-top: 48px;
+      font-size: 14px; color: #888888; position: relative;
+    }
+    .footer::before {
+      content: ''; display: block; width: 120px; height: 1px;
+      margin: 0 auto 24px;
+      background: linear-gradient(90deg, transparent, #D4A5A5, transparent);
+    }
+    .footer a { color: #D4A5A5; }
+    @media (max-width: 767px) {
+      h1 { font-size: 26px; }
+      h2 { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/aio-view/" class="back-link">← 回 AEO Consultant 工具</a>
+
+    <h1>AI 搜尋檢查清單</h1>
+    <p class="subtitle">網站被 AI 引用前的 12 項檢查｜<a href="/about/">Kaoru Tsai</a> 撰寫・2026-07 更新</p>
+
+    <p>網站內容寫得再好，AI 看不到、讀不懂、不信任，就不會引用。這份清單把「被 AI 引用」拆成 12 項可以逐條檢查的工作，分成三層：技術基礎、內容結構、權威信任。</p>
+    <p>懶得逐條手動查的話，<a href="/aio-view/">AEO Consultant</a> 貼上網址就能自動健檢。</p>
+    <a href="/aio-view/" class="cta">用 AEO Consultant 自動檢查</a>
+
+    <h2>技術基礎 — AI 看得到嗎</h2>
+    <div class="check-item">
+      <h3><span class="num">1</span>robots.txt 放行 AI 爬蟲</h3>
+      <p>GPTBot、Google-Extended、PerplexityBot、ClaudeBot 有沒有被擋在門外。部分 CDN（如 Cloudflare）預設會擋 AI 爬蟲。</p>
+      <p class="fix"><strong>修法：</strong>robots.txt 逐一列出 AI 爬蟲的 User-agent 並 Allow，CDN 設定手動放行。</p>
+    </div>
+    <div class="check-item">
+      <h3><span class="num">2</span>llms.txt 存在</h3>
+      <p>網站根目錄有沒有 llms.txt，讓 AI 一進站就看懂網站定位與重要頁面。</p>
+      <p class="fix"><strong>修法：</strong>依 <a href="https://llmstxt.org/" target="_blank" rel="noopener">llmstxt.org</a> 規範建立：一段站點簡介 + 重要頁面清單與說明。</p>
+    </div>
+    <div class="check-item">
+      <h3><span class="num">3</span>JSON-LD 結構化資料</h3>
+      <p>每頁有沒有對應的 Schema.org 標記：網站用 WebSite、工具用 WebApplication、文章用 Article、問答用 FAQPage。</p>
+      <p class="fix"><strong>修法：</strong>在 head 注入 JSON-LD，用 Google 的複合式搜尋結果測試工具驗證。</p>
+    </div>
+    <div class="check-item">
+      <h3><span class="num">4</span>重要內容不依賴 JavaScript</h3>
+      <p>多數 AI 爬蟲不執行 JS。內容要等 JS 跑完才出現的話，AI 看到的是空白頁。</p>
+      <p class="fix"><strong>修法：</strong>重要內容直接寫進 HTML，互動工具配一頁靜態說明。</p>
+    </div>
+    <div class="check-item">
+      <h3><span class="num">5</span>sitemap 完整且新鮮</h3>
+      <p>sitemap.xml 有沒有涵蓋所有重要頁面，lastmod 是不是三個月內。太久沒更新會被當成沒人維護的站。</p>
+      <p class="fix"><strong>修法：</strong>補齊缺頁，內容有實質更新時同步更新 lastmod。</p>
+    </div>
+
+    <h2>內容結構 — AI 讀得懂嗎</h2>
+    <div class="check-item">
+      <h3><span class="num">6</span>標題分層清楚</h3>
+      <p>H1 只有一個，H2 / H3 按邏輯分層。AI 靠標題層級理解文章骨架。</p>
+      <p class="fix"><strong>修法：</strong>一頁一個 H1，每個 H2 底下講一個主題，不跳層。</p>
+    </div>
+    <div class="check-item">
+      <h3><span class="num">7</span>開頭直接給答案</h3>
+      <p>每頁、每段的前兩三句有沒有直接給定義或結論。AI 摘要偏好開門見山的段落。</p>
+      <p class="fix"><strong>修法：</strong>把結論搬到段落第一句，鋪陳放後面。</p>
+    </div>
+    <div class="check-item">
+      <h3><span class="num">8</span>表格與列點</h3>
+      <p>比較、步驟、規格這類資訊有沒有用表格或列點呈現。這是 AI 最容易直接引用的格式。</p>
+      <p class="fix"><strong>修法：</strong>三項以上的並列資訊改表格，流程改編號列點。</p>
+    </div>
+    <div class="check-item">
+      <h3><span class="num">9</span>FAQ 用真問句</h3>
+      <p>FAQ 標題是不是讀者真正會打進搜尋框的問句。AI 用問句做語意匹配。</p>
+      <p class="fix"><strong>修法：</strong>FAQ 標題寫完整問句，答案第一句給結論，再補為什麼。</p>
+    </div>
+    <div class="check-item">
+      <h3><span class="num">10</span>證據與來源標註</h3>
+      <p>數字有沒有來源、日期、樣本；引語有沒有出處。KDD 2024 的 <a href="https://arxiv.org/abs/2311.09735" target="_blank" rel="noopener">GEO 研究</a>實測：補強證據與引用，生成式引擎可見度最高提升 40%。</p>
+      <p class="fix"><strong>修法：</strong>每個數據補「來源 + 時間」，能連結原始出處就連。</p>
+    </div>
+
+    <h2>權威信任 — AI 信得過嗎</h2>
+    <div class="check-item">
+      <h3><span class="num">11</span>作者是查得到的人</h3>
+      <p>文章有沒有署名，署名有沒有連到作者頁，作者頁有沒有經歷與專業領域。匿名內容的引用權重低。</p>
+      <p class="fix"><strong>修法：</strong>建立作者頁（含 Person 結構化資料），每篇內容署名並連過去。</p>
+    </div>
+    <div class="check-item">
+      <h3><span class="num">12</span>聯絡方式與品牌一致</h3>
+      <p>網站有沒有明確的聯絡方式，品牌名稱在站內外是否一致。這是最基本的信任信號。</p>
+      <p class="fix"><strong>修法：</strong>footer 放 email，社群檔案的品牌名稱與網站統一。</p>
+    </div>
+
+    <h2>常見問題</h2>
+    <div class="faq-item">
+      <h3>Q1、什麼是 AEO？和 SEO 差在哪？</h3>
+      <p>AEO（Answer Engine Optimization）是讓內容成為 AI 回答引擎引用來源的最佳化方法。SEO 追求排名，AEO 追求被引用，最佳化重點不同。單篇文案的檢測可以用 <a href="/sge-writer/">SGE Writer</a> 搭配 <a href="/sge-writer/guide.html">SGE 文案檢測指南</a>。</p>
+    </div>
+    <div class="faq-item">
+      <h3>Q2、什麼是 llms.txt？</h3>
+      <p>放在網站根目錄的純文字檔，用固定格式向 AI 爬蟲介紹網站定位與重要頁面，像是給 AI 看的網站導覽。規範見 <a href="https://llmstxt.org/" target="_blank" rel="noopener">llmstxt.org</a>。</p>
+    </div>
+    <div class="faq-item">
+      <h3>Q3、12 項都做完就一定會被 AI 引用嗎？</h3>
+      <p>不一定，但沒做的話幾乎確定不會。這 12 項是門票，不是保證 — 進了場，內容本身的品質才開始比賽。</p>
+    </div>
+
+    <footer class="footer">
+      <p>&copy; <span id="footerYear"></span> Kaoru Tsai. All Rights Reserved. | Contact: <a href="mailto:hello@helloruru.com">hello@helloruru.com</a></p>
+    </footer>
+  </div>
+  <script>
+    const startYear = 2026;
+    const y = new Date().getFullYear();
+    document.getElementById('footerYear').textContent = y > startYear ? startYear + '–' + y : startYear;
+  </script>
+</body>
+</html>

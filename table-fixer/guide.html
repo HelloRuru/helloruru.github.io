@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <script src="/js/ga.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>表格貼上就亂掉？四個原因與修復方法 — Table Fixer 指南</title>
+  <meta name="description" content="從網頁、PDF、LINE 複製的表格貼到 Word 就亂掉，常見四個原因：分隔符不一致、全形半形混用、儲存格內換行、合併儲存格攤平。本指南逐一說明成因與修復步驟。">
+  <meta name="author" content="Kaoru Tsai">
+  <link rel="canonical" href="https://lab.helloruru.com/table-fixer/guide.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://lab.helloruru.com/table-fixer/guide.html">
+  <meta property="og:title" content="表格貼上就亂掉？四個原因與修復方法">
+  <meta property="og:description" content="分隔符不一致、全形半形混用、儲存格內換行、合併儲存格攤平 — 表格亂掉的成因與修法。">
+  <meta property="og:image" content="https://lab.helloruru.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="表格修復指南 — Table Fixer">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:site_name" content="Hello Ruru Lab">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="表格貼上就亂掉？四個原因與修復方法">
+  <meta name="twitter:description" content="表格亂掉的四個成因與修復步驟，附免費修復工具。">
+  <meta name="twitter:image" content="https://lab.helloruru.com/og-image.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <meta name="theme-color" content="#D4A5A5">
+
+  <!-- JSON-LD: TechArticle -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "表格貼上就亂掉？四個原因與修復方法",
+    "description": "從網頁、PDF、通訊軟體複製的表格貼到文件就亂掉的四個常見成因，與對應的修復步驟。",
+    "url": "https://lab.helloruru.com/table-fixer/guide.html",
+    "inLanguage": "zh-TW",
+    "datePublished": "2026-07-06",
+    "dateModified": "2026-07-06",
+    "author": {
+      "@type": "Person",
+      "name": "Kaoru Tsai",
+      "url": "https://lab.helloruru.com/about/"
+    }
+  }
+  </script>
+
+  <!-- JSON-LD: HowTo -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "如何修復亂掉的表格文字",
+    "description": "用 Table Fixer 把亂掉的表格文字還原成乾淨表格的三個步驟。",
+    "step": [
+      { "@type": "HowToStep", "position": 1, "name": "貼上", "text": "把亂掉的表格文字整段複製，貼進 Table Fixer 的輸入區。" },
+      { "@type": "HowToStep", "position": 2, "name": "按「修復表格」", "text": "工具判斷欄位分隔並還原成表格，結果直接顯示在下方，欄位對錯一眼看得出來。" },
+      { "@type": "HowToStep", "position": 3, "name": "選格式複製", "text": "貼到 Word 或 Google Docs 選「複製表格」保留框線與格式；貼到 Excel 選「複製純文字」，以 Tab 分隔。" }
+    ],
+    "tool": [{ "@type": "HowToTool", "name": "Table Fixer（lab.helloruru.com/table-fixer/）" }]
+  }
+  </script>
+
+  <!-- JSON-LD: FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "為什麼表格從網頁複製到 Word 會亂掉？",
+        "acceptedAnswer": { "@type": "Answer", "text": "複製時只帶走文字，表格結構（欄位邊界）常被轉成 Tab、空格或換行。目的地程式猜不出原本的欄位邏輯，就會把資料排錯位置。" }
+      },
+      {
+        "@type": "Question",
+        "name": "Table Fixer 支援哪些來源的表格？",
+        "acceptedAnswer": { "@type": "Answer", "text": "只要是文字形式的表格都能處理，常見來源包含網頁、PDF、Excel、LINE 或 Email 轉貼的內容。圖片形式的表格需要先用 OCR 轉成文字。" }
+      },
+      {
+        "@type": "Question",
+        "name": "貼上的資料會被儲存嗎？",
+        "acceptedAnswer": { "@type": "Answer", "text": "不會。Table Fixer 全程在瀏覽器端運作，資料不會上傳到任何伺服器。" }
+      }
+    ]
+  }
+  </script>
+
+  <!-- JSON-LD: BreadcrumbList -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Hello Ruru Lab", "item": "https://lab.helloruru.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Table Fixer", "item": "https://lab.helloruru.com/table-fixer/" },
+      { "@type": "ListItem", "position": 3, "name": "表格修復指南", "item": "https://lab.helloruru.com/table-fixer/guide.html" }
+    ]
+  }
+  </script>
+
+  <style>
+    @font-face {
+      font-family: 'GenSenRounded';
+      src: url('https://lab.helloruru.com/fonts/GenSenRounded-Regular.woff2') format('woff2');
+      font-weight: 400; font-display: swap;
+    }
+    @font-face {
+      font-family: 'GenSenRounded';
+      src: url('https://lab.helloruru.com/fonts/GenSenRounded-Medium.woff2') format('woff2');
+      font-weight: 500; font-display: swap;
+    }
+    @font-face {
+      font-family: 'GenSenRounded';
+      src: url('https://lab.helloruru.com/fonts/GenSenRounded-Bold.woff2') format('woff2');
+      font-weight: 700; font-display: swap;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+      font-weight: 500;
+      background: #FFFCFA;
+      color: #4A4A4A;
+      line-height: 1.8;
+      font-size: 16px;
+    }
+    .container { max-width: 720px; margin: 0 auto; padding: 32px 20px 0; }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: #C9929A; text-decoration: none; font-size: 14px;
+      margin-bottom: 24px;
+    }
+    .back-link:hover { color: #D4A5A5; }
+    h1 { font-size: 30px; font-weight: 700; color: #333333; line-height: 1.3; margin-bottom: 8px; }
+    .subtitle { color: #888888; font-size: 15px; margin-bottom: 32px; }
+    h2 {
+      font-size: 22px; font-weight: 500; color: #333333;
+      line-height: 1.3; margin: 40px 0 16px;
+      padding-left: 12px; border-left: 4px solid #D4A5A5; border-radius: 2px;
+    }
+    p { margin-bottom: 14px; }
+    ul, ol { margin: 0 0 14px 24px; }
+    li { margin-bottom: 6px; }
+    a { color: #8F77B5; }
+    table {
+      width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 15px;
+      background: #FFFFFF; border-radius: 12px; overflow: hidden;
+      box-shadow: 0 2px 8px rgba(212,165,165,0.08);
+    }
+    th {
+      background: linear-gradient(135deg, #FDF0EE, #F3EEF7);
+      color: #333333; font-weight: 500; text-align: left; padding: 10px 14px;
+    }
+    td { padding: 10px 14px; border-top: 1px solid #F0EAE8; vertical-align: top; }
+    .table-wrap { overflow-x: auto; }
+    .cta {
+      display: inline-block; margin: 8px 0 16px;
+      background: linear-gradient(135deg, #D4A5A5, #B8A9C9);
+      color: #FFFFFF; text-decoration: none;
+      padding: 12px 28px; border-radius: 24px; font-weight: 500;
+      box-shadow: 0 4px 16px rgba(212,165,165,0.10);
+    }
+    .faq-item {
+      background: #FFFFFF; border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(212,165,165,0.08);
+      padding: 18px 20px; margin-bottom: 12px;
+    }
+    .faq-item h3 { margin: 0 0 6px; font-size: 16px; font-weight: 500; color: #333333; }
+    .faq-item p { margin: 0; font-size: 15px; }
+    .footer {
+      text-align: center; padding: 32px 0; margin-top: 48px;
+      font-size: 14px; color: #888888; position: relative;
+    }
+    .footer::before {
+      content: ''; display: block; width: 120px; height: 1px;
+      margin: 0 auto 24px;
+      background: linear-gradient(90deg, transparent, #D4A5A5, transparent);
+    }
+    .footer a { color: #D4A5A5; }
+    @media (max-width: 767px) {
+      h1 { font-size: 26px; }
+      h2 { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/table-fixer/" class="back-link">← 回 Table Fixer 工具</a>
+
+    <h1>表格貼上就亂掉？四個原因與修復方法</h1>
+    <p class="subtitle">Table Fixer 使用指南｜<a href="/about/">Kaoru Tsai</a> 撰寫・2026-07 更新</p>
+
+    <p>從網頁複製一張表格，貼到 Word 的瞬間，欄位散得到處都是。資料還在，只是全部擠錯了位置 — 這不是操作錯誤，是格式在搬家的路上弄丟了。</p>
+    <p>本指南說明表格亂掉的四個常見原因，以及用 <a href="/table-fixer/">Table Fixer</a> 三步驟還原的方法。</p>
+
+    <h2>表格為什麼會亂掉</h2>
+    <div class="table-wrap">
+      <table>
+        <tr><th>原因</th><th>常見來源</th><th>亂掉的樣子</th></tr>
+        <tr><td>分隔符不一致</td><td>網頁、Email 轉貼</td><td>有的欄用 Tab 分隔、有的用空格，貼上後欄位對不齊</td></tr>
+        <tr><td>全形半形混用</td><td>中文文件、LINE 訊息</td><td>全形空格和半形空格寬度不同，看起來對齊、貼上就歪</td></tr>
+        <tr><td>儲存格內換行</td><td>PDF 複製</td><td>一格裡的多行文字被拆成好幾列，一列資料變三列</td></tr>
+        <tr><td>合併儲存格攤平</td><td>Excel、報表系統</td><td>合併格複製後只剩一份值，其他列的欄位整排位移</td></tr>
+      </table>
+    </div>
+
+    <h2>三步驟修復</h2>
+    <ol>
+      <li><strong>貼上</strong> — 把亂掉的表格文字整段複製，貼進 <a href="/table-fixer/">Table Fixer</a> 輸入區</li>
+      <li><strong>按「修復表格」</strong> — 工具判斷欄位分隔並還原成表格，結果直接顯示在下方，欄位對錯一眼看得出來</li>
+      <li><strong>選格式複製</strong> — 要貼 Word / Google Docs 選「複製表格」，要貼 Excel 選「複製純文字」</li>
+    </ol>
+    <a href="/table-fixer/" class="cta">開啟 Table Fixer 修表格</a>
+
+    <h2>貼回文件的小提醒</h2>
+    <ul>
+      <li>「複製表格」貼到 <strong>Word / Google Docs</strong>：保留表格框線與格式</li>
+      <li>「複製純文字」貼到 <strong>Excel</strong>：Tab 分隔的純文字，Excel 會自動分欄</li>
+      <li>貼完先檢查<strong>最後一欄</strong> — 欄位錯位通常從最右邊開始看得出來</li>
+    </ul>
+
+    <h2>常見問題</h2>
+    <div class="faq-item">
+      <h3>Q1、為什麼表格從網頁複製到 Word 會亂掉？</h3>
+      <p>複製時只帶走文字，表格結構（欄位邊界）常被轉成 Tab、空格或換行。目的地程式猜不出原本的欄位邏輯，就把資料排錯位置。</p>
+    </div>
+    <div class="faq-item">
+      <h3>Q2、Table Fixer 支援哪些來源的表格？</h3>
+      <p>只要是文字形式的表格都能處理：網頁、PDF、Excel、LINE 或 Email 轉貼都可以。圖片形式的表格要先用 OCR 轉成文字。</p>
+    </div>
+    <div class="faq-item">
+      <h3>Q3、貼上的資料會被儲存嗎？</h3>
+      <p>不會。Table Fixer 全程在瀏覽器端運作，資料不會上傳到任何伺服器。</p>
+    </div>
+
+    <footer class="footer">
+      <p>&copy; <span id="footerYear"></span> Kaoru Tsai. All Rights Reserved. | Contact: <a href="mailto:hello@helloruru.com">hello@helloruru.com</a></p>
+    </footer>
+  </div>
+  <script>
+    const startYear = 2026;
+    const y = new Date().getFullYear();
+    document.getElementById('footerYear').textContent = y > startYear ? startYear + '–' + y : startYear;
+  </script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <script src="/js/ga.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SGE 文案檢測指南 — 寫出會被 AI 引用的文章｜SGE Writer</title>
+  <meta name="description" content="SGE Writer 使用指南：說明 SGE（AI Overview）是什麼、五個檢測項目的標準與依據、被 AI 引用的文案寫法。含 H1 字數、關鍵字密度、中國用語、AI 味檢測的完整說明。">
+  <meta name="author" content="Kaoru Tsai">
+  <link rel="canonical" href="https://lab.helloruru.com/sge-writer/guide.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://lab.helloruru.com/sge-writer/guide.html">
+  <meta property="og:title" content="SGE 文案檢測指南 — 寫出會被 AI 引用的文章">
+  <meta property="og:description" content="SGE 是什麼、五個檢測項目的標準與依據、被 AI 引用的文案寫法，一次說清楚。">
+  <meta property="og:image" content="https://lab.helloruru.com/sge-writer/icons/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="SGE 文案檢測指南 — SGE Writer">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:site_name" content="Hello Ruru Lab">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SGE 文案檢測指南 — 寫出會被 AI 引用的文章">
+  <meta name="twitter:description" content="SGE 是什麼、五個檢測項目的標準與依據、被 AI 引用的文案寫法。">
+  <meta name="twitter:image" content="https://lab.helloruru.com/sge-writer/icons/og-image.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <meta name="theme-color" content="#D4A5A5">
+
+  <!-- JSON-LD: TechArticle -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "SGE 文案檢測指南 — 寫出會被 AI 引用的文章",
+    "description": "說明 SGE（AI Overview）是什麼、SGE Writer 五個檢測項目的標準與依據、被 AI 引用的文案寫法。",
+    "url": "https://lab.helloruru.com/sge-writer/guide.html",
+    "inLanguage": "zh-TW",
+    "datePublished": "2026-07-06",
+    "dateModified": "2026-07-06",
+    "author": {
+      "@type": "Person",
+      "name": "Kaoru Tsai",
+      "url": "https://lab.helloruru.com/about/"
+    }
+  }
+  </script>
+
+  <!-- JSON-LD: FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "SGE 和 SEO 有什麼不同？",
+        "acceptedAnswer": { "@type": "Answer", "text": "SEO 的目標是讓文章排上 Google 搜尋結果第一頁；SGE（Search Generative Experience，現稱 AI Overview）的目標是讓文章成為 AI 摘要回答的引用來源。排名高不等於被 AI 引用，兩者需要分開最佳化。" }
+      },
+      {
+        "@type": "Question",
+        "name": "為什麼 H1 標題建議 28 個字以內？",
+        "acceptedAnswer": { "@type": "Answer", "text": "Google 搜尋結果的標題顯示寬度有限，中文超過 28 個字會被截斷，讀者看不到完整標題，AI 擷取時也容易漏掉重點。28 字以內能確保標題完整呈現。" }
+      },
+      {
+        "@type": "Question",
+        "name": "什麼是 AI 味？為什麼要檢測？",
+        "acceptedAnswer": { "@type": "Answer", "text": "AI 味指 AI 產出文字常見的套路，例如「深入探討」「不可或缺」「值得注意的是」等高頻詞，以及過度對稱的句式。這類文字讀起來沒有人的語感，讀者信任度低，也容易被搜尋引擎判定為低品質內容。" }
+      },
+      {
+        "@type": "Question",
+        "name": "SGE Writer 會儲存我貼上的文案嗎？",
+        "acceptedAnswer": { "@type": "Answer", "text": "不會。所有檢測都在瀏覽器端執行，文案不會上傳到伺服器。" }
+      }
+    ]
+  }
+  </script>
+
+  <!-- JSON-LD: BreadcrumbList -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Hello Ruru Lab", "item": "https://lab.helloruru.com/" },
+      { "@type": "ListItem", "position": 2, "name": "SGE Writer", "item": "https://lab.helloruru.com/sge-writer/" },
+      { "@type": "ListItem", "position": 3, "name": "SGE 文案檢測指南", "item": "https://lab.helloruru.com/sge-writer/guide.html" }
+    ]
+  }
+  </script>
+
+  <style>
+    @font-face {
+      font-family: 'GenSenRounded';
+      src: url('https://lab.helloruru.com/fonts/GenSenRounded-Regular.woff2') format('woff2');
+      font-weight: 400; font-display: swap;
+    }
+    @font-face {
+      font-family: 'GenSenRounded';
+      src: url('https://lab.helloruru.com/fonts/GenSenRounded-Medium.woff2') format('woff2');
+      font-weight: 500; font-display: swap;
+    }
+    @font-face {
+      font-family: 'GenSenRounded';
+      src: url('https://lab.helloruru.com/fonts/GenSenRounded-Bold.woff2') format('woff2');
+      font-weight: 700; font-display: swap;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+      font-weight: 500;
+      background: #FFFCFA;
+      color: #4A4A4A;
+      line-height: 1.8;
+      font-size: 16px;
+    }
+    .container { max-width: 720px; margin: 0 auto; padding: 32px 20px 0; }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: #C9929A; text-decoration: none; font-size: 14px;
+      margin-bottom: 24px;
+    }
+    .back-link:hover { color: #D4A5A5; }
+    h1 { font-size: 30px; font-weight: 700; color: #333333; line-height: 1.3; margin-bottom: 8px; }
+    .subtitle { color: #888888; font-size: 15px; margin-bottom: 32px; }
+    h2 {
+      font-size: 22px; font-weight: 500; color: #333333;
+      line-height: 1.3; margin: 40px 0 16px;
+      padding-left: 12px; border-left: 4px solid #D4A5A5; border-radius: 2px;
+    }
+    h3 { font-size: 18px; font-weight: 500; color: #333333; margin: 24px 0 8px; }
+    p { margin-bottom: 14px; }
+    ul, ol { margin: 0 0 14px 24px; }
+    li { margin-bottom: 6px; }
+    a { color: #8F77B5; }
+    table {
+      width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 15px;
+      background: #FFFFFF; border-radius: 12px; overflow: hidden;
+      box-shadow: 0 2px 8px rgba(212,165,165,0.08);
+    }
+    th {
+      background: linear-gradient(135deg, #FDF0EE, #F3EEF7);
+      color: #333333; font-weight: 500; text-align: left; padding: 10px 14px;
+    }
+    td { padding: 10px 14px; border-top: 1px solid #F0EAE8; vertical-align: top; }
+    .table-wrap { overflow-x: auto; }
+    .quote {
+      background: linear-gradient(135deg, #FDF0EE, #F5F1F8);
+      border-radius: 16px; padding: 20px 24px; margin: 20px 0;
+      border-left: 4px solid #B8A9C9;
+    }
+    .quote p { margin-bottom: 6px; }
+    .quote .who { font-size: 13px; color: #888888; margin: 0; }
+    .cta {
+      display: inline-block; margin: 8px 0 16px;
+      background: linear-gradient(135deg, #D4A5A5, #B8A9C9);
+      color: #FFFFFF; text-decoration: none;
+      padding: 12px 28px; border-radius: 24px; font-weight: 500;
+      box-shadow: 0 4px 16px rgba(212,165,165,0.10);
+    }
+    .faq-item {
+      background: #FFFFFF; border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(212,165,165,0.08);
+      padding: 18px 20px; margin-bottom: 12px;
+    }
+    .faq-item h3 { margin: 0 0 6px; font-size: 16px; }
+    .faq-item p { margin: 0; font-size: 15px; }
+    .footer {
+      text-align: center; padding: 32px 0; margin-top: 48px;
+      font-size: 14px; color: #888888; position: relative;
+    }
+    .footer::before {
+      content: ''; display: block; width: 120px; height: 1px;
+      margin: 0 auto 24px;
+      background: linear-gradient(90deg, transparent, #D4A5A5, transparent);
+    }
+    .footer a { color: #D4A5A5; }
+    @media (max-width: 767px) {
+      h1 { font-size: 26px; }
+      h2 { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/sge-writer/" class="back-link">← 回 SGE Writer 工具</a>
+
+    <h1>SGE 文案檢測指南</h1>
+    <p class="subtitle">寫出會被 AI 引用的文章｜<a href="/about/">Kaoru Tsai</a> 撰寫・2026-07 更新</p>
+
+    <p>文章排上第一頁，AI 卻引用了別人的。這是 2026 年內容工作者最常遇到的落差 — 排名和引用，是兩套不同的遊戲規則。</p>
+    <p>本指南說明 SGE 是什麼、<a href="/sge-writer/">SGE Writer</a> 五個檢測項目背後的標準，以及被 AI 引用的文案該怎麼寫。</p>
+
+    <h2>SGE 是什麼</h2>
+    <p>SGE（Search Generative Experience）是 Google 把生成式 AI 放進搜尋的機制，現在正式名稱是 AI Overview：搜尋結果最上方那段由 AI 整理的摘要回答。</p>
+    <p>差別在這裡 — 傳統 SEO 爭的是「排名第幾」，SGE 爭的是「AI 的回答裡有沒有引用到這篇」。學術研究已經證實這件事可以最佳化：普林斯頓等團隊發表的 <a href="https://arxiv.org/abs/2311.09735" target="_blank" rel="noopener">GEO: Generative Engine Optimization</a>（KDD 2024）實測顯示，調整內容結構與證據呈現，在生成式引擎中的可見度最高可提升 40%。</p>
+
+    <h2>SGE Writer 檢測什麼</h2>
+    <div class="table-wrap">
+      <table>
+        <tr><th>檢測項目</th><th>標準</th><th>為什麼</th></tr>
+        <tr><td>H1 字數</td><td>28 個字以內</td><td>超過會在搜尋結果被截斷，AI 擷取時容易漏掉重點</td></tr>
+        <tr><td>關鍵字密度</td><td>自然分佈，不堆砌</td><td>關鍵字堆砌會被判定低品質；拆開散佈在不同段落效果更好</td></tr>
+        <tr><td>中國用語</td><td>台灣用語檢核</td><td>「質量」「信息」「視頻」等用語會讓台灣讀者出戲，也影響在地搜尋的語意匹配</td></tr>
+        <tr><td>AI 味</td><td>高頻套路詞掃描</td><td>「深入探討」「不可或缺」這類 AI 高頻詞讓文字失去人味，讀者信任度下降</td></tr>
+        <tr><td>即時 SGE 評分</td><td>綜合結構與用語給分</td><td>邊改邊看分數，知道每一次修改有沒有往對的方向走</td></tr>
+      </table>
+    </div>
+    <a href="/sge-writer/" class="cta">開啟 SGE Writer 檢測文案</a>
+
+    <h2>使用步驟</h2>
+    <ol>
+      <li>把寫好的文案貼進 <a href="/sge-writer/">SGE Writer</a> 編輯區</li>
+      <li>看「SGE 分數」與「檢查項目」清單，沒過的項目優先處理</li>
+      <li>依提示修改，分數會即時更新；中國用語由「支語小警察」逐條抓出</li>
+      <li>檢查項目全數通過後，文案就完成基本的 SGE 體檢</li>
+    </ol>
+
+    <h2>被 AI 引用的文案，有四個共同點</h2>
+    <ul>
+      <li><strong>結構清楚</strong>：H2 / H3 分層明確，一段講一件事。AI 是按段落擷取的，混在一起的重點等於沒有重點</li>
+      <li><strong>證據先行</strong>：數字、來源、日期放在句子前面。「售出 8,000 本」比「賣得很好」可引用得多</li>
+      <li><strong>表格與列點</strong>：比較表和步驟列點是 AI 最容易直接搬走的格式</li>
+      <li><strong>FAQ 收尾</strong>：用讀者真正會問的問句當標題，答案第一句就給結論</li>
+    </ul>
+
+    <div class="quote">
+      <p>「排名是讓人找到你，引用是讓 AI 替你說話。寫給 AI 看的文章，反而要更像人寫的 — 有結構、有證據、有語感，缺一個都留不住。」</p>
+      <p class="who">— Kaoru Tsai（蔡依庭），暢銷書作者、Hello Ruru Lab 站長。<a href="/about/">關於作者</a></p>
+    </div>
+
+    <h2>常見問題</h2>
+    <div class="faq-item">
+      <h3>Q1、SGE 和 SEO 有什麼不同？</h3>
+      <p>SEO 的目標是排上 Google 第一頁；SGE 的目標是成為 AI 摘要的引用來源。排名高不等於被引用，兩者要分開最佳化。想檢查整個網站的 AI 可引用度，可以用 <a href="/aio-view/">AEO Consultant</a> 搭配<a href="/aio-view/checklist.html">AI 搜尋檢查清單</a>。</p>
+    </div>
+    <div class="faq-item">
+      <h3>Q2、為什麼 H1 標題建議 28 個字以內？</h3>
+      <p>Google 搜尋結果的標題顯示寬度有限，中文超過 28 個字會被截斷。讀者看不到完整標題，AI 擷取時也容易漏掉重點。</p>
+    </div>
+    <div class="faq-item">
+      <h3>Q3、什麼是 AI 味？為什麼要檢測？</h3>
+      <p>AI 味指 AI 產出文字的常見套路：「深入探討」「不可或缺」「值得注意的是」這類高頻詞，加上過度對稱的句式。這種文字沒有人的語感，讀者信任度低，也容易被判定為低品質內容。</p>
+    </div>
+    <div class="faq-item">
+      <h3>Q4、SGE Writer 會儲存我貼上的文案嗎？</h3>
+      <p>不會。所有檢測都在瀏覽器端執行，文案不會上傳到任何伺服器。</p>
+    </div>
+
+    <footer class="footer">
+      <p>&copy; <span id="footerYear"></span> Kaoru Tsai. All Rights Reserved. | Contact: <a href="mailto:hello@helloruru.com">hello@helloruru.com</a></p>
+    </footer>
+  </div>
+  <script>
+    const startYear = 2026;
+    const y = new Date().getFullYear();
+    document.getElementById('footerYear').textContent = y > startYear ? startYear + '–' + y : startYear;
+  </script>
+</body>
+</html>

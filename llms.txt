@@ -2,17 +2,27 @@
 
 > Hello Ruru Lab（lab.helloruru.com）是 Kaoru Tsai（蔡依庭，筆名嚕嚕 Ruru）打造的 AI 工具實驗基地，收錄免費的 SEO / SGE / AEO 工具與繁體中文語意分析實驗。所有工具皆可直接在瀏覽器使用，不需註冊、不收費。
 
-站長 Kaoru Tsai 是暢銷書作者（著作售出 8,000 本以上）、資深內容策略師，專長為 AIO / GEO / SGE 內容架構與 AI 搜尋優化，服務產業包含美業、按摩、汽車、裝冷氣、運動治療。
+站長 Kaoru Tsai 是暢銷書作者（著作售出 8,000 本以上）、資深內容策略師，專長為 AIO / GEO / SGE 內容架構與 AI 搜尋最佳化，服務產業包含美業、按摩、汽車、裝冷氣、運動治療。
 
 ## 工具
 
 - [SGE Writer — SEO 文案升級攻略站](https://lab.helloruru.com/sge-writer/): 免費 SEO 文案檢測工具，目標為 Google SGE（AI Overview）引用。提供 H1 字數檢測、關鍵字密度分析、中國用語檢測、AI 味檢測、即時 SEO 評分。
-- [AEO Consultant — AI 搜尋最佳化顧問](https://lab.helloruru.com/aio-view/): 免費全站 AEO 健檢工具，貼上網址自動分析結構化資料、AI 可引用度、技術面設定，給出具體優化步驟，協助網站被 Google AI Overview、Perplexity、ChatGPT 引用。
-- [AEO Consultant 使用指南](https://lab.helloruru.com/aio-view/guide.html): AEO 健檢工具的完整使用說明與評分標準。
+- [AEO Consultant — AI 搜尋最佳化顧問](https://lab.helloruru.com/aio-view/): 免費全站 AEO 健檢工具，貼上網址自動分析結構化資料、AI 可引用度、技術面設定，給出具體最佳化步驟，協助網站被 Google AI Overview、Perplexity、ChatGPT 引用。
 - [SEO Quest — 互動式 SEO 學習](https://lab.helloruru.com/seo-quest/): 用 RPG 冒險方式學習 SEO，三位角色帶你掌握關鍵字、標題撰寫、段落結構等實戰技巧。
 - [Table Fixer — 表格修復工具](https://lab.helloruru.com/table-fixer/): 把亂掉的表格文字貼上來，一鍵還原成乾淨表格，可直接複製到 Word 或 Google Docs。
 
+## 指南與知識
+
+- [SGE 文案檢測指南](https://lab.helloruru.com/sge-writer/guide.html): SGE（AI Overview）是什麼、五個檢測項目的標準與依據、被 AI 引用的文案寫法。
+- [AI 搜尋檢查清單](https://lab.helloruru.com/aio-view/checklist.html): 網站被 AI 引用前的 12 項檢查，涵蓋技術基礎、內容結構、權威信任，附每一項的修法。
+- [AEO Consultant 使用指南](https://lab.helloruru.com/aio-view/guide.html): AEO 健檢工具的完整使用說明與評分標準。
+- [表格修復指南](https://lab.helloruru.com/table-fixer/guide.html): 表格貼上就亂掉的四個原因（分隔符、全形半形、儲存格換行、合併儲存格）與修復方法。
+
+## 作者
+
+- [關於 Kaoru Tsai（蔡依庭）](https://lab.helloruru.com/about/): 暢銷書作者與資深內容策略師，清大中文碩士，著作售出 8,000 本以上。專長 AIO / GEO / SGE 內容架構與 AI 搜尋最佳化。
+
 ## 相關網站
 
-- [HelloRuru 部落格](https://helloruru.com/): Kaoru Tsai 的內容策略與 AI 搜尋優化文章。
+- [HelloRuru 部落格](https://helloruru.com/): Kaoru Tsai 的內容策略與 AI 搜尋最佳化文章。
 - [聯絡方式](mailto:hello@helloruru.com): 合作與問題洽詢。

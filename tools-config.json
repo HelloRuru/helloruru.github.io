@@ -12,7 +12,7 @@
           "url": "/aio-view/",
           "icon": "search-check",
           "iconColor": "rose",
-          "badge": { "text": "開發中", "type": "dev" }
+          "badge": { "text": "Beta", "type": "dev" }
         },
         {
           "id": "table-fixer",
@@ -29,7 +29,7 @@
           "url": "/seo-quest/",
           "icon": "sparkles",
           "iconColor": "sakura",
-          "badge": { "text": "開發中", "type": "dev" }
+          "badge": { "text": "Beta", "type": "dev" }
         },
         {
           "id": "sge-writer",
