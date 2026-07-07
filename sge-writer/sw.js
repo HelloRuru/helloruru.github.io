@@ -3,12 +3,13 @@
  * 提供離線功能與快取管理
  */
 
-const CACHE_NAME = 'sge-writer-v7';
+const CACHE_NAME = 'sge-writer-v8';
 const STATIC_ASSETS = [
   '/sge-writer/',
   '/sge-writer/index.html',
   '/sge-writer/manifest.json',
   '/sge-writer/icons/favicon.svg',
+  '/sge-writer/icons/favicon-16x16.png',
   '/sge-writer/icons/favicon-32x32.png',
   '/sge-writer/icons/apple-touch-icon.png',
   '/sge-writer/icons/android-chrome-192x192.png',
@@ -40,6 +41,7 @@ const STATIC_ASSETS = [
   '/sge-writer/css/components/opening.css',
   '/sge-writer/css/components/level-dialog.css',
   '/sge-writer/css/components/zhiyu-police.css',
+  '/sge-writer/css/components/faq.css',
   // JS 模組
   '/sge-writer/js/app.js',
   '/sge-writer/js/editor.js',
@@ -49,7 +51,19 @@ const STATIC_ASSETS = [
   '/sge-writer/js/seo-analyzer.js',
   '/sge-writer/js/features/portrait-director.js',
   '/sge-writer/js/features/opening.js',
-  '/sge-writer/js/features/level-dialogs.js'
+  '/sge-writer/js/features/level-dialogs.js',
+  '/sge-writer/js/analyzers/ai-taste-analyzer.js',
+  '/sge-writer/js/analyzers/sge-structure-analyzer.js',
+  '/sge-writer/js/analyzers/zhiyu-analyzer.js',
+  '/sge-writer/js/data/characters.js',
+  '/sge-writer/js/data/faq-data.js',
+  '/sge-writer/js/data/positive-markers.js',
+  '/sge-writer/js/data/violation-words.js',
+  '/sge-writer/js/data/zhiyu-words.js',
+  '/sge-writer/js/ui/ai-taste-ui.js',
+  '/sge-writer/js/ui/faq-ui.js',
+  '/sge-writer/js/ui/sge-structure-ui.js',
+  '/sge-writer/js/ui/zhiyu-ui.js'
 ];
 
 // 外部資源（字體等）
