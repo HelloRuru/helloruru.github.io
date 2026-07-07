@@ -65,16 +65,6 @@
           "external": true
         },
         {
-          "id": "bg-removal",
-          "title": "批次去背",
-          "description": "AI 自動去背，4 種模式、不限解析度，全程本機處理",
-          "url": "https://tools.helloruru.com/bg-remove",
-          "icon": "wand",
-          "iconColor": "lavender",
-          "external": true,
-          "badge": { "text": "開發中", "type": "dev" }
-        },
-        {
           "id": "post-writer",
           "title": "社群貼文排版",
           "description": "解決 FB、IG、Threads 換行消失問題，即時預覽",
