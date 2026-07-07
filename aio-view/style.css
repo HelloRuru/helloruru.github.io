@@ -35,7 +35,7 @@
 @import url('./css/components/technical.css');      /* 技術面檢查 */
 @import url('./css/components/schema-checker.css'); /* 結構化資料健檢 */
 @import url('./css/components/citability.css');     /* AI 可引用度 */
-@import url('./css/components/recommendations.css'); /* 優化建議 */
+@import url('./css/components/recommendations.css'); /* 最佳化建議 */
 @import url('./css/components/visibility.css');      /* AI 能見度 */
 @import url('./css/components/competitor.css');      /* 競品比較 */
 

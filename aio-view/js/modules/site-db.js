@@ -59,7 +59,7 @@ const SiteDB = {
           store.createIndex('date', 'date', { unique: false });
         }
 
-        // 優化建議
+        // 最佳化建議
         if (!db.objectStoreNames.contains(this.STORES.RECOMMENDATIONS)) {
           const store = db.createObjectStore(this.STORES.RECOMMENDATIONS, { keyPath: 'id', autoIncrement: true });
           store.createIndex('domain', 'domain', { unique: false });

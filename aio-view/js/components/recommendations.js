@@ -152,11 +152,11 @@ const Recommendations = {
     this.render();
 
     // 更新首頁
-    Landing.updateProgress('report', 'done', `產生了 ${this.items.length} 項優化建議`);
+    Landing.updateProgress('report', 'done', `產生了 ${this.items.length} 項最佳化建議`);
     const reportLink = document.getElementById('landing-report-link');
     if (reportLink && this.items.length > 0) {
       reportLink.classList.remove('hidden');
-      reportLink.textContent = `查看 ${this.items.length} 項優化建議 →`;
+      reportLink.textContent = `查看 ${this.items.length} 項最佳化建議 →`;
     }
   },
 
@@ -166,7 +166,7 @@ const Recommendations = {
 
     if (this.items.length === 0) {
       panel.innerHTML = `<div class="panel-placeholder">
-        <h2>優化建議</h2>
+        <h2>最佳化建議</h2>
         <p>請先在首頁輸入網址開始分析</p>
       </div>`;
       return;
@@ -195,7 +195,7 @@ const Recommendations = {
         <div class="tech-score-card">
           <div class="tech-score ${pct >= 80 ? 'good' : pct >= 40 ? 'warn' : 'bad'}">${this.items.length}</div>
           <div>
-            <div class="tech-score-label">優化建議</div>
+            <div class="tech-score-label">最佳化建議</div>
             <div style="font-size:12px;color:var(--color-gray);margin-top:4px;">
               已完成 ${doneCount}/${this.items.length}
             </div>
@@ -321,11 +321,11 @@ const Recommendations = {
     if (CitabilityAnalyzer.results) {
       lines.push(`- **AI 可引用度**：${CitabilityAnalyzer.results.siteScore}/100（${CitabilityAnalyzer.results.pages.filter(p => !p.failed).length} 頁平均）`);
     }
-    lines.push(`- **優化建議**：${this.items.length} 項（已完成 ${this.items.filter(i => i.done).length} 項）`);
+    lines.push(`- **最佳化建議**：${this.items.length} 項（已完成 ${this.items.filter(i => i.done).length} 項）`);
     lines.push('');
 
-    // 優化建議
-    lines.push('## 優化建議（按優先順序）');
+    // 最佳化建議
+    lines.push('## 最佳化建議（按優先順序）');
     lines.push('');
 
     const grouped = {};

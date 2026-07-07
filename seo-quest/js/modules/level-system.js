@@ -50,8 +50,8 @@ export const LevelSystem = {
         const levelNum = levelId.split('-')[1];
 
         const titles = {
-          '1-1': '關鍵字優化基礎',
-          '1-2': '標題優化技巧',
+          '1-1': '關鍵字最佳化基礎',
+          '1-2': '標題最佳化技巧',
           '1-3': '段落結構設計',
           '1-4': '內部連結策略',
           '1-5': 'SEO 文案實戰',

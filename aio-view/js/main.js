@@ -737,7 +737,7 @@ const App = {
       show: () => CompetitorCompare.show()
     });
 
-    // 優化建議（Phase 1）
+    // 最佳化建議（Phase 1）
     Router.register('/report', {
       panelId: 'panel-report',
       show: () => Recommendations.show()
