@@ -17,6 +17,8 @@ export const analyzer = {
   wordMin: 650,
   wordMax: 700,
   editorElement: null,
+  lastResults: null,
+  onResults: null, // 分析完成回呼（遊戲引擎掛在這裡）
 
   /**
    * 初始化分析器
@@ -97,6 +99,18 @@ export const analyzer = {
     // 支語小警察分析
     const zhiyuResult = ZhiyuAnalyzer.analyze(content);
     ZhiyuUI.update(zhiyuResult);
+
+    // 保存結果並通知遊戲引擎
+    this.lastResults = {
+      score,
+      h1: h1Result,
+      wordCount: wordCountResult,
+      keyword: keywordResult,
+      violation: violationResult,
+      tone: toneResult,
+      textLength: content.trim().length
+    };
+    if (this.onResults) this.onResults(this.lastResults);
   },
 
   /**

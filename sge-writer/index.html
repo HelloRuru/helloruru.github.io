@@ -452,7 +452,7 @@
             </form>
           </div>
 
-          <!-- Step 2: Strategy Selection (Socratic) -->
+          <!-- Step 2: 查核 — 策略選擇 + 事實檢核 -->
           <div class="dialog-step" id="step-2">
             <div class="dialog-bubble guide-bubble">
               <div class="bubble-avatar">
@@ -463,7 +463,7 @@
               </div>
               <div class="bubble-content">
                 <span class="bubble-name">伊歐</span>
-                <p>在開始冒險前，我想問你一個問題...</p>
+                <p>任務資訊收到了！開始撰寫前，我想問你一個問題...</p>
               </div>
             </div>
 
@@ -499,10 +499,7 @@
                 <span>精靈呢喃：高單價服務建議選 B，更能突顯價值感</span>
               </div>
             </div>
-          </div>
 
-          <!-- Step 3: Fact Check -->
-          <div class="dialog-step" id="step-3">
             <div class="goddess-revelation" id="goddess-card" style="display: none;">
               <div class="revelation-header">
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
@@ -511,19 +508,6 @@
                 <span>女神啟示</span>
               </div>
               <p class="revelation-text" id="goddess-text"></p>
-            </div>
-
-            <div class="dialog-bubble guide-bubble">
-              <div class="bubble-avatar">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
-                  <path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
-                </svg>
-              </div>
-              <div class="bubble-content">
-                <span class="bubble-name">伊歐</span>
-                <p>我已經整理好任務資訊，請確認以下內容正確：</p>
-              </div>
             </div>
 
             <div class="fact-check-card">
@@ -538,14 +522,8 @@
                 <!-- Dynamically populated -->
               </ul>
               <div class="fact-actions">
-                <button class="btn-secondary" id="back-to-step2">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M19 12H5M12 19l-7-7 7-7"/>
-                  </svg>
-                  返回修正
-                </button>
                 <button class="btn-primary" id="confirm-facts">
-                  確認 GO
+                  開始撰寫 GO
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                   </svg>
@@ -554,8 +532,8 @@
             </div>
           </div>
 
-          <!-- Step 4: Writing -->
-          <div class="dialog-step" id="step-4">
+          <!-- Step 3: 撰寫 — 哈皮陪寫 -->
+          <div class="dialog-step" id="step-3">
             <div class="dialog-bubble writer-bubble">
               <div class="bubble-avatar">
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
@@ -565,8 +543,25 @@
               </div>
               <div class="bubble-content">
                 <span class="bubble-name">哈皮</span>
-                <p>交給我把這些資料變成動人的故事吧！</p>
-                <p class="writing-status" id="writing-status">正在施展文案魔法...</p>
+                <p>換我上場～每個字都是音符，我陪你把旋律寫完♪</p>
+                <p class="writing-status" id="writing-status">開始動筆吧，我在旁邊看著！</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4: 校對 — 伊歐檢查 + 完成動作 -->
+          <div class="dialog-step" id="step-4">
+            <div class="dialog-bubble guide-bubble">
+              <div class="bubble-avatar">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
+                  <path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+                </svg>
+              </div>
+              <div class="bubble-content">
+                <span class="bubble-name">伊歐</span>
+                <p>字數達標、違規詞歸零——進入最終校對階段。</p>
+                <p>確認右側檢查項目都亮綠燈後，就可以複製成品交付了。</p>
               </div>
             </div>
 

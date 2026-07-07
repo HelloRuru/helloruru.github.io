@@ -228,6 +228,113 @@ const levelSystem = {
 };
 
 // ========================================
+// Quest Engine（遊戲引擎：EXP 與進度掛在真實寫作行為上）
+// ========================================
+const questEngine = {
+  // 每回任務的里程碑（重寫/重置後歸零，避免重複給分）
+  milestones: {
+    checkStage: false,   // 填好關鍵字 + H1 → 查核 +10
+    writeStage: false,   // 寫超過 100 字 → 撰寫（哈皮登場）
+    score60: false,      // SGE 分數首達 60 → +20
+    score80: false,      // SGE 分數首達 80 → +30
+    proofStage: false,   // 字數達標 + 零違規 → 校對 +20
+    firstCopy: false     // 首次複製成品 → +30
+  },
+
+  reset() {
+    for (const key of Object.keys(this.milestones)) {
+      this.milestones[key] = false;
+    }
+  },
+
+  /** 輸入檢查：關鍵字 + H1 都填了 → 進入查核 */
+  checkInputs() {
+    if (this.milestones.checkStage) return;
+    const keyword = elements.keywordQuick ? elements.keywordQuick.value.trim() : '';
+    const h1 = elements.h1Input ? elements.h1Input.value.trim() : '';
+    if (keyword && h1) {
+      this.milestones.checkStage = true;
+      buildFactCheckList();
+      goToStep(2);
+      levelSystem.addExp(10);
+      showToast('任務資訊確認！獲得 10 EXP', 'success');
+    }
+  },
+
+  /** 分析結果檢查：由 analyzer.onResults 呼叫 */
+  evaluate(results) {
+    if (!results) return;
+
+    // 進度條只前進不後退
+    // 撰寫階段：寫超過 100 字
+    if (!this.milestones.writeStage && results.textLength >= 100) {
+      this.milestones.writeStage = true;
+      if (state.currentStep < 3) goToStep(3);
+    }
+
+    // 分數里程碑
+    if (!this.milestones.score60 && results.score >= 60) {
+      this.milestones.score60 = true;
+      levelSystem.addExp(20);
+      showToast('SGE 分數突破 60！獲得 20 EXP', 'success');
+    }
+    if (!this.milestones.score80 && results.score >= 80) {
+      this.milestones.score80 = true;
+      levelSystem.addExp(30);
+      showToast('SGE 分數突破 80！獲得 30 EXP', 'success');
+    }
+
+    // 校對階段：字數達標 + 零違規
+    if (!this.milestones.proofStage &&
+        results.wordCount.status === 'success' &&
+        results.violation.count === 0 &&
+        results.textLength > 0) {
+      this.milestones.proofStage = true;
+      if (state.currentStep < 4) goToStep(4);
+      levelSystem.addExp(20);
+      showToast('字數達標、違規歸零！獲得 20 EXP', 'success');
+    }
+
+    // 撰寫中的即時狀態（哈皮陪寫台詞）
+    this.updateWritingStatus(results);
+
+    // 查核階段後，輸入變動時同步更新事實檢核單
+    if (state.currentStep >= 2) {
+      buildFactCheckList();
+    }
+  },
+
+  /** 更新哈皮的陪寫狀態列 */
+  updateWritingStatus(results) {
+    if (!elements.writingStatus) return;
+    const count = results.wordCount.count;
+    const min = results.wordCount.min;
+    const max = results.wordCount.max;
+    if (count === 0) {
+      elements.writingStatus.textContent = '開始動筆吧，我在旁邊看著！';
+    } else if (count < min) {
+      elements.writingStatus.textContent = `目前 ${count} 字，目標 ${min}-${max} 字，繼續加油♪`;
+    } else if (count <= max) {
+      elements.writingStatus.textContent = `${count} 字，字數達標！旋律完成了～`;
+    } else {
+      elements.writingStatus.textContent = `${count} 字，超過 ${max} 字了，修剪一下吧`;
+    }
+  },
+
+  /** 複製成品的獎勵 */
+  onCopy() {
+    if (!this.milestones.firstCopy) {
+      this.milestones.firstCopy = true;
+      levelSystem.addExp(30);
+      showToast('任務完成！成品已交付，獲得 30 EXP', 'success');
+    } else {
+      levelSystem.addExp(5);
+      showToast('再次複製成品，獲得 5 EXP', 'success');
+    }
+  }
+};
+
+// ========================================
 // Goddess Revelations (策略解說)
 // ========================================
 const goddessRevelations = {
@@ -280,35 +387,30 @@ function goToStep(stepNumber) {
 const PARTY_MOODS = {
   guide: {
     1: ['準備好了嗎？告訴我任務目標吧', '新的冒險即將展開！'],
-    2: ['讓我想想最適合的策略...', '每個選擇都會影響結果喔'],
-    3: ['確認事實是最重要的一步', '仔細核對，不能有錯'],
-    4: ['交給哈皮了，我在旁邊看著', '哈皮加油～'],
-    5: ['寫得不錯呢！', '任務完成，辛苦了']
+    2: ['讓我想想最適合的策略...', '仔細核對任務資訊，不能有錯'],
+    3: ['交給哈皮了，我在旁邊看著', '哈皮加油～'],
+    4: ['最終校對，讓我檢查細節', '快完成了，仔細確認每個項目']
   },
   writer: {
     1: ['～♪ 等待靈感中...', '今天要寫什麼呢～'],
     2: ['策略決定好就換我上場囉', '已經開始構思了...'],
-    3: ['正在醞釀最美的詩句...', '靈感快來了...'],
-    4: ['讓我來施展文字魔法！', '筆尖已經發光了！', '最喜歡寫作的時刻～'],
-    5: ['這篇文案好有感覺！', '又完成一首詩篇了']
+    3: ['讓我來施展文字魔法！', '筆尖已經發光了！', '最喜歡寫作的時刻～'],
+    4: ['寫完的感覺最棒了～', '校對交給伊歐，我醞釀下一首♪']
   },
   player: {
     1: ['第一次冒險好期待！', '我會認真學習的！'],
     2: ['原來有這麼多策略...', '我在認真做筆記中'],
-    3: ['確認事實好重要啊', '學到了！'],
-    4: ['哈皮好厲害...', '我也想學寫作！'],
-    5: ['太棒了，我學到好多！', '下次我也要試試看']
+    3: ['哈皮好厲害...', '我也在旁邊跟著練習！'],
+    4: ['零違規好緊張...', '快通過了，加油！']
   }
 };
 
 function updateActivePartyMember(step) {
   elements.partyMembers.forEach(member => member.classList.remove('active'));
 
-  if (step <= 3) {
-    document.querySelector('[data-member="guide"]').classList.add('active');
-  } else {
-    document.querySelector('[data-member="writer"]').classList.add('active');
-  }
+  // 查核前伊歐帶隊、撰寫換哈皮、校對回到伊歐
+  const activeRole = step === 3 ? 'writer' : 'guide';
+  document.querySelector(`[data-member="${activeRole}"]`).classList.add('active');
 
   updatePartyMoods(step);
 }
@@ -373,6 +475,9 @@ function handleH1Input() {
   } else if (charCount > 24) {
     charCounter.classList.add('warning');
   }
+
+  // 遊戲引擎：檢查是否進入查核階段
+  questEngine.checkInputs();
 }
 
 function handleQuickInputChange() {
@@ -396,6 +501,10 @@ function handleQuickInputChange() {
   if (elements.editor && elements.editor.innerText.trim()) {
     analyzer.analyze();
   }
+
+  // 遊戲引擎：檢查是否進入查核階段
+  questEngine.checkInputs();
+  if (state.currentStep >= 2) buildFactCheckList();
 }
 
 // ========================================
@@ -416,25 +525,20 @@ function handleStrategySelect(e) {
   elements.goddessCard.style.display = 'block';
   elements.goddessText.textContent = revelation.text;
 
-  // Build fact check list
+  // 更新事實檢核單（留在查核階段，不強制推進）
   buildFactCheckList();
-
-  // Go to step 3 after a short delay
-  setTimeout(() => {
-    goToStep(3);
-  }, 500);
 }
 
 // ========================================
 // Fact Check
 // ========================================
 function buildFactCheckList() {
+  const h1 = elements.h1Input ? elements.h1Input.value.trim() : '';
   const facts = [
-    { label: '核心關鍵字', value: escapeHTML(state.questData.keyword), status: 'success' },
+    { label: 'H1 標題', value: escapeHTML(h1) || '未填寫', status: h1 ? 'success' : 'warning' },
+    { label: '核心關鍵字', value: escapeHTML(state.questData.keyword) || '未填寫', status: state.questData.keyword ? 'success' : 'warning' },
     { label: '目標字數', value: `${state.questData.wordMin}-${state.questData.wordMax} 字`, status: 'success' },
-    { label: '策略方向', value: getStrategyLabel(state.questData.strategy), status: 'success' },
-    { label: '店家資料', value: state.questData.source ? '已提供' : '未提供', status: state.questData.source ? 'success' : 'warning' },
-    { label: '文案重點', value: escapeHTML(state.questData.focus) || '未指定', status: state.questData.focus ? 'success' : 'warning' }
+    { label: '策略方向', value: getStrategyLabel(state.questData.strategy), status: state.questData.strategy ? 'success' : 'warning' }
   ];
 
   elements.factList.innerHTML = facts.map(fact => `
@@ -458,109 +562,11 @@ function getStrategyLabel(strategy) {
 }
 
 // ========================================
-// Writing Phase
+// Writing Phase（手動推進：查核卡片上的「開始撰寫 GO」）
 // ========================================
 function startWriting() {
-  goToStep(4);
-
-  // Simulate writing process
-  const statuses = [
-    '正在分析關鍵字結構...',
-    '正在構思標題...',
-    '正在撰寫開場白...',
-    '正在組織內容架構...',
-    '文案撰寫完成！'
-  ];
-
-  let statusIndex = 0;
-  const statusInterval = setInterval(() => {
-    if (statusIndex < statuses.length) {
-      elements.writingStatus.textContent = statuses[statusIndex];
-      statusIndex++;
-    } else {
-      clearInterval(statusInterval);
-      generateSampleContent();
-    }
-  }, 800);
-}
-
-function generateSampleContent() {
-  const keyword = escapeHTML(state.questData.keyword);
-  const strategy = state.questData.strategy;
-
-  // Generate sample H1 (target 28 characters)
-  let h1 = `${keyword}推薦｜專業服務讓你安心`;
-  if (h1.length > 28) {
-    h1 = h1.substring(0, 28);
-  } else if (h1.length < 28) {
-    h1 = h1.padEnd(28, '！');
-  }
-
-  // Generate sample content based on strategy
-  let content = '';
-
-  if (strategy === 'price') {
-    content = `
-<h1>${h1}</h1>
-
-<p>正在尋找<strong>${keyword}</strong>服務嗎？本篇整理了高 CP 值的選擇，讓你花小錢也能享受專業服務。</p>
-
-<h2>${keyword}怎麼挑才划算？</h2>
-
-<p>選擇${keyword}服務時，建議先比較以下重點：價格透明度、服務內容、額外優惠。很多店家會提供首次優惠或套裝組合，善用這些方案可以省下不少費用。</p>
-
-<h2>平價${keyword}服務比較表</h2>
-
-<p>以下整理了市面上常見的價格區間供參考。</p>
-
-<h2>什麼時候最適合預約？</h2>
-
-<p>平日預約通常比假日便宜，部分店家也會在淡季推出優惠活動。建議提前預約，不但能選到理想時段，有時還能享有早鳥價。</p>
-`;
-  } else if (strategy === 'quality') {
-    content = `
-<h1>${h1}</h1>
-
-<p>追求品質的你，一定在尋找真正專業的<strong>${keyword}</strong>服務。本篇將深入介紹如何辨識優質服務，讓你的每一分投資都物超所值。</p>
-
-<h2>專業${keyword}服務有什麼不同？</h2>
-
-<p>真正專業的服務從細節就能看出差異：完整的事前諮詢、透明的服務流程、使用的設備與材料等級。這些細節決定了最終的服務品質與滿意度。</p>
-
-<h2>如何辨識${keyword}的專業度？</h2>
-
-<p>建議觀察以下幾點：服務人員的專業資歷、店家的營業年資、客戶評價的真實性。有經驗的專業人員會主動說明服務內容，而非只談價格。</p>
-
-<h2>選擇品質服務的長期價值</h2>
-
-<p>雖然專業服務的價格可能較高，但考量到效果持久度和整體體驗，長期來看反而更划算。品質投資帶來的是安心與滿意。</p>
-`;
-  } else {
-    content = `
-<h1>${h1}</h1>
-
-<p>想找<strong>${keyword}</strong>服務嗎？這篇文章整理了完整的資訊，幫助你做出最適合的選擇。</p>
-
-<h2>${keyword}服務該注意什麼？</h2>
-
-<p>選擇服務前，建議先了解自己的需求和預算。不同的服務方案適合不同的情況，找到最適合自己的才是最重要的。</p>
-
-<h2>常見問題解答</h2>
-
-<p>許多人在選擇${keyword}服務時會有疑問，以下整理了最常被問到的問題。</p>
-
-<h2>如何預約${keyword}服務？</h2>
-
-<p>大部分店家都提供線上預約或電話預約，建議提前 3-5 天預約以確保能選到理想時段。</p>
-`;
-  }
-
-  editor.setContent(content);
-  analyzer.analyze();
-
-  // Add EXP for completing a draft
-  levelSystem.addExp(30);
-  showToast('初稿完成！獲得 30 EXP', 'success');
+  if (state.currentStep < 3) goToStep(3);
+  if (elements.editor) elements.editor.focus();
 }
 
 // ========================================
@@ -580,10 +586,14 @@ function handleCommand(cmd) {
 }
 
 async function copyToClipboard() {
+  if (!elements.editor || !elements.editor.innerText.trim()) {
+    showToast('編輯器還是空的，先寫點內容吧', 'error');
+    return;
+  }
   const success = await editor.copyFormatted();
   if (success) {
     showToast('已複製到剪貼簿', 'success');
-    levelSystem.addExp(10);
+    questEngine.onCopy();
   } else {
     showToast('複製失敗，請手動選取複製', 'error');
   }
@@ -1173,6 +1183,12 @@ function resetApp() {
   // Reset analyzer
   analyzer.reset();
 
+  // Reset 遊戲引擎里程碑（EXP 等級保留，重新開始賺）
+  questEngine.reset();
+  if (elements.writingStatus) {
+    elements.writingStatus.textContent = '開始動筆吧，我在旁邊看著！';
+  }
+
   // Go to step 1
   goToStep(1);
 
@@ -1298,8 +1314,13 @@ function init() {
     option.addEventListener('click', handleStrategySelect);
   });
 
-  elements.backToStep2.addEventListener('click', () => goToStep(2));
+  if (elements.backToStep2) {
+    elements.backToStep2.addEventListener('click', () => goToStep(2));
+  }
   elements.confirmFacts.addEventListener('click', startWriting);
+
+  // 遊戲引擎：分析結果驅動進度與 EXP
+  analyzer.onResults = (results) => questEngine.evaluate(results);
 
   elements.commandButtons.forEach(btn => {
     btn.addEventListener('click', () => handleCommand(btn.dataset.cmd));
@@ -1342,7 +1363,25 @@ function init() {
     toneStatus: elements.toneStatus,
     violationCard: elements.violationCard,
     violationList: elements.violationList,
-    checkItems: elements.checkItems
+    checkItems: elements.checkItems,
+    // AI 味指數（漏傳會讓編輯器打字直接爆炸）
+    aiTasteScore: elements.aiTasteScore,
+    aiTasteFill: elements.aiTasteFill,
+    aiTasteEmoji: elements.aiTasteEmoji,
+    aiTasteMessage: elements.aiTasteMessage,
+    aiNegativeList: elements.aiNegativeList,
+    aiPositiveList: elements.aiPositiveList,
+    // SGE 結構分數
+    sgeStructureScore: elements.sgeStructureScore,
+    sgeStructureFill: elements.sgeStructureFill,
+    sgeH2Value: elements.sgeH2Value,
+    sgeH2Icon: elements.sgeH2Icon,
+    sgeDirectValue: elements.sgeDirectValue,
+    sgeDirectIcon: elements.sgeDirectIcon,
+    sgeInfoValue: elements.sgeInfoValue,
+    sgeInfoIcon: elements.sgeInfoIcon,
+    sgeSocialValue: elements.sgeSocialValue,
+    sgeSocialIcon: elements.sgeSocialIcon
   });
 
   // Initialize templates
