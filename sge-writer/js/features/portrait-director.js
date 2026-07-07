@@ -19,6 +19,16 @@ const PORTRAIT_BASE = 'icons/characters/';
 const SCENE_MAP = {
   // 進入網站
   welcome: { img: 'scene-welcome-1.png', character: 'guide', name: '伊歐', role: '領航員' },
+  // 回訪（非首次）
+  welcomeBack: { img: 'scene-guide-welcomeback-1.png', character: 'guide', name: '伊歐', role: '領航員' },
+  // 主打夥伴的迎接立繪（開場選擇的後果）
+  partnerGuide: { img: 'scene-guide-welcomeback-2.png', character: 'guide', name: '伊歐', role: '領航員' },
+  partnerWriter: { img: 'scene-welcome-2.png', character: 'writer', name: '哈皮', role: '吟遊詩人' },
+  partnerPlayer: { img: 'scene-player-notes-1.png', character: 'player', name: 'BLUE', role: '文案見習生' },
+  // 里程碑演出（暫現後回到步驟場景）
+  scoreMagic: { img: 'scene-guide-magic-1.png', character: 'guide', name: '伊歐', role: '領航員' },
+  proofCheer: { img: 'scene-player-encourage-1.png', character: 'player', name: 'BLUE', role: '文案見習生' },
+  questDone: { img: 'scene-guide-welcomeback-4.png', character: 'guide', name: '伊歐', role: '領航員' },
   // 引導階段（Step 1）
   guiding: { img: 'guide-default-1.png', character: 'guide', name: '伊歐', role: '領航員' },
   // 開始撰寫（Step 3）
@@ -107,7 +117,28 @@ export const portraitDirector = {
   onStepChange(step) {
     const stepMap = { 1: 'guiding', 2: 'checking', 3: 'writing', 4: 'proofing' };
     const sceneKey = stepMap[step];
-    if (sceneKey) this.setScene(sceneKey);
+    if (sceneKey) {
+      clearTimeout(this._flashTimer); // 步驟推進優先於暫現場景
+      this.setScene(sceneKey);
+    }
+  },
+
+  /**
+   * 暫現場景：演出幾秒後回到指定場景（里程碑儀式感）
+   * @param {string} sceneKey - 要演出的場景
+   * @param {string} revertKey - 結束後回到的場景
+   * @param {number} [ms=4000] - 演出時間
+   */
+  flashScene(sceneKey, revertKey, ms = 4000) {
+    if (!SCENE_MAP[sceneKey]) return;
+    clearTimeout(this._flashTimer);
+    this.setScene(sceneKey);
+    this._flashTimer = setTimeout(() => {
+      // 只有暫現場景還在台上才換回去（避免蓋掉後來的切換）
+      if (this._currentScene === sceneKey && SCENE_MAP[revertKey]) {
+        this.setScene(revertKey);
+      }
+    }, ms);
   },
 
   /**

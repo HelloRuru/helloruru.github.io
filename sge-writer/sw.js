@@ -3,7 +3,7 @@
  * 提供離線功能與快取管理
  */
 
-const CACHE_NAME = 'sge-writer-v10';
+const CACHE_NAME = 'sge-writer-v11';
 const STATIC_ASSETS = [
   '/sge-writer/',
   '/sge-writer/index.html',

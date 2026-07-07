@@ -27,6 +27,7 @@ function escapeHTML(str) {
 // ========================================
 const state = {
   currentStep: 1,
+  partner: localStorage.getItem('sge-partner') || null, // 開場選的主打夥伴
   viewMode: 'quick', // 'quick' or 'detailed'
   questData: {
     keyword: '',
@@ -243,10 +244,40 @@ const questEngine = {
     firstCopy: false     // 首次複製成品 → +30
   },
 
+  // GEO 寫作事件（每回任務各觸發一次夥伴反應）
+  geoEvents: {
+    list: false, table: false, quote: false, stat: false, source: false, stuffed: false
+  },
+
+  // 策略任務目標（女神啟示的 tips 變成可打勾的玩法）
+  activeGoals: [],
+  goalExpCount: 0,
+
   reset() {
     for (const key of Object.keys(this.milestones)) {
       this.milestones[key] = false;
     }
+    for (const key of Object.keys(this.geoEvents)) {
+      this.geoEvents[key] = false;
+    }
+    this.activeGoals = [];
+    this.goalExpCount = 0;
+    renderGoddessGoals();
+  },
+
+  /** 主打夥伴的招牌里程碑加成 +5（開場選擇的後果） */
+  partnerBonus(milestone) {
+    const signature = { guide: 'checkStage', writer: 'writeStage', player: 'proofStage' };
+    if (state.partner && signature[state.partner] === milestone) {
+      levelSystem.addExp(5);
+      const names = { guide: state.partyNames.guide, writer: state.partyNames.writer, player: state.partyNames.player };
+      showToast(`夥伴加成！${names[state.partner]} 給你 5 EXP`, 'success');
+    }
+  },
+
+  /** 目前步驟對應的場景 key（暫現場景結束後回到這裡） */
+  stepScene() {
+    return ({ 1: 'guiding', 2: 'checking', 3: 'writing', 4: 'proofing' })[state.currentStep] || 'guiding';
   },
 
   /** 輸入檢查：關鍵字 + H1 都填了 → 進入查核 */
@@ -260,6 +291,7 @@ const questEngine = {
       goToStep(2);
       levelSystem.addExp(10);
       showToast('任務資訊確認！獲得 10 EXP', 'success');
+      this.partnerBonus('checkStage');
     }
   },
 
@@ -272,6 +304,7 @@ const questEngine = {
     if (!this.milestones.writeStage && results.textLength >= 100) {
       this.milestones.writeStage = true;
       if (state.currentStep < 3) goToStep(3);
+      this.partnerBonus('writeStage');
     }
 
     // 分數里程碑
@@ -284,6 +317,7 @@ const questEngine = {
       this.milestones.score80 = true;
       levelSystem.addExp(30);
       showToast('SGE 分數突破 80！獲得 30 EXP', 'success');
+      portraitDirector.flashScene('scoreMagic', this.stepScene());
     }
 
     // 校對階段：字數達標 + 零違規
@@ -295,7 +329,15 @@ const questEngine = {
       if (state.currentStep < 4) goToStep(4);
       levelSystem.addExp(20);
       showToast('字數達標、違規歸零！獲得 20 EXP', 'success');
+      portraitDirector.flashScene('proofCheer', this.stepScene());
+      this.partnerBonus('proofStage');
     }
+
+    // GEO 寫作事件 → 夥伴即時反應（把分數卡翻譯成台詞）
+    this.reactToGeoEvents(results);
+
+    // 策略任務目標打勾
+    this.checkGoals(results);
 
     // 撰寫中的即時狀態（哈皮陪寫台詞）
     this.updateWritingStatus(results);
@@ -304,6 +346,44 @@ const questEngine = {
     if (state.currentStep >= 2) {
       buildFactCheckList();
     }
+  },
+
+  /** GEO 事件的夥伴反應（每回任務各一次） */
+  reactToGeoEvents(results) {
+    const geo = results.geo && results.geo.breakdown;
+    if (!geo) return;
+
+    const events = [
+      { key: 'list', hit: geo.structure.hasList, role: 'writer', text: '哦！清單出現了，AI 最愛這個♪' },
+      { key: 'table', hit: geo.structure.hasComparisonTable, role: 'writer', text: '比較表登場！結構分大進補～' },
+      { key: 'quote', hit: geo.evidence.hasQuote, role: 'writer', text: '這句引用有靈魂！' },
+      { key: 'stat', hit: geo.evidence.statCount >= 1, role: 'writer', text: '有數字有真相，引用力 UP！' },
+      { key: 'source', hit: geo.evidence.hasSource, role: 'guide', text: '來源標註確認。AI 會記得可信的人。' },
+      { key: 'stuffed', hit: geo.stuffing && geo.stuffing.stuffed, role: 'player', text: '......關鍵字塞太多了，AI 會扣分的。' }
+    ];
+
+    for (const ev of events) {
+      if (!this.geoEvents[ev.key] && ev.hit) {
+        this.geoEvents[ev.key] = true;
+        flashMood(ev.role, ev.text);
+      }
+    }
+  },
+
+  /** 策略目標檢查：達成打勾 +5 EXP（每回任務最多 3 個目標） */
+  checkGoals(results) {
+    if (!this.activeGoals.length) return;
+    let changed = false;
+    for (const goal of this.activeGoals) {
+      if (!goal.done && this.goalExpCount < 3 && goal.test(results)) {
+        goal.done = true;
+        this.goalExpCount++;
+        changed = true;
+        levelSystem.addExp(5);
+        showToast(`女神目標達成：${goal.label}！獲得 5 EXP`, 'success');
+      }
+    }
+    if (changed) renderGoddessGoals();
   },
 
   /** 更新哈皮的陪寫狀態列 */
@@ -329,12 +409,67 @@ const questEngine = {
       this.milestones.firstCopy = true;
       levelSystem.addExp(30);
       showToast('任務完成！成品已交付，獲得 30 EXP', 'success');
+      portraitDirector.flashScene('questDone', this.stepScene(), 5000);
     } else {
       levelSystem.addExp(5);
       showToast('再次複製成品，獲得 5 EXP', 'success');
     }
   }
 };
+
+/** 夥伴心情泡泡暫現一句話，幾秒後回到步驟預設台詞 */
+const moodFlashTimers = {};
+function flashMood(role, text, ms = 5000) {
+  const el = document.getElementById(`${role}-mood`);
+  if (!el) return;
+  clearTimeout(moodFlashTimers[role]);
+  clearTimeout(moodStepTimers[role]); // 取消步驟台詞的延遲覆寫，反應台詞優先
+  el.textContent = text;
+  el.classList.add('visible');
+  moodFlashTimers[role] = setTimeout(() => {
+    updatePartyMoods(state.currentStep);
+  }, ms);
+}
+
+// ========================================
+// 策略任務目標（F5：女神啟示變玩法）
+// ========================================
+const STRATEGY_GOALS = {
+  price: [
+    { id: 'price-number', label: '用具體數字呈現價值（元、折、%）', test: (r) => /\d+\s*(?:元|折|%|％)/.test(r.content) },
+    { id: 'price-table', label: '放一張 3×3 比較表凸顯 CP 值', test: (r) => r.geo && r.geo.breakdown.structure.hasComparisonTable },
+    { id: 'price-freebie', label: '列出優惠或免費附加項目', test: (r) => /免費|贈送|加贈|優惠/.test(r.content) }
+  ],
+  quality: [
+    { id: 'quality-cred', label: '提到資歷、認證或年資', test: (r) => /\d+\s*年|認證|證照|資歷|原廠/.test(r.content) },
+    { id: 'quality-quote', label: '加一句專家引語或經驗掛銜', test: (r) => r.geo && (r.geo.breakdown.evidence.hasQuote || r.geo.breakdown.authority.hasExperience) },
+    { id: 'quality-process', label: '詳述服務流程（列點更好）', test: (r) => (r.geo && r.geo.breakdown.structure.hasList) || /流程|步驟/.test(r.content) }
+  ],
+  auto: [
+    { id: 'auto-list', label: '用列點整理重點（3 項以上）', test: (r) => r.geo && r.geo.breakdown.structure.hasList },
+    { id: 'auto-stat', label: '放至少一筆有單位的數據', test: (r) => r.geo && r.geo.breakdown.evidence.statCount >= 1 },
+    { id: 'auto-question', label: 'H2 全部用生活化痛點問句', test: (r) => r.geo && r.geo.breakdown.coverage.h2.h2Count > 0 && r.geo.breakdown.coverage.h2.issues.length === 0 }
+  ]
+};
+
+/** 渲染女神目標清單（打勾狀態） */
+function renderGoddessGoals() {
+  const listEl = document.getElementById('goddess-goals');
+  if (!listEl) return;
+  if (!questEngine.activeGoals.length) {
+    listEl.innerHTML = '';
+    listEl.style.display = 'none';
+    return;
+  }
+  listEl.style.display = '';
+  listEl.innerHTML = questEngine.activeGoals.map(goal => `
+    <li class="goddess-goal${goal.done ? ' done' : ''}">
+      <span class="goal-check">${goal.done ? '✓' : '○'}</span>
+      <span class="goal-label">${goal.label}</span>
+      <span class="goal-exp">+5</span>
+    </li>
+  `).join('');
+}
 
 // ========================================
 // Goddess Revelations (策略解說)
@@ -417,19 +552,21 @@ function updateActivePartyMember(step) {
   updatePartyMoods(step);
 }
 
+const moodStepTimers = {};
 function updatePartyMoods(step) {
   const roles = ['guide', 'writer', 'player'];
   for (const role of roles) {
     const el = document.getElementById(`${role}-mood`);
     if (!el) continue;
     const lines = PARTY_MOODS[role][step] || [];
+    clearTimeout(moodStepTimers[role]);
     if (lines.length === 0) {
       el.textContent = '';
       el.classList.remove('visible');
       continue;
     }
     el.classList.remove('visible');
-    setTimeout(() => {
+    moodStepTimers[role] = setTimeout(() => {
       el.textContent = lines[Math.floor(Math.random() * lines.length)];
       el.classList.add('visible');
     }, 150);
@@ -526,6 +663,11 @@ function handleStrategySelect(e) {
   const revelation = goddessRevelations[strategy];
   elements.goddessCard.style.display = 'block';
   elements.goddessText.textContent = revelation.text;
+
+  // 啟動策略任務目標（達成打勾 +5 EXP）
+  questEngine.activeGoals = (STRATEGY_GOALS[strategy] || []).map(g => ({ ...g, done: false }));
+  renderGoddessGoals();
+  if (analyzer.lastResults) questEngine.checkGoals(analyzer.lastResults);
 
   // 更新事實檢核單（留在查核階段，不強制推進）
   buildFactCheckList();
@@ -1284,12 +1426,25 @@ function init() {
   // 🎮 GBA 立繪導演系統
   portraitDirector.init();
 
-  // 🎮 開場劇情（首次訪問）
+  // 🎮 開場劇情（首次訪問）／回訪迎接（選擇要有後果）
+  const applyPartnerScene = () => {
+    const partnerScenes = { guide: 'partnerGuide', writer: 'partnerWriter', player: 'partnerPlayer' };
+    if (state.partner && partnerScenes[state.partner]) {
+      portraitDirector.setScene(partnerScenes[state.partner]);
+    } else {
+      portraitDirector.setScene('welcomeBack');
+    }
+  };
+
   if (opening.shouldShow()) {
-    opening.show((selectedCharacter) => {
-      // 開場結束後，左側立繪保持選定角色
-      console.log('開場完成，選擇的角色：', selectedCharacter.name);
+    opening.show((characterKey) => {
+      state.partner = characterKey;
+      applyPartnerScene();
+      const names = { guide: state.partyNames.guide, writer: state.partyNames.writer, player: state.partyNames.player };
+      showToast(`${names[characterKey] || '夥伴'} 成為你的主打夥伴！招牌時刻會多給 5 EXP`, 'success');
     });
+  } else {
+    applyPartnerScene();
   }
 
   // Update footer year

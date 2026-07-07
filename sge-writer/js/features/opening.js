@@ -112,6 +112,7 @@ export const opening = {
   /** 開始播放選定角色的劇情 */
   _startStory(characterKey, selectionModal) {
     this._currentStory = OPENING_STORIES[characterKey];
+    this._currentCharacterKey = characterKey;
     this._currentLineIndex = 0;
 
     // 移除選擇畫面
@@ -226,12 +227,13 @@ export const opening = {
       this._keyHandler = null;
     }
 
-    // 標記已觀看
+    // 標記已觀看 + 記住選定的主打夥伴（選擇要有後果）
     localStorage.setItem(STORAGE_KEY, 'true');
+    localStorage.setItem('sge-partner', this._currentCharacterKey);
 
     // 回呼
     if (this._onComplete) {
-      this._onComplete(this._currentStory);
+      this._onComplete(this._currentCharacterKey, this._currentStory);
     }
   }
 };

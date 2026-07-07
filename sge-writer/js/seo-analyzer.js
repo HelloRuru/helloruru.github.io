@@ -108,7 +108,9 @@ export const analyzer = {
       keyword: keywordResult,
       violation: violationResult,
       tone: toneResult,
-      textLength: content.trim().length
+      textLength: content.trim().length,
+      content,
+      geo: sgeStructureResult
     };
     if (this.onResults) this.onResults(this.lastResults);
   },

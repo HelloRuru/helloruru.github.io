@@ -208,6 +208,42 @@
   box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
 }
 
+/* ─── 角度選項（GBA 選單風）───────── */
+
+.level-dialog-choices {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.level-choice-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #000000;
+  background: #FFFFFF;
+  border: 3px solid #000000;
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+  transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
+
+.level-choice-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+  background: #FEDFE1;
+}
+
+.level-choice-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
+}
+
 /* ─── 響應式 ─────────────────────── */
 
 @media (max-width: 768px) {
