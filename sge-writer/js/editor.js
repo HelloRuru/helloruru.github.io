@@ -70,6 +70,12 @@ export const editor = {
       case 'highlight':
         this.wrapSelection('span', 'keyword-highlight');
         break;
+      case 'ul':
+        document.execCommand('insertUnorderedList', false, null);
+        break;
+      case 'ol':
+        document.execCommand('insertOrderedList', false, null);
+        break;
       case 'table':
         this.insertTable();
         break;

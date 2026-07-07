@@ -125,17 +125,19 @@ const elements = {
   aiNegativeList: document.getElementById('ai-negative-list'),
   aiPositiveList: document.getElementById('ai-positive-list'),
 
-  // SGE Structure
+  // GEO 引用力（五大維度）
   sgeStructureScore: document.getElementById('sge-structure-score'),
   sgeStructureFill: document.getElementById('sge-structure-fill'),
-  sgeH2Value: document.getElementById('sge-h2-value'),
-  sgeH2Icon: document.getElementById('sge-h2-icon'),
-  sgeDirectValue: document.getElementById('sge-direct-value'),
-  sgeDirectIcon: document.getElementById('sge-direct-icon'),
-  sgeInfoValue: document.getElementById('sge-info-value'),
-  sgeInfoIcon: document.getElementById('sge-info-icon'),
-  sgeSocialValue: document.getElementById('sge-social-value'),
-  sgeSocialIcon: document.getElementById('sge-social-icon'),
+  sgeEvidenceValue: document.getElementById('sge-evidence-value'),
+  sgeEvidenceIcon: document.getElementById('sge-evidence-icon'),
+  sgeStructureValue: document.getElementById('sge-structure-value'),
+  sgeStructureIcon: document.getElementById('sge-structure-icon'),
+  sgeCoverageValue: document.getElementById('sge-coverage-value'),
+  sgeCoverageIcon: document.getElementById('sge-coverage-icon'),
+  sgeFluencyValue: document.getElementById('sge-fluency-value'),
+  sgeFluencyIcon: document.getElementById('sge-fluency-icon'),
+  sgeAuthorityValue: document.getElementById('sge-authority-value'),
+  sgeAuthorityIcon: document.getElementById('sge-authority-icon'),
 
   // Mobile Tabs
   tabButtons: document.querySelectorAll('.tab-btn'),
@@ -1371,17 +1373,19 @@ function init() {
     aiTasteMessage: elements.aiTasteMessage,
     aiNegativeList: elements.aiNegativeList,
     aiPositiveList: elements.aiPositiveList,
-    // SGE 結構分數
+    // GEO 引用力（五大維度）
     sgeStructureScore: elements.sgeStructureScore,
     sgeStructureFill: elements.sgeStructureFill,
-    sgeH2Value: elements.sgeH2Value,
-    sgeH2Icon: elements.sgeH2Icon,
-    sgeDirectValue: elements.sgeDirectValue,
-    sgeDirectIcon: elements.sgeDirectIcon,
-    sgeInfoValue: elements.sgeInfoValue,
-    sgeInfoIcon: elements.sgeInfoIcon,
-    sgeSocialValue: elements.sgeSocialValue,
-    sgeSocialIcon: elements.sgeSocialIcon
+    sgeEvidenceValue: elements.sgeEvidenceValue,
+    sgeEvidenceIcon: elements.sgeEvidenceIcon,
+    sgeStructureValue: elements.sgeStructureValue,
+    sgeStructureIcon: elements.sgeStructureIcon,
+    sgeCoverageValue: elements.sgeCoverageValue,
+    sgeCoverageIcon: elements.sgeCoverageIcon,
+    sgeFluencyValue: elements.sgeFluencyValue,
+    sgeFluencyIcon: elements.sgeFluencyIcon,
+    sgeAuthorityValue: elements.sgeAuthorityValue,
+    sgeAuthorityIcon: elements.sgeAuthorityIcon
   });
 
   // Initialize templates

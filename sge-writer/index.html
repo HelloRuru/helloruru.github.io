@@ -696,6 +696,26 @@
               </svg>
             </button>
             <div class="toolbar-divider"></div>
+            <button class="toolbar-btn" data-format="ul" title="列點清單">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="8" y1="6" x2="21" y2="6"/>
+                <line x1="8" y1="12" x2="21" y2="12"/>
+                <line x1="8" y1="18" x2="21" y2="18"/>
+                <line x1="3" y1="6" x2="3.01" y2="6"/>
+                <line x1="3" y1="12" x2="3.01" y2="12"/>
+                <line x1="3" y1="18" x2="3.01" y2="18"/>
+              </svg>
+            </button>
+            <button class="toolbar-btn" data-format="ol" title="編號清單">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="10" y1="6" x2="21" y2="6"/>
+                <line x1="10" y1="12" x2="21" y2="12"/>
+                <line x1="10" y1="18" x2="21" y2="18"/>
+                <path d="M4 6h1v4"/>
+                <path d="M4 10h2"/>
+                <path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/>
+              </svg>
+            </button>
             <button class="toolbar-btn" data-format="table" title="插入表格">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -823,14 +843,15 @@
             </details>
           </div>
 
-          <!-- SGE Structure Score Card -->
+          <!-- GEO 引用力分數 Card（12 維度前端版）-->
           <div class="card sge-structure-card">
             <div class="card-header">
               <h3>
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M4 6h16M4 12h16M4 18h16"/>
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
                 </svg>
-                SGE 結構分數
+                GEO 引用力分數
               </h3>
               <span class="sge-structure-value" id="sge-structure-score">0</span>
               <span class="sge-structure-max">/100</span>
@@ -839,25 +860,30 @@
               <div class="sge-structure-fill" id="sge-structure-fill" style="width: 0%"></div>
             </div>
             <ul class="sge-structure-list">
-              <li class="sge-structure-item" id="sge-h2-item">
-                <span class="structure-icon pending" id="sge-h2-icon">○</span>
-                <span class="structure-label">H2 問句格式</span>
-                <span class="structure-value" id="sge-h2-value">檢測中</span>
+              <li class="sge-structure-item" id="sge-evidence-item">
+                <span class="structure-icon pending" id="sge-evidence-icon">○</span>
+                <span class="structure-label">證據引用（40）</span>
+                <span class="structure-value" id="sge-evidence-value">檢測中</span>
               </li>
-              <li class="sge-structure-item" id="sge-direct-item">
-                <span class="structure-icon pending" id="sge-direct-icon">○</span>
-                <span class="structure-label">直接回答策略</span>
-                <span class="structure-value" id="sge-direct-value">檢測中</span>
+              <li class="sge-structure-item" id="sge-structure-item">
+                <span class="structure-icon pending" id="sge-structure-icon">○</span>
+                <span class="structure-label">結構規範（25）</span>
+                <span class="structure-value" id="sge-structure-value">檢測中</span>
               </li>
-              <li class="sge-structure-item" id="sge-info-item">
-                <span class="structure-icon pending" id="sge-info-icon">○</span>
-                <span class="structure-label">資訊增益</span>
-                <span class="structure-value" id="sge-info-value">檢測中</span>
+              <li class="sge-structure-item" id="sge-coverage-item">
+                <span class="structure-icon pending" id="sge-coverage-icon">○</span>
+                <span class="structure-label">問題覆蓋（15）</span>
+                <span class="structure-value" id="sge-coverage-value">檢測中</span>
               </li>
-              <li class="sge-structure-item" id="sge-social-item">
-                <span class="structure-icon pending" id="sge-social-icon">○</span>
-                <span class="structure-label">社會證明</span>
-                <span class="structure-value" id="sge-social-value">檢測中</span>
+              <li class="sge-structure-item" id="sge-fluency-item">
+                <span class="structure-icon pending" id="sge-fluency-icon">○</span>
+                <span class="structure-label">表達流暢（10）</span>
+                <span class="structure-value" id="sge-fluency-value">檢測中</span>
+              </li>
+              <li class="sge-structure-item" id="sge-authority-item">
+                <span class="structure-icon pending" id="sge-authority-icon">○</span>
+                <span class="structure-label">權威信號（10）</span>
+                <span class="structure-value" id="sge-authority-value">檢測中</span>
               </li>
             </ul>
           </div>

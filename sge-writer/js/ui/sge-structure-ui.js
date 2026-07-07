@@ -1,11 +1,11 @@
 /**
- * SGE 文案助手 - SGE 結構 UI 更新器
+ * SGE 文案助手 - GEO 引用力 UI 更新器
  * @module ui/sge-structure-ui
  */
 
 export class SGEStructureUI {
   /**
-   * 更新 SGE 結構 UI
+   * 更新 GEO 引用力 UI
    */
   static update(elements, result) {
     if (!elements) return;
@@ -16,47 +16,33 @@ export class SGEStructureUI {
     elements.sgeStructureScore.textContent = score;
     elements.sgeStructureFill.style.width = `${score}%`;
 
-    // 更新 H2 問句
-    this.updateItem(
-      elements,
-      'h2',
-      breakdown.h2.status,
-      breakdown.h2.message
-    );
+    // 五大維度
+    this.updateItem(elements, 'evidence', breakdown.evidence.status, breakdown.evidence.message);
+    this.updateItem(elements, 'structure', breakdown.structure.status, breakdown.structure.message);
+    this.updateItem(elements, 'fluency', breakdown.fluency.status, breakdown.fluency.message);
+    this.updateItem(elements, 'coverage', breakdown.coverage.status, breakdown.coverage.message);
+    this.updateItem(elements, 'authority', breakdown.authority.status, breakdown.authority.message);
 
-    // 更新直接回答
-    this.updateItem(
-      elements,
-      'direct',
-      breakdown.directAnswer.status,
-      breakdown.directAnswer.message
-    );
-
-    // 更新資訊增益
-    this.updateItem(
-      elements,
-      'info',
-      breakdown.information.status,
-      breakdown.information.message
-    );
-
-    // 更新社會證明
-    this.updateItem(
-      elements,
-      'social',
-      breakdown.social.status,
-      breakdown.social.message
-    );
+    // 堆砌警示（有懲罰時顯示在權威信號列尾端）
+    if (breakdown.stuffing && breakdown.stuffing.stuffed) {
+      this.updateItem(
+        elements,
+        'authority',
+        'error',
+        `關鍵字 ${breakdown.stuffing.count} 次，堆砌懲罰 -9`
+      );
+    }
   }
 
   /**
-   * 更新 SGE 結構項目
+   * 更新單一維度項目
    */
   static updateItem(elements, itemName, status, message) {
     if (!elements) return;
 
-    const valueElement = elements[`sge${itemName.charAt(0).toUpperCase() + itemName.slice(1)}Value`];
-    const iconElement = elements[`sge${itemName.charAt(0).toUpperCase() + itemName.slice(1)}Icon`];
+    const key = itemName.charAt(0).toUpperCase() + itemName.slice(1);
+    const valueElement = elements[`sge${key}Value`];
+    const iconElement = elements[`sge${key}Icon`];
 
     if (valueElement) {
       valueElement.textContent = message;
