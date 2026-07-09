@@ -11,6 +11,9 @@ import { AITasteUI } from './ui/ai-taste-ui.js';
 import { SGEStructureUI } from './ui/sge-structure-ui.js';
 import { ZhiyuUI } from './ui/zhiyu-ui.js';
 
+// 暴露分析器給 UI 模組使用
+window.__GEO_ANALYZER = { SGEStructureAnalyzer };
+
 export const analyzer = {
   elements: null,
   keyword: '',

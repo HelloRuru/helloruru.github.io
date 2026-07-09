@@ -381,3 +381,76 @@
   background: rgba(184, 169, 201, 0.1);
 }
 
+/* ========================================
+   GEO 改善建議（可展開）
+   ======================================== */
+.geo-tips-container {
+  margin-top: var(--space-sm);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-sm);
+}
+
+.geo-tips-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  padding: var(--space-xs) 0;
+  user-select: none;
+}
+
+.geo-tips-header:hover {
+  color: var(--color-text);
+}
+
+.geo-tips-toggle {
+  transition: transform 0.2s ease;
+  font-size: 0.7rem;
+}
+
+.geo-tips-container.expanded .geo-tips-toggle {
+  transform: rotate(180deg);
+}
+
+.geo-tips-body {
+  display: none;
+  padding: var(--space-xs) 0;
+}
+
+.geo-tips-container.expanded .geo-tips-body {
+  display: block;
+}
+
+.geo-tip-group {
+  margin-bottom: var(--space-sm);
+}
+
+.geo-tip-group:last-child {
+  margin-bottom: 0;
+}
+
+.geo-tip-dimension {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 2px;
+}
+
+.geo-tip-item {
+  font-size: 0.7rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  padding: 1px 0 1px var(--space-sm);
+  position: relative;
+}
+
+.geo-tips-empty {
+  font-size: 0.75rem;
+  color: var(--color-success);
+  text-align: center;
+  padding: var(--space-xs) 0;
+}
+

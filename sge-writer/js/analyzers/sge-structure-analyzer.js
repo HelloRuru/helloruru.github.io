@@ -191,8 +191,99 @@ export class SGEStructureAnalyzer {
   }
 
   /**
-   * 風險控制 — 關鍵字堆砌懲罰（AI 對堆砌 -9%）
+   * 產生各維度的改善建議（給用戶學習用）
    */
+  static getTips(result) {
+    const tips = {
+      evidence: [],
+      structure: [],
+      fluency: [],
+      coverage: [],
+      authority: []
+    };
+
+    // 證據引用層建議
+    if (result.statCount === 0) {
+      tips.evidence.push('加入具體數字與量詞，如「9 成用戶」、「3 萬人次」、「80% 滿意度」。AI 偏愛有數據佐證的內容。');
+    } else if (result.statCount < 2) {
+      tips.evidence.push('數據只有 1 筆，再補 1-2 個數字（百分比、金額、數量）讓論點更有力。');
+    }
+    if (!result.hasSource) {
+      tips.evidence.push('標註資料來源，如「根據 Google 數據」、「經濟部統計」。加上超連結效果更佳。');
+    }
+    if (!result.hasQuote) {
+      tips.evidence.push('加入專家或真實用戶引述，如「王老闆分享：⋯⋯」。掛銜引語讓 AI 引用率提升。');
+    }
+
+    // 結構規範層建議
+    if (result.h1Count === 0) {
+      tips.structure.push('加入 H1 標題，並控制在 28 字內。這是 AI 抓取的第一個信號。');
+    } else if (result.h1Count > 1) {
+      tips.structure.push('H1 標題只能有一個，多餘的請改為 H2。');
+    }
+    if (result.h2Count < 2) {
+      tips.structure.push('加入至少 2 個 H2 副標題來分層內容。AI 需要清楚的結構才能理解脈絡。');
+    }
+    if (!result.hasList) {
+      tips.structure.push('用項目清單整理要點（至少 3 項），AI 對清單的可見度 +30-40%。');
+    }
+    if (!result.hasComparisonTable) {
+      tips.structure.push('加入 3×3 以上的比較表，這是 AI 最愛引用的格式之一。');
+    }
+    if (!result.hasDirectAnswer) {
+      tips.structure.push('每個 H2 後的第一句直接給答案（倒金字塔寫法），讓 AI 一眼抓到重點。');
+    }
+
+    // 表達流暢層建議
+    if (result.transitionCount < 3) {
+      if (result.transitionCount === 0) {
+        tips.fluency.push('完全沒有邏輯過渡詞！加入「不過、因此、舉例來說、另外」等幫助 AI 讀懂段落關係。');
+      } else {
+        tips.fluency.push(`目前只用了 ${result.transitionCount} 種過渡詞，建議用到 3 種以上。試試「因此」「換句話說」「相較之下」。`);
+      }
+    }
+    if (result.shortRatio < 70 && result.shortRatio >= 0) {
+      tips.fluency.push(`短段落佔比 ${result.shortRatio}%，建議拉到 70% 以上。每段控制在 3 句內，AI 比較好提取。`);
+    }
+
+    // 問題覆蓋層建議
+    if (result.h2Count === 0) {
+      tips.coverage.push('完全沒有 H2！先用問句當 H2 副標，如「為什麼⋯⋯？」「如何選擇⋯⋯？」');
+    } else if (result.h2Result && result.h2Result.issues.length > 0) {
+      tips.coverage.push('H2 改為生活化痛點問句，如「台北冷氣清洗多少錢？」比「冷氣清洗費用」更容易被 AI 理解。');
+    }
+    if (result.keywordDispersion && result.keywordDispersion.status !== 'success') {
+      if (result.keywordDispersion.naturalCount < 3) {
+        tips.coverage.push(`關鍵字只出現在 ${result.keywordDispersion.naturalCount} 個句子中，目標是分散在至少 3 個段落。不要連續塞在同一段。`);
+      }
+      if (result.keywordDispersion.rigidCount > 0) {
+        tips.coverage.push('關鍵字出現太密集！用同義詞或換句話說來自然分散，避免僵硬重複。');
+      }
+    }
+
+    // 權威信號層建議
+    if (result.social && result.social.status !== 'success') {
+      if (!result.social.hasReviews) {
+        tips.authority.push('加入社會證明，如「Google 評論 4.8 星」、「網友大推」、「常客必點」。');
+      } else if (!result.social.hasRating) {
+        tips.authority.push('有提及評論是不夠的，加入具體星等或評分數字更有說服力。');
+      }
+    }
+    if (!result.hasExperience) {
+      tips.authority.push('加入第一手經驗，如「實際走訪」、「實測心得」、「多年經驗分享」。專家掛銜讓權威信號 +41%。');
+    }
+
+    // 只回傳有建議的維度
+    const result_tips = {};
+    for (const key of Object.keys(tips)) {
+      if (tips[key].length > 0) {
+        result_tips[key] = tips[key];
+      }
+    }
+    return result_tips;
+  }
+
+  /** 風險控制 — 關鍵字堆砌懲罰（AI 對堆砌 -9%） */
   static analyzeStuffing(content, keyword, escapeRegexFn) {
     if (!keyword) return { penalty: 0, count: 0, stuffed: false };
     const regex = new RegExp(escapeRegexFn(keyword), 'gi');
