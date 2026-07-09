@@ -36,8 +36,42 @@
 }
 
 .toolbar-btn:hover {
-  background: var(--color-bg-hover);
-  color: var(--color-text);
+  background: rgba(212, 165, 165, 0.15);
+  color: var(--color-primary);
+}
+
+/* 快速插入橫條（工具列與編輯器之間） */
+.quick-insert-strip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.quick-insert-label {
+  font-size: 0.8rem;
+  margin-right: 4px;
+  opacity: 0.6;
+}
+
+.quick-insert-strip .template-btn {
+  padding: 2px 10px;
+  font-size: 0.75rem;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.quick-insert-strip .template-btn:hover {
+  border-color: var(--color-secondary);
+  color: var(--color-secondary-dark);
+  background: rgba(184, 169, 201, 0.08);
 }
 
 .toolbar-btn.active {
