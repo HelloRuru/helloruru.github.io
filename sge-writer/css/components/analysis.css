@@ -454,3 +454,118 @@
   padding: var(--space-xs) 0;
 }
 
+/* ========================================
+   GEO 12 維度權重表 Modal
+   ======================================== */
+.weight-modal-content {
+  max-width: 480px;
+}
+
+.weight-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.weight-intro {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.weight-layer-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--space-xs);
+}
+
+.weight-layer-label strong {
+  color: var(--color-primary);
+}
+
+.weight-layer-label.penalty strong {
+  color: var(--color-error);
+}
+
+.weight-bar {
+  height: 6px;
+  background: rgba(0,0,0,0.06);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: var(--space-sm);
+}
+
+.weight-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1s ease;
+}
+
+.weight-fill.p1 { background: #D4A5A5; }
+.weight-fill.p2 { background: #B8A9C9; }
+.weight-fill.p3 { background: #E8A87C; }
+.weight-fill.p4 { background: #A8B5A0; }
+.weight-fill.p5 { background: #C4A882; }
+
+.weight-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.weight-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: var(--color-bg);
+  padding: 2px var(--space-sm);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+}
+
+.weight-name {
+  color: var(--color-text-secondary);
+}
+
+.weight-pts {
+  font-weight: 700;
+  color: var(--color-primary);
+  font-size: 0.8rem;
+}
+
+.weight-items-single {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  padding: 0;
+}
+
+.weight-note {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-sm);
+  margin-top: 0;
+}
+
+.btn-weight-table {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--color-text-light);
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.btn-weight-table:hover {
+  background: var(--color-bg);
+  color: var(--color-primary);
+}
+

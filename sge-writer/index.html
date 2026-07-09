@@ -42,7 +42,7 @@
   <meta name="theme-color" content="#D4A5A5">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="SEO文案升級攻略站">
+  <meta name="apple-mobile-web-app-title" content="GEO 文案冒險學院">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -76,8 +76,8 @@
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "SEO文案升級攻略站",
-    "description": "免費 SEO 文案升級工具，目標為 Google SGE（AI Overview）引用。H1 28字元檢測、關鍵字密度分析、支語小警察、AI 味檢測、即時 SEO 評分。",
+    "name": "GEO 文案冒險學院",
+    "description": "GEO 文案冒險學院 — 免費互動教學工具，透過 RPG 冒險遊戲學習 GEO 生成式引擎優化。AI 引用力分析、12 維度技能樹、支語檢測、即時評分。",
     "url": "https://lab.helloruru.com/sge-writer/",
     "applicationCategory": "UtilityApplication",
     "operatingSystem": "Web",
@@ -223,6 +223,7 @@
   <link rel="stylesheet" href="css/components/quick-commands.css">
   <link rel="stylesheet" href="css/components/quick-input.css">
   <link rel="stylesheet" href="css/components/level.css">
+  <link rel="stylesheet" href="css/components/skill-tree.css">
   <link rel="stylesheet" href="css/components/mobile-tabs.css">
   <link rel="stylesheet" href="css/components/editor.css">
   <link rel="stylesheet" href="css/components/analysis.css">
@@ -242,14 +243,14 @@
 </head>
 <body>
   <div class="app-container">
-    <hello-ruru-header title="SGE 文案助手"></hello-ruru-header>
+    <hello-ruru-header title="GEO 文案冒險學院"></hello-ruru-header>
 
     <!-- Header -->
     <header class="app-header">
       <div class="header-content">
         <div class="logo-section">
-          <h1 class="app-title">SGE 文案升級攻略站</h1>
-          <p class="app-subtitle">歡迎來到關鍵字最佳化大陸</p>
+          <h1 class="app-title">GEO 文案冒險學院</h1>
+                    <p class="app-subtitle">在冒險中學會 AI 引用你的文案</p>
         </div>
         <div class="header-actions">
           <!-- View Mode Toggle -->
@@ -592,6 +593,25 @@
             <div class="exp-fill" id="exp-fill" style="width: 0%"></div>
           </div>
           <span class="exp-text">EXP: <span id="exp-current">0</span>/<span id="exp-max">100</span></span>
+        </div>
+
+        <!-- 🌳 GEO 技能樹 -->
+        <div class="card skill-tree-card" id="skill-tree-card">
+          <div class="card-header">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+            </svg>
+            <h3>GEO 技能樹</h3>
+            <span class="skill-tree-badge" id="skill-tree-badge">0%</span>
+            <button class="btn-icon btn-weight-table" id="btn-weight-table" title="查看 12 維度權重表">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>
+              </svg>
+            </button>
+          </div>
+          <div class="skill-tree-content" id="skill-tree-content">
+            <div class="skill-tree-loading">載入技能結晶中⋯</div>
+          </div>
         </div>
 
         <!-- FAQ Knowledge Base -->
@@ -1025,6 +1045,58 @@
       </div>
       <div class="image-modal-body" id="image-modal-body">
         <!-- JS 動態生成：3 角色 × 5 表情 × 4 變體 + 其他區 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 🌐 GEO 12 維度權重表 Modal -->
+  <div class="modal weight-modal" id="weight-modal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content weight-modal-content">
+      <div class="modal-header">
+        <h3>📊 GEO 12 維度權重表</h3>
+        <button class="modal-close" id="close-weight-modal">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="weight-modal-body">
+        <p class="weight-intro">AI 引用你的文章，是由這些維度決定的。分數越高代表越容易被 AI 搜尋引擎引用。</p>
+        <div class="weight-p1"><div class="weight-layer-label">P1 — 證據引用層 <strong>43%</strong></div>
+          <div class="weight-bar"><div class="weight-fill p1" style="width:43%"></div></div>
+          <div class="weight-items">
+            <div class="weight-item"><span class="weight-name">權威原文引語</span><span class="weight-pts">16</span></div>
+            <div class="weight-item"><span class="weight-name">統計數據完整性</span><span class="weight-pts">14</span></div>
+            <div class="weight-item"><span class="weight-name">可引用性／可信來源</span><span class="weight-pts">13</span></div>
+          </div>
+        </div>
+        <div class="weight-p2"><div class="weight-layer-label">P2 — 結構規範層 <strong>12%</strong></div>
+          <div class="weight-bar"><div class="weight-fill p2" style="width:12%"></div></div>
+          <div class="weight-items-single"><span>H1/H2/列點/表格/倒金字塔</span></div>
+        </div>
+        <div class="weight-p3"><div class="weight-layer-label">P3 — 表達 + 語義層 <strong>18%</strong></div>
+          <div class="weight-bar"><div class="weight-fill p3" style="width:18%"></div></div>
+          <div class="weight-items">
+            <div class="weight-item"><span class="weight-name">流暢度／邏輯過渡</span><span class="weight-pts">10</span></div>
+            <div class="weight-item"><span class="weight-name">實體覆蓋／問題覆蓋</span><span class="weight-pts">8</span></div>
+          </div>
+        </div>
+        <div class="weight-p4"><div class="weight-layer-label">P4 — 權威 + 專業層 <strong>14%</strong></div>
+          <div class="weight-bar"><div class="weight-fill p4" style="width:14%"></div></div>
+          <div class="weight-items">
+            <div class="weight-item"><span class="weight-name">權威信號</span><span class="weight-pts">8</span></div>
+            <div class="weight-item"><span class="weight-name">術語一致性</span><span class="weight-pts">6</span></div>
+          </div>
+        </div>
+        <div class="weight-p5"><div class="weight-layer-label">P5 — 穩健 + 跨域層 <strong>12%</strong></div>
+          <div class="weight-bar"><div class="weight-fill p5" style="width:12%"></div></div>
+          <div class="weight-items-single"><span>多源支撐／關聯領域／易懂表達</span></div>
+        </div>
+        <div class="weight-penalty"><span class="weight-layer-label penalty">⚠️ 風險控制 <strong>-9</strong></span>
+          <div class="weight-items-single"><span>關鍵字堆砌懲罰（AI 對堆砌敏感）</span></div>
+        </div>
+        <p class="weight-note">工具中的 5 個維度對應：證據引用(P1) + 結構規範(P2) + 表達流暢(P3a) + 問題覆蓋(P3b) + 權威信號(P4a)</p>
       </div>
     </div>
   </div>

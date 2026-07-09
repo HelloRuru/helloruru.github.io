@@ -1,0 +1,554 @@
+/* SGE 文案助手 - Skill Tree (GEO 技能樹) */
+/* ========================================
+   GEO 文案冒險學院 — 技能樹元件
+   5 個 GEO 維度以「技能結晶」呈現學習進度
+   ======================================== */
+
+/* ----------------------------------------
+   Container — 搭配 .card 使用
+   ---------------------------------------- */
+.skill-tree {
+  position: relative;
+  overflow: hidden;
+}
+
+/* 裝飾底紋 — RPG 風格的微弱光暈 */
+.skill-tree::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 15% 50%, rgba(212, 165, 165, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 85% 50%, rgba(184, 169, 201, 0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.skill-tree__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  color: var(--color-text);
+  position: relative;
+  z-index: 1;
+}
+
+.skill-tree__header h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: var(--font-heading);
+}
+
+.skill-tree__header-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.skill-tree__header-sub {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-ui);
+  font-weight: 400;
+  margin-left: auto;
+}
+
+/* ----------------------------------------
+   Grid — 5 個技能結晶橫排
+   ---------------------------------------- */
+.skill-tree__grid {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-lg);
+  position: relative;
+  z-index: 1;
+}
+
+/* 連線 — 在結晶中心高度繪製一條淡色連接線 */
+.skill-tree__grid {
+  background-image: linear-gradient(
+    to right,
+    transparent 0%,
+    var(--color-border-light) 8%,
+    var(--color-border) 45%,
+    var(--color-secondary-light) 50%,
+    var(--color-border) 55%,
+    var(--color-border-light) 92%,
+    transparent 100%
+  );
+  background-size: 100% 1px;
+  background-position: 0 32px;
+  background-repeat: no-repeat;
+}
+
+/* ----------------------------------------
+   Skill Crystal — 單一技能結晶
+   ---------------------------------------- */
+.skill-crystal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  min-width: 0;
+  transition: transform var(--transition-fast);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.skill-crystal:active {
+  transform: scale(0.96);
+}
+
+/* ============ 水晶球體 ============ */
+.skill-crystal__orb {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  background: var(--color-bg-card);
+  border: 2px solid var(--color-border);
+  transition: all var(--transition-normal);
+  position: relative;
+  flex-shrink: 0;
+  will-change: transform, box-shadow;
+}
+
+/* ---------- 狀態：未解鎖 ---------- */
+.skill-crystal.locked .skill-crystal__orb {
+  background: var(--color-bg-hover);
+  border-color: var(--color-border-light);
+  filter: grayscale(1);
+  opacity: 0.45;
+}
+
+/* ---------- 狀態：學習中 ---------- */
+.skill-crystal.learning .skill-crystal__orb {
+  border-color: var(--color-primary);
+  background: linear-gradient(145deg, var(--color-bg-card), rgba(212, 165, 165, 0.08));
+  box-shadow:
+    0 0 10px rgba(212, 165, 165, 0.25),
+    0 0 24px rgba(212, 165, 165, 0.08);
+}
+
+/* 學習中光暈脈衝 */
+.skill-crystal.learning .skill-crystal__orb::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)) border-box;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: skill-orb-pulse 2.5s ease-in-out infinite;
+}
+
+/* ---------- 狀態：熟練 ---------- */
+.skill-crystal.mastered .skill-crystal__orb {
+  border-color: var(--color-success);
+  background: linear-gradient(145deg, var(--color-bg-card), rgba(127, 174, 127, 0.06));
+  box-shadow:
+    0 0 10px rgba(127, 174, 127, 0.3),
+    0 0 24px rgba(127, 174, 127, 0.1);
+}
+
+/* 熟練星印 */
+.skill-crystal.mastered .skill-crystal__orb::after {
+  content: '✦';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 0.75rem;
+  color: var(--color-success);
+  filter: drop-shadow(0 0 4px rgba(127, 174, 127, 0.5));
+}
+
+/* ---------- Hover ---------- */
+@media (hover: hover) {
+  .skill-crystal:not(.locked):hover {
+    transform: translateY(-2px);
+  }
+
+  .skill-crystal:not(.locked):hover .skill-crystal__orb {
+    transform: scale(1.08);
+    box-shadow: 0 0 18px rgba(212, 165, 165, 0.35);
+  }
+
+  .skill-crystal.mastered:not(.locked):hover .skill-crystal__orb {
+    box-shadow: 0 0 18px rgba(127, 174, 127, 0.4);
+  }
+}
+
+/* ============ 結晶下方資訊 ============ */
+
+/* 技能名稱 */
+.skill-crystal__name {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-text);
+  text-align: center;
+  line-height: 1.35;
+  white-space: nowrap;
+  transition: color var(--transition-fast);
+}
+
+.skill-crystal.locked .skill-crystal__name {
+  color: var(--color-text-light);
+}
+
+.skill-crystal.learning .skill-crystal__name {
+  color: var(--color-primary-dark);
+}
+
+.skill-crystal.mastered .skill-crystal__name {
+  color: #5A8F5E;
+}
+
+/* 分數 */
+.skill-crystal__score {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.skill-crystal__score-max {
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.skill-crystal.locked .skill-crystal__score {
+  color: var(--color-text-light);
+}
+
+.skill-crystal.learning .skill-crystal__score {
+  color: var(--color-primary-dark);
+}
+
+.skill-crystal.mastered .skill-crystal__score {
+  color: #5A8F5E;
+}
+
+/* 等級徽章 */
+.skill-crystal__level {
+  font-family: var(--font-small);
+  font-size: 0.625rem;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-hover);
+  color: var(--color-text-muted);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.skill-crystal.learning .skill-crystal__level {
+  background: rgba(212, 165, 165, 0.15);
+  color: var(--color-primary-dark);
+}
+
+.skill-crystal.mastered .skill-crystal__level {
+  background: rgba(127, 174, 127, 0.15);
+  color: #4A7A4E;
+}
+
+/* ============ 展開說明面板 ============ */
+.skill-crystal__detail {
+  display: none;
+  position: absolute;
+  top: calc(100% + var(--space-sm));
+  left: 50%;
+  transform: translateX(-50%);
+  width: 240px;
+  max-width: 85vw;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-md);
+  z-index: 20;
+  text-align: left;
+  pointer-events: auto;
+}
+
+.skill-crystal.expanded .skill-crystal__detail {
+  display: block;
+  animation: skill-detail-in 0.2s ease both;
+}
+
+/* 三角形箭頭 */
+.skill-crystal__detail::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background: var(--color-bg-card);
+  border-left: 1px solid var(--color-border);
+  border-top: 1px solid var(--color-border);
+}
+
+.skill-crystal__detail-title {
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--space-xs);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.skill-crystal__detail-title .skill-crystal__detail-icon {
+  font-size: 1rem;
+}
+
+.skill-crystal__detail-desc {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  line-height: 1.65;
+  margin-bottom: var(--space-sm);
+}
+
+.skill-crystal__detail-why {
+  font-family: var(--font-ui);
+  font-size: 0.6875rem;
+  color: var(--color-text-muted);
+  line-height: 1.55;
+  padding: var(--space-sm);
+  background: var(--color-bg-hover);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--color-secondary-light);
+}
+
+.skill-crystal__detail-why strong {
+  color: var(--color-text-secondary);
+  font-weight: 600;
+}
+
+/* 關閉按鈕 */
+.skill-crystal__detail-close {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.625rem;
+  color: var(--color-text-muted);
+  background: var(--color-bg-hover);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  line-height: 1;
+}
+
+.skill-crystal__detail-close:hover {
+  background: var(--color-border);
+  color: var(--color-text);
+}
+
+/* ============ Progress Ring (SVG) ============ */
+.skill-crystal__ring {
+  position: absolute;
+  inset: -4px;
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
+  transform: rotate(-90deg);
+  pointer-events: none;
+}
+
+.skill-crystal__ring-track {
+  fill: none;
+  stroke: var(--color-border-light);
+  stroke-width: 2;
+}
+
+.skill-crystal__ring-fill {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.8s ease;
+}
+
+.skill-crystal.learning .skill-crystal__ring-fill {
+  stroke: var(--color-primary);
+}
+
+.skill-crystal.mastered .skill-crystal__ring-fill {
+  stroke: var(--color-success);
+}
+
+/* ----------------------------------------
+   Animations
+   ---------------------------------------- */
+@keyframes skill-orb-pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes skill-detail-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* ----------------------------------------
+   Dark Mode Overrides
+   ---------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  .skill-crystal__detail {
+    border-color: var(--color-border);
+  }
+
+  .skill-crystal__detail::before {
+    border-left-color: var(--color-border);
+    border-top-color: var(--color-border);
+  }
+
+  .skill-crystal.learning .skill-crystal__orb {
+    box-shadow:
+      0 0 12px rgba(212, 165, 165, 0.2),
+      0 0 28px rgba(212, 165, 165, 0.06);
+  }
+
+  .skill-crystal.mastered .skill-crystal__orb {
+    box-shadow:
+      0 0 12px rgba(127, 174, 127, 0.25),
+      0 0 28px rgba(127, 174, 127, 0.08);
+  }
+
+  .skill-crystal__level {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .skill-crystal.learning .skill-crystal__level {
+    background: rgba(212, 165, 165, 0.2);
+  }
+
+  .skill-crystal.mastered .skill-crystal__level {
+    background: rgba(127, 174, 127, 0.2);
+  }
+
+  .skill-crystal__detail-why {
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .skill-crystal__detail-close {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .skill-crystal__detail-close:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+}
+
+/* ----------------------------------------
+   Responsive
+   ---------------------------------------- */
+
+/* Tablet — 3+2 排列 */
+@media (max-width: 1024px) {
+  .skill-tree__grid {
+    flex-wrap: wrap;
+    gap: var(--space-md) var(--space-lg);
+    background-image: none;
+  }
+
+  .skill-crystal {
+    flex: 0 0 calc(33.33% - var(--space-lg) * 2 / 3);
+    max-width: 140px;
+  }
+
+  .skill-crystal__detail {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+/* Mobile — 2+2+1 排列 */
+@media (max-width: 768px) {
+  .skill-tree__grid {
+    gap: var(--space-lg) var(--space-md);
+  }
+
+  .skill-crystal {
+    flex: 0 0 calc(50% - var(--space-md) / 2);
+    max-width: none;
+  }
+
+  .skill-crystal__orb {
+    width: 56px;
+    height: 56px;
+    font-size: 1.3rem;
+  }
+
+  .skill-crystal__detail {
+    width: 220px;
+  }
+
+  .skill-tree__header-sub {
+    display: none;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .skill-tree__grid {
+    gap: var(--space-md);
+  }
+
+  .skill-crystal {
+    flex: 0 0 calc(50% - var(--space-md) / 2);
+  }
+
+  .skill-crystal__orb {
+    width: 48px;
+    height: 48px;
+    font-size: 1.125rem;
+  }
+
+  .skill-crystal__name {
+    font-size: 0.6875rem;
+  }
+
+  .skill-crystal__score {
+    font-size: 0.75rem;
+  }
+
+  .skill-crystal__detail {
+    width: 200px;
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .skill-crystal__detail-desc {
+    font-size: 0.6875rem;
+  }
+
+  .skill-crystal__detail-why {
+    font-size: 0.625rem;
+  }
+}

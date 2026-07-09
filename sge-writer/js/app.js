@@ -231,6 +231,74 @@ const levelSystem = {
 };
 
 // ========================================
+// GEO 技能樹
+// ========================================
+const skillTree = {
+  SKILLS: {
+    evidence: { name: '證據引用層', icon: '📊', maxScore: 40, desc: 'AI 引用你的內容，靠的是證據不是形容詞。加入數據（15分）、來源標註（15分）、專家引語（10分）' },
+    structure: { name: '結構規範層', icon: '🏗️', maxScore: 25, desc: '清楚的結構讓 AI 一眼看懂脈絡。H1 唯一（4分）、H2 分層（6分）、列點（5分）、表格（5分）、倒金字塔（5分）' },
+    fluency: { name: '表達流暢層', icon: '💬', maxScore: 10, desc: '流暢的邏輯讓 AI 讀懂段落關係。過渡詞（5分）、短段落（5分）' },
+    coverage: { name: '問題覆蓋層', icon: '🎯', maxScore: 15, desc: '圍繞真實問題組織內容。痛點問句（8分）、關鍵字自然分散（7分）' },
+    authority: { name: '權威信號層', icon: '👑', maxScore: 10, desc: '權威感讓 AI 更信任你。社會證明（5分）、第一手經驗（5分）' }
+  },
+
+  getLevel(score, max) {
+    const pct = max > 0 ? score / max : 0;
+    if (pct === 0) return { label: '未解鎖', cls: 'locked' };
+    if (pct < 0.5) return { label: '學習中', cls: 'learning' };
+    return { label: '熟練', cls: 'mastered' };
+  },
+
+  getOverall(breakdown) {
+    if (!breakdown) return 0;
+    const total = breakdown.evidence.score + breakdown.structure.score + breakdown.fluency.score + breakdown.coverage.score + breakdown.authority.score;
+    return Math.min(100, Math.round(total));
+  },
+
+  render(breakdown) {
+    const container = document.getElementById('skill-tree-content');
+    if (!container) return;
+
+    if (!breakdown) {
+      container.innerHTML = `<div class="skill-tree-loading">開始寫作後就會呈現技能結晶⋯</div>`;
+      document.getElementById('skill-tree-badge').textContent = '0%';
+      return;
+    }
+
+    const overall = this.getOverall(breakdown);
+    document.getElementById('skill-tree-badge').textContent = `${overall}%`;
+
+    let html = `<div class="skill-tree-grid">`;
+    for (const [key, skill] of Object.entries(this.SKILLS)) {
+      const bd = breakdown[key];
+      const score = bd ? bd.score : 0;
+      const max = skill.maxScore;
+      const level = this.getLevel(score, max);
+      html += `<div class="skill-crystal ${level.cls}" data-skill="${key}" title="${skill.desc}">
+        <div class="skill-crystal-icon">${skill.icon}</div>
+        <div class="skill-crystal-name">${skill.name.replace('層', '')}</div>
+        <div class="skill-crystal-level">${level.label}</div>
+        <div class="skill-crystal-score">${score}/${max}</div>
+        <div class="skill-crystal-detail">${skill.desc}</div>
+      </div>`;
+    }
+    html += `</div>`;
+    container.innerHTML = html;
+
+    // 點擊展開說明
+    container.querySelectorAll('.skill-crystal').forEach(el => {
+      el.addEventListener('click', () => {
+        el.classList.toggle('active');
+        // 收起其他
+        container.querySelectorAll('.skill-crystal.active').forEach(other => {
+          if (other !== el) other.classList.remove('active');
+        });
+      });
+    });
+  }
+};
+
+// ========================================
 // Quest Engine（遊戲引擎：EXP 與進度掛在真實寫作行為上）
 // ========================================
 const questEngine = {
@@ -1420,6 +1488,9 @@ function init() {
     updateViewModeUI();
   }
 
+  // 初始化技能樹（空的，等待分析結果）
+  skillTree.render(null);
+
   // Initialize FAQ UI
   faqUI.init();
 
@@ -1477,7 +1548,13 @@ function init() {
   elements.confirmFacts.addEventListener('click', startWriting);
 
   // 遊戲引擎：分析結果驅動進度與 EXP
-  analyzer.onResults = (results) => questEngine.evaluate(results);
+  analyzer.onResults = (results) => {
+    questEngine.evaluate(results);
+    // 同步更新技能樹
+    if (results && results.geo && results.geo.breakdown) {
+      skillTree.render(results.geo.breakdown);
+    }
+  };
 
   elements.commandButtons.forEach(btn => {
     btn.addEventListener('click', () => handleCommand(btn.dataset.cmd));
@@ -1501,7 +1578,17 @@ function init() {
 
   elements.themeToggle.addEventListener('click', toggleTheme);
 
-  // View mode toggle
+  // GEO 權重表 modal
+  const weightBtn = document.getElementById('btn-weight-table');
+  const weightModal = document.getElementById('weight-modal');
+  const closeWeight = document.getElementById('close-weight-modal');
+  if (weightBtn && weightModal) {
+    weightBtn.addEventListener('click', () => weightModal.classList.add('open'));
+    closeWeight.addEventListener('click', () => weightModal.classList.remove('open'));
+    weightModal.querySelector('.modal-backdrop').addEventListener('click', () => weightModal.classList.remove('open'));
+  }
+
+  // Initialize analyzer with elements
   elements.viewToggleBtns.forEach(btn => {
     btn.addEventListener('click', () => handleViewModeChange(btn.dataset.view));
   });
