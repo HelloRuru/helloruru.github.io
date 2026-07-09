@@ -94,6 +94,34 @@
   gap: 16px;
 }
 
+/* 跳過引導按鈕（白底對話框內，用可及深色） */
+.opening-skip {
+  display: block;
+  margin: 20px auto 0;
+  padding: 10px 20px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md, 12px);
+  color: #6B6B6B;
+  font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+}
+
+.opening-skip:hover {
+  color: #333333;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.opening-skip:focus-visible {
+  outline: 2px solid var(--color-primary, #D4A5A5);
+  outline-offset: 2px;
+}
+
 .opening-choice {
   display: flex;
   align-items: center;

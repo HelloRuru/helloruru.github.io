@@ -94,10 +94,12 @@ export const opening = {
             </button>
           `).join('')}
         </div>
+        <button class="opening-skip" id="opening-skip">跳過引導，直接開始</button>
       </div>
     `;
 
     document.body.appendChild(modal);
+    this._selectionModal = modal;
     document.body.style.overflow = 'hidden';
 
     // 綁定選擇事件
@@ -107,6 +109,25 @@ export const opening = {
         this._startStory(character, modal);
       });
     });
+
+    // 跳過引導：以預設夥伴直接進入編輯器
+    const skipBtn = modal.querySelector('#opening-skip');
+    if (skipBtn) {
+      skipBtn.addEventListener('click', () => this._skip());
+    }
+  },
+
+  /** 跳過整段開場，以預設夥伴（伊歐）直接開始 */
+  _skip() {
+    const defaultKey = OPENING_STORIES.guide ? 'guide' : Object.keys(OPENING_STORIES)[0];
+    this._currentCharacterKey = defaultKey;
+    this._currentStory = OPENING_STORIES[defaultKey];
+
+    if (this._selectionModal) {
+      this._selectionModal.remove();
+      this._selectionModal = null;
+    }
+    this._finish();
   },
 
   /** 開始播放選定角色的劇情 */

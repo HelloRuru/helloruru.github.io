@@ -22,6 +22,19 @@ export const editor = {
       });
     });
 
+    // 貼上時剝除 HTML，只保留純文字（跨瀏覽器行為一致、避免帶入外部樣式）
+    this.element.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+      if (!text) return;
+      // 逐行插入，保留換行
+      const lines = text.split(/\r\n|\r|\n/);
+      lines.forEach((line, i) => {
+        if (i > 0) document.execCommand('insertLineBreak');
+        if (line) document.execCommand('insertText', false, line);
+      });
+    });
+
     // Keyboard shortcuts
     this.element.addEventListener('keydown', (e) => {
       if (e.ctrlKey || e.metaKey) {

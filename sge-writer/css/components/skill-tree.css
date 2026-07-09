@@ -63,6 +63,16 @@
   z-index: 1;
 }
 
+/* 空狀態引導文字 */
+.skill-tree__hint {
+  margin-top: var(--space-md);
+  padding: 0 var(--space-sm);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
 /* 連線 — 在結晶中心高度繪製一條淡色連接線 */
 .skill-tree__grid {
   background-image: linear-gradient(
