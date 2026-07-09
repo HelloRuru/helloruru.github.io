@@ -96,16 +96,17 @@
   font-family: 'GenSenRounded', 'Noto Sans TC', sans-serif;
   font-size: 12px;
   font-weight: 700;
-  color: #888888;
+  color: var(--color-text-muted);
   pointer-events: none;
 }
 
 .char-counter.warning {
-  color: #D4A5A5;
+  color: var(--color-warning);
 }
 
 .char-counter.danger {
-  color: #DD698C;
+  color: var(--color-error);
+  font-weight: 700;
 }
 
 /* ─── 橫向輸入列 ─────────────────────── */

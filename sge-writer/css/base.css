@@ -30,17 +30,21 @@
   --color-warm-gray: #B5ADA7;
   --color-charcoal: #5C5856;
 
-  /* Status Colors — v1.9 */
-  --color-success: #7BAE7F;
-  --color-warning: #D4A85A;
-  --color-error: #C97070;
-  --color-info: #6B9EC2;
+  /* Status Colors — v1.9（淺底文字達 WCAG AA 4.5:1；深色模式另行覆寫） */
+  --color-success: #2E7D32;
+  --color-warning: #8A6D1E;
+  --color-error: #B0424A;
+  --color-info: #3F6E8C;
 
   /* Text */
   --color-text: #333333;
   --color-text-secondary: #4A4A4A;
-  --color-text-muted: #888888;
+  --color-text-muted: #6B6B6B;
   --color-text-light: #AAAAAA;
+
+  /* Link — 品牌玫瑰的可及深色版（--color-primary 保留給背景/漸層） */
+  --color-link: #9C565C;
+  --color-link-hover: #7E4247;
 
   /* Background */
   --color-bg: #FAFAFA;
@@ -111,6 +115,8 @@
     --color-warning: #DEBB78;
     --color-error: #D48A8A;
     --color-info: #88B5D4;
+    --color-link: #E0AFAF;
+    --color-link-hover: #EAC6C6;
   }
 }
 
@@ -145,13 +151,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 a {
-  color: var(--color-primary);
+  color: var(--color-link);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
 
 a:hover {
-  color: var(--color-primary-dark);
+  color: var(--color-link-hover);
 }
 
 button {

@@ -103,6 +103,7 @@ const elements = {
 
   // Editor
   editor: document.getElementById('editor'),
+  autosaveStatus: document.getElementById('autosave-status'),
   toolbarButtons: document.querySelectorAll('.toolbar-btn'),
   templateButtons: document.querySelectorAll('.template-btn'),
 
@@ -299,13 +300,14 @@ const skillTree = {
         </div>
         <div class="skill-tree__grid">
           ${Object.entries(this.SKILLS).map(([key, s]) => `
-            <div class="skill-crystal locked" data-skill="${key}">
+            <div class="skill-crystal locked" data-skill="${key}" title="${s.short}：${s.desc}">
               <div class="skill-crystal__orb">${s.icon}${this._ring(0)}</div>
               <div class="skill-crystal__name">${s.short}</div>
               <div class="skill-crystal__level">未解鎖</div>
               <div class="skill-crystal__score">0<span class="skill-crystal__score-max">/${s.maxScore}</span></div>
             </div>`).join('')}
         </div>
+        <p class="skill-tree__hint">開始撰寫後，這 5 種技能會依你的內容逐一解鎖，點亮結晶就代表你的文案更容易被 AI 引用。</p>
       </div>`;
       return;
     }
@@ -1453,6 +1455,15 @@ function resetApp() {
   // Reset editor
   editor.clear();
 
+  // 清除自動儲存的草稿與提示
+  storage.clearContent();
+  clearTimeout(autosaveTimer);
+  clearTimeout(autosaveClearTimer);
+  if (elements.autosaveStatus) {
+    elements.autosaveStatus.classList.remove('visible', 'saved');
+    elements.autosaveStatus.textContent = '';
+  }
+
   // Reset analyzer
   analyzer.reset();
 
@@ -1477,6 +1488,35 @@ function updateFooterYear() {
   elements.footerYear.textContent = currentYear > startYear
     ? `${startYear}–${currentYear}`
     : `${startYear}`;
+}
+
+// ========================================
+// 自動儲存草稿
+// ========================================
+let autosaveTimer = null;
+let autosaveClearTimer = null;
+
+function setAutosaveStatus(text, saved) {
+  const el = elements.autosaveStatus;
+  if (!el) return;
+  el.textContent = text;
+  el.classList.add('visible');
+  el.classList.toggle('saved', !!saved);
+}
+
+function scheduleAutosave() {
+  if (!elements.editor) return;
+  setAutosaveStatus('自動儲存中…', false);
+  clearTimeout(autosaveTimer);
+  clearTimeout(autosaveClearTimer);
+  autosaveTimer = setTimeout(() => {
+    const ok = storage.saveContent(elements.editor.innerHTML);
+    setAutosaveStatus(ok ? '草稿已儲存 ✓' : '儲存失敗，請手動備份', ok);
+    // 幾秒後淡出，避免長駐干擾
+    autosaveClearTimer = setTimeout(() => {
+      elements.autosaveStatus && elements.autosaveStatus.classList.remove('visible');
+    }, 2500);
+  }, 800);
 }
 
 // ========================================
@@ -1549,6 +1589,17 @@ function init() {
 
   // 初始化技能樹（空的，等待分析結果）
   skillTree.render(null);
+
+  // 還原上次自動儲存的草稿內容
+  const savedContent = storage.loadContent();
+  if (savedContent && savedContent.trim() && elements.editor) {
+    elements.editor.innerHTML = savedContent;
+    analyzer.analyze();
+    setAutosaveStatus('已還原上次的草稿', true);
+    setTimeout(() => {
+      elements.autosaveStatus && elements.autosaveStatus.classList.remove('visible');
+    }, 3000);
+  }
 
   // Initialize FAQ UI
   faqUI.init();
@@ -1703,6 +1754,7 @@ function init() {
   // Editor change listener
   elements.editor.addEventListener('input', () => {
     analyzer.analyze();
+    scheduleAutosave();
   });
 
   console.log('GEO 文案冒險學院已載入！歡迎來到冒險學院～');

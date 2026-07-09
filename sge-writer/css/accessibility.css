@@ -12,3 +12,27 @@
   white-space: nowrap;
   border: 0;
 }
+
+/* Skip to content — 鍵盤使用者可直接跳到編輯區 */
+.skip-link {
+  position: absolute;
+  left: 50%;
+  top: -60px;
+  transform: translateX(-50%);
+  z-index: 1000;
+  padding: 10px 20px;
+  background: var(--color-bg-card);
+  color: var(--color-link);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-weight: 500;
+  box-shadow: var(--shadow-md);
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: 12px;
+  outline: none;
+  color: var(--color-link);
+}

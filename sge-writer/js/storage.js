@@ -7,10 +7,48 @@ const STORAGE_KEYS = {
   NAMES: 'sge-writer-names',
   PROGRESS: 'sge-writer-progress',
   THEME: 'sge-writer-theme',
-  DRAFTS: 'sge-writer-drafts'
+  DRAFTS: 'sge-writer-drafts',
+  CONTENT: 'sge-writer-content'
 };
 
 export const storage = {
+  /**
+   * 自動儲存目前編輯器內容
+   * @returns {boolean} 是否成功
+   */
+  saveContent(html) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.CONTENT, html);
+      return true;
+    } catch (e) {
+      console.warn('無法儲存內容:', e);
+      return false;
+    }
+  },
+
+  /**
+   * 讀取上次自動儲存的編輯器內容
+   */
+  loadContent() {
+    try {
+      return localStorage.getItem(STORAGE_KEYS.CONTENT) || '';
+    } catch (e) {
+      console.warn('無法讀取內容:', e);
+      return '';
+    }
+  },
+
+  /**
+   * 清除自動儲存的內容
+   */
+  clearContent() {
+    try {
+      localStorage.removeItem(STORAGE_KEYS.CONTENT);
+    } catch (e) {
+      console.warn('無法清除內容:', e);
+    }
+  },
+
   /**
    * 儲存夥伴名稱
    */

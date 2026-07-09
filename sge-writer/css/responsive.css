@@ -243,9 +243,11 @@
     font-size: 1rem;
   }
 
+  /* 觸控目標達 Apple HIG / Material 建議的 44px（視覺維持精簡，靠 padding 補足） */
   .toolbar-btn {
-    min-width: 28px;
-    height: 28px;
+    min-width: 44px;
+    min-height: 44px;
+    height: auto;
     padding: var(--space-xs);
   }
 
