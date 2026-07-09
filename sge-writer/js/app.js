@@ -235,11 +235,31 @@ const levelSystem = {
 // ========================================
 const skillTree = {
   SKILLS: {
-    evidence: { name: '證據引用層', icon: '📊', maxScore: 40, desc: 'AI 引用你的內容，靠的是證據不是形容詞。加入數據（15分）、來源標註（15分）、專家引語（10分）' },
-    structure: { name: '結構規範層', icon: '🏗️', maxScore: 25, desc: '清楚的結構讓 AI 一眼看懂脈絡。H1 唯一（4分）、H2 分層（6分）、列點（5分）、表格（5分）、倒金字塔（5分）' },
-    fluency: { name: '表達流暢層', icon: '💬', maxScore: 10, desc: '流暢的邏輯讓 AI 讀懂段落關係。過渡詞（5分）、短段落（5分）' },
-    coverage: { name: '問題覆蓋層', icon: '🎯', maxScore: 15, desc: '圍繞真實問題組織內容。痛點問句（8分）、關鍵字自然分散（7分）' },
-    authority: { name: '權威信號層', icon: '👑', maxScore: 10, desc: '權威感讓 AI 更信任你。社會證明（5分）、第一手經驗（5分）' }
+    evidence: {
+      name: '證據引用層', short: '證據引用', icon: '📊', maxScore: 40,
+      desc: 'AI 引用內容靠的是證據，不是形容詞。數據、來源、引語缺一不可。',
+      why: '研究顯示，附具體數據與來源標註的內容，被 AI 引用率高出 40%。這是 GEO 最重要的單一維度。'
+    },
+    structure: {
+      name: '結構規範層', short: '結構規範', icon: '🏗️', maxScore: 25,
+      desc: '清楚的結構讓 AI 一眼看懂脈絡。H1/H2/列點/表格/倒金字塔各司其職。',
+      why: '結構化內容（清單、表格）在 AI 搜尋中的可見度 +30-40%。H2 問句直接對應 AI 的 query fan-out。'
+    },
+    fluency: {
+      name: '表達流暢層', short: '表達流暢', icon: '💬', maxScore: 10,
+      desc: '流暢的邏輯讓 AI 讀懂段落之間的關係。過渡詞 + 短段落是關鍵。',
+      why: 'AI 偏愛每段 ≤3 句的內容，長段落容易讓 AI 抓不到可引用的句子。'
+    },
+    coverage: {
+      name: '問題覆蓋層', short: '問題覆蓋', icon: '🎯', maxScore: 15,
+      desc: '圍繞真實問題組織內容。H2 痛點問句 + 關鍵字自然分散。',
+      why: 'AI 把使用者問題拆成子查詢（query fan-out），你的 H2 就是這些子查詢的答案。'
+    },
+    authority: {
+      name: '權威信號層', short: '權威信號', icon: '👑', maxScore: 10,
+      desc: '權威感讓 AI 更信任你的內容。社會證明 + 第一手經驗。',
+      why: '專家掛銜引語 +41% 引用率，Google 評論與星等是最直接的社會證明。'
+    }
   },
 
   getLevel(score, max) {
@@ -255,44 +275,85 @@ const skillTree = {
     return Math.min(100, Math.round(total));
   },
 
+  /** 產生 SVG 進度環 */
+  _ring(pct) {
+    const r = 28, circ = 2 * Math.PI * r;
+    const offset = circ - (pct / 100) * circ;
+    return `<svg class="skill-crystal__ring" viewBox="0 0 64 64">
+      <circle class="skill-crystal__ring-track" cx="32" cy="32" r="${r}"/>
+      <circle class="skill-crystal__ring-fill" cx="32" cy="32" r="${r}"
+        stroke-dasharray="${circ}" stroke-dashoffset="${offset}"/>
+    </svg>`;
+  },
+
   render(breakdown) {
     const container = document.getElementById('skill-tree-content');
     if (!container) return;
 
     if (!breakdown) {
-      container.innerHTML = `<div class="skill-tree-loading">開始寫作後就會呈現技能結晶⋯</div>`;
-      document.getElementById('skill-tree-badge').textContent = '0%';
+      container.innerHTML = `<div class="skill-tree">
+        <div class="skill-tree__header">
+          <span class="skill-tree__header-icon">🌳</span>
+          <h3>技能結晶</h3>
+          <span class="skill-tree__header-sub">0%</span>
+        </div>
+        <div class="skill-tree__grid">
+          ${Object.entries(this.SKILLS).map(([key, s]) => `
+            <div class="skill-crystal locked" data-skill="${key}">
+              <div class="skill-crystal__orb">${s.icon}${this._ring(0)}</div>
+              <div class="skill-crystal__name">${s.short}</div>
+              <div class="skill-crystal__level">未解鎖</div>
+              <div class="skill-crystal__score">0<span class="skill-crystal__score-max">/${s.maxScore}</span></div>
+            </div>`).join('')}
+        </div>
+      </div>`;
       return;
     }
 
     const overall = this.getOverall(breakdown);
-    document.getElementById('skill-tree-badge').textContent = `${overall}%`;
 
-    let html = `<div class="skill-tree-grid">`;
+    let html = `<div class="skill-tree">
+      <div class="skill-tree__header">
+        <span class="skill-tree__header-icon">🌳</span>
+        <h3>技能結晶</h3>
+        <span class="skill-tree__header-sub">${overall}%</span>
+        <button class="btn-weight-table" id="btn-weight-table" title="查看 12 維度權重表" style="margin-left:auto;background:none;border:none;cursor:pointer;color:var(--color-text-light);font-size:0.8rem;padding:2px;">❔</button>
+      </div>
+      <div class="skill-tree__grid">`;
+
     for (const [key, skill] of Object.entries(this.SKILLS)) {
       const bd = breakdown[key];
       const score = bd ? bd.score : 0;
       const max = skill.maxScore;
+      const pct = max > 0 ? Math.round((score / max) * 100) : 0;
       const level = this.getLevel(score, max);
-      html += `<div class="skill-crystal ${level.cls}" data-skill="${key}" title="${skill.desc}">
-        <div class="skill-crystal-icon">${skill.icon}</div>
-        <div class="skill-crystal-name">${skill.name.replace('層', '')}</div>
-        <div class="skill-crystal-level">${level.label}</div>
-        <div class="skill-crystal-score">${score}/${max}</div>
-        <div class="skill-crystal-detail">${skill.desc}</div>
+      html += `<div class="skill-crystal ${level.cls}" data-skill="${key}">
+        <div class="skill-crystal__orb">${skill.icon}${this._ring(pct)}</div>
+        <div class="skill-crystal__name">${skill.short}</div>
+        <div class="skill-crystal__level">${level.label}</div>
+        <div class="skill-crystal__score">${score}<span class="skill-crystal__score-max">/${max}</span></div>
+        <div class="skill-crystal__detail">
+          <button class="skill-crystal__detail-close">✕</button>
+          <div class="skill-crystal__detail-title"><span class="skill-crystal__detail-icon">${skill.icon}</span> ${skill.name}</div>
+          <div class="skill-crystal__detail-desc">${skill.desc}</div>
+          <div class="skill-crystal__detail-why"><strong>為什麼重要？</strong>${skill.why}</div>
+        </div>
       </div>`;
     }
-    html += `</div>`;
+
+    html += `</div></div>`;
     container.innerHTML = html;
 
-    // 點擊展開說明
+    // 點擊水晶切換展開，點擊 ✕ 關閉
     container.querySelectorAll('.skill-crystal').forEach(el => {
-      el.addEventListener('click', () => {
-        el.classList.toggle('active');
-        // 收起其他
-        container.querySelectorAll('.skill-crystal.active').forEach(other => {
-          if (other !== el) other.classList.remove('active');
-        });
+      el.addEventListener('click', (e) => {
+        if (e.target.closest('.skill-crystal__detail-close')) {
+          el.classList.remove('expanded');
+          return;
+        }
+        const wasOpen = el.classList.contains('expanded');
+        container.querySelectorAll('.skill-crystal.expanded').forEach(other => other.classList.remove('expanded'));
+        if (!wasOpen) el.classList.add('expanded');
       });
     });
   }
