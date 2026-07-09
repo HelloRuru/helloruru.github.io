@@ -1,5 +1,5 @@
 /**
- * SGE 文案助手 - 主程式
+ * GEO 文案冒險學院 - 主程式
  * @module app
  */
 
@@ -1648,7 +1648,7 @@ function init() {
     analyzer.analyze();
   });
 
-  console.log('SGE 文案助手已載入！歡迎來到文案大陸～');
+  console.log('GEO 文案冒險學院已載入！歡迎來到冒險學院～');
 }
 
 // Start app

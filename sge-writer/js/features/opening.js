@@ -13,7 +13,7 @@
 const PORTRAIT_BASE = 'icons/characters/';
 const STORAGE_KEY = 'sge-first-visit-done';
 
-/** 三位角色的開場劇情 */
+/** 三位角色的開場劇情 — GEO 教學導覽版 */
 const OPENING_STORIES = {
   guide: {
     name: '伊歐',
@@ -22,9 +22,9 @@ const OPENING_STORIES = {
     slogan: '讓我引導你前進，這條路我很熟悉。',
     cg: 'scene-guide-welcome-white.png',
     dialogs: [
-      { img: 'guide-default-1.png', text: '偵測到新訪客——歡迎來到 SGE 文案大陸。我是伊歐，你的領航員。' },
-      { img: 'guide-happy-1.png', text: '這裡的規則很簡單：寫出好內容，讓搜尋引擎看見你的價值。' },
-      { img: 'guide-joy-1.png', text: '別擔心，我會一步步帶你前進。準備好了嗎？那就開始吧。' },
+      { img: 'guide-default-1.png', text: '偵測到新訪客——歡迎來到 GEO 文案冒險學院。我是伊歐，你的領航員。' },
+      { img: 'guide-happy-1.png', text: 'GEO 就是「生成式引擎優化」— 讓你的文章更容易被 ChatGPT、Perplexity、Google AI Overview 引用。跟傳統 SEO 不一樣，AI 看的是證據不是關鍵字密度。' },
+      { img: 'guide-joy-1.png', text: '右邊的編輯器會即時分析你的 GEO 引用力。左邊的 GEO 技能樹會記錄你的學習進度。先填 H1 標題和關鍵字，開始你第一趟冒險吧！' },
     ]
   },
   writer: {
@@ -34,21 +34,21 @@ const OPENING_STORIES = {
     slogan: '文案就像音樂，讓我們一起創作旋律吧♪',
     cg: 'writer-joy-1.png',
     dialogs: [
-      { img: 'writer-joy-1.png', text: '哇！新朋友～～歡迎來到這個充滿文字魔法的地方！我是哈皮♪' },
-      { img: 'writer-joy-2.png', text: '寫文案就像彈豎琴一樣，每個字都是音符，組合起來就是動人的旋律～' },
-      { img: 'writer-default-1.png', text: 'SGE 文案大陸需要你的創意！讓我們一起用文字改變世界吧！' },
+      { img: 'writer-joy-1.png', text: '哇！新朋友～～歡迎來到 GEO 文案冒險學院！我是吟遊詩人哈皮♪' },
+      { img: 'writer-joy-2.png', text: '你知道嗎？AI 搜尋引擎最喜歡引用有數據、有來源、有故事的文章。寫得越生動、越有畫面，AI 越愛你！跟我一起創作讓 AI 也想引用的旋律吧～' },
+      { img: 'writer-default-1.png', text: '我會在你寫作的時候即時給建議喔！右邊的分析面板會告訴你「證據引用」「表達流暢」這些維度哪些可以更好～快開始創作吧！' },
     ]
   },
   player: {
     name: 'BLUE',
     role: '文案見習生',
-    color: '#2C3E50',
+    color: '#6D5954',
     slogan: '......演算法不簡單，但我可以陪你研究。',
     cg: 'player-default-1.png',
     dialogs: [
-      { img: 'player-default-1.png', text: '......新人？我是 BLUE，文案見習生。' },
-      { img: 'player-default-2.png', text: '這裡不是玩遊戲的地方。SGE 演算法很複雜，你得認真學習才能掌握。' },
-      { img: 'player-happy-1.png', text: '不過......如果你願意一起研究，我可以分享我的筆記。歡迎加入。' },
+      { img: 'player-default-1.png', text: '......新人？我是 BLUE，文案見習生。這裡是 GEO 文案冒險學院。' },
+      { img: 'player-default-2.png', text: 'GEO 不是魔法，是方法論。你的文章會被 5 個維度打分數：證據引用（40分）、結構規範（25分）、表達流暢（10分）、問題覆蓋（15分）、權威信號（10分）。總分 100。' },
+      { img: 'player-happy-1.png', text: '......先從填寫 H1 和關鍵字開始吧。右邊的分析面板會即時更新分數，左邊的技能樹會記錄你的學習進度。一步步來，我也在學。' },
     ]
   }
 };
@@ -79,8 +79,8 @@ export const opening = {
       <div class="opening-backdrop"></div>
       <div class="opening-box">
         <div class="opening-title">
-          <h2>歡迎來到 SGE 文案大陸</h2>
-          <p>選擇一位角色作為你的引路人</p>
+          <h2>歡迎來到 GEO 文案冒險學院</h2>
+          <p>選擇一位夥伴，帶領你開始 GEO 學習之旅</p>
         </div>
         <div class="opening-choices">
           ${Object.entries(OPENING_STORIES).map(([key, story]) => `
