@@ -1476,10 +1476,8 @@ function init() {
   }
   levelSystem.updateUI();
 
-  const savedTheme = storage.loadTheme();
-  if (savedTheme === 'dark') {
-    document.documentElement.classList.add('dark-mode');
-  }
+  // 確保永遠 light mode（取消 dark mode）
+  document.documentElement.classList.remove('dark-mode');
 
   // Load saved view mode
   const savedViewMode = localStorage.getItem('sge-view-mode');
@@ -1575,8 +1573,6 @@ function init() {
       resetApp();
     }
   });
-
-  elements.themeToggle.addEventListener('click', toggleTheme);
 
   // GEO 權重表 modal
   const weightBtn = document.getElementById('btn-weight-table');
